@@ -1132,6 +1132,22 @@ pub trait Mob: EntityBase + Send + Sync {
         false
     }
 
+    /// Vanilla `Drowned.wantsToSwim`: whether the mob belongs under the surface right
+    /// now. Only the drowned answers anything but `false`.
+    fn wants_to_swim(&self) -> bool {
+        false
+    }
+
+    /// Vanilla `Drowned.isSearchingForLand`, which its swim-up and beach goals set to
+    /// make it swim up while it looks for somewhere to come ashore.
+    fn is_searching_for_land(&self) -> bool {
+        false
+    }
+
+    /// Sets what [`Mob::is_searching_for_land`] reads. Interior mutability, because the
+    /// goals only ever hold `&dyn Mob`.
+    fn set_searching_for_land(&self, _searching: bool) {}
+
     /// Whether currents push this mob along. Water animals hold their ground.
     fn mob_is_pushed_by_fluids(&self) -> bool {
         true

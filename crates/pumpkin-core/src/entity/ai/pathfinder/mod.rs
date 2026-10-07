@@ -1127,7 +1127,14 @@ impl PathNavigation {
                     return;
                 }
 
-                let desired_yaw = wrap_degrees((dz.atan2(dx) as f32).to_degrees() - 90.0);
+                // A path that climbs or drops straight leaves no horizontal direction to
+                // aim along, and `atan2(0, 0)` is zero -- due east, wherever the target
+                // really is. Keep the facing we have in that case.
+                let desired_yaw = if dx * dx + dz * dz > 1.0e-6 {
+                    wrap_degrees((dz.atan2(dx) as f32).to_degrees() - 90.0)
+                } else {
+                    entity.entity.yaw.load()
+                };
                 let current_yaw = entity.entity.yaw.load();
                 let yaw_diff = wrap_degrees(desired_yaw - current_yaw);
                 let target_yaw =
@@ -2109,7 +2116,13 @@ impl PathNavigationTrait for WallClimberNavigation {
                 self.path_to_position = None;
                 self.inner.inner.finish_navigation(entity);
             } else {
-                let desired_yaw = wrap_degrees((dz.atan2(dx) as f32).to_degrees() - 90.0);
+                // See the ground navigation above: no horizontal direction means no yaw
+                // to compute, and `atan2(0, 0)` would aim the mob due east.
+                let desired_yaw = if dx * dx + dz * dz > 1.0e-6 {
+                    wrap_degrees((dz.atan2(dx) as f32).to_degrees() - 90.0)
+                } else {
+                    entity.entity.yaw.load()
+                };
                 entity.entity.yaw.store(desired_yaw);
                 entity.entity.head_yaw.store(desired_yaw);
                 entity.entity.body_yaw.store(desired_yaw);

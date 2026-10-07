@@ -11,7 +11,10 @@ pub struct SwimGoal {
 impl Default for SwimGoal {
     fn default() -> Self {
         Self {
-            goal_control: Controls::JUMP,
+            // Deliberately no controls. Floating must not compete for the jump control:
+            // any goal that claims jump (the attack and move-to-target goals do) stops
+            // whatever holds it, which would switch a mob's buoyancy off mid-chase.
+            goal_control: Controls::empty(),
         }
     }
 }
@@ -33,6 +36,7 @@ impl Goal for SwimGoal {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner)
             .set_can_float(true);
+
         Self::is_in_fluid(mob)
     }
 
@@ -41,12 +45,27 @@ impl Goal for SwimGoal {
     }
 
     fn tick(&mut self, mob: &dyn Mob) {
-        // No jump control yet; the flag it would set is what the movement tick reads anyway.
+        // While it is chasing something, height belongs to the swim controller: buoyancy
+        // would fight a mob following a player who dived, and pumping it up is what used
+        // to surface an attacking mob that was meant to stay under.
+        if mob
+            .get_mob_entity()
+            .target
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .is_some()
+        {
+            return;
+        }
+
+        // Push straight onto the velocity instead of setting the shared jump flag: the
+        // navigator rewrites that flag every tick it follows a path, so a mob chasing
+        // something would lose its buoyancy and sink. The 0.8 mirrors vanilla's jitter.
         if mob.get_random().random::<f32>() < 0.8 {
-            mob.get_mob_entity()
-                .living_entity
-                .jumping
-                .store(true, Ordering::SeqCst);
+            let entity = &mob.get_mob_entity().living_entity.entity;
+            let mut velocity = entity.velocity.load();
+            velocity.y += 0.04;
+            entity.velocity.store(velocity);
         }
     }
 

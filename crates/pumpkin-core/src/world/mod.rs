@@ -2519,6 +2519,13 @@ impl World {
             .time_of_day
     }
 
+    /// Vanilla `Level.isDay`: the lit half of the day cycle, from sunrise up to the
+    /// 12000 tick dusk mark.
+    #[must_use]
+    pub fn is_day(&self) -> bool {
+        (self.get_time_of_day() % 24000) < 12000
+    }
+
     pub fn set_time_of_day(&self, time: i64) {
         let level_time = {
             let mut guard = self
