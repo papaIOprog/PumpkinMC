@@ -112,7 +112,7 @@ pub fn degrees_difference_abs(angle_a: f32, angle_b: f32) -> f32 {
 pub fn rotate_if_necessary(base_angle: f32, target_angle: f32, max_angle_diff: f32) -> f32 {
     let delta_angle = degrees_difference(base_angle, target_angle);
     let delta_angle_clamped = delta_angle.clamp(-max_angle_diff, max_angle_diff);
-    target_angle - delta_angle_clamped
+    base_angle + delta_angle_clamped
 }
 
 #[must_use]
@@ -522,4 +522,17 @@ fn java_hash() {
     for (string, _, value) in values {
         assert_eq!(java_array_hash(string.as_bytes()), value);
     }
+}
+
+#[test]
+fn rotate_if_necessary_turns_base_towards_target() {
+    // The step is added to the base, never taken off the target: subtracting it left
+    // the head on the opposite side of the body whenever they disagreed by more than
+    // the limit — a mirrored head, not a lagging one.
+    assert_eq!(rotate_if_necessary(0.0, 30.0, 10.0), 10.0);
+    assert_eq!(rotate_if_necessary(0.0, 90.0, 75.0), 75.0);
+    assert_eq!(rotate_if_necessary(0.0, -30.0, 10.0), -10.0);
+    assert_eq!(rotate_if_necessary(0.0, 4.0, 10.0), 4.0);
+    // Across the ±180 seam, where the shortest way round is backwards.
+    assert_eq!(rotate_if_necessary(170.0, -170.0, 10.0), 180.0);
 }
