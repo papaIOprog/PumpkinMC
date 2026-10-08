@@ -154,7 +154,15 @@ pub fn build() -> TokenStream {
                 visit_dir(&path, base, pools);
             } else if path.extension().is_some_and(|ext| ext == "json") {
                 let rel = path.strip_prefix(base).unwrap();
-                let stem = rel.with_extension("").to_string_lossy().into_owned();
+                // Join path components with `/` so registry names such as
+                // `abandoned_camp/camp/forest` match the vanilla resource
+                // location on every platform.
+                let stem = rel
+                    .with_extension("")
+                    .components()
+                    .map(|c| c.as_os_str().to_string_lossy())
+                    .collect::<Vec<_>>()
+                    .join("/");
                 let content = fs::read_to_string(&path).expect("Failed to read template pool JSON");
                 let pool: RawTemplatePool =
                     serde_json::from_str(&content).expect("Failed to parse template pool JSON");
