@@ -10,7 +10,8 @@ use pumpkin_util::math::position::BlockPos;
 use pumpkin_world::tick::TickPriority;
 use pumpkin_world::world::BlockFlags;
 
-#[pumpkin_block_from_tag("minecraft:lanterns")]
+// `minecraft:lanterns` is a 26.x tag; use the pumpkin-side c: tag instead.
+#[pumpkin_block_from_tag("c:lanterns")]
 pub struct LanternBlock;
 
 impl BlockBehaviour for LanternBlock {

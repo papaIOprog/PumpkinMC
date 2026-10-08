@@ -1,5 +1,5 @@
 use pumpkin_data::block_properties::{DoubleBlockHalf, PitcherCropLikeProperties};
-use pumpkin_data::{Block, BlockStateId, tag, tag::Taggable};
+use pumpkin_data::{Block, BlockStateId};
 use pumpkin_macros::pumpkin_block;
 use pumpkin_world::world::{BlockAccessor, BlockFlags};
 
@@ -22,7 +22,7 @@ impl PitcherCropBlock {
     ) -> bool {
         let below = world.get_block(&pos.down());
         if props.half == DoubleBlockHalf::Lower {
-            below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CROPS) || below == &Block::FARMLAND
+            below == &Block::FARMLAND
         } else {
             below == &Block::PITCHER_CROP
         }

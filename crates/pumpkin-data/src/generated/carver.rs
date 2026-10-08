@@ -118,9 +118,7 @@ pub const CAVE: CarverConfig = CarverConfig {
         max_inclusive: YOffset::Absolute(Absolute { absolute: 180i16 }),
     }),
     additional: CarverAdditionalConfig::Cave(CaveCarverConfig {
-        count: IntProvider::Object(NormalIntProvider::VeryBiasedToBottom(
-            VeryBiasedToBottomIntProvider::new(0i32, 14i32, 1i32),
-        )),
+        count: IntProvider::Constant(0),
         horizontal_radius_multiplier: FloatProvider::Object(NormalFloatProvider::Uniform(
             UniformFloatProvider::new(0.7f32, 1.4f32),
         )),
@@ -130,14 +128,10 @@ pub const CAVE: CarverConfig = CarverConfig {
         floor_level: FloatProvider::Object(NormalFloatProvider::Uniform(
             UniformFloatProvider::new(-1f32, -0.4f32),
         )),
-        room_vertical_radius_multiplier: FloatProvider::Object(NormalFloatProvider::Uniform(
-            UniformFloatProvider::new(0.1f32, 0.9f32),
-        )),
+        room_vertical_radius_multiplier: FloatProvider::Constant(0.0),
         start_vertical_radius_multiplier: FloatProvider::Constant(1.0),
-        thickness: FloatProvider::Object(NormalFloatProvider::Trapezoid(
-            TrapezoidFloatProvider::new(0f32, 3f32, 1f32),
-        )),
-        weird_thickness_bias: true,
+        thickness: FloatProvider::Constant(0.0),
+        weird_thickness_bias: false,
     }),
 };
 pub const CAVE_EXTRA_UNDERGROUND: CarverConfig = CarverConfig {
@@ -147,9 +141,7 @@ pub const CAVE_EXTRA_UNDERGROUND: CarverConfig = CarverConfig {
         max_inclusive: YOffset::Absolute(Absolute { absolute: 47i16 }),
     }),
     additional: CarverAdditionalConfig::Cave(CaveCarverConfig {
-        count: IntProvider::Object(NormalIntProvider::VeryBiasedToBottom(
-            VeryBiasedToBottomIntProvider::new(0i32, 14i32, 1i32),
-        )),
+        count: IntProvider::Constant(0),
         horizontal_radius_multiplier: FloatProvider::Object(NormalFloatProvider::Uniform(
             UniformFloatProvider::new(0.7f32, 1.4f32),
         )),
@@ -159,14 +151,10 @@ pub const CAVE_EXTRA_UNDERGROUND: CarverConfig = CarverConfig {
         floor_level: FloatProvider::Object(NormalFloatProvider::Uniform(
             UniformFloatProvider::new(-1f32, -0.4f32),
         )),
-        room_vertical_radius_multiplier: FloatProvider::Object(NormalFloatProvider::Uniform(
-            UniformFloatProvider::new(0.1f32, 0.9f32),
-        )),
+        room_vertical_radius_multiplier: FloatProvider::Constant(0.0),
         start_vertical_radius_multiplier: FloatProvider::Constant(1.0),
-        thickness: FloatProvider::Object(NormalFloatProvider::Trapezoid(
-            TrapezoidFloatProvider::new(0f32, 3f32, 1f32),
-        )),
-        weird_thickness_bias: true,
+        thickness: FloatProvider::Constant(0.0),
+        weird_thickness_bias: false,
     }),
 };
 pub const NETHER_CAVE: CarverConfig = CarverConfig {
@@ -175,18 +163,5 @@ pub const NETHER_CAVE: CarverConfig = CarverConfig {
         min_inclusive: YOffset::Absolute(Absolute { absolute: 0i16 }),
         max_inclusive: YOffset::BelowTop(BelowTop { below_top: 1i8 }),
     }),
-    additional: CarverAdditionalConfig::Cave(CaveCarverConfig {
-        count: IntProvider::Object(NormalIntProvider::VeryBiasedToBottom(
-            VeryBiasedToBottomIntProvider::new(0i32, 9i32, 1i32),
-        )),
-        horizontal_radius_multiplier: FloatProvider::Constant(1f32),
-        vertical_radius_multiplier: FloatProvider::Constant(1f32),
-        floor_level: FloatProvider::Constant(-0.7f32),
-        room_vertical_radius_multiplier: FloatProvider::Constant(0.5f32),
-        start_vertical_radius_multiplier: FloatProvider::Constant(5f32),
-        thickness: FloatProvider::Object(NormalFloatProvider::Trapezoid(
-            TrapezoidFloatProvider::new(0f32, 6f32, 2f32),
-        )),
-        weird_thickness_bias: false,
-    }),
+    additional: CarverAdditionalConfig::Cave(CaveCarverConfig::default()),
 };

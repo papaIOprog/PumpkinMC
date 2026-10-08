@@ -3,13 +3,35 @@ use crate::item::{ItemBehaviour, ItemMetadata};
 use pumpkin_data::data_component_impl::BundleContentsImpl;
 use pumpkin_data::item::Item;
 use pumpkin_data::sound::Sound;
-use pumpkin_data::tag;
 
 pub struct BundleItem;
 
 impl ItemMetadata for BundleItem {
     fn ids() -> Box<[u16]> {
-        tag::Item::MINECRAFT_BUNDLES.1.into()
+        // The `minecraft:bundles` item tag is 26.x only; 1.21.1 bundles are a
+        // fixed set of items.
+        [
+            Item::BUNDLE,
+            Item::WHITE_BUNDLE,
+            Item::ORANGE_BUNDLE,
+            Item::MAGENTA_BUNDLE,
+            Item::LIGHT_BLUE_BUNDLE,
+            Item::YELLOW_BUNDLE,
+            Item::LIME_BUNDLE,
+            Item::PINK_BUNDLE,
+            Item::GRAY_BUNDLE,
+            Item::LIGHT_GRAY_BUNDLE,
+            Item::CYAN_BUNDLE,
+            Item::PURPLE_BUNDLE,
+            Item::BLUE_BUNDLE,
+            Item::BROWN_BUNDLE,
+            Item::GREEN_BUNDLE,
+            Item::RED_BUNDLE,
+            Item::BLACK_BUNDLE,
+        ]
+        .iter()
+        .map(|item| item.id)
+        .collect()
     }
 }
 

@@ -24,9 +24,28 @@ where
         Vec(Vec<String>),
     }
 
-    match Option::<StringOrVec>::deserialize(deserializer)? {
-        Some(StringOrVec::String(s)) => Ok(vec![s]),
-        Some(StringOrVec::Vec(v)) => Ok(v),
+    // 1.21.1 groups carvers by carving medium (`{"air": [...], "liquid": [...]}`)
+    // while later versions use a plain list. Flatten both into one list.
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Carvers {
+        Flat(StringOrVec),
+        Grouped(BTreeMap<String, StringOrVec>),
+    }
+
+    match Option::<Carvers>::deserialize(deserializer)? {
+        Some(Carvers::Flat(StringOrVec::String(s))) => Ok(vec![s]),
+        Some(Carvers::Flat(StringOrVec::Vec(v))) => Ok(v),
+        Some(Carvers::Grouped(map)) => {
+            let mut carvers = Vec::new();
+            for list in map.into_values() {
+                match list {
+                    StringOrVec::String(s) => carvers.push(s),
+                    StringOrVec::Vec(v) => carvers.extend(v),
+                }
+            }
+            Ok(carvers)
+        }
         None => Ok(Vec::new()),
     }
 }
@@ -260,9 +279,15 @@ enum BiomeTree {
 
 impl BiomeTree {
     /// Converts this biome tree node into a `TokenStream` for use in generated code.
-    fn into_token_stream(self) -> TokenStream {
+    fn into_token_stream(self, known: &std::collections::BTreeSet<String>) -> TokenStream {
         match self {
             Self::Leaf { parameters, biome } => {
+                if !known.contains(biome.strip_prefix("minecraft:").unwrap_or(biome.as_str())) {
+                    // The extractor tree comes from a newer version than the
+                    // datapack; drop leaves for biomes that do not exist in
+                    // the target version.
+                    return TokenStream::new();
+                }
                 let biome = format_ident!(
                     "{}",
                     biome
@@ -281,7 +306,10 @@ impl BiomeTree {
             Self::Branch { parameters, nodes } => {
                 let nodes = nodes
                     .into_iter()
-                    .map(Self::into_token_stream)
+                    .filter_map(|node| {
+                        let tokens = node.into_token_stream(known);
+                        (!tokens.is_empty()).then_some(tokens)
+                    })
                     .collect::<Vec<_>>();
                 let parameters = parameters.map(ParameterRange::into_token_stream);
                 quote! {
@@ -337,6 +365,7 @@ pub fn build() -> TokenStream {
     let bedrock_biomes: BTreeMap<String, GeyserBiomeMapping> =
         serde_json::from_str(&fs::read_to_string("../../assets/bedrock/biomes.json").unwrap())
             .expect("Failed to parse biomes.json");
+    let known_biomes: std::collections::BTreeSet<String> = biomes.keys().cloned().collect();
 
     let mut variants = TokenStream::new();
     let mut name_to_type = TokenStream::new();
@@ -487,8 +516,8 @@ pub fn build() -> TokenStream {
         all_variants.extend(quote! { &Self::#format_name, });
     }
 
-    let overworld_tree = biome_trees.overworld.into_token_stream();
-    let nether_tree = biome_trees.nether.into_token_stream();
+    let overworld_tree = biome_trees.overworld.into_token_stream(&known_biomes);
+    let nether_tree = biome_trees.nether.into_token_stream(&known_biomes);
     quote! {
         use crate::biome::de::Deserialize;
         use crate::entity_type::EntityType;

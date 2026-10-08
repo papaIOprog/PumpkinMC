@@ -1,7 +1,7 @@
 use crate::block::{BlockBehaviour, CanPlaceAtArgs};
 use crate::block::{GetStateForNeighborUpdateArgs, blocks::plant::PlantBlockBase};
-use pumpkin_data::BlockStateId;
 use pumpkin_data::tag::{self, Taggable};
+use pumpkin_data::{Block, BlockStateId};
 use pumpkin_macros::pumpkin_block;
 #[pumpkin_block("minecraft:nether_sprouts")]
 pub struct NetherSproutsBlock;
@@ -29,6 +29,8 @@ impl PlantBlockBase for NetherSproutsBlock {
         pos: &pumpkin_util::math::position::BlockPos,
     ) -> bool {
         let block = block_accessor.get_block(pos);
-        block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_NETHER_SPROUTS)
+        block.has_tag(&tag::Block::MINECRAFT_NYLIUM)
+            || block == &Block::SOUL_SOIL
+            || block.has_tag(&tag::Block::MINECRAFT_DIRT)
     }
 }

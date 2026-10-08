@@ -111,10 +111,7 @@ impl PolarBearEntity {
     pub fn set_standing(&self, standing: bool) {
         self.standing.store(standing, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::polar_bear::DATA_STANDING_ID,
-            standing,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::polar_bear::WARNING, standing);
     }
 }
 
@@ -172,7 +169,7 @@ impl Mob for PolarBearEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::polar_bear::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::polar_bear::DATA_STANDING_ID,
+            pumpkin_data::tracked_data::polar_bear::WARNING,
             self.is_standing(),
         );
     }

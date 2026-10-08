@@ -458,8 +458,8 @@ mod tests {
 
         let mut packet_buf = Vec::new();
         let writer = &mut packet_buf;
-        writer.write_var_int(&VarInt(T::to_id(JavaMinecraftVersion::V_1_21_11)))?;
-        packet.write_packet_data(writer, &JavaMinecraftVersion::V_1_21_11)?;
+        writer.write_var_int(&VarInt(T::to_id(JavaMinecraftVersion::V_1_21)))?;
+        packet.write_packet_data(writer, &JavaMinecraftVersion::V_1_21)?;
 
         encoder
             .write_packet(packet_buf.into())
@@ -494,13 +494,13 @@ mod tests {
         let decoded_packet_id = decode_varint(&mut buffer).map_err(|e| e.to_string())?;
         assert_eq!(
             decoded_packet_id,
-            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)
+            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21)
         );
 
         // Remaining buffer is the payload
         // We need to obtain the expected payload
         let mut expected_payload = Vec::new();
-        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21_11)?;
+        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21)?;
 
         assert_eq!(buffer, expected_payload);
         Ok(())
@@ -529,10 +529,10 @@ mod tests {
         // Read data length VarInt (uncompressed data length)
         let data_length = decode_varint(&mut buffer).map_err(|e| e.to_string())?;
         let mut expected_payload = Vec::new();
-        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21_11)?;
-        let uncompressed_data_length =
-            VarInt(CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)).written_size()
-                + expected_payload.len();
+        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21)?;
+        let uncompressed_data_length = VarInt(CStatusResponse::to_id(JavaMinecraftVersion::V_1_21))
+            .written_size()
+            + expected_payload.len();
         assert_eq!(data_length as usize, uncompressed_data_length);
 
         // Remaining buffer is the compressed data
@@ -549,7 +549,7 @@ mod tests {
             decode_varint(&mut decompressed_buffer).map_err(|e| e.to_string())?;
         assert_eq!(
             decoded_packet_id,
-            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)
+            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21)
         );
 
         // Remaining buffer is the payload
@@ -587,12 +587,12 @@ mod tests {
         let decoded_packet_id = decode_varint(&mut buffer).map_err(|e| e.to_string())?;
         assert_eq!(
             decoded_packet_id,
-            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)
+            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21)
         );
 
         // Remaining buffer is the payload
         let mut expected_payload = Vec::new();
-        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21_11)?;
+        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21)?;
         assert_eq!(buffer, expected_payload);
         Ok(())
     }
@@ -627,10 +627,10 @@ mod tests {
         // Read data length VarInt (uncompressed data length)
         let data_length = decode_varint(&mut buffer).map_err(|e| e.to_string())?;
         let mut expected_payload = Vec::new();
-        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21_11)?;
-        let uncompressed_data_length =
-            VarInt(CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)).written_size()
-                + expected_payload.len();
+        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21)?;
+        let uncompressed_data_length = VarInt(CStatusResponse::to_id(JavaMinecraftVersion::V_1_21))
+            .written_size()
+            + expected_payload.len();
         assert_eq!(data_length as usize, uncompressed_data_length);
 
         // Remaining buffer is the compressed data
@@ -647,7 +647,7 @@ mod tests {
             decode_varint(&mut decompressed_buffer).map_err(|e| e.to_string())?;
         assert_eq!(
             decoded_packet_id,
-            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)
+            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21)
         );
 
         // Remaining buffer is the payload
@@ -679,12 +679,12 @@ mod tests {
         let decoded_packet_id = decode_varint(&mut buffer).map_err(|e| e.to_string())?;
         assert_eq!(
             decoded_packet_id,
-            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)
+            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21)
         );
 
         // Remaining buffer is the payload (empty)
         let mut expected_payload = Vec::new();
-        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21_11)?;
+        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21)?;
 
         assert_eq!(
             buffer.len(),
@@ -728,12 +728,12 @@ mod tests {
         // Assume packet ID is 0 for CStatusResponse
         assert_eq!(
             decoded_packet_id,
-            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)
+            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21)
         );
 
         // Remaining buffer is the payload
         let mut expected_payload = Vec::new();
-        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21_11)?;
+        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21)?;
 
         assert_eq!(buffer, expected_payload);
         Ok(())
@@ -786,12 +786,12 @@ mod tests {
         let decoded_packet_id = decode_varint(&mut buffer).map_err(|e| e.to_string())?;
         assert_eq!(
             decoded_packet_id,
-            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21_11)
+            CStatusResponse::to_id(JavaMinecraftVersion::V_1_21)
         );
 
         // Remaining buffer is the payload
         let mut expected_payload = Vec::new();
-        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21_11)?;
+        packet.write_packet_data(&mut expected_payload, &JavaMinecraftVersion::V_1_21)?;
 
         assert_eq!(buffer, expected_payload);
         Ok(())

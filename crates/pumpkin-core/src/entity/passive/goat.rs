@@ -80,10 +80,7 @@ impl GoatEntity {
     pub fn set_screaming(&self, screaming: bool) {
         self.is_screaming.store(screaming, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::goat::DATA_IS_SCREAMING_GOAT,
-            screaming,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::goat::SCREAMING, screaming);
     }
 
     #[must_use]
@@ -94,10 +91,7 @@ impl GoatEntity {
     pub fn set_has_left_horn(&self, has_horn: bool) {
         self.has_left_horn.store(has_horn, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::goat::DATA_HAS_LEFT_HORN,
-            has_horn,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::goat::LEFT_HORN, has_horn);
     }
 
     #[must_use]
@@ -108,10 +102,7 @@ impl GoatEntity {
     pub fn set_has_right_horn(&self, has_horn: bool) {
         self.has_right_horn.store(has_horn, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::goat::DATA_HAS_RIGHT_HORN,
-            has_horn,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::goat::RIGHT_HORN, has_horn);
     }
 }
 
@@ -170,15 +161,15 @@ impl Mob for GoatEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::goat::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::goat::DATA_IS_SCREAMING_GOAT,
+            pumpkin_data::tracked_data::goat::SCREAMING,
             self.is_screaming(),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::goat::DATA_HAS_LEFT_HORN,
+            pumpkin_data::tracked_data::goat::LEFT_HORN,
             self.has_left_horn(),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::goat::DATA_HAS_RIGHT_HORN,
+            pumpkin_data::tracked_data::goat::RIGHT_HORN,
             self.has_right_horn(),
         );
     }

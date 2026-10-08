@@ -29,7 +29,7 @@ impl HugeRedMushroomFeature {
         }
 
         let below_block = chunk.get_block(&pos.down());
-        if !below_block.has_tag(&tag::Block::MINECRAFT_HUGE_RED_MUSHROOM_CAN_PLACE_ON) {
+        if !below_block.has_tag(&tag::Block::MINECRAFT_DIRT) {
             return false;
         }
 

@@ -40,6 +40,10 @@ use crate::entity::{
 };
 use crate::world::World;
 
+/// The `minecraft:piglin_preferred_weapons` item tag only exists in 26.x;
+/// in 1.21.1 adult piglins simply prefer the crossbow.
+static PIGLIN_PREFERRED_WEAPONS: tag::Tag = (&["crossbow"], &[Item::CROSSBOW.id]);
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum PiglinActivity {
     Idle,
@@ -205,7 +209,7 @@ impl PiglinEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(tracked_data::piglin::DATA_IMMUNE_TO_ZOMBIFICATION, immune);
+            .set_synced_data(tracked_data::piglin::IMMUNE_TO_ZOMBIFICATION, immune);
     }
 
     #[must_use]
@@ -247,7 +251,7 @@ impl PiglinEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(tracked_data::piglin::DATA_IS_CHARGING_CROSSBOW, is_charging);
+            .set_synced_data(tracked_data::piglin::CHARGING, is_charging);
     }
 
     #[must_use]
@@ -260,7 +264,7 @@ impl PiglinEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(tracked_data::piglin::DATA_IS_DANCING, is_dancing);
+            .set_synced_data(tracked_data::piglin::DANCING, is_dancing);
     }
 
     #[must_use]
@@ -1052,16 +1056,16 @@ impl Mob for PiglinEntity {
     fn mob_init_data_tracker(&self) {
         let entity = self.get_entity();
         if self.is_immune_to_zombification() {
-            entity.set_synced_data(tracked_data::piglin::DATA_IMMUNE_TO_ZOMBIFICATION, true);
+            entity.set_synced_data(tracked_data::piglin::IMMUNE_TO_ZOMBIFICATION, true);
         }
         if self.is_baby() {
             entity.set_synced_data(tracked_data::piglin::DATA_BABY_ID, true);
         }
         if self.is_charging_crossbow() {
-            entity.set_synced_data(tracked_data::piglin::DATA_IS_CHARGING_CROSSBOW, true);
+            entity.set_synced_data(tracked_data::piglin::CHARGING, true);
         }
         if self.is_dancing() {
-            entity.set_synced_data(tracked_data::piglin::DATA_IS_DANCING, true);
+            entity.set_synced_data(tracked_data::piglin::DANCING, true);
         }
     }
 
@@ -1218,7 +1222,7 @@ impl Mob for PiglinEntity {
     }
 
     fn get_preferred_weapon_type(&self) -> Option<&'static tag::Tag> {
-        (!self.is_baby()).then_some(&tag::Item::MINECRAFT_PIGLIN_PREFERRED_WEAPONS)
+        (!self.is_baby()).then_some(&PIGLIN_PREFERRED_WEAPONS)
     }
 
     fn can_replace_current_item(

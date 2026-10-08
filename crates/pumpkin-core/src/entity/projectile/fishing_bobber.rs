@@ -204,7 +204,7 @@ impl FishingBobberEntity {
                 self.hooked_entity_id
                     .store(cand.get_entity().entity_id, Ordering::Relaxed);
                 entity.set_synced_data(
-                    pumpkin_data::tracked_data::fishing_bobber::HOOKED_ENTITY,
+                    pumpkin_data::tracked_data::fishing_bobber::HOOK_ENTITY_ID,
                     cand.get_entity().entity_id + 1,
                 );
                 return;

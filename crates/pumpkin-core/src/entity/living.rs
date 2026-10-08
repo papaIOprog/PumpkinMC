@@ -5,7 +5,6 @@ use pumpkin_data::tag::{self, Taggable};
 use pumpkin_data::tracked_data;
 use pumpkin_inventory::build_equipment_slots;
 use pumpkin_inventory::player::player_inventory::PlayerInventory;
-use pumpkin_inventory::screen_handler::InventoryPlayer;
 use pumpkin_protocol::bedrock::client::take_item_actor::CTakeItemActor;
 use pumpkin_protocol::bedrock::server::actor_event::{ActorEventID, SActorEvent};
 use pumpkin_protocol::codec::var_ulong::VarULong;
@@ -56,9 +55,7 @@ use pumpkin_inventory::entity_equipment::EntityEquipment;
 use pumpkin_nbt::compound::NbtCompound;
 use pumpkin_nbt::tag::NbtTag;
 use pumpkin_protocol::codec::var_int::VarInt;
-use pumpkin_protocol::java::client::play::{
-    CHurtAnimation, CSetPlayerInventory, CTakeItemEntity, CUpdateMobEffect,
-};
+use pumpkin_protocol::java::client::play::{CHurtAnimation, CTakeItemEntity, CUpdateMobEffect};
 use pumpkin_protocol::{
     codec::item_stack_seralizer::ItemStackSerializer,
     java::client::play::{CSetEquipment, MetadataSerializer},
@@ -2463,7 +2460,7 @@ impl LivingEntity {
                 .collect()
         };
 
-        for (slot_index, mut stack, slot) in armor_slots {
+        for (_slot_index, mut stack, slot) in armor_slots {
             if stack.is_empty() {
                 continue;
             }
@@ -2492,12 +2489,6 @@ impl LivingEntity {
                         );
                     }
                     equipment_updates.push((slot.clone(), stack.clone()));
-                    if let Some(player) = caller.get_player() {
-                        player.enqueue_slot_set_packet(&CSetPlayerInventory::new(
-                            (slot_index as i32).into(),
-                            &ItemStackSerializer::from(stack),
-                        ));
-                    }
                 }
             }
         }
@@ -3885,7 +3876,6 @@ pub(crate) const fn bypasses_armor_durability(damage_type: &DamageType) -> bool 
             && DamageType::WITHER.id < 64
             && DamageType::DRAGON_BREATH.id < 64
             && DamageType::STARVE.id < 64
-            && DamageType::ENDER_PEARL.id < 64
             && DamageType::FREEZE.id < 64
             && DamageType::STALAGMITE.id < 64
             && DamageType::MAGIC.id < 64
@@ -3906,7 +3896,6 @@ pub(crate) const fn bypasses_armor_durability(damage_type: &DamageType) -> bool 
         | (1u64 << DamageType::WITHER.id)
         | (1u64 << DamageType::DRAGON_BREATH.id)
         | (1u64 << DamageType::STARVE.id)
-        | (1u64 << DamageType::ENDER_PEARL.id)
         | (1u64 << DamageType::FREEZE.id)
         | (1u64 << DamageType::STALAGMITE.id)
         | (1u64 << DamageType::MAGIC.id)
@@ -3939,7 +3928,6 @@ mod tests {
             DamageType::DRAGON_BREATH,
             DamageType::STARVE,
             DamageType::FALL,
-            DamageType::ENDER_PEARL,
             DamageType::FREEZE,
             DamageType::STALAGMITE,
             DamageType::MAGIC,
@@ -4055,10 +4043,10 @@ mod tests {
         metadata
             .write(
                 &mut bytes,
-                &pumpkin_util::version::JavaMinecraftVersion::V_26_3,
+                &pumpkin_util::version::JavaMinecraftVersion::V_1_21,
             )
             .unwrap();
 
-        assert_eq!(bytes, [10, 17, 1, 28, 0xff, 0xcd, 0x5c, 0xab]);
+        assert_eq!(bytes, [10, 18, 1, 28, 0xff, 0xcd, 0x5c, 0xab]);
     }
 }

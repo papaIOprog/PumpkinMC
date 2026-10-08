@@ -8,7 +8,6 @@ mod tnt;
 use std::sync::Arc;
 use std::sync::atomic::Ordering;
 
-use pumpkin_protocol::java::server::play::SPlayerInput;
 use rand::RngExt;
 
 use crate::{
@@ -272,61 +271,7 @@ impl EntityBase for MinecartEntity {
             return;
         }
 
-        let mut velocity = self.vehicle.entity.velocity.load();
-
-        let mut has_driver = false;
-        let mut driver_input = 0;
-        let mut driver_yaw = 0.0f32;
-
-        if let Ok(passengers) = self.vehicle.entity.passengers.try_lock()
-            && let Some(passenger) = passengers.first()
-            && let Some(player) = passenger.get_player()
-        {
-            driver_input = player.last_input.load(Ordering::Relaxed);
-            driver_yaw = player.get_entity().yaw.load();
-            has_driver = true;
-        }
-
-        if has_driver && is_on_rails {
-            let forward = driver_input & SPlayerInput::FORWARD != 0;
-            let backward = driver_input & SPlayerInput::BACKWARD != 0;
-
-            let mut force_dir = Vector3::new(0.0, 0.0, 0.0);
-            if forward {
-                let yaw_rad = f64::from(driver_yaw).to_radians();
-                force_dir.x = -yaw_rad.sin();
-                force_dir.z = yaw_rad.cos();
-            } else if backward {
-                let yaw_rad = f64::from(driver_yaw).to_radians();
-                force_dir.x = yaw_rad.sin();
-                force_dir.z = -yaw_rad.cos();
-            }
-
-            if forward || backward {
-                velocity.x += force_dir.x * 0.02;
-                velocity.z += force_dir.z * 0.02;
-
-                let speed = velocity.x.hypot(velocity.z);
-                if speed > 0.15 {
-                    #[allow(clippy::suboptimal_flops)]
-                    let old_speed = self
-                        .vehicle
-                        .entity
-                        .velocity
-                        .load()
-                        .x
-                        .hypot(self.vehicle.entity.velocity.load().z);
-
-                    let max_speed = old_speed.clamp(0.15, 0.4);
-                    if speed > max_speed {
-                        velocity.x = (velocity.x / speed) * max_speed;
-                        velocity.z = (velocity.z / speed) * max_speed;
-                    }
-                }
-                self.vehicle.entity.velocity.store(velocity);
-                self.vehicle.entity.send_velocity();
-            }
-        }
+        let _velocity = self.vehicle.entity.velocity.load();
 
         let mut velocity = self.vehicle.entity.velocity.load();
 

@@ -44,7 +44,7 @@ impl BlockBehaviour for ChorusPlantBlock {
         let connect = neighbor_block == &Block::CHORUS_PLANT
             || neighbor_block == &Block::CHORUS_FLOWER
             || (args.direction == BlockDirection::Down
-                && neighbor_block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CHORUS_PLANT));
+                && neighbor_block.has_tag(&tag::Block::C_END_STONES));
 
         let mut props = BrownMushroomBlockLikeProperties::from_state_id(args.state_id);
         match args.direction {
@@ -80,7 +80,7 @@ pub fn get_state_with_connections(
 ) -> BlockStateId {
     let plant_id = Block::CHORUS_PLANT.id;
     let flower_id = Block::CHORUS_FLOWER.id;
-    let supports = &tag::Block::MINECRAFT_SUPPORTS_CHORUS_PLANT;
+    let supports = &tag::Block::C_END_STONES;
 
     let connects = |b: &Block| b.id == plant_id || b.id == flower_id;
 
@@ -122,13 +122,12 @@ fn can_survive(block_accessor: &dyn BlockAccessor, pos: &BlockPos) -> bool {
             }
             let neighbor_below = block_accessor.get_block(&neighbor_pos.down());
             if neighbor_below == &Block::CHORUS_PLANT
-                || neighbor_below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CHORUS_PLANT)
+                || neighbor_below.has_tag(&tag::Block::C_END_STONES)
             {
                 return true;
             }
         }
     }
 
-    block_below == &Block::CHORUS_PLANT
-        || block_below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CHORUS_PLANT)
+    block_below == &Block::CHORUS_PLANT || block_below.has_tag(&tag::Block::C_END_STONES)
 }

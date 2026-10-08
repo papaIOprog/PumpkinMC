@@ -88,8 +88,7 @@ impl PiglinAi {
         ] {
             if let Some(stack) = guard.equipment.get(&slot)
                 && !stack.is_empty()
-                && (stack.item.has_tag(&tag::Item::MINECRAFT_PIGLIN_SAFE_ARMOR)
-                    || stack.item.has_tag(&tag::Item::MINECRAFT_PIGLIN_LOVED))
+                && stack.item.has_tag(&tag::Item::MINECRAFT_PIGLIN_LOVED)
             {
                 return true;
             }

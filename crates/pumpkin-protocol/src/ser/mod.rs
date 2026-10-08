@@ -188,11 +188,8 @@ pub trait NetworkReadExt {
 
     #[inline]
     fn get_container_id(&mut self, version: &JavaMinecraftVersion) -> Result<VarInt, ReadingError> {
-        if *version >= JavaMinecraftVersion::V_1_21_2 {
-            self.get_var_int()
-        } else {
-            Ok(VarInt(i32::from(self.get_u8()?)))
-        }
+        let _ = version;
+        Ok(VarInt(i32::from(self.get_u8()?)))
     }
 
     #[inline]
@@ -1019,11 +1016,8 @@ pub trait NetworkWriteExt {
         container_id: &VarInt,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        if *version >= JavaMinecraftVersion::V_1_21_2 {
-            self.write_var_int(container_id)
-        } else {
-            self.write_u8(container_id.0 as u8)
-        }
+        let _ = version;
+        self.write_u8(container_id.0 as u8)
     }
 
     fn write_uuid(&mut self, data: &uuid::Uuid) -> Result<(), WritingError> {
@@ -1078,7 +1072,7 @@ pub trait NetworkWriteExt {
 
     #[inline]
     fn write_nbt(&mut self, data: NbtTag) -> Result<(), WritingError> {
-        self.write_nbt_with_version(Some(&data), &JavaMinecraftVersion::V_26_3)
+        self.write_nbt_with_version(Some(&data), &JavaMinecraftVersion::V_1_21)
     }
 }
 

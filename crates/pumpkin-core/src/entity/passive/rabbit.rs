@@ -142,7 +142,7 @@ impl RabbitEntity {
         self.variant.store(variant.id(), Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::rabbit::DATA_TYPE_ID,
+            pumpkin_data::tracked_data::rabbit::RABBIT_TYPE,
             VarInt(variant.id()),
         );
 
@@ -231,7 +231,7 @@ impl Mob for RabbitEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::rabbit::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::rabbit::DATA_TYPE_ID,
+            pumpkin_data::tracked_data::rabbit::RABBIT_TYPE,
             VarInt(self.get_variant().id()),
         );
     }

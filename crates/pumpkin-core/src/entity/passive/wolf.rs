@@ -6,8 +6,8 @@ use std::sync::{
 use pumpkin_data::entity::EntityType;
 use pumpkin_data::item::Item;
 use pumpkin_data::item_stack::ItemStack;
+use pumpkin_data::sound::Sound;
 use pumpkin_data::tag::{self, Taggable};
-use pumpkin_data::wolf_sound_variant::WolfSoundVariant;
 use pumpkin_data::wolf_variant::WolfVariant;
 use pumpkin_nbt::compound::NbtCompound;
 use pumpkin_protocol::codec::var_int::VarInt;
@@ -40,7 +40,6 @@ use crate::entity::{
 pub struct WolfEntity {
     pub mob_entity: MobEntity,
     pub variant: AtomicU8,
-    pub sound_variant: AtomicU8,
     pub collar_color: AtomicU8,
     pub tamable_data: TamableData,
     pub ageable_data: crate::entity::ageable::AgeableData,
@@ -53,7 +52,6 @@ impl WolfEntity {
         let wolf = Self {
             mob_entity,
             variant: AtomicU8::new(WolfVariant::Pale.id()),
-            sound_variant: AtomicU8::new(WolfSoundVariant::Classic as u8),
             collar_color: AtomicU8::new(14), // Default to red
             tamable_data: TamableData::default(),
             ageable_data: crate::entity::ageable::AgeableData::default(),
@@ -248,12 +246,6 @@ impl Mob for WolfEntity {
             .get(variant_id as usize)
             .map_or("minecraft:pale", WolfVariant::asset_id);
         nbt.put_string("variant", variant_str.to_string());
-        let sound_variant = WolfSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        nbt.put_string(
-            "sound_variant",
-            format!("minecraft:{}", sound_variant.to_name()),
-        );
         nbt.put_byte(
             "CollarColor",
             self.collar_color.load(Ordering::Relaxed) as i8,
@@ -265,12 +257,6 @@ impl Mob for WolfEntity {
             let variant =
                 WolfVariant::from_name(variant_str).map_or(WolfVariant::Pale.id(), |v| v.id());
             self.variant.store(variant, Ordering::Relaxed);
-        }
-        if let Some(sound_str) = nbt.get_string("sound_variant")
-            && let Some(sound_variant) = WolfSoundVariant::from_name(sound_str)
-        {
-            self.sound_variant
-                .store(sound_variant as u8, Ordering::Relaxed);
         }
         if let Some(collar) = nbt.get_byte("CollarColor") {
             self.collar_color.store(collar as u8, Ordering::Relaxed);
@@ -292,12 +278,6 @@ impl Mob for WolfEntity {
         self.variant.store(variant, Ordering::Relaxed);
     }
 
-    fn mob_set_sound_variant_name(&self, name: &str) {
-        if let Some(v) = WolfSoundVariant::from_name(name) {
-            self.set_sound_variant(v);
-        }
-    }
-
     fn mob_init_data_tracker(&self) {
         let entity = self.get_entity();
         let is_baby = entity.age.load(Ordering::Relaxed) < 0;
@@ -313,12 +293,8 @@ impl Mob for WolfEntity {
             VarInt(self.collar_color.load(Ordering::Relaxed) as i32),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::wolf::WOLF_VARIANT_ID,
+            pumpkin_data::tracked_data::wolf::VARIANT,
             VarInt(self.variant.load(Ordering::Relaxed) as i32),
-        );
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::wolf::DATA_SOUND_VARIANT_ID,
-            VarInt(self.sound_variant.load(Ordering::Relaxed) as i32),
         );
         entity.set_synced_data(
             pumpkin_data::tracked_data::wolf::OWNER_UUID,
@@ -328,9 +304,7 @@ impl Mob for WolfEntity {
 
     fn mob_interact(&self, player: &Arc<Player>, item_stack: &mut ItemStack) -> bool {
         let item = item_stack.get_item();
-        let sound_variant = WolfSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        let ambient = sound_variant.ambient_sound(self.is_baby());
+        let ambient = Sound::EntityWolfAmbient;
         if self.is_tame() {
             if self.is_food(item_stack)
                 && self.mob_entity.living_entity.health.load()
@@ -377,17 +351,11 @@ impl Mob for WolfEntity {
 
 impl CustomSound for WolfEntity {
     fn death_sound(&self) -> Option<pumpkin_data::sound::Sound> {
-        let is_baby = self.is_baby();
-        let sound_variant = WolfSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        Some(sound_variant.death_sound(is_baby))
+        Some(Sound::EntityWolfDeath)
     }
 
     fn hurt_sound(&self) -> Option<pumpkin_data::sound::Sound> {
-        let is_baby = self.is_baby();
-        let sound_variant = WolfSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        Some(sound_variant.hurt_sound(is_baby))
+        Some(Sound::EntityWolfHurt)
     }
 }
 
@@ -409,18 +377,8 @@ impl WolfEntity {
         self.variant.store(variant.id(), Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::wolf::WOLF_VARIANT_ID,
+            pumpkin_data::tracked_data::wolf::VARIANT,
             VarInt(variant.id() as i32),
-        );
-    }
-
-    pub fn set_sound_variant(&self, sound_variant: WolfSoundVariant) {
-        self.sound_variant
-            .store(sound_variant as u8, Ordering::Relaxed);
-        let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::wolf::DATA_SOUND_VARIANT_ID,
-            VarInt(sound_variant as u8 as i32),
         );
     }
 }

@@ -30,7 +30,19 @@ pub struct SpearItem;
 
 impl ItemMetadata for SpearItem {
     fn ids() -> Box<[u16]> {
-        tag::Item::MINECRAFT_SPEARS.1.into()
+        // The `minecraft:spears` item tag is 26.x only; enumerate its members.
+        [
+            Item::WOODEN_SPEAR,
+            Item::STONE_SPEAR,
+            Item::IRON_SPEAR,
+            Item::COPPER_SPEAR,
+            Item::GOLDEN_SPEAR,
+            Item::DIAMOND_SPEAR,
+            Item::NETHERITE_SPEAR,
+        ]
+        .iter()
+        .map(|item| item.id)
+        .collect()
     }
 }
 
@@ -180,7 +192,7 @@ impl SpearItem {
             && target.damage_with_context(
                 target.as_ref(),
                 total_damage,
-                DamageType::SPEAR,
+                DamageType::TRIDENT,
                 None,
                 Some(player),
                 Some(player),

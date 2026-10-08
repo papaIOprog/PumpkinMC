@@ -80,7 +80,7 @@ impl PaintingEntity {
 
     pub fn sync_variant(&self) {
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::painting::DATA_PAINTING_VARIANT_ID,
+            pumpkin_data::tracked_data::painting::VARIANT,
             VarInt(self.variant().id() as i32),
         );
     }
@@ -247,7 +247,7 @@ impl EntityBase for PaintingEntity {
     fn java_spawn_metadata(&self, version: JavaMinecraftVersion) -> Option<Box<[u8]>> {
         let mut metadata = Vec::new();
         Metadata::new(
-            pumpkin_data::tracked_data::painting::DATA_PAINTING_VARIANT_ID,
+            pumpkin_data::tracked_data::painting::VARIANT,
             VarInt(self.variant().id() as i32),
         )
         .write(&mut metadata, &version)

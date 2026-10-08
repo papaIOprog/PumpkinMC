@@ -4,7 +4,7 @@ use pumpkin_util::{math::vector3::Vector3, version::JavaMinecraftVersion};
 
 use crate::{
     ServerPacket,
-    codec::{lp_vector_3d::LpVector3d, var_int::VarInt},
+    codec::var_int::VarInt,
     ser::{NetworkReadExt, ReadingError},
 };
 
@@ -19,23 +19,7 @@ pub struct SInteract {
 
 // Great job Mojang ;D
 impl<'a> ServerPacket<'a> for SInteract {
-    fn read(mut read: &mut &'a [u8], version: &JavaMinecraftVersion) -> Result<Self, ReadingError> {
-        // 26.1+ removes the 'type' field and uses doubles for location
-        if version >= &JavaMinecraftVersion::V_26_1 {
-            let entity_id = read.get_var_int()?;
-            let hand = Some(read.get_var_int()?);
-            let target_position = Some(LpVector3d::read(&mut read)?.0);
-            let sneaking = read.get_bool()?;
-
-            return Ok(Self {
-                entity_id,
-                r#type: VarInt(2), // InteractAt for compatibility
-                target_position,
-                hand,
-                sneaking,
-            });
-        }
-
+    fn read(read: &mut &'a [u8], version: &JavaMinecraftVersion) -> Result<Self, ReadingError> {
         let entity_id = if version >= &JavaMinecraftVersion::V_1_8 {
             read.get_var_int()?
         } else {
@@ -100,18 +84,6 @@ impl crate::ClientPacket for SInteract {
         version: &JavaMinecraftVersion,
     ) -> Result<(), crate::ser::WritingError> {
         use crate::ser::NetworkWriteExt;
-        if version >= &JavaMinecraftVersion::V_26_1 {
-            write.write_var_int(&self.entity_id)?;
-            write.write_var_int(&self.hand.unwrap_or(VarInt(0)))?;
-            if let Some(pos) = self.target_position {
-                LpVector3d(pos).write(&mut write)?;
-            } else {
-                LpVector3d(Vector3::new(0.0, 0.0, 0.0)).write(&mut write)?;
-            }
-            write.write_bool(self.sneaking)?;
-            return Ok(());
-        }
-
         if version >= &JavaMinecraftVersion::V_1_8 {
             write.write_var_int(&self.entity_id)?;
             write.write_var_int(&self.r#type)?;

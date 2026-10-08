@@ -100,7 +100,7 @@ impl TextComponentBase {
     /// Converts this component to an NBT compound tag for the latest Minecraft version.
     #[must_use]
     pub fn to_nbt_compound(&self) -> pumpkin_nbt::NbtCompound {
-        self.to_nbt_compound_for_version(&JavaMinecraftVersion::V_26_3)
+        self.to_nbt_compound_for_version(&JavaMinecraftVersion::V_1_21)
     }
 
     /// Converts this component to an NBT compound tag for a specific Minecraft version.
@@ -149,24 +149,9 @@ impl TextComponentBase {
                     compound.put_list("with", list);
                 }
             }
-            TextContent::PlayerSprite {
-                type_name,
-                profile,
-                hat,
-            } => {
-                if *version >= JavaMinecraftVersion::V_26_1 {
-                    let full_type = if type_name.contains(':') {
-                        type_name.to_string()
-                    } else {
-                        format!("minecraft:{type_name}")
-                    };
-                    compound.put_string("type", full_type);
-                    compound.put_compound("player", profile.0.clone());
-                    compound.put_byte("hat", i8::from(*hat));
-                } else {
-                    let name = profile.0.get_string("name").unwrap_or("player_sprite");
-                    compound.put_string("text", name.to_string());
-                }
+            TextContent::PlayerSprite { profile, .. } => {
+                let name = profile.0.get_string("name").unwrap_or("player_sprite");
+                compound.put_string("text", name.to_string());
             }
         }
 
@@ -209,111 +194,40 @@ impl TextComponentBase {
             compound.put_string("font", font.clone());
         }
 
-        if *version >= JavaMinecraftVersion::V_1_21_4
-            && let Some(ref shadow) = self.style.shadow_color
-        {
-            compound.put_int("shadow_color", shadow.to_argb_int());
-        }
-
         if let Some(ref click) = self.style.click_event {
             let mut click_tag = pumpkin_nbt::NbtCompound::new();
             match click {
                 ClickEvent::OpenUrl { url } => {
                     click_tag.put_string("action", "open_url".to_string());
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_tag.put_string("url", url.to_string());
-                    } else {
-                        click_tag.put_string("value", url.to_string());
-                    }
+                    click_tag.put_string("value", url.to_string());
                 }
                 ClickEvent::OpenFile { path } => {
                     click_tag.put_string("action", "open_file".to_string());
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_tag.put_string("path", path.to_string());
-                    } else {
-                        click_tag.put_string("value", path.to_string());
-                    }
+                    click_tag.put_string("value", path.to_string());
                 }
                 ClickEvent::RunCommand { command } => {
                     click_tag.put_string("action", "run_command".to_string());
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_tag.put_string("command", command.to_string());
-                    } else {
-                        click_tag.put_string("value", command.to_string());
-                    }
+                    click_tag.put_string("value", command.to_string());
                 }
                 ClickEvent::SuggestCommand { command } => {
                     click_tag.put_string("action", "suggest_command".to_string());
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_tag.put_string("command", command.to_string());
-                    } else {
-                        click_tag.put_string("value", command.to_string());
-                    }
+                    click_tag.put_string("value", command.to_string());
                 }
                 ClickEvent::ChangePage { page } => {
                     click_tag.put_string("action", "change_page".to_string());
-                    if *version >= JavaMinecraftVersion::V_1_21_6 {
-                        click_tag.put_int("page", *page as i32);
-                    } else if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_tag.put_string("page", page.to_string());
-                    } else {
-                        click_tag.put_string("value", page.to_string());
-                    }
+                    click_tag.put_string("value", page.to_string());
                 }
                 ClickEvent::CopyToClipboard { value } => {
                     click_tag.put_string("action", "copy_to_clipboard".to_string());
                     click_tag.put_string("value", value.to_string());
                 }
             }
-            let click_key = if *version >= JavaMinecraftVersion::V_1_21_5 {
-                "click_event"
-            } else {
-                "clickEvent"
-            };
-            compound.put_compound(click_key, click_tag);
+            compound.put_compound("clickEvent", click_tag);
         }
 
         if let Some(ref hover) = self.style.hover_event {
             let mut hover_tag = pumpkin_nbt::NbtCompound::new();
-            if *version >= JavaMinecraftVersion::V_1_21_5 {
-                match hover {
-                    HoverEvent::ShowText { value } => {
-                        hover_tag.put_string("action", "show_text".to_string());
-                        if value.len() == 1 {
-                            hover_tag.put("value", value[0].to_nbt_tag_for_version(version));
-                        } else {
-                            let list = value
-                                .iter()
-                                .map(|e| e.to_nbt_tag_for_version(version))
-                                .collect();
-                            hover_tag.put_list("value", list);
-                        }
-                    }
-                    HoverEvent::ShowItem { id, count } => {
-                        hover_tag.put_string("action", "show_item".to_string());
-                        hover_tag.put_string("id", id.to_string());
-                        if let Some(cnt) = count {
-                            hover_tag.put_int("count", *cnt);
-                        }
-                    }
-                    HoverEvent::ShowEntity { id, uuid, name } => {
-                        hover_tag.put_string("action", "show_entity".to_string());
-                        hover_tag.put_string("id", id.to_string());
-                        hover_tag.put_string("uuid", uuid.to_string());
-                        if let Some(n) = name {
-                            if n.len() == 1 {
-                                hover_tag.put("name", n[0].to_nbt_tag_for_version(version));
-                            } else {
-                                let list = n
-                                    .iter()
-                                    .map(|e| e.to_nbt_tag_for_version(version))
-                                    .collect();
-                                hover_tag.put_list("name", list);
-                            }
-                        }
-                    }
-                }
-            } else if *version >= JavaMinecraftVersion::V_1_16 {
+            if *version >= JavaMinecraftVersion::V_1_16 {
                 match hover {
                     HoverEvent::ShowText { value } => {
                         hover_tag.put_string("action", "show_text".to_string());
@@ -389,12 +303,7 @@ impl TextComponentBase {
                     }
                 }
             }
-            let hover_key = if *version >= JavaMinecraftVersion::V_1_21_5 {
-                "hover_event"
-            } else {
-                "hoverEvent"
-            };
-            compound.put_compound(hover_key, hover_tag);
+            compound.put_compound("hoverEvent", hover_tag);
         }
 
         if !self.extra.is_empty() {
@@ -498,27 +407,12 @@ impl TextComponentBase {
                     map.insert("with".to_string(), serde_json::Value::Array(list));
                 }
             }
-            TextContent::PlayerSprite {
-                type_name,
-                profile,
-                hat,
-            } => {
-                if *version >= JavaMinecraftVersion::V_26_1 {
-                    let full_type = if type_name.contains(':') {
-                        type_name.to_string()
-                    } else {
-                        format!("minecraft:{type_name}")
-                    };
-                    map.insert("type".to_string(), serde_json::Value::String(full_type));
-                    map.insert("player".to_string(), nbt_compound_to_json(&profile.0));
-                    map.insert("hat".to_string(), serde_json::Value::Bool(*hat));
-                } else {
-                    let name = profile.0.get_string("name").unwrap_or("player_sprite");
-                    map.insert(
-                        "text".to_string(),
-                        serde_json::Value::String(name.to_string()),
-                    );
-                }
+            TextContent::PlayerSprite { profile, .. } => {
+                let name = profile.0.get_string("name").unwrap_or("player_sprite");
+                map.insert(
+                    "text".to_string(),
+                    serde_json::Value::String(name.to_string()),
+                );
             }
         }
 
@@ -573,15 +467,6 @@ impl TextComponentBase {
             map.insert("font".to_string(), serde_json::Value::String(font.clone()));
         }
 
-        if *version >= JavaMinecraftVersion::V_1_21_4
-            && let Some(ref shadow) = self.style.shadow_color
-        {
-            map.insert(
-                "shadow_color".to_string(),
-                serde_json::json!(shadow.to_argb_int()),
-            );
-        }
-
         if let Some(ref click) = self.style.click_event {
             let mut click_map = serde_json::Map::new();
             match click {
@@ -590,87 +475,50 @@ impl TextComponentBase {
                         "action".to_string(),
                         serde_json::Value::String("open_url".to_string()),
                     );
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_map.insert(
-                            "url".to_string(),
-                            serde_json::Value::String(url.to_string()),
-                        );
-                    } else {
-                        click_map.insert(
-                            "value".to_string(),
-                            serde_json::Value::String(url.to_string()),
-                        );
-                    }
+                    click_map.insert(
+                        "value".to_string(),
+                        serde_json::Value::String(url.to_string()),
+                    );
                 }
                 ClickEvent::OpenFile { path } => {
                     click_map.insert(
                         "action".to_string(),
                         serde_json::Value::String("open_file".to_string()),
                     );
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_map.insert(
-                            "path".to_string(),
-                            serde_json::Value::String(path.to_string()),
-                        );
-                    } else {
-                        click_map.insert(
-                            "value".to_string(),
-                            serde_json::Value::String(path.to_string()),
-                        );
-                    }
+                    click_map.insert(
+                        "value".to_string(),
+                        serde_json::Value::String(path.to_string()),
+                    );
                 }
                 ClickEvent::RunCommand { command } => {
                     click_map.insert(
                         "action".to_string(),
                         serde_json::Value::String("run_command".to_string()),
                     );
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_map.insert(
-                            "command".to_string(),
-                            serde_json::Value::String(command.to_string()),
-                        );
-                    } else {
-                        click_map.insert(
-                            "value".to_string(),
-                            serde_json::Value::String(command.to_string()),
-                        );
-                    }
+                    click_map.insert(
+                        "value".to_string(),
+                        serde_json::Value::String(command.to_string()),
+                    );
                 }
                 ClickEvent::SuggestCommand { command } => {
                     click_map.insert(
                         "action".to_string(),
                         serde_json::Value::String("suggest_command".to_string()),
                     );
-                    if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_map.insert(
-                            "command".to_string(),
-                            serde_json::Value::String(command.to_string()),
-                        );
-                    } else {
-                        click_map.insert(
-                            "value".to_string(),
-                            serde_json::Value::String(command.to_string()),
-                        );
-                    }
+                    click_map.insert(
+                        "value".to_string(),
+                        serde_json::Value::String(command.to_string()),
+                    );
                 }
                 ClickEvent::ChangePage { page } => {
                     click_map.insert(
                         "action".to_string(),
                         serde_json::Value::String("change_page".to_string()),
                     );
-                    if *version >= JavaMinecraftVersion::V_1_21_6 {
-                        click_map.insert("page".to_string(), serde_json::json!(*page as i32));
-                    } else if *version >= JavaMinecraftVersion::V_1_21_5 {
-                        click_map.insert(
-                            "page".to_string(),
-                            serde_json::Value::String(page.to_string()),
-                        );
-                    } else {
-                        click_map.insert(
-                            "value".to_string(),
-                            serde_json::Value::String(page.to_string()),
-                        );
-                    }
+                    click_map.insert(
+                        "value".to_string(),
+                        serde_json::Value::String(page.to_string()),
+                    );
                 }
                 ClickEvent::CopyToClipboard { value } => {
                     click_map.insert(
@@ -683,76 +531,15 @@ impl TextComponentBase {
                     );
                 }
             }
-            let click_key = if *version >= JavaMinecraftVersion::V_1_21_5 {
-                "click_event"
-            } else {
-                "clickEvent"
-            };
-            map.insert(click_key.to_string(), serde_json::Value::Object(click_map));
+            map.insert(
+                "clickEvent".to_string(),
+                serde_json::Value::Object(click_map),
+            );
         }
 
         if let Some(ref hover) = self.style.hover_event {
             let mut hover_map = serde_json::Map::new();
-            if *version >= JavaMinecraftVersion::V_1_21_5 {
-                match hover {
-                    HoverEvent::ShowText { value } => {
-                        hover_map.insert(
-                            "action".to_string(),
-                            serde_json::Value::String("show_text".to_string()),
-                        );
-                        if value.len() == 1 {
-                            hover_map.insert(
-                                "value".to_string(),
-                                value[0].to_json_value_for_version(version),
-                            );
-                        } else {
-                            let list = value
-                                .iter()
-                                .map(|e| e.to_json_value_for_version(version))
-                                .collect();
-                            hover_map.insert("value".to_string(), serde_json::Value::Array(list));
-                        }
-                    }
-                    HoverEvent::ShowItem { id, count } => {
-                        hover_map.insert(
-                            "action".to_string(),
-                            serde_json::Value::String("show_item".to_string()),
-                        );
-                        hover_map
-                            .insert("id".to_string(), serde_json::Value::String(id.to_string()));
-                        if let Some(cnt) = count {
-                            hover_map.insert("count".to_string(), serde_json::json!(*cnt));
-                        }
-                    }
-                    HoverEvent::ShowEntity { id, uuid, name } => {
-                        hover_map.insert(
-                            "action".to_string(),
-                            serde_json::Value::String("show_entity".to_string()),
-                        );
-                        hover_map
-                            .insert("id".to_string(), serde_json::Value::String(id.to_string()));
-                        hover_map.insert(
-                            "uuid".to_string(),
-                            serde_json::Value::String(uuid.to_string()),
-                        );
-                        if let Some(n) = name {
-                            if n.len() == 1 {
-                                hover_map.insert(
-                                    "name".to_string(),
-                                    n[0].to_json_value_for_version(version),
-                                );
-                            } else {
-                                let list = n
-                                    .iter()
-                                    .map(|e| e.to_json_value_for_version(version))
-                                    .collect();
-                                hover_map
-                                    .insert("name".to_string(), serde_json::Value::Array(list));
-                            }
-                        }
-                    }
-                }
-            } else if *version >= JavaMinecraftVersion::V_1_16 {
+            if *version >= JavaMinecraftVersion::V_1_16 {
                 match hover {
                     HoverEvent::ShowText { value } => {
                         hover_map.insert(
@@ -871,12 +658,10 @@ impl TextComponentBase {
                     }
                 }
             }
-            let hover_key = if *version >= JavaMinecraftVersion::V_1_21_5 {
-                "hover_event"
-            } else {
-                "hoverEvent"
-            };
-            map.insert(hover_key.to_string(), serde_json::Value::Object(hover_map));
+            map.insert(
+                "hoverEvent".to_string(),
+                serde_json::Value::Object(hover_map),
+            );
         }
 
         if !self.extra.is_empty() {
@@ -1588,7 +1373,7 @@ impl TextComponent {
     /// A boxed byte slice containing the NBT-encoded component.
     #[must_use]
     pub fn encode(&self) -> Box<[u8]> {
-        self.encode_for_version(&JavaMinecraftVersion::V_26_3)
+        self.encode_for_version(&JavaMinecraftVersion::V_1_21)
     }
 
     /// Encodes this component into a byte array using NBT serialization for a specific Minecraft version.
@@ -2105,10 +1890,11 @@ mod test {
             })
             .0
             .to_nbt_compound();
-        let hover = show_item.get_compound("hover_event").unwrap();
+        let hover = show_item.get_compound("hoverEvent").unwrap();
         assert_eq!(hover.get_string("action"), Some("show_item"));
-        assert_eq!(hover.get_string("id"), Some("minecraft:diamond_sword"));
-        assert_eq!(hover.get_int("count"), Some(1));
+        let contents = hover.get_compound("contents").unwrap();
+        assert_eq!(contents.get_string("id"), Some("minecraft:diamond_sword"));
+        assert_eq!(contents.get_int("count"), Some(1));
         assert!(hover.get_compound("item").is_none());
 
         let show_entity = TextComponent::text("pig")
@@ -2119,11 +1905,12 @@ mod test {
             ))
             .0
             .to_nbt_compound();
-        let hover = show_entity.get_compound("hover_event").unwrap();
+        let hover = show_entity.get_compound("hoverEvent").unwrap();
         assert_eq!(hover.get_string("action"), Some("show_entity"));
-        assert_eq!(hover.get_string("id"), Some("minecraft:pig"));
+        let contents = hover.get_compound("contents").unwrap();
+        assert_eq!(contents.get_string("type"), Some("minecraft:pig"));
         assert_eq!(
-            hover.get_string("uuid"),
+            contents.get_string("id"),
             Some("6ba1a740-9a3b-4b7c-8f2c-8f5a5c1a0a11")
         );
         assert!(hover.get_compound("entity").is_none());
@@ -2140,18 +1927,19 @@ mod test {
             })
             .0
             .to_nbt_compound();
-        let hover = compound.get_compound("hover_event").unwrap();
-        assert!(hover.get_int("count").is_none());
+        let hover = compound.get_compound("hoverEvent").unwrap();
+        let contents = hover.get_compound("contents").unwrap();
+        assert!(contents.get_int("count").is_none());
     }
 
     #[test]
-    fn click_event_uses_legacy_value_before_1_21_5() {
+    fn click_event_uses_legacy_value_keys() {
         let compound = TextComponent::text("link")
             .click_event(ClickEvent::OpenUrl {
                 url: Cow::Borrowed("https://example.com"),
             })
             .0
-            .to_nbt_compound_for_version(&JavaMinecraftVersion::V_1_21_4);
+            .to_nbt_compound_for_version(&JavaMinecraftVersion::V_1_21);
         let click = compound.get_compound("clickEvent").unwrap();
         assert_eq!(click.get_string("action"), Some("open_url"));
         assert_eq!(click.get_string("value"), Some("https://example.com"));
@@ -2162,23 +1950,10 @@ mod test {
                 command: Cow::Borrowed("/tell name"),
             })
             .0
-            .to_nbt_compound_for_version(&JavaMinecraftVersion::V_1_21_4);
+            .to_nbt_compound_for_version(&JavaMinecraftVersion::V_1_21);
         let click = suggest.get_compound("clickEvent").unwrap();
         assert_eq!(click.get_string("command"), None);
         assert_eq!(click.get_string("value"), Some("/tell name"));
-    }
-
-    #[test]
-    fn click_event_uses_modern_keys_from_1_21_5() {
-        let compound = TextComponent::text("link")
-            .click_event(ClickEvent::OpenUrl {
-                url: Cow::Borrowed("https://example.com"),
-            })
-            .0
-            .to_nbt_compound_for_version(&JavaMinecraftVersion::V_1_21_5);
-        let click = compound.get_compound("click_event").unwrap();
-        assert_eq!(click.get_string("url"), Some("https://example.com"));
-        assert!(click.get_string("value").is_none());
     }
 
     #[test]
@@ -2208,7 +1983,7 @@ mod custom_name_nbt_tests {
     fn plain_text_round_trips_as_string_tag() {
         let tag = TextComponent::text("Bob")
             .0
-            .to_nbt_tag_for_version(&crate::version::JavaMinecraftVersion::V_26_3);
+            .to_nbt_tag_for_version(&crate::version::JavaMinecraftVersion::V_1_21);
         assert!(matches!(tag, NbtTag::String(ref s) if &**s == "Bob"));
     }
 }

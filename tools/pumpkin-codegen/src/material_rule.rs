@@ -536,31 +536,39 @@ pub fn resolve_rule(
     }
 }
 
-/// Reads material_rule files and resolves conditions from material_condition folder.
+/// Reads the inline `surface_rule` of each vanilla noise settings file.
 pub fn build() -> TokenStream {
-    let rule_dir =
-        std::path::Path::new("../../assets/datapack/data/minecraft/worldgen/material_rule");
-    let cond_dir =
-        std::path::Path::new("../../assets/datapack/data/minecraft/worldgen/material_condition");
+    let noise_settings_dir =
+        std::path::Path::new("../../assets/datapack/data/minecraft/worldgen/noise_settings");
 
+    // 1.21.1 embeds the surface rules inline in the noise settings files.
+    // `amplified` and `large_biomes` share the overworld rule.
     let top_level_rules = [
-        "bedrock_floor",
-        "bedrock_roof",
-        "end",
-        "nether",
-        "overworld",
-        "overworld_caves",
-        "overworld_floating_islands",
+        ("OVERWORLD", "overworld"),
+        ("OVERWORLD_CAVES", "caves"),
+        ("OVERWORLD_FLOATING_ISLANDS", "floating_islands"),
+        ("NETHER", "nether"),
+        ("END", "end"),
     ];
 
     let mut const_defs = TokenStream::new();
 
-    for rule_name in top_level_rules {
-        let raw = RawMaterialRule::Ref(format!("minecraft:{}", rule_name));
-        let resolved = resolve_rule(&raw, rule_dir, cond_dir)
-            .unwrap_or_else(|| panic!("Failed to resolve material rule {}", rule_name));
+    for (const_name, settings_file) in top_level_rules {
+        let path = noise_settings_dir.join(format!("{settings_file}.json"));
+        let content = std::fs::read_to_string(&path)
+            .unwrap_or_else(|e| panic!("Failed to read noise settings {}: {e}", path.display()));
+        let settings: serde_json::Value = serde_json::from_str(&content)
+            .unwrap_or_else(|e| panic!("Failed to parse noise settings {}: {e}", path.display()));
+        let surface_rule = settings
+            .get("surface_rule")
+            .cloned()
+            .unwrap_or_else(|| panic!("No surface_rule in noise settings {}", path.display()));
+        let raw: RawMaterialRule = serde_json::from_value(surface_rule)
+            .unwrap_or_else(|e| panic!("Failed to parse surface rule of {}: {e}", path.display()));
+        let resolved = resolve_rule(&raw, noise_settings_dir, noise_settings_dir)
+            .unwrap_or_else(|| panic!("Failed to resolve surface rule of {}", path.display()));
 
-        let const_ident = format_ident!("{}", rule_name.to_uppercase());
+        let const_ident = format_ident!("{}", const_name);
         const_defs.extend(quote!(
             pub const #const_ident: MaterialRule = #resolved;
         ));
@@ -604,10 +612,10 @@ pub fn build() -> TokenStream {
                     "overworld" | "amplified" | "large_biomes" => Some(&OVERWORLD),
                     "nether" => Some(&NETHER),
                     "end" => Some(&END),
-                    "bedrock_floor" => Some(&BEDROCK_FLOOR),
-                    "bedrock_roof" => Some(&BEDROCK_ROOF),
-                    "overworld_caves" => Some(&OVERWORLD_CAVES),
-                    "overworld_floating_islands" => Some(&OVERWORLD_FLOATING_ISLANDS),
+                    "caves" | "overworld_caves" => Some(&OVERWORLD_CAVES),
+                    "floating_islands" | "overworld_floating_islands" => {
+                        Some(&OVERWORLD_FLOATING_ISLANDS)
+                    }
                     _ => None,
                 }
             }

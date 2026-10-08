@@ -114,7 +114,7 @@ unused_async_trait_impl = "allow"
 assert_is_empty = "allow"
 
 [workspace.package]
-version = "0.2.0+26.3-26.51"
+version = "0.2.0+1.21.1-26.51"
 edition = "2024"
 rust-version = "1.96"
 license = "GPL-3.0"
@@ -283,4 +283,3 @@ webpki-root-certs = { version = "1.0.9", default-features = false }
 # ring-only: must match the provider the rest of the tree (wasmtime-wasi-http, rtc) uses
 rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12", "logging"] }
 zip = { version = "8.6", default-features = false, features = ["deflate-flate2"] }
-

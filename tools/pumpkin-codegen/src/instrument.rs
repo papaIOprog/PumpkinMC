@@ -22,6 +22,13 @@ struct DescriptionJson {
 
 pub fn build() -> TokenStream {
     let dir = Path::new("../../assets/datapack/data/minecraft/instrument");
+    // 1.21.1 hardcodes goat horn instruments in the server jar instead of
+    // shipping them as datapack files; assets/vanilla holds those values.
+    let dir = if dir.is_dir() {
+        dir
+    } else {
+        Path::new("../../assets/vanilla/data/minecraft/instrument")
+    };
 
     let mut instruments: BTreeMap<String, InstrumentJson> = BTreeMap::new();
 

@@ -561,8 +561,7 @@ mod tests {
     use crate::entity_equipment::EntityEquipment;
     use crate::inventory::SimpleInventory;
     use pumpkin_protocol::java::client::play::{
-        CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetCursorItem,
-        CSetPlayerInventory, CSetSelectedSlot,
+        CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetSelectedSlot,
     };
     use std::sync::Mutex;
     use std::sync::atomic::AtomicI32;
@@ -634,11 +633,7 @@ mod tests {
         ) {
         }
 
-        fn enqueue_cursor_packet(&self, _packet: &CSetCursorItem) {}
-
         fn enqueue_property_packet(&self, _packet: &CSetContainerProperty) {}
-
-        fn enqueue_slot_set_packet(&self, _packet: &CSetPlayerInventory) {}
 
         fn enqueue_set_held_item_packet(&self, _packet: &CSetSelectedSlot) {}
 

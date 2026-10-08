@@ -1,7 +1,5 @@
 #[allow(clippy::wildcard_imports)]
 use super::*;
-use pumpkin_data::game_rules::GameRule;
-use pumpkin_protocol::java::client::play::CGameRuleValues;
 
 impl JavaClient {
     pub fn handle_client_status(&self, player: &Arc<Player>, client_status: &SClientCommand) {
@@ -49,55 +47,9 @@ impl JavaClient {
                 // Request stats
                 player.send_stats();
             }
-            SClientCommand::REQUEST_GAMERULE_VALUES => {
-                self.send_game_rule_values(player);
-            }
             _ => {
                 self.try_kick(&TextComponent::text("Invalid client status"));
             }
         }
-    }
-
-    pub fn send_game_rule_values(&self, player: &Player) {
-        if player.permission_lvl.load() < PermissionLvl::Two {
-            warn!(
-                "Player {} tried to request game rule values without required permissions",
-                player.gameprofile.name
-            );
-            return;
-        }
-
-        let world = player.world();
-        let level_info = world.level_info.load();
-        let minecart_improvements_enabled = world.server.upgrade().map_or_else(
-            || {
-                level_info
-                    .data_packs
-                    .enabled
-                    .iter()
-                    .any(|p| p == "minecart_improvements" || p == "file/minecart_improvements")
-            },
-            |s| s.is_feature_enabled("minecraft:minecart_improvements"),
-        );
-
-        let rules: Vec<(String, String)> = GameRule::all()
-            .iter()
-            .filter(|rule| match rule {
-                GameRule::MaxMinecartSpeed => minecart_improvements_enabled,
-                _ => true,
-            })
-            .map(|rule| {
-                (
-                    rule.to_string(),
-                    level_info.game_rules.get(rule).to_string(),
-                )
-            })
-            .collect();
-        let rules_ref: Vec<(&str, &str)> = rules
-            .iter()
-            .map(|(k, v)| (k.as_str(), v.as_str()))
-            .collect();
-
-        self.try_send_packet(&CGameRuleValues::new(&rules_ref));
     }
 }

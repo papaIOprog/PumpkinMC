@@ -10,20 +10,18 @@ use crossbeam::atomic::AtomicCell;
 use pumpkin_data::packet::CURRENT_MC_VERSION;
 use pumpkin_data::translation;
 use pumpkin_protocol::java::server::play::{
-    SAttack, SBlockEntityTagQuery, SBundleItemSelected, SChangeDifficulty, SChangeGameMode,
-    SChatAck, SChatCommand, SChatCommandSigned, SChatMessage, SChunkBatch, SClickSlot,
-    SClientCommand, SClientInformationPlay, SClientTickEnd, SCloseContainer, SCommandSuggestion,
-    SConfigurationAcknowledged, SConfirmTeleport, SContainerButtonClick,
+    SBlockEntityTagQuery, SChangeDifficulty, SChatAck, SChatCommand, SChatCommandSigned,
+    SChatMessage, SChunkBatch, SClickSlot, SClientCommand, SClientInformationPlay, SCloseContainer,
+    SCommandSuggestion, SConfigurationAcknowledged, SConfirmTeleport, SContainerButtonClick,
     SContainerSlotStateChanged, SCookieResponse as SPCookieResponse, SCustomPayload,
-    SDebugSampleSubscription, SDebugSubscriptionRequest, SEditBook, SEntityTagQuery, SInteract,
-    SJigsawGenerate, SLockDifficulty, SMoveVehicle, SPaddleBoat, SPickItemFromBlock, SPlaceRecipe,
-    SPlayPingRequest, SPlayPong, SPlayResourcePack, SPlayerAbilities, SPlayerAction,
-    SPlayerCommand, SPlayerInput, SPlayerLoaded, SPlayerPosition, SPlayerPositionRotation,
-    SPlayerRotation, SPlayerSession, SRecipeBookChangeSettings, SRecipeBookSeenRecipe, SRenameItem,
-    SSeenAdvancement, SSelectTrade, SSetBeacon, SSetCommandBlock, SSetCommandMinecart,
-    SSetCreativeSlot, SSetGameRule, SSetHeldItem, SSetJigsawBlock, SSetPlayerGround,
-    SSetStructureBlock, SSetTestBlock, SSpectateEntity, SSwingArm, STeleportToEntity,
-    STestInstanceBlockAction, SUpdateSign, SUseItem, SUseItemOn,
+    SDebugSampleSubscription, SEditBook, SEntityTagQuery, SInteract, SJigsawGenerate,
+    SLockDifficulty, SMoveVehicle, SPaddleBoat, SPlaceRecipe, SPlayPingRequest, SPlayPong,
+    SPlayResourcePack, SPlayerAbilities, SPlayerAction, SPlayerCommand, SPlayerPosition,
+    SPlayerPositionRotation, SPlayerRotation, SPlayerSession, SRecipeBookChangeSettings,
+    SRecipeBookSeenRecipe, SRenameItem, SSeenAdvancement, SSelectTrade, SSetBeacon,
+    SSetCommandBlock, SSetCommandMinecart, SSetCreativeSlot, SSetHeldItem, SSetJigsawBlock,
+    SSetPlayerGround, SSetStructureBlock, SSpectateEntity, SSwingArm, STeleportToEntity,
+    SUpdateSign, SUseItem, SUseItemOn,
 };
 use pumpkin_protocol::packet::MultiVersionJavaPacket;
 use pumpkin_protocol::{
@@ -747,12 +745,6 @@ impl JavaClient {
                     &SConfirmTeleport::read(&mut payload, &version)?,
                 );
             }
-            id if id == SChangeGameMode::to_id(version) => {
-                self.handle_change_game_mode(
-                    player,
-                    &SChangeGameMode::read(&mut payload, &version)?,
-                );
-            }
             id if id == SChatAck::to_id(version) => {
                 let packet = SChatAck::read(&mut payload, &version)?;
                 self.handle_chat_ack(player, &packet);
@@ -833,13 +825,6 @@ impl JavaClient {
             id if id == SClientCommand::to_id(version) => {
                 self.handle_client_status(player, &SClientCommand::read(&mut payload, &version)?);
             }
-            id if id == SPlayerInput::to_id(version) => {
-                self.handle_player_input(
-                    player,
-                    &SPlayerInput::read(&mut payload, &version)?,
-                    server,
-                );
-            }
             id if id == SMoveVehicle::to_id(version) => {
                 self.handle_move_vehicle(player, &SMoveVehicle::read(&mut payload, &version)?);
             }
@@ -848,15 +833,6 @@ impl JavaClient {
             }
             id if id == SInteract::to_id(version) => {
                 self.handle_interact(player, &SInteract::read(&mut payload, &version)?, server);
-            }
-            id if id == SBundleItemSelected::to_id(version) => {
-                self.handle_bundle_item_selected(
-                    player,
-                    &SBundleItemSelected::read(&mut payload, &version)?,
-                );
-            }
-            id if id == SAttack::to_id(version) => {
-                self.handle_attack(player, &SAttack::read(&mut payload, &version)?, server);
             }
             id if id == STeleportToEntity::to_id(version) => {
                 self.handle_teleport_to_entity(
@@ -872,24 +848,6 @@ impl JavaClient {
                         &mut payload,
                         &version,
                     )?,
-                );
-            }
-            id if id == SClientTickEnd::to_id(version) => {
-                self.handle_client_tick_end(player);
-            }
-            id if id == STestInstanceBlockAction::to_id(version) => {
-                self.handle_test_instance_block_action(
-                    player,
-                    &STestInstanceBlockAction::read(&mut payload, &version)?,
-                );
-            }
-            id if id == SSetTestBlock::to_id(version) => {
-                self.handle_set_test_block(player, &SSetTestBlock::read(&mut payload, &version)?);
-            }
-            id if id == SDebugSubscriptionRequest::to_id(version) => {
-                self.handle_debug_subscription_request(
-                    player,
-                    &SDebugSubscriptionRequest::read(&mut payload, &version)?,
                 );
             }
             id if id == SDebugSampleSubscription::to_id(version) => {
@@ -917,23 +875,6 @@ impl JavaClient {
             }
             id if id == SSetPlayerGround::to_id(version) => {
                 self.handle_player_ground(player, &SSetPlayerGround::read(&mut payload, &version)?);
-            }
-            id if id == SPickItemFromBlock::to_id(version) => {
-                self.handle_pick_item_from_block(
-                    player,
-                    &SPickItemFromBlock::read(&mut payload, &version)?,
-                );
-            }
-            id if id
-                == pumpkin_protocol::java::server::play::SPickItemFromEntity::to_id(version) =>
-            {
-                self.handle_pick_item_from_entity(
-                    player,
-                    &pumpkin_protocol::java::server::play::SPickItemFromEntity::read(
-                        &mut payload,
-                        &version,
-                    )?,
-                );
             }
             id if id == SPlayerAbilities::to_id(version) => {
                 self.handle_player_abilities(
@@ -973,9 +914,6 @@ impl JavaClient {
                     &SPlayerCommand::read(&mut payload, &version)?,
                     server,
                 );
-            }
-            id if id == SPlayerLoaded::to_id(version) => {
-                Self::handle_player_loaded(player);
             }
             id if id == SPlayPingRequest::to_id(version) => {
                 self.handle_play_ping_request(&SPlayPingRequest::read(&mut payload, &version)?);
@@ -1116,20 +1054,6 @@ impl JavaClient {
                 let packet = SPlaceRecipe::read(&mut payload, &version)?;
                 self.handle_place_recipe(server, player, &packet);
             }
-            id if id
-                == pumpkin_protocol::java::server::play::SCustomClickAction::to_id(version) =>
-            {
-                let packet = pumpkin_protocol::java::server::play::SCustomClickAction::read(
-                    &mut payload,
-                    &version,
-                )?;
-                let mut event = crate::plugin::api::events::dialog::dialog_click_action::DialogClickActionEvent::new(
-                    player.clone(),
-                    packet.action_id.to_string(),
-                    packet.payload.map(Bytes::copy_from_slice),
-                );
-                server.plugin_manager.fire_blocking(server, &mut event);
-            }
             id if id == SSelectTrade::to_id(version) => {
                 self.handle_select_trade(player, &SSelectTrade::read(&mut payload, &version)?);
             }
@@ -1190,9 +1114,6 @@ impl JavaClient {
                     player,
                     &SSetStructureBlock::read(&mut payload, &version)?,
                 );
-            }
-            id if id == SSetGameRule::to_id(version) => {
-                self.handle_set_game_rule(player, &SSetGameRule::read(&mut payload, &version)?);
             }
             id if id == SBlockEntityTagQuery::to_id(version) => {
                 self.handle_block_entity_tag_query(

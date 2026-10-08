@@ -171,7 +171,7 @@ impl ArmadilloEntity {
         self.in_state_ticks.store(0, Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::armadillo::ARMADILLO_STATE,
+            pumpkin_data::tracked_data::armadillo::STATE,
             VarInt(state.id()),
         );
     }
@@ -411,7 +411,7 @@ impl Mob for ArmadilloEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::armadillo::BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::armadillo::ARMADILLO_STATE,
+            pumpkin_data::tracked_data::armadillo::STATE,
             VarInt(self.get_state().id()),
         );
     }

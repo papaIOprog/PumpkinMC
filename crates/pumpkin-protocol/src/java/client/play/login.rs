@@ -226,8 +226,6 @@ impl ClientPacket for CLogin<'_> {
 
         let v1_20_2 = *version >= JavaMinecraftVersion::V_1_20_2;
         let v1_20_5 = *version >= JavaMinecraftVersion::V_1_20_5;
-        let v1_21_2 = *version >= JavaMinecraftVersion::V_1_21_2;
-        let v1_26_2 = *version >= JavaMinecraftVersion::V_26_2;
         let v1_19 = *version >= JavaMinecraftVersion::V_1_19;
         let v1_18 = *version >= JavaMinecraftVersion::V_1_18;
         let v1_16_2 = *version >= JavaMinecraftVersion::V_1_16_2;
@@ -363,16 +361,6 @@ impl ClientPacket for CLogin<'_> {
             write.write_var_int(&self.spawn_data.portal_cooldown)?;
         }
 
-        // Sea Level (Added in 1.21.2)
-        if v1_21_2 {
-            write.write_var_int(&self.spawn_data.sealevel)?;
-        }
-
-        // Online Mode (Added in 26.2)
-        if v1_26_2 {
-            write.write_bool(self.online_mode)?;
-        }
-
         // Enforces Secure Chat (Added in 1.20.5)
         if v1_20_5 {
             write.write_bool(self.enforce_secure_chat)?;
@@ -427,8 +415,8 @@ mod tests {
         let mut slice = &serialized[..];
         let packet_id = slice.get_var_int().expect("packet_id").0;
         assert_eq!(
-            packet_id, 0x32,
-            "Login packet ID must match native 26.3 packet ID"
+            packet_id, 0x2B,
+            "Login packet ID must match native 1.21.1 packet ID"
         );
 
         let entity_id = slice.get_i32_be().expect("entity_id");

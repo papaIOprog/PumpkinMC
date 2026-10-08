@@ -10,7 +10,7 @@ use serde::Deserialize;
 use crate::version::JavaMinecraftVersion;
 
 /// The newest protocol version used as the fallback for unknown versions in `TrackedId::get`.
-const LATEST_VERSION: JavaMinecraftVersion = JavaMinecraftVersion::V_26_3;
+const LATEST_VERSION: JavaMinecraftVersion = JavaMinecraftVersion::V_1_21;
 
 #[derive(Deserialize)]
 struct RawTrackedField {
@@ -22,7 +22,7 @@ struct RawTrackedField {
 
 /// Generates the `TokenStream` for `TrackedId`, `TrackedData`, and all per-entity tracking modules.
 pub(crate) fn build() -> TokenStream {
-    let assets = [(JavaMinecraftVersion::V_26_3, "26_3_tracked_data.json")];
+    let assets = [(JavaMinecraftVersion::V_1_21, "tracked_data.json")];
 
     let mut raw_versions = BTreeMap::new();
     for (ver, file) in assets {
@@ -306,8 +306,8 @@ fn canonicalize_field_type(ty: &str) -> String {
         "text_component" | "component" => "component".to_string(),
         "optional_text_component" | "optional_component" => "optional_component".to_string(),
         "optional_int" | "optional_unsigned_int" => "optional_unsigned_int".to_string(),
-        "vector_3f" | "vector3" => "vector3".to_string(),
-        "quaternion_f" | "quaternion" => "quaternion".to_string(),
+        "vector_3f" | "vector3f" | "vector3" => "vector3".to_string(),
+        "quaternion_f" | "quaternionf" | "quaternion" => "quaternion".to_string(),
         "rotation" | "rotations" => "rotations".to_string(),
         "particle_list" | "particles" => "particles".to_string(),
         "lazy_entity_reference" | "optional_living_entity_reference" => {
@@ -657,7 +657,7 @@ mod tests {
         let boat_hurt = field_body(&generated, "boat", "DATA_ID_HURT");
         assert!(boat_hurt.contains("TrackedId (8u8)"));
 
-        let baby = field_body(&generated, "ageable_mob", "DATA_BABY_ID");
+        let baby = field_body(&generated, "animal_entity", "DATA_BABY_ID");
         assert!(!baby.contains("TrackedId (255u8)"));
 
         let item = field_body(&generated, "item", "DATA_ITEM");
@@ -670,6 +670,7 @@ mod tests {
 
         assert!(generated.contains("mod wolf"));
         assert!(generated.contains("mod cat"));
-        assert!(generated.contains("DATA_COLLAR_COLOR"));
+        let collar = field_body(&generated, "cat", "COLLAR_COLOR");
+        assert!(collar.contains("TrackedId (22u8)"));
     }
 }

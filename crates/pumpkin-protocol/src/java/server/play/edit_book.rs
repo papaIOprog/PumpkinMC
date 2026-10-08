@@ -20,27 +20,15 @@ impl<'a> ServerPacket<'a> for SEditBook<'a> {
         if *version >= JavaMinecraftVersion::V_1_17_1 {
             let slot = read.get_var_int()?;
             let count = read.get_var_int()?.0 as usize;
-            let max_pages = if *version >= JavaMinecraftVersion::V_1_21_2 {
-                100
-            } else {
-                200
-            };
+            let max_pages = 200;
             let count = count.min(max_pages);
-            let char_limit = if *version >= JavaMinecraftVersion::V_1_21_2 {
-                1024
-            } else {
-                8192
-            };
+            let char_limit = 8192;
             let mut pages = Vec::with_capacity(count);
             for _ in 0..count {
                 pages.push(read.get_str_bounded_borrowed(char_limit)?);
             }
             let has_title = read.get_bool()?;
-            let title_limit = if *version >= JavaMinecraftVersion::V_1_21_2 {
-                32
-            } else {
-                128
-            };
+            let title_limit = 128;
             let title = if has_title {
                 Some(read.get_str_bounded_borrowed(title_limit)?)
             } else {

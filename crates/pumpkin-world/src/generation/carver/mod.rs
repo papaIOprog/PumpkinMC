@@ -690,16 +690,21 @@ mod tests {
         use pumpkin_data::biome::Biome;
         use pumpkin_data::carver::{CANYON, CAVE, CAVE_EXTRA_UNDERGROUND, NETHER_CAVE};
 
+        // `Biome::carvers` references the generated carver consts, but consts are
+        // inlined per use site, so compare the defining fields instead of addresses.
         assert_eq!(Biome::PLAINS.carvers.len(), 3);
-        assert!(std::ptr::eq(Biome::PLAINS.carvers[0], &CAVE));
-        assert!(std::ptr::eq(
-            Biome::PLAINS.carvers[1],
-            &CAVE_EXTRA_UNDERGROUND
-        ));
-        assert!(std::ptr::eq(Biome::PLAINS.carvers[2], &CANYON));
+        assert_eq!(Biome::PLAINS.carvers[0].probability, CAVE.probability);
+        assert_eq!(
+            Biome::PLAINS.carvers[1].probability,
+            CAVE_EXTRA_UNDERGROUND.probability
+        );
+        assert_eq!(Biome::PLAINS.carvers[2].probability, CANYON.probability);
 
         assert_eq!(Biome::NETHER_WASTES.carvers.len(), 1);
-        assert!(std::ptr::eq(Biome::NETHER_WASTES.carvers[0], &NETHER_CAVE));
+        assert_eq!(
+            Biome::NETHER_WASTES.carvers[0].probability,
+            NETHER_CAVE.probability
+        );
 
         assert!(Biome::THE_END.carvers.is_empty());
     }

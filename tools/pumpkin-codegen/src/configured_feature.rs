@@ -12,7 +12,8 @@ use crate::placed_feature::{
 };
 
 fn load_configured_features() -> BTreeMap<String, Value> {
-    let dir = Path::new("../../assets/datapack/data/minecraft/worldgen/feature");
+    // Renamed from `configured_feature` to `feature` in later versions; 1.21.1 uses the old name.
+    let dir = Path::new("../../assets/datapack/data/minecraft/worldgen/configured_feature");
     let mut map = BTreeMap::new();
     collect_configured_features(dir, "", &mut map);
     map
@@ -20,7 +21,7 @@ fn load_configured_features() -> BTreeMap<String, Value> {
 
 fn collect_configured_features(dir: &Path, prefix: &str, map: &mut BTreeMap<String, Value>) {
     let mut entries: Vec<_> = fs::read_dir(dir)
-        .expect("Missing worldgen/feature directory")
+        .expect("Missing worldgen/configured_feature directory")
         .flatten()
         .collect();
     entries.sort_by_key(|e| e.path());
@@ -722,7 +723,7 @@ pub fn value_to_configured_feature(v: &Value) -> TokenStream {
         "minecraft:basalt_pillar" => {
             quote! { ConfiguredFeature::BasaltPillar(crate::generation::feature::features::basalt_pillar::BasaltPillarFeature {}) }
         }
-        "minecraft:block_blob" => {
+        "minecraft:block_blob" | "minecraft:forest_rock" => {
             let state = value_to_block_state(&config["state"]);
             quote! {
                 ConfiguredFeature::ForestRock(crate::generation::feature::features::forest_rock::ForestRockFeature {

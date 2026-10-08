@@ -84,7 +84,7 @@ impl SnowGolemEntity {
         let entity = self.get_entity();
         let flags = if has_pumpkin { 16u8 } else { 0u8 };
         entity.set_synced_data(
-            pumpkin_data::tracked_data::snow_golem::DATA_PUMPKIN_ID,
+            pumpkin_data::tracked_data::snow_golem::SNOW_GOLEM_FLAGS,
             flags as i8,
         );
     }
@@ -137,7 +137,7 @@ impl Mob for SnowGolemEntity {
         let entity = self.get_entity();
         let flags = if self.has_pumpkin() { 16u8 } else { 0u8 };
         entity.set_synced_data(
-            pumpkin_data::tracked_data::snow_golem::DATA_PUMPKIN_ID,
+            pumpkin_data::tracked_data::snow_golem::SNOW_GOLEM_FLAGS,
             flags as i8,
         );
     }

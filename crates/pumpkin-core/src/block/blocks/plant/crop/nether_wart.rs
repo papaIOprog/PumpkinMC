@@ -1,10 +1,6 @@
 use std::sync::Arc;
 
-use pumpkin_data::{
-    Block, BlockStateId,
-    block_properties::NetherWartLikeProperties,
-    tag::{self, Taggable},
-};
+use pumpkin_data::{Block, BlockStateId, block_properties::NetherWartLikeProperties};
 use pumpkin_macros::pumpkin_block;
 use pumpkin_util::math::position::BlockPos;
 use pumpkin_world::world::{BlockAccessor, BlockFlags};
@@ -46,7 +42,7 @@ impl BlockBehaviour for NetherWartBlock {
 impl PlantBlockBase for NetherWartBlock {
     fn can_plant_on_top(&self, block_accessor: &dyn BlockAccessor, pos: &BlockPos) -> bool {
         let block = block_accessor.get_block(pos);
-        block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_NETHER_WART)
+        block == &Block::SOUL_SAND
     }
 
     fn can_place_at(&self, block_accessor: &dyn BlockAccessor, block_pos: &BlockPos) -> bool {

@@ -1,5 +1,4 @@
-use pumpkin_data::BlockStateId;
-use pumpkin_data::tag::{self, Taggable};
+use pumpkin_data::{Block, BlockStateId};
 use pumpkin_macros::pumpkin_block;
 use pumpkin_util::math::position::BlockPos;
 use pumpkin_world::world::{BlockAccessor, BlockFlags};
@@ -50,8 +49,7 @@ impl PlantBlockBase for LilyPadBlock {
         // TODO: get and use fluids not blocks
         let block = block_accessor.get_block(pos);
         let above_fluid = block_accessor.get_block(&pos.up());
-        (block.has_tag(&tag::Fluid::MINECRAFT_SUPPORTS_LILY_PAD)
-            || block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_LILY_PAD))
+        (block == &Block::WATER || block == &Block::ICE || block == &Block::FROSTED_ICE)
             && above_fluid.is_air()
     }
 }

@@ -84,6 +84,16 @@ enum SplineRepr {
     Fixed { value: HashableF32 },
 }
 
+/// Rarity mapper of a 1.21.1 `weird_scaled_sampler`, vanilla's
+/// `DensityFunctions$WeirdScaledSampler$RarityValueMapper`.
+#[derive(Deserialize, Hash, Copy, Clone)]
+enum WeirdScaledMapper {
+    #[serde(rename = "type_1")]
+    Type1,
+    #[serde(rename = "type_2")]
+    Type2,
+}
+
 impl SplineRepr {
     fn get_token_stream(
         &self,
@@ -482,6 +492,11 @@ enum DensityFunctionRepr {
         #[serde(flatten)]
         data: NoiseData,
     },
+    WeirdScaledSampler {
+        input: Box<Self>,
+        noise_id: String,
+        rarity_mapper: WeirdScaledMapper,
+    },
     ShiftA {
         #[serde(rename(deserialize = "offsetNoise"))]
         noise_id: String,
@@ -659,6 +674,7 @@ impl DensityFunctionRepr {
             Self::ClampedYGradient { .. } => AXIS_Y,
             Self::Gradient { data } => data.axis.as_axes(),
             Self::Noise { data } => noise_domain_axes(data.xz_scale.0, data.y_scale.0),
+            Self::WeirdScaledSampler { input, .. } => AXES_ALL | input.domain_axes(),
             Self::ShiftedNoise {
                 shift_x,
                 shift_y,
@@ -738,6 +754,7 @@ impl DensityFunctionRepr {
             | Self::Linear { input, .. }
             | Self::Unary { input, .. }
             | Self::Clamp { input, .. }
+            | Self::WeirdScaledSampler { input, .. }
             | Self::Slice { input, .. } => f(input),
             Self::FindTopSurface {
                 density,
@@ -1337,6 +1354,45 @@ impl DensityFunctionRepr {
                     }
                 }
             }
+            Self::WeirdScaledSampler {
+                input,
+                noise_id,
+                rarity_mapper,
+            } => {
+                let in_idx = input.get_index_for_component_readonly(hash_to_index_map);
+                let in_fn =
+                    syn::Ident::new(&format!("{}_{}", fn_prefix, in_idx), Span::call_site());
+                let noise_ident = quote::format_ident!("{}", noise_id.to_shouty_snake_case());
+                // Vanilla `DensityFunctions.WeirdScaledSampler.transform`: the mapper
+                // quantizes the input into a rarity, and the noise is sampled at
+                // coordinates divided by that rarity.
+                let rarity_body = match rarity_mapper {
+                    WeirdScaledMapper::Type1 => {
+                        quote! {
+                            if v < -0.5 { 0.75 } else if v < 0.0 { 1.0 } else if v < 0.5 { 1.5 } else { 2.0 }
+                        }
+                    }
+                    WeirdScaledMapper::Type2 => {
+                        quote! {
+                            if v < -0.75 { 0.5 } else if v < -0.5 { 0.75 } else if v < 0.5 { 1.0 } else if v < 0.75 { 2.0 } else { 3.0 }
+                        }
+                    }
+                };
+
+                quote! {
+                    #[inline(always)]
+                    pub fn #fn_name<C: NoiseEvaluationContext>(pos: &pumpkin_util::math::vector3::Vector3<i32>, ctx: &mut C) -> f32 {
+                        let v = #in_fn(pos, ctx);
+                        let rarity = #rarity_body;
+                        rarity * ctx.sample_noise(
+                            DoublePerlinNoiseParameters::#noise_ident,
+                            f64::from(pos.x) / f64::from(rarity),
+                            f64::from(pos.y) / f64::from(rarity),
+                            f64::from(pos.z) / f64::from(rarity),
+                        ).abs()
+                    }
+                }
+            }
             Self::ShiftA { noise_id } => {
                 let noise_id = quote::format_ident!("{}", noise_id.to_shouty_snake_case());
                 quote! {
@@ -1624,6 +1680,26 @@ impl DensityFunctionRepr {
                             xz_scale: #xz_scale,
                             y_scale: #y_scale,
                         }
+                    }
+                }
+            }
+            Self::WeirdScaledSampler {
+                input,
+                noise_id,
+                rarity_mapper,
+            } => {
+                let input_index = input.get_index_for_component(stack, nodes, hash_to_index_map);
+                let noise_id = quote::format_ident!("{}", noise_id.to_shouty_snake_case());
+                let mapper_ident = match rarity_mapper {
+                    WeirdScaledMapper::Type1 => quote::format_ident!("Type1"),
+                    WeirdScaledMapper::Type2 => quote::format_ident!("Type2"),
+                };
+
+                quote! {
+                    BaseNoiseFunctionComponent::WeirdScaledSampler {
+                        input_index: #input_index,
+                        noise_id: DoublePerlinNoiseParameters::#noise_id,
+                        rarity_mapper: WeirdScaledMapper::#mapper_ident,
                     }
                 }
             }
@@ -2687,6 +2763,33 @@ fn parse_vanilla_df(base_df_dir: &std::path::Path, val: &serde_json::Value) -> D
                         }
                     }
                 }
+                "weird_scaled_sampler" => {
+                    let input = parse_vanilla_df(
+                        base_df_dir,
+                        obj.get("input")
+                            .expect("Missing input in weird_scaled_sampler"),
+                    );
+                    let noise_name = obj
+                        .get("noise")
+                        .and_then(|v| v.as_str())
+                        .expect("Missing noise name in weird_scaled_sampler");
+                    let rarity_mapper: WeirdScaledMapper = obj
+                        .get("rarity_value_mapper")
+                        .and_then(|v| v.as_str())
+                        .and_then(|v| match v {
+                            "type_1" => Some(WeirdScaledMapper::Type1),
+                            "type_2" => Some(WeirdScaledMapper::Type2),
+                            _ => None,
+                        })
+                        .unwrap_or_else(|| {
+                            panic!("Unknown rarity_value_mapper in weird_scaled_sampler")
+                        });
+                    DensityFunctionRepr::WeirdScaledSampler {
+                        input: Box::new(input),
+                        noise_id: clean_noise_name(noise_name),
+                        rarity_mapper,
+                    }
+                }
                 "shifted_noise" => {
                     let shift_x =
                         parse_vanilla_df(base_df_dir, obj.get("shift_x").expect("Missing shift_x"));
@@ -2765,14 +2868,12 @@ fn parse_vanilla_df(base_df_dir: &std::path::Path, val: &serde_json::Value) -> D
                             .expect("Missing input/argument"),
                     );
                     let wrapper = if clean_type == "interpolated" {
-                        let cell_size_xz =
-                            obj.get("cell_size_xz")
-                                .and_then(|v| v.as_i64())
-                                .expect("Missing cell_size_xz") as i32;
+                        let cell_size_xz = obj
+                            .get("cell_size_xz")
+                            .and_then(|v| v.as_i64())
+                            .unwrap_or(8) as i32;
                         let cell_size_y =
-                            obj.get("cell_size_y")
-                                .and_then(|v| v.as_i64())
-                                .expect("Missing cell_size_y") as i32;
+                            obj.get("cell_size_y").and_then(|v| v.as_i64()).unwrap_or(4) as i32;
                         WrapperType::Interpolated {
                             cell_size_xz,
                             cell_size_y,
@@ -3241,6 +3342,57 @@ pub fn build() -> TokenStream {
             Cache,
         }
 
+        /// Vanilla `DensityFunctions$WeirdScaledSampler$RarityValueMapper`.
+        #[derive(Copy, Clone, PartialEq, Eq)]
+        pub enum WeirdScaledMapper {
+            Type1,
+            Type2,
+        }
+
+        impl WeirdScaledMapper {
+            /// Quantizes a sampled input value into a rarity multiplier.
+            #[inline]
+            #[must_use]
+            pub const fn map(&self, value: f32) -> f32 {
+                match self {
+                    Self::Type1 => {
+                        if value < -0.5 {
+                            0.75
+                        } else if value < 0.0 {
+                            1.0
+                        } else if value < 0.5 {
+                            1.5
+                        } else {
+                            2.0
+                        }
+                    }
+                    Self::Type2 => {
+                        if value < -0.75 {
+                            0.5
+                        } else if value < -0.5 {
+                            0.75
+                        } else if value < 0.5 {
+                            1.0
+                        } else if value < 0.75 {
+                            2.0
+                        } else {
+                            3.0
+                        }
+                    }
+                }
+            }
+
+            /// The largest rarity this mapper can produce.
+            #[inline]
+            #[must_use]
+            pub const fn max_rarity(&self) -> f32 {
+                match self {
+                    Self::Type1 => 2.0,
+                    Self::Type2 => 3.0,
+                }
+            }
+        }
+
         pub enum BaseNoiseFunctionComponent {
             Beardifier,
             BlendAlpha,
@@ -3256,6 +3408,11 @@ pub fn build() -> TokenStream {
             EndIslands,
             Noise {
                 data: &'static NoiseData,
+            },
+            WeirdScaledSampler {
+                input_index: usize,
+                noise_id: DoublePerlinNoiseParameters,
+                rarity_mapper: WeirdScaledMapper,
             },
             ShiftA {
                 noise_id: DoublePerlinNoiseParameters,

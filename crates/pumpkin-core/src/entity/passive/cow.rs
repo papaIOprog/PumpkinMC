@@ -1,15 +1,9 @@
-use std::sync::{
-    Arc, Weak,
-    atomic::{AtomicU8, Ordering},
-};
+use std::sync::{Arc, Weak};
 
-use pumpkin_data::cow_sound_variant::CowSoundVariant;
-use pumpkin_data::cow_variant::CowVariant;
 use pumpkin_data::item_stack::ItemStack;
 use pumpkin_data::sound::Sound;
 use pumpkin_data::{entity::EntityType, item::Item};
 use pumpkin_nbt::compound::NbtCompound;
-use pumpkin_protocol::codec::var_int::VarInt;
 
 use crate::entity::{
     Entity, EntityBase,
@@ -33,21 +27,14 @@ const TEMPT_ITEMS: &[&Item] = &[&Item::WHEAT];
 pub struct CowEntity {
     pub mob_entity: MobEntity,
     pub ageable_data: crate::entity::ageable::AgeableData,
-    pub variant: AtomicU8,
-    pub sound_variant: AtomicU8,
 }
 
 impl CowEntity {
     pub fn new(entity: Entity) -> Arc<Self> {
-        let world = entity.world.load();
-        let biome = world.get_biome(&entity.block_pos.load());
-        let variant = CowVariant::select_for_biome(biome.registry_id);
         let mob_entity = MobEntity::new(entity);
         let cow = Self {
             mob_entity,
             ageable_data: crate::entity::ageable::AgeableData::default(),
-            variant: AtomicU8::new(variant.id()),
-            sound_variant: AtomicU8::new(CowSoundVariant::Classic as u8),
         };
         let mob_arc = Arc::new(cow);
         let mob_weak: Weak<dyn Mob> = {
@@ -77,40 +64,15 @@ impl CowEntity {
 
         mob_arc
     }
-
-    pub fn set_variant(&self, variant: CowVariant) {
-        self.variant.store(variant.id(), Ordering::Relaxed);
-        let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::cow::DATA_VARIANT_ID,
-            VarInt(variant.id() as i32),
-        );
-    }
-
-    pub fn set_sound_variant(&self, sound_variant: CowSoundVariant) {
-        self.sound_variant
-            .store(sound_variant as u8, Ordering::Relaxed);
-        let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::cow::DATA_SOUND_VARIANT_ID,
-            VarInt(sound_variant as u8 as i32),
-        );
-    }
 }
 
 impl CustomSound for CowEntity {
     fn death_sound(&self) -> Option<Sound> {
-        let is_baby = self.is_baby();
-        let sound_variant = CowSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        Some(sound_variant.death_sound(is_baby))
+        Some(Sound::EntityCowDeath)
     }
 
     fn hurt_sound(&self) -> Option<Sound> {
-        let is_baby = self.is_baby();
-        let sound_variant = CowSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        Some(sound_variant.hurt_sound(is_baby))
+        Some(Sound::EntityCowHurt)
     }
 }
 
@@ -153,52 +115,11 @@ impl Mob for CowEntity {
         if is_baby {
             entity.set_synced_data(pumpkin_data::tracked_data::cow::DATA_BABY_ID, true);
         }
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::cow::DATA_VARIANT_ID,
-            VarInt(self.variant.load(Ordering::Relaxed) as i32),
-        );
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::cow::DATA_SOUND_VARIANT_ID,
-            VarInt(self.sound_variant.load(Ordering::Relaxed) as i32),
-        );
     }
 
-    fn mob_set_variant_name(&self, name: &str) {
-        if let Some(v) = CowVariant::from_name(name) {
-            self.set_variant(v);
-        }
-    }
+    fn mob_write_nbt(&self, _nbt: &mut NbtCompound) {}
 
-    fn mob_set_sound_variant_name(&self, name: &str) {
-        if let Some(v) = CowSoundVariant::from_name(name) {
-            self.set_sound_variant(v);
-        }
-    }
-
-    fn mob_write_nbt(&self, nbt: &mut NbtCompound) {
-        let variant = CowVariant::from_id(self.variant.load(Ordering::Relaxed)).unwrap_or_default();
-        nbt.put_string("variant", format!("minecraft:{}", variant.to_name()));
-        let sound_variant = CowSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        nbt.put_string(
-            "sound_variant",
-            format!("minecraft:{}", sound_variant.to_name()),
-        );
-    }
-
-    fn mob_read_nbt(&self, nbt: &NbtCompound) {
-        if let Some(variant_str) = nbt.get_string("variant")
-            && let Some(variant) = CowVariant::from_name(variant_str)
-        {
-            self.variant.store(variant.id(), Ordering::Relaxed);
-        }
-        if let Some(sound_str) = nbt.get_string("sound_variant")
-            && let Some(sound_variant) = CowSoundVariant::from_name(sound_str)
-        {
-            self.sound_variant
-                .store(sound_variant as u8, Ordering::Relaxed);
-        }
-    }
+    fn mob_read_nbt(&self, _nbt: &NbtCompound) {}
 
     fn mob_interact(&self, player: &Arc<Player>, item_stack: &mut ItemStack) -> bool {
         if item_stack.get_item() == &Item::BUCKET && !self.is_baby() {
@@ -212,12 +133,6 @@ impl Mob for CowEntity {
             );
             return true;
         }
-        let sound_variant = CowSoundVariant::from_id(self.sound_variant.load(Ordering::Relaxed))
-            .unwrap_or_default();
-        self.animal_interact(
-            player,
-            item_stack,
-            sound_variant.ambient_sound(self.is_baby()),
-        )
+        self.animal_interact(player, item_stack, Sound::EntityCowAmbient)
     }
 }

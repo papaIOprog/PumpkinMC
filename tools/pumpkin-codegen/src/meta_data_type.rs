@@ -11,8 +11,8 @@ fn canonicalize_type_name(name: &str) -> String {
         "text_component" | "component" => "component".to_string(),
         "optional_text_component" | "optional_component" => "optional_component".to_string(),
         "optional_int" | "optional_unsigned_int" => "optional_unsigned_int".to_string(),
-        "vector_3f" | "vector3" => "vector3".to_string(),
-        "quaternion_f" | "quaternion" => "quaternion".to_string(),
+        "vector_3f" | "vector3f" | "vector3" => "vector3".to_string(),
+        "quaternion_f" | "quaternionf" | "quaternion" => "quaternion".to_string(),
         "rotation" | "rotations" => "rotations".to_string(),
         "particle_list" | "particles" => "particles".to_string(),
         "copper_golem_state" | "weathering_copper_state" => "weathering_copper_state".to_string(),
@@ -44,21 +44,33 @@ pub fn build() -> TokenStream {
         });
     }
 
-    let aliases = quote! {
-        pub const INTEGER: MetaDataType = Self::INT;
-        pub const ENTITY_POSE: MetaDataType = Self::POSE;
-        pub const FACING: MetaDataType = Self::DIRECTION;
-        pub const TEXT_COMPONENT: MetaDataType = Self::COMPONENT;
-        pub const OPTIONAL_TEXT_COMPONENT: MetaDataType = Self::OPTIONAL_COMPONENT;
-        pub const OPTIONAL_INT: MetaDataType = Self::OPTIONAL_UNSIGNED_INT;
-        pub const VECTOR_3F: MetaDataType = Self::VECTOR3;
-        pub const QUATERNION_F: MetaDataType = Self::QUATERNION;
-        pub const ROTATION: MetaDataType = Self::ROTATIONS;
-        pub const PARTICLE_LIST: MetaDataType = Self::PARTICLES;
-        pub const COPPER_GOLEM_STATE: MetaDataType = Self::WEATHERING_COPPER_STATE;
-        pub const PROFILE: MetaDataType = Self::RESOLVABLE_PROFILE;
-        pub const ARM: MetaDataType = Self::HUMANOID_ARM;
-    };
+    // Old names kept as aliases; only emitted when the canonical type exists
+    // in the dumped version.
+    const ALIAS_TARGETS: &[(&str, &str)] = &[
+        ("INTEGER", "int"),
+        ("ENTITY_POSE", "pose"),
+        ("FACING", "direction"),
+        ("TEXT_COMPONENT", "component"),
+        ("OPTIONAL_TEXT_COMPONENT", "optional_component"),
+        ("OPTIONAL_INT", "optional_unsigned_int"),
+        ("VECTOR_3F", "vector3"),
+        ("QUATERNION_F", "quaternion"),
+        ("ROTATION", "rotations"),
+        ("PARTICLE_LIST", "particles"),
+        ("COPPER_GOLEM_STATE", "weathering_copper_state"),
+        ("PROFILE", "resolvable_profile"),
+        ("ARM", "humanoid_arm"),
+    ];
+    let mut aliases = TokenStream::new();
+    for (alias, target) in ALIAS_TARGETS {
+        if handlers_map.contains_key(*target) {
+            let alias_ident = format_ident!("{}", alias);
+            let target_ident = format_ident!("{}", target.to_uppercase());
+            aliases.extend(quote! {
+                pub const #alias_ident: MetaDataType = Self::#target_ident;
+            });
+        }
+    }
 
     quote! {
         #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

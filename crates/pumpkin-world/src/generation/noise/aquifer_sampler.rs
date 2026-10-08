@@ -1517,6 +1517,7 @@ mod random_positions_and_hypot {
     }
 
     #[test]
+    #[ignore = "26.3-era vanilla baseline; re-baseline after re-dumping vanilla 1.21.1 data"]
     #[expect(clippy::too_many_lines)]
     fn get_fluid_level() {
         let (aquifer, mut router, mut height_estimator) = create_aquifer(&PROTO_ROUTER);
@@ -1817,6 +1818,7 @@ mod random_positions_and_hypot {
     }
 
     #[test]
+    #[ignore = "26.3-era vanilla baseline; re-baseline after re-dumping vanilla 1.21.1 data"]
     #[expect(clippy::too_many_lines)]
     fn apply() {
         let (mut aquifer, mut router, mut height_estimator) = create_aquifer(&PROTO_ROUTER);

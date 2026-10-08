@@ -1051,9 +1051,10 @@ impl TrialSpawner {
         }
 
         if let Some(size) = slime_size {
-            entity
-                .get_entity()
-                .set_synced_data(pumpkin_data::tracked_data::slime::ID_SIZE, i32::from(size));
+            entity.get_entity().set_synced_data(
+                pumpkin_data::tracked_data::slime::SLIME_SIZE,
+                i32::from(size),
+            );
         }
 
         if let Some(equip) = equipment_loot_table

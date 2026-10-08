@@ -154,11 +154,8 @@ impl EntityBase for EnderPearlEntity {
             );
 
             // Deal 5 damage to owner
-            owner.damage(
-                owner.as_ref(),
-                5.0,
-                pumpkin_data::damage::DamageType::ENDER_PEARL,
-            );
+            // 1.21.1 has no `minecraft:ender_pearl` damage type; vanilla uses fall damage.
+            owner.damage(owner.as_ref(), 5.0, pumpkin_data::damage::DamageType::FALL);
         }
 
         world.send_entity_status(entity, EntityStatus::Death, Some(ActorEventID::Death));

@@ -5,7 +5,6 @@ use crate::{
 };
 use pumpkin_data::entity::EntityStatus;
 use pumpkin_protocol::bedrock::server::actor_event::ActorEventID;
-use pumpkin_protocol::codec::optional_int::OptionalInt;
 use pumpkin_util::{
     math::vector3::Vector3,
     random::{RandomGenerator, RandomImpl, get_seed, xoroshiro128::Xoroshiro},
@@ -53,19 +52,12 @@ impl FireworkRocketEntity {
             random.next_triangular(0.0, 0.002_297),
         ));
 
-        let rocket = Self {
+        Self {
             entity: thrown,
             life: 0.into(),
             life_time: (10 + random.next_bounded_i32(6) as u32 + random.next_bounded_i32(7) as u32)
                 .into(),
-        };
-
-        rocket.entity.entity.set_synced_data(
-            pumpkin_data::tracked_data::firework_rocket::ATTACHED_TO_TARGET,
-            OptionalInt(Some(shooter.entity_id)),
-        );
-
-        rocket
+        }
     }
 
     pub fn explode_and_remove(&self, world: &World) {

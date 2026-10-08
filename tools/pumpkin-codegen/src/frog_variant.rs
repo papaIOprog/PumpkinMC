@@ -14,6 +14,13 @@ struct FrogVariantJson {
 
 pub fn build() -> TokenStream {
     let dir = Path::new("../../assets/datapack/data/minecraft/frog_variant");
+    // 1.21.1 hardcodes frog variants in the server jar instead of shipping
+    // them as datapack files; assets/vanilla holds those values.
+    let dir = if dir.is_dir() {
+        dir
+    } else {
+        Path::new("../../assets/vanilla/data/minecraft/frog_variant")
+    };
 
     let mut variants: BTreeMap<String, FrogVariantJson> = BTreeMap::new();
 

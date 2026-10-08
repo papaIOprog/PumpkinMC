@@ -25,7 +25,9 @@ use super::{
             ClampedYGradient, DistanceToPoint, EndIsland, Gradient, IntervalSelect, RangeChoice,
             Slice,
         },
-        noise::{InterpolatedNoiseSampler, Noise, ShiftA, ShiftB, ShiftedNoise},
+        noise::{
+            InterpolatedNoiseSampler, Noise, ShiftA, ShiftB, ShiftedNoise, WeirdScaledSampler,
+        },
         spline::{Spline, SplineFunction, SplinePoint, SplineValue},
     },
     density_volume::DensityVolume,
@@ -116,6 +118,7 @@ pub enum DependentProtoNoiseFunctionComponent {
     Unary(Unary),
     Binary(Binary),
     ShiftedNoise(ShiftedNoise),
+    WeirdScaledSampler(WeirdScaledSampler),
     IntervalSelect(IntervalSelect),
     FindTopSurface(FindTopSurface),
     Clamp(Clamp),
@@ -134,6 +137,7 @@ impl NoiseFunctionComponentRange for DependentProtoNoiseFunctionComponent {
             Self::Unary(u) => u.min(),
             Self::Binary(b) => b.min(),
             Self::ShiftedNoise(s) => s.min(),
+            Self::WeirdScaledSampler(w) => w.min(),
             Self::IntervalSelect(i) => i.min(),
             Self::FindTopSurface(f) => f.min(),
             Self::Clamp(c) => c.min(),
@@ -152,6 +156,7 @@ impl NoiseFunctionComponentRange for DependentProtoNoiseFunctionComponent {
             Self::Unary(u) => u.max(),
             Self::Binary(b) => b.max(),
             Self::ShiftedNoise(s) => s.max(),
+            Self::WeirdScaledSampler(w) => w.max(),
             Self::IntervalSelect(i) => i.max(),
             Self::FindTopSurface(f) => f.max(),
             Self::Clamp(c) => c.max(),
@@ -176,6 +181,7 @@ impl StaticChunkNoiseFunctionComponentImpl for DependentProtoNoiseFunctionCompon
             Self::Unary(u) => u.sample(component_stack, pos),
             Self::Binary(b) => b.sample(component_stack, pos),
             Self::ShiftedNoise(s) => s.sample(component_stack, pos),
+            Self::WeirdScaledSampler(w) => w.sample(component_stack, pos),
             Self::IntervalSelect(i) => i.sample(component_stack, pos),
             Self::FindTopSurface(f) => f.sample(component_stack, pos),
             Self::Clamp(c) => c.sample(component_stack, pos),
@@ -200,6 +206,9 @@ impl StaticChunkNoiseFunctionComponentImpl for DependentProtoNoiseFunctionCompon
             Self::Binary(b) => b.sample_volume(component_stack, buffer, volume),
             Self::ShiftedNoise(s) => {
                 s.sample_volume(component_stack, buffer, volume);
+            }
+            Self::WeirdScaledSampler(w) => {
+                w.sample_volume(component_stack, buffer, volume);
             }
             Self::IntervalSelect(i) => {
                 i.sample_volume(component_stack, buffer, volume);
@@ -375,6 +384,21 @@ impl ProtoNoiseRouters {
                         IndependentProtoNoiseFunctionComponent::Noise(Noise::new(sampler, data)),
                     )
                 }
+                BaseNoiseFunctionComponent::WeirdScaledSampler {
+                    input_index,
+                    noise_id,
+                    rarity_mapper,
+                } => {
+                    let sampler = DoublePerlinNoiseBuilder::get_noise_sampler_for_id(
+                        base_random_deriver,
+                        noise_id,
+                    );
+                    ProtoNoiseFunctionComponent::Dependent(
+                        DependentProtoNoiseFunctionComponent::WeirdScaledSampler(
+                            WeirdScaledSampler::new(sampler, *input_index, *rarity_mapper),
+                        ),
+                    )
+                }
                 BaseNoiseFunctionComponent::ShiftA { noise_id } => {
                     let sampler = DoublePerlinNoiseBuilder::get_noise_sampler_for_id(
                         base_random_deriver,
@@ -420,30 +444,10 @@ impl ProtoNoiseRouters {
                     shift_z_index,
                     data,
                 } => {
-                    let sampler = match data.noise_id.id {
-                        id if id == DoublePerlinNoiseParameters::NETHER_TEMPERATURE.id => {
-                            let mut legacy_rand =
-                                LegacyRand::from_seed(random_config.seed.wrapping_add(0));
-                            DoublePerlinNoiseSampler::from_params(
-                                &mut legacy_rand,
-                                &data.noise_id,
-                                true,
-                            )
-                        }
-                        id if id == DoublePerlinNoiseParameters::NETHER_VEGETATION.id => {
-                            let mut legacy_rand =
-                                LegacyRand::from_seed(random_config.seed.wrapping_add(1));
-                            DoublePerlinNoiseSampler::from_params(
-                                &mut legacy_rand,
-                                &data.noise_id,
-                                true,
-                            )
-                        }
-                        _ => DoublePerlinNoiseBuilder::get_noise_sampler_for_id(
-                            base_random_deriver,
-                            &data.noise_id,
-                        ),
-                    };
+                    let sampler = DoublePerlinNoiseBuilder::get_noise_sampler_for_id(
+                        base_random_deriver,
+                        &data.noise_id,
+                    );
                     ProtoNoiseFunctionComponent::Dependent(
                         DependentProtoNoiseFunctionComponent::ShiftedNoise(ShiftedNoise::new(
                             *shift_x_index,

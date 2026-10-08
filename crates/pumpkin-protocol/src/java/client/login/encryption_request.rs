@@ -128,7 +128,7 @@ mod tests {
         let packet =
             CEncryptionRequest::new("test_server", b"public_key_bytes", b"verify_1234", true);
         let mut buf = Vec::new();
-        let version = JavaMinecraftVersion::V_1_21_4;
+        let version = JavaMinecraftVersion::V_1_21;
         packet.write_packet_data(&mut buf, &version).unwrap();
 
         let mut slice = buf.as_slice();

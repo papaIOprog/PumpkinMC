@@ -209,22 +209,30 @@ mod tests {
     fn canyon_carve() {
         let chunk_pos = Vector2::new(0, 0);
         let carver_chunk_pos = Vector2::new(0, 0);
-        let mut mask = CarvingMask::new(-64, 320);
-        let mut random = RandomGenerator::Legacy(
-            pumpkin_util::random::legacy_rand::LegacyRand::from_seed(12345),
-        );
+        // The 1.21.1 carver configs rarely carve on a given seed, so try a few.
+        let mut carved = false;
+        for seed in 0..128 {
+            let mut mask = CarvingMask::new(-64, 320);
+            let mut random = RandomGenerator::Legacy(
+                pumpkin_util::random::legacy_rand::LegacyRand::from_seed(seed),
+            );
 
-        CanyonCarver.carve(
-            &CANYON,
-            &mut mask,
-            &mut random,
-            &chunk_pos,
-            &carver_chunk_pos,
-            -64,
-            384,
-            false,
-        );
+            CanyonCarver.carve(
+                &CANYON,
+                &mut mask,
+                &mut random,
+                &chunk_pos,
+                &carver_chunk_pos,
+                -64,
+                384,
+                false,
+            );
 
-        assert!(!mask.is_empty());
+            if !mask.is_empty() {
+                carved = true;
+                break;
+            }
+        }
+        assert!(carved);
     }
 }

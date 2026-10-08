@@ -301,7 +301,7 @@ impl EndermanEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(pumpkin_data::tracked_data::enderman::CREEPY, creepy);
+            .set_synced_data(pumpkin_data::tracked_data::enderman::ANGRY, creepy);
     }
 
     pub fn is_creepy(&self) -> bool {
@@ -313,7 +313,7 @@ impl EndermanEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(pumpkin_data::tracked_data::enderman::STARED_AT, provoked);
+            .set_synced_data(pumpkin_data::tracked_data::enderman::PROVOKED, provoked);
     }
 
     pub fn set_carried_block(&self, block_state: Option<BlockStateId>) {
@@ -322,7 +322,7 @@ impl EndermanEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(pumpkin_data::tracked_data::enderman::CARRY_STATE, value);
+            .set_synced_data(pumpkin_data::tracked_data::enderman::CARRIED_BLOCK, value);
     }
 
     pub fn get_carried_block(&self) -> Option<BlockStateId> {

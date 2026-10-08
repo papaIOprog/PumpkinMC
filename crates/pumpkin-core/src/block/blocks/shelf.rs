@@ -11,7 +11,8 @@ use crate::block::{
 use crate::entity::EntityBase;
 use std::sync::Arc;
 
-#[pumpkin_block_from_tag("minecraft:wooden_shelves")]
+// `minecraft:wooden_shelves` is a 26.x tag; use the pumpkin-side c: tag instead.
+#[pumpkin_block_from_tag("c:wooden_shelves")]
 pub struct ShelfBlock;
 
 impl BlockBehaviour for ShelfBlock {

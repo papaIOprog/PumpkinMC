@@ -128,7 +128,7 @@ impl MuleEntity {
     pub fn set_has_chest(&self, val: bool) {
         self.has_chest.store(val, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(pumpkin_data::tracked_data::mule::DATA_ID_CHEST, val);
+        entity.set_synced_data(pumpkin_data::tracked_data::mule::CHEST, val);
     }
 }
 
@@ -200,10 +200,7 @@ impl Mob for MuleEntity {
         if is_baby {
             entity.set_synced_data(pumpkin_data::tracked_data::mule::DATA_BABY_ID, true);
         }
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::mule::DATA_ID_CHEST,
-            self.has_chest(),
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::mule::CHEST, self.has_chest());
         entity.set_synced_data(
             pumpkin_data::tracked_data::mule::DATA_ID_FLAGS,
             self.flags.load(Ordering::Relaxed) as i8,

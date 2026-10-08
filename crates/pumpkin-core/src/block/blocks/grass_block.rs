@@ -179,7 +179,14 @@ fn biome_bonemeal_state(
 
     let mut random = RandomGenerator::Xoroshiro(Xoroshiro::from_seed(rand::rng().random()));
     let key = features[random.next_bounded_i32(features.len() as i32) as usize];
-    let ConfiguredFeature::SimpleBlock(feature) = CONFIGURED_FEATURES.get(&key)? else {
+    // In 1.21.1 the flower features wrap the actual simple-block feature in a patch.
+    let ConfiguredFeature::Flower(patch) = CONFIGURED_FEATURES.get(&key)? else {
+        return None;
+    };
+    let Feature::Inlined(inner) = &patch.feature.feature else {
+        return None;
+    };
+    let ConfiguredFeature::SimpleBlock(feature) = &**inner else {
         return None;
     };
     feature

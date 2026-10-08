@@ -9,16 +9,10 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 struct WolfVariantJson {
-    assets: WolfAssetsJson,
-    #[serde(default)]
-    baby_assets: Option<WolfAssetsJson>,
-}
-
-#[derive(Deserialize)]
-struct WolfAssetsJson {
-    angry: String,
-    tame: String,
-    wild: String,
+    /// 1.21.1 ships the textures as flat fields.
+    wild_texture: String,
+    tame_texture: String,
+    angry_texture: String,
 }
 
 pub fn build() -> TokenStream {
@@ -58,9 +52,9 @@ pub fn build() -> TokenStream {
     for (name, json) in &variants {
         let variant_ident = format_ident!("{}", name.to_pascal_case());
         let namespaced = format!("minecraft:{name}");
-        let wild = &json.assets.wild;
-        let tame = &json.assets.tame;
-        let angry = &json.assets.angry;
+        let wild = &json.wild_texture;
+        let tame = &json.tame_texture;
+        let angry = &json.angry_texture;
 
         enum_variants.push(quote! { #variant_ident });
         from_name_arms.push(quote! {

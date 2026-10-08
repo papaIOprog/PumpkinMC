@@ -21,9 +21,7 @@ pub fn place_mushroom_block<T: GenerationCache>(
     state: &'static BlockState,
 ) {
     let (current_block, current_state) = chunk.get_block_and_state(pos);
-    if current_state.is_air()
-        || current_block.has_tag(&tag::Block::MINECRAFT_REPLACEABLE_BY_MUSHROOMS)
-    {
+    if current_state.is_air() || current_block.has_tag(&tag::Block::MINECRAFT_REPLACEABLE) {
         chunk.set_block_state(&pos.0, state);
     }
 }
@@ -52,7 +50,7 @@ impl HugeBrownMushroomFeature {
         }
 
         let below_block = chunk.get_block(&pos.down());
-        if !below_block.has_tag(&tag::Block::MINECRAFT_HUGE_BROWN_MUSHROOM_CAN_PLACE_ON) {
+        if !below_block.has_tag(&tag::Block::MINECRAFT_DIRT) {
             return false;
         }
 

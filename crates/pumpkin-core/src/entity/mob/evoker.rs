@@ -128,10 +128,7 @@ impl EvokerEntity {
     pub fn set_is_casting_spell(&self, spell: IllagerSpell) {
         self.current_spell.store(spell as u8, Ordering::Relaxed);
         let entity = &self.mob_entity.living_entity.entity;
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::evoker::SPELL_CASTING_ID,
-            spell as u8 as i8,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::evoker::SPELL, spell as u8 as i8);
     }
 
     pub fn get_current_spell(&self) -> IllagerSpell {

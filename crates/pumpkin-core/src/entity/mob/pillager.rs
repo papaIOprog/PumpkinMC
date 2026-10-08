@@ -107,7 +107,7 @@ impl PillagerEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(tracked_data::pillager::IS_CHARGING_CROSSBOW, is_charging);
+            .set_synced_data(tracked_data::pillager::CHARGING, is_charging);
     }
 
     pub fn add_to_inventory(&self, item: ItemStack) -> Option<ItemStack> {

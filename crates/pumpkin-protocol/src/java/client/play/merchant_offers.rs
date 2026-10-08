@@ -257,7 +257,7 @@ mod tests {
 
     #[test]
     fn merchant_inputs_use_item_cost_encoding() {
-        let version = JavaMinecraftVersion::V_26_2;
+        let version = JavaMinecraftVersion::V_1_21;
         let packet =
             CMerchantOffers::new(VarInt(1), vec![offer()], VarInt(1), VarInt(0), true, true);
         let mut bytes = Vec::new();
@@ -342,7 +342,7 @@ mod tests {
                 true,
             );
             packet
-                .write_packet_data(&mut Vec::new(), &JavaMinecraftVersion::V_26_2)
+                .write_packet_data(&mut Vec::new(), &JavaMinecraftVersion::V_1_21)
                 .unwrap();
         }
     }

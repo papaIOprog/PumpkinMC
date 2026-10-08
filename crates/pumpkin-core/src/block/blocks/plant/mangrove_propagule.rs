@@ -40,11 +40,11 @@ impl MangrovePropaguleBlock {
         if props.hanging {
             let above_pos = pos.up();
             let above_block = world.get_block(&above_pos);
-            above_block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_HANGING_MANGROVE_PROPAGULE)
+            above_block == &Block::MANGROVE_LEAVES
         } else {
             let below_pos = pos.down();
             let below_block = world.get_block(&below_pos);
-            below_block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_MANGROVE_PROPAGULE)
+            below_block.has_tag(&tag::Block::MINECRAFT_DIRT) || below_block == &Block::CLAY
         }
     }
 

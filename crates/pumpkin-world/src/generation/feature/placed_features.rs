@@ -181,6 +181,9 @@ pub enum PlacementModifier {
     InSquare(SquarePlacementModifier),
     RandomOffset(RandomOffsetPlacementModifier),
     FixedPlacement(Vec<BlockPos>),
+    /// `minecraft:carving_mask` – pumpkin does not track carving masks yet, so
+    /// positions pass through unfiltered.
+    CarvingMask,
 }
 
 impl PlacementModifier {
@@ -221,6 +224,7 @@ impl PlacementModifier {
             Self::InSquare(_) => SquarePlacementModifier::get_positions(random, pos),
             Self::RandomOffset(modifier) => modifier.get_positions(random, pos),
             Self::FixedPlacement(positions) => Box::new(positions.clone().into_iter()),
+            Self::CarvingMask => Box::new(std::iter::once(pos)),
         }
     }
 }

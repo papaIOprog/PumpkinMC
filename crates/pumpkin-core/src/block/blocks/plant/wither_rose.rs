@@ -1,6 +1,7 @@
 use crate::block::{GetStateForNeighborUpdateArgs, blocks::plant::PlantBlockBase};
 use pumpkin_data::BlockStateId;
 use pumpkin_data::{
+    Block,
     effect::StatusEffect,
     entity::EntityType,
     tag::{self, Taggable},
@@ -60,6 +61,9 @@ impl PlantBlockBase for WitherRoseBlock {
         pos: &pumpkin_util::math::position::BlockPos,
     ) -> bool {
         let support_block = block_accessor.get_block(pos);
-        support_block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_WITHER_ROSE)
+        support_block.has_tag(&tag::Block::MINECRAFT_DIRT)
+            || support_block == &Block::NETHERRACK
+            || support_block == &Block::SOUL_SAND
+            || support_block == &Block::SOUL_SOIL
     }
 }

@@ -5,7 +5,6 @@ use std::sync::atomic::Ordering;
 use wasmtime::component::{Access, HasSelf, Resource};
 
 use crate::pumpkin::plugin::forms::Form;
-use crate::pumpkin::plugin::java_dialogs::Dialog;
 use crate::{
     events::{from_wasm_game_mode, from_wasm_position, to_wasm_game_mode, to_wasm_position},
     living_entity::from_wit_damage_type,
@@ -37,7 +36,6 @@ use pumpkin_core::{
 use pumpkin_inventory::player::player_inventory::PlayerInventory;
 use pumpkin_protocol::Property;
 use pumpkin_protocol::bedrock::client::modal_form_request::CModalFormRequest;
-use pumpkin_protocol::java::client::dialog::DialogNBT;
 use pumpkin_util::permission::PermissionLvl;
 use pumpkin_util::translation::Locale;
 use pumpkin_wasm_host_common::{plugin::WasmPlugin, state::PluginHostState};
@@ -149,16 +147,6 @@ const fn to_wasm_java_version(
         JavaMinecraftVersion::V_1_20_3 => pumpkin::plugin::player::JavaMinecraftVersion::V1203,
         JavaMinecraftVersion::V_1_20_5 => pumpkin::plugin::player::JavaMinecraftVersion::V1205,
         JavaMinecraftVersion::V_1_21 => pumpkin::plugin::player::JavaMinecraftVersion::V121,
-        JavaMinecraftVersion::V_1_21_2 => pumpkin::plugin::player::JavaMinecraftVersion::V1212,
-        JavaMinecraftVersion::V_1_21_4 => pumpkin::plugin::player::JavaMinecraftVersion::V1214,
-        JavaMinecraftVersion::V_1_21_5 => pumpkin::plugin::player::JavaMinecraftVersion::V1215,
-        JavaMinecraftVersion::V_1_21_6 => pumpkin::plugin::player::JavaMinecraftVersion::V1216,
-        JavaMinecraftVersion::V_1_21_7 => pumpkin::plugin::player::JavaMinecraftVersion::V1217,
-        JavaMinecraftVersion::V_1_21_9 => pumpkin::plugin::player::JavaMinecraftVersion::V1219,
-        JavaMinecraftVersion::V_1_21_11 => pumpkin::plugin::player::JavaMinecraftVersion::V12111,
-        JavaMinecraftVersion::V_26_1 => pumpkin::plugin::player::JavaMinecraftVersion::V261,
-        JavaMinecraftVersion::V_26_2 => pumpkin::plugin::player::JavaMinecraftVersion::V262,
-        JavaMinecraftVersion::V_26_3 => pumpkin::plugin::player::JavaMinecraftVersion::V263,
         JavaMinecraftVersion::Unknown => pumpkin::plugin::player::JavaMinecraftVersion::Unknown,
     }
 }
@@ -552,16 +540,6 @@ const fn from_wasm_bedrock_status_flag(flag: pumpkin::plugin::player::BedrockSta
             entity_data_flag::ROTATION_LOCKED_TO_VEHICLE
         }
     }
-}
-
-pub(crate) fn text_component_from_resource(
-    state: &PluginHostState,
-    text: &Resource<pumpkin::plugin::text::TextComponent>,
-) -> pumpkin_util::text::TextComponent {
-    state
-        .get(text)
-        .expect("invalid text-component resource handle")
-        .clone()
 }
 
 fn plugin_from_state(state: &PluginHostState) -> wasmtime::Result<Arc<WasmPlugin>> {
@@ -3639,124 +3617,6 @@ impl pumpkin::plugin::player::HostJavaPlayer for PluginHostState {
 impl pumpkin::plugin::player::HostJavaPlayerWithStore<PluginHostState>
     for HasSelf<PluginHostState>
 {
-    #[allow(clippy::too_many_lines)]
-    async fn show_dialog(
-        mut host: Access<'_, PluginHostState, Self>,
-        player: Resource<pumpkin::plugin::player::JavaPlayer>,
-        dialog: Dialog,
-    ) -> wasmtime::Result<()> {
-        let (player, protocol_dialog, plugin) = {
-            let state = host.get();
-            let player = state.get(&player)?.clone();
-            let protocol_dialog = super::events::dialog::protocol_dialog_from_wasm(state, &dialog);
-            let plugin = state
-                .plugin
-                .as_ref()
-                .and_then(std::sync::Weak::upgrade)
-                .ok_or_else(|| wasmtime::Error::msg("Plugin instance not available"))?;
-            (player, protocol_dialog, plugin)
-        };
-
-        let operation = async move {
-            if let Some(server) = player.world().server.upgrade() {
-                let mut event =
-                    pumpkin_core::plugin::api::events::dialog::dialog_show::DialogShowEvent::new(
-                        player.clone(),
-                        protocol_dialog.clone(),
-                    );
-                server.plugin_manager.fire(&server, &mut event).await;
-                if event.cancelled {
-                    return Ok(());
-                }
-            }
-
-            if let pumpkin_core::net::ClientPlatform::Java(client) = player.client.as_ref() {
-                match client.connection_state.load() {
-                    pumpkin_protocol::ConnectionState::Config => {
-                        client
-                            .send_packet(
-                                &pumpkin_protocol::java::client::config::CConfigShowDialog::new(
-                                    pumpkin_protocol::IdOr::Value(DialogNBT::from_dialog(
-                                        &protocol_dialog,
-                                    )),
-                                ),
-                            )
-                            .await;
-                    }
-                    pumpkin_protocol::ConnectionState::Play => {
-                        client
-                            .send_packet(
-                                &pumpkin_protocol::java::client::play::CPlayShowDialog::new(
-                                    pumpkin_protocol::IdOr::Value(DialogNBT::from_dialog(
-                                        &protocol_dialog,
-                                    )),
-                                ),
-                            )
-                            .await;
-                    }
-                    _ => {}
-                }
-            }
-
-            Ok(())
-        };
-
-        plugin.store.pump_reentry(&mut host, operation).await?
-    }
-
-    async fn clear_dialog(
-        mut host: Access<'_, PluginHostState, Self>,
-        player: Resource<pumpkin::plugin::player::JavaPlayer>,
-    ) -> wasmtime::Result<()> {
-        let (player, plugin) = {
-            let state = host.get();
-            let player = state.get(&player)?.clone();
-            let plugin = state
-                .plugin
-                .as_ref()
-                .and_then(std::sync::Weak::upgrade)
-                .ok_or_else(|| wasmtime::Error::msg("Plugin instance not available"))?;
-            (player, plugin)
-        };
-
-        let operation = async move {
-            if let Some(server) = player.world().server.upgrade() {
-                let mut event =
-                    pumpkin_core::plugin::api::events::dialog::dialog_clear::DialogClearEvent::new(
-                        player.clone(),
-                    );
-                server.plugin_manager.fire(&server, &mut event).await;
-                if event.cancelled {
-                    return Ok(());
-                }
-            }
-
-            if let pumpkin_core::net::ClientPlatform::Java(client) = player.client.as_ref() {
-                match client.connection_state.load() {
-                    pumpkin_protocol::ConnectionState::Config => {
-                        client
-                            .send_packet(
-                                &pumpkin_protocol::java::client::config::CConfigClearDialog::new(),
-                            )
-                            .await;
-                    }
-                    pumpkin_protocol::ConnectionState::Play => {
-                        client
-                            .send_packet(
-                                &pumpkin_protocol::java::client::play::CPlayClearDialog::new(),
-                            )
-                            .await;
-                    }
-                    _ => {}
-                }
-            }
-
-            Ok(())
-        };
-
-        plugin.store.pump_reentry(&mut host, operation).await?
-    }
-
     async fn kick(
         mut host: Access<'_, PluginHostState, Self>,
         player: Resource<pumpkin::plugin::player::JavaPlayer>,

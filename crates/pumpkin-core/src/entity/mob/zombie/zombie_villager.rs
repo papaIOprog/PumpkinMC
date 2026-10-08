@@ -112,7 +112,7 @@ impl ZombieVillagerEntity {
 
         self.conversion_starter.store(starter);
         self.conversion_time.store(ticks, Ordering::Relaxed);
-        entity.set_synced_data(tracked_data::zombie_villager::DATA_CONVERTING_ID, true);
+        entity.set_synced_data(tracked_data::zombie_villager::CONVERTING, true);
         living.remove_effect(&StatusEffect::WEAKNESS);
         living.add_effect(Effect {
             effect_type: &StatusEffect::STRENGTH,
@@ -281,7 +281,7 @@ impl Mob for ZombieVillagerEntity {
         .write(&mut metadata, &version)
         .ok()?;
         Metadata::new(
-            tracked_data::zombie_villager::DATA_CONVERTING_ID,
+            tracked_data::zombie_villager::CONVERTING,
             self.is_converting(),
         )
         .write(&mut metadata, &version)

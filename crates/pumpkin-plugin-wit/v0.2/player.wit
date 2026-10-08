@@ -7,7 +7,6 @@ interface player {
     use text.{text-component};
     use gui.{gui};
     use forms.{form};
-    use java-dialogs.{dialog};
     use java-packets.{clientbound-packet as java-packet};
     use bedrock-packets.{clientbound-packet as bedrock-packet};
     use uuid.{uuid};
@@ -1352,12 +1351,6 @@ interface player {
 
         /// Sends a custom payload packet (plugin message) to the player.
         send-custom-payload: func(channel: string, data: list<u8>);
-
-        /// Shows a dialog to the player.
-        show-dialog: func(dialog: dialog);
-
-        /// Clears any currently shown dialog for the player.
-        clear-dialog: func();
 
         /// Returns the Java scoreboard handle for this player.
         get-scoreboard: func() -> scoreboard;

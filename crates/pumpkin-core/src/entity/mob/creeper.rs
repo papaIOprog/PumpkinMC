@@ -100,10 +100,10 @@ impl CreeperEntity {
 
     pub fn set_fuse_speed(&self, speed: i32) {
         self.fuse_speed.store(speed, Ordering::Relaxed);
-        self.mob_entity
-            .living_entity
-            .entity
-            .set_synced_data(pumpkin_data::tracked_data::creeper::FUSE_ID, VarInt(speed));
+        self.mob_entity.living_entity.entity.set_synced_data(
+            pumpkin_data::tracked_data::creeper::FUSE_SPEED,
+            VarInt(speed),
+        );
     }
 
     pub fn explode(&self) {
@@ -233,7 +233,7 @@ impl Mob for CreeperEntity {
         );
 
         self.ignited.store(true, Ordering::Relaxed);
-        entity.set_synced_data(pumpkin_data::tracked_data::creeper::IS_IGNITED, true);
+        entity.set_synced_data(pumpkin_data::tracked_data::creeper::IGNITED, true);
 
         if player.gamemode.load() != pumpkin_util::GameMode::Creative {
             let _ = item_stack.damage_item(1);
@@ -261,7 +261,7 @@ impl CreeperEntity {
     pub fn set_ignited(&self, ignited: bool) {
         self.ignited.store(ignited, Ordering::Relaxed);
         let entity = &self.mob_entity.living_entity.entity;
-        entity.set_synced_data(pumpkin_data::tracked_data::creeper::IS_IGNITED, ignited);
+        entity.set_synced_data(pumpkin_data::tracked_data::creeper::IGNITED, ignited);
     }
 
     pub fn get_fuse(&self) -> i32 {

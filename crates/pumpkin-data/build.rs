@@ -2,7 +2,7 @@ use std::fs::{self, File};
 use std::io::{self, Cursor, Read};
 use std::path::{Path, PathBuf};
 
-const MC_VERSION: &str = "26.3";
+const MC_VERSION: &str = "1.21.1";
 const MANIFEST_URL: &str = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json";
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -49,12 +49,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 fn copy_conventional_tags(assets_dir: &Path, datapack_dir: &Path) {
     let src = assets_dir.join("conventional_tags").join("data").join("c");
     let dst = datapack_dir.join("data").join("c");
-    if src.is_dir() && !dst.is_dir() {
-        let _ = copy_dir_all(&src, &dst);
+    if src.is_dir() {
+        // The vanilla datapack may already ship its own `c:` namespace; merge the
+        // tracked conventional tags in without overwriting existing dump files.
+        let _ = merge_dir_all(&src, &dst);
     }
 }
 
-fn copy_dir_all(src: &Path, dst: &Path) -> io::Result<()> {
+fn merge_dir_all(src: &Path, dst: &Path) -> io::Result<()> {
     fs::create_dir_all(dst)?;
     for entry in fs::read_dir(src)? {
         let entry = entry?;
@@ -62,8 +64,8 @@ fn copy_dir_all(src: &Path, dst: &Path) -> io::Result<()> {
         let from = entry.path();
         let to = dst.join(entry.file_name());
         if ty.is_dir() {
-            copy_dir_all(&from, &to)?;
-        } else {
+            merge_dir_all(&from, &to)?;
+        } else if !to.exists() {
             fs::copy(&from, &to)?;
         }
     }

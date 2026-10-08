@@ -1,7 +1,7 @@
 use crate::ClientPacket;
 use crate::VarInt;
 use crate::ser::NetworkWriteExt;
-use pumpkin_data::packet::clientbound::play::{ANIMATE, SWING_ANIMATION};
+use pumpkin_data::packet::clientbound::play::ANIMATE;
 use pumpkin_macros::java_packet;
 use pumpkin_util::version::JavaMinecraftVersion;
 
@@ -34,27 +34,16 @@ impl ClientPacket for CEntityAnimation {
         mut write: impl std::io::Write,
         version: &JavaMinecraftVersion,
     ) -> Result<(), crate::ser::WritingError> {
+        let _ = version;
         write.write_var_int(&self.entity_id)?;
-        // 26.3 moved the swings into their own packet and renumbered the remaining animations
-        let animation = if *version >= JavaMinecraftVersion::V_26_3 {
-            match self.animation {
-                2 => 0, // Leave bed
-                4 => 1, // Critical effect
-                5 => 2, // Magic critical effect
-                other => other,
-            }
-        } else {
-            self.animation
-        };
-        write.write_u8(animation)?;
+        write.write_u8(self.animation)?;
         Ok(())
     }
 }
 
 /// Plays the swing animation of an entity's hand.
 ///
-/// Up to 26.2 this was an animation of [`CEntityAnimation`], since 26.3 it is its own packet that
-/// also carries the swing animation of the held item.
+/// Encoded as an animation of [`CEntityAnimation`].
 pub struct CSwingArm {
     pub entity_id: VarInt,
     pub off_hand: bool,
@@ -72,11 +61,7 @@ impl CSwingArm {
 
 impl crate::packet::MultiVersionJavaPacket for CSwingArm {
     fn to_id(version: JavaMinecraftVersion) -> i32 {
-        if version >= JavaMinecraftVersion::V_26_3 {
-            SWING_ANIMATION.to_id(version)
-        } else {
-            ANIMATE.to_id(version)
-        }
+        ANIMATE.to_id(version)
     }
 }
 
@@ -87,12 +72,8 @@ impl ClientPacket for CSwingArm {
         version: &JavaMinecraftVersion,
     ) -> Result<(), crate::ser::WritingError> {
         write.write_var_int(&self.entity_id)?;
-        if *version >= JavaMinecraftVersion::V_26_3 {
-            write.write_var_int(&VarInt(i32::from(self.off_hand)))?;
-            // The swing animation of the held item, whacking for 6 ticks is the default one
-            write.write_var_int(&VarInt(1))?;
-            write.write_var_int(&VarInt(6))?;
-        } else if self.off_hand {
+        let _ = version;
+        if self.off_hand {
             write.write_u8(Animation::SwingOffhand as u8)?;
         } else {
             write.write_u8(Animation::SwingMainArm as u8)?;

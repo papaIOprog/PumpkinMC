@@ -60,15 +60,47 @@ impl JavaClient {
                     }
                 }
             }
-            // <= 1.21.5
+            // 1.21.1 sends sneak state through the player command packet
             Action::StartSneaking | Action::StopSneaking => {
-                self.handle_player_input(
-                    player,
-                    &SPlayerInput {
-                        input: SPlayerInput::SNEAK,
-                    },
-                    server,
-                );
+                let sneak = matches!(command.action, Action::StartSneaking);
+                if sneak
+                    && player.gamemode.load() == GameMode::Spectator
+                    && player.camera_target_id.load().is_some()
+                {
+                    player.camera_target_id.store(None);
+                    player.try_send_client_packet(&CSetCamera::new(player.entity_id().into()));
+                }
+
+                if player.get_entity().is_sneaking() != sneak {
+                    send_cancellable_blocking! {{
+                        server;
+                        PlayerToggleSneakEvent::new(player.clone(), sneak);
+                        'after: {
+                            player.get_entity().set_sneaking(event.is_sneaking);
+                            if event.is_sneaking {
+                                let vehicle = player
+                                    .get_entity()
+                                    .vehicle
+                                    .lock()
+                                    .unwrap_or_else(std::sync::PoisonError::into_inner)
+                                    .clone();
+                                if let Some(vehicle) = vehicle {
+                                    vehicle.get_entity().remove_passenger(player.entity_id());
+                                }
+                            }
+                        }
+                    }}
+                } else if sneak {
+                    let vehicle = player
+                        .get_entity()
+                        .vehicle
+                        .lock()
+                        .unwrap_or_else(std::sync::PoisonError::into_inner)
+                        .clone();
+                    if let Some(vehicle) = vehicle {
+                        vehicle.get_entity().remove_passenger(player.entity_id());
+                    }
+                }
             }
         }
     }

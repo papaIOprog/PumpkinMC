@@ -28,11 +28,7 @@ impl<'a> ServerPacket<'a> for SSetCreativeSlot {
         } else {
             read.get_i16_be()?
         };
-        let clicked_item = if *version >= JavaMinecraftVersion::V_1_21_5 {
-            ItemStackSerializer::read_length_prefixed_optional(&mut read)?
-        } else {
-            ItemStackSerializer::read(&mut read)?
-        };
+        let clicked_item = ItemStackSerializer::read(&mut read)?;
         Ok(Self { slot, clicked_item })
     }
 }
@@ -45,12 +41,7 @@ impl crate::ClientPacket for SSetCreativeSlot {
     ) -> Result<(), crate::ser::WritingError> {
         use crate::ser::NetworkWriteExt;
         write.write_i16_be(self.slot)?;
-        if *version >= JavaMinecraftVersion::V_1_21_5 {
-            self.clicked_item
-                .write_length_prefixed_with_version(&mut write, version)?;
-        } else {
-            self.clicked_item.write_with_version(&mut write, version)?;
-        }
+        self.clicked_item.write_with_version(&mut write, version)?;
         Ok(())
     }
 }

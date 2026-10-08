@@ -162,7 +162,7 @@ impl TraderLlamaEntity {
         self.variant.store(variant.id(), Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::trader_llama::DATA_VARIANT_ID,
+            pumpkin_data::tracked_data::trader_llama::VARIANT,
             VarInt(variant.id()),
         );
     }
@@ -176,7 +176,7 @@ impl TraderLlamaEntity {
         self.strength.store(strength, Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::trader_llama::DATA_STRENGTH_ID,
+            pumpkin_data::tracked_data::trader_llama::STRENGTH,
             VarInt(strength),
         );
     }
@@ -214,7 +214,7 @@ impl TraderLlamaEntity {
     pub fn set_has_chest(&self, val: bool) {
         self.has_chest.store(val, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(pumpkin_data::tracked_data::trader_llama::DATA_ID_CHEST, val);
+        entity.set_synced_data(pumpkin_data::tracked_data::trader_llama::CHEST, val);
     }
 
     pub fn spit(&self, target: &Arc<dyn EntityBase>) {
@@ -321,15 +321,15 @@ impl Mob for TraderLlamaEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::trader_llama::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::trader_llama::DATA_VARIANT_ID,
+            pumpkin_data::tracked_data::trader_llama::VARIANT,
             VarInt(self.get_variant().id()),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::trader_llama::DATA_STRENGTH_ID,
+            pumpkin_data::tracked_data::trader_llama::STRENGTH,
             VarInt(self.get_strength()),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::trader_llama::DATA_ID_CHEST,
+            pumpkin_data::tracked_data::trader_llama::CHEST,
             self.has_chest(),
         );
         entity.set_synced_data(

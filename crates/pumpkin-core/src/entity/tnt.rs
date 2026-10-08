@@ -115,10 +115,7 @@ impl EntityBase for TNTEntity {
         // Vanilla `setFuse` every tick; the tracker picks it up through `is_dirty`.
         let fuse = self.fuse.load(Relaxed).saturating_sub(1);
         self.fuse.store(fuse, Relaxed);
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::tnt::FUSE_ID,
-            VarInt(fuse as i32),
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::tnt::FUSE, VarInt(fuse as i32));
 
         if fuse == 0 {
             entity.remove();
@@ -140,11 +137,11 @@ impl EntityBase for TNTEntity {
 
     fn init_data_tracker(&self) {
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::tnt::FUSE_ID,
+            pumpkin_data::tracked_data::tnt::FUSE,
             VarInt(self.fuse.load(Relaxed) as i32),
         );
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::tnt::BLOCK_STATE_ID,
+            pumpkin_data::tracked_data::tnt::BLOCK_STATE,
             VarInt(i32::from(Block::TNT.default_state.id.as_u16())),
         );
     }

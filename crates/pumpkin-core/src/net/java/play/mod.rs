@@ -56,22 +56,19 @@ use pumpkin_protocol::bedrock::client::CMovePlayer;
 use pumpkin_protocol::codec::var_int::VarInt;
 use pumpkin_protocol::codec::var_ulong::VarULong;
 use pumpkin_protocol::java::client::play::{
-    CBlockUpdate, CCommandSuggestions, CEntityPositionSync, CHeadRot, CPingResponse,
-    CPlayerInfoUpdate, CPlayerPosition, CSetCamera, CSetSelectedSlot, CUpdateEntityPos,
-    CUpdateEntityPosRot, CUpdateEntityRot, InitChat, PlayerAction, PlayerInfoFlags,
+    CBlockUpdate, CCommandSuggestions, CHeadRot, CPingResponse, CPlayerInfoUpdate, CPlayerPosition,
+    CSetCamera, CSetSelectedSlot, CTeleportEntity, CUpdateEntityPos, CUpdateEntityPosRot,
+    CUpdateEntityRot, InitChat, PlayerAction, PlayerInfoFlags,
 };
 use pumpkin_protocol::java::server::play::{
-    Action, ActionType, CommandBlockMode, FLAG_ON_GROUND, SAttack, SBundleItemSelected,
-    SChangeGameMode, SChatCommand, SChatMessage, SChunkBatch, SClientCommand,
-    SClientInformationPlay, SCommandSuggestion, SConfirmTeleport,
+    Action, ActionType, CommandBlockMode, FLAG_ON_GROUND, SChatCommand, SChatMessage, SChunkBatch,
+    SClientCommand, SClientInformationPlay, SCommandSuggestion, SConfirmTeleport,
     SCookieResponse as SPCookieResponse, SEditBook, SInteract, SJigsawGenerate, SKeepAlive,
-    SMoveVehicle, SPaddleBoat, SPickItemFromBlock, SPickItemFromEntity, SPlaceRecipe,
-    SPlayPingRequest, SPlayerAbilities, SPlayerAction, SPlayerCommand, SPlayerInput,
-    SPlayerPosition, SPlayerPositionRotation, SPlayerRotation, SPlayerSession,
+    SMoveVehicle, SPaddleBoat, SPlaceRecipe, SPlayPingRequest, SPlayerAbilities, SPlayerAction,
+    SPlayerCommand, SPlayerPosition, SPlayerPositionRotation, SPlayerRotation, SPlayerSession,
     SRecipeBookChangeSettings, SRecipeBookSeenRecipe, SSeenAdvancement, SSelectTrade,
-    SSetCommandBlock, SSetCreativeSlot, SSetHeldItem, SSetJigsawBlock, SSetPlayerGround,
-    SSetTestBlock, SSwingArm, STeleportToEntity, STestInstanceBlockAction, SUpdateSign, SUseItem,
-    SUseItemOn, Status,
+    SSetCommandBlock, SSetCreativeSlot, SSetHeldItem, SSetJigsawBlock, SSetPlayerGround, SSwingArm,
+    STeleportToEntity, SUpdateSign, SUseItem, SUseItemOn, Status,
 };
 use pumpkin_util::math::vector3::Vector3;
 use pumpkin_util::math::{polynomial_rolling_hash, position::BlockPos, wrap_degrees};
@@ -240,17 +237,13 @@ impl PumpkinError for ChatError {
     }
 }
 
-pub mod attack;
-pub mod bundle_item_selected;
 pub mod change_difficulty;
-pub mod change_game_mode;
 pub mod chat_ack;
 pub mod chat_command;
 pub mod chat_message;
 pub mod chunk_batch;
 pub mod client_command;
 pub mod client_information;
-pub mod client_tick_end;
 pub mod close_container;
 pub mod command_suggestion;
 pub mod configuration_acknowledged;
@@ -258,7 +251,6 @@ pub mod confirm_teleport;
 pub mod container_slot_state_changed;
 pub mod cookie_response;
 pub mod debug_sample_subscription;
-pub mod debug_subscription_request;
 pub mod edit_book;
 pub mod interact;
 pub mod jigsaw_generate;
@@ -266,15 +258,12 @@ pub mod keep_alive;
 pub mod lock_difficulty;
 pub mod move_vehicle;
 pub mod paddle_boat;
-pub mod pick_item;
 pub mod ping_request;
 pub mod place_recipe;
 pub mod player_abilities;
 pub mod player_action;
 pub mod player_command;
 pub mod player_ground;
-pub mod player_input;
-pub mod player_loaded;
 pub mod player_position;
 pub mod player_rotation;
 pub mod pong;
@@ -287,16 +276,13 @@ pub mod set_beacon;
 pub mod set_command_block;
 pub mod set_command_minecart;
 pub mod set_creative_slot;
-pub mod set_game_rule;
 pub mod set_held_item;
 pub mod set_jigsaw_block;
 pub mod set_structure_block;
-pub mod set_test_block;
 pub mod spectate_entity;
 pub mod swing_arm;
 pub mod tag_query;
 pub mod teleport_to_entity;
-pub mod test_instance_block_action;
 pub mod update_sign;
 pub mod use_item;
 pub mod use_item_on;

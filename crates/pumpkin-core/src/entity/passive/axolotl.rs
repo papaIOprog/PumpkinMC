@@ -184,7 +184,7 @@ impl AxolotlEntity {
         self.variant.store(variant.id(), Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::axolotl::DATA_VARIANT,
+            pumpkin_data::tracked_data::axolotl::VARIANT,
             VarInt(variant.id()),
         );
     }
@@ -198,7 +198,7 @@ impl AxolotlEntity {
         self.playing_dead.store(playing_dead, Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::axolotl::DATA_PLAYING_DEAD,
+            pumpkin_data::tracked_data::axolotl::PLAYING_DEAD,
             playing_dead,
         );
     }
@@ -279,11 +279,11 @@ impl Mob for AxolotlEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::axolotl::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::axolotl::DATA_VARIANT,
+            pumpkin_data::tracked_data::axolotl::VARIANT,
             VarInt(self.get_variant().id()),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::axolotl::DATA_PLAYING_DEAD,
+            pumpkin_data::tracked_data::axolotl::PLAYING_DEAD,
             self.is_playing_dead(),
         );
         entity.set_synced_data(

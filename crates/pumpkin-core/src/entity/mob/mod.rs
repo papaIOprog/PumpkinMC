@@ -38,7 +38,6 @@ pub mod bat;
 pub mod blaze;
 pub mod breeze;
 pub mod cave_spider;
-pub mod creaking;
 pub mod creeper;
 pub mod crossbow_attack_mob;
 pub mod elder_guardian;
@@ -504,7 +503,7 @@ impl MobEntity {
 
             self.living_entity
                 .entity
-                .set_synced_data(tracked_data::mob::DATA_MOB_FLAGS_ID, new_b);
+                .set_synced_data(tracked_data::mob_entity::DATA_MOB_FLAGS_ID, new_b);
         }
     }
 
@@ -823,11 +822,25 @@ pub trait Mob: EntityBase + Send + Sync {
         false
     }
 
-    /// Whether daylight burns this mob. Default: entity tag `burn_in_daylight`.
+    /// Whether daylight burns this mob.
+    ///
+    /// The `minecraft:burn_in_daylight` entity tag is 26.x only; in 1.21.1 the
+    /// burning mobs are the skeleton and zombie families plus phantoms.
     fn burns_in_daylight(&self) -> bool {
-        self.get_entity()
-            .entity_type
-            .has_tag(&tag::EntityType::MINECRAFT_BURN_IN_DAYLIGHT)
+        let entity_type = self.get_entity().entity_type;
+        [
+            EntityType::SKELETON,
+            EntityType::STRAY,
+            EntityType::WITHER_SKELETON,
+            EntityType::BOGGED,
+            EntityType::ZOMBIE,
+            EntityType::ZOMBIE_HORSE,
+            EntityType::ZOMBIE_VILLAGER,
+            EntityType::DROWNED,
+            EntityType::PHANTOM,
+        ]
+        .iter()
+        .any(|ty| entity_type == ty)
     }
 
     /// Slot whose item shields the mob from the sun and takes the wear instead.
@@ -1329,7 +1342,7 @@ pub trait Mob: EntityBase + Send + Sync {
         let entity = self.get_entity();
         let is_baby = entity.age.load(std::sync::atomic::Ordering::Relaxed) < 0;
         if is_baby {
-            entity.set_synced_data(tracked_data::ageable_mob::DATA_BABY_ID, true);
+            entity.set_synced_data(tracked_data::animal_entity::DATA_BABY_ID, true);
         }
     }
 

@@ -10,7 +10,6 @@ interface event {
     use java-packets.{serverbound-packet as java-serverbound-packet, clientbound-packet as java-clientbound-packet};
     use bedrock-packets.{serverbound-packet as bedrock-serverbound-packet, clientbound-packet as bedrock-clientbound-packet};
     use uuid.{uuid};
-    use java-dialogs.{dialog};
 
     variant serverbound-packet {
         java(java-serverbound-packet),
@@ -284,24 +283,6 @@ interface event {
         player: player,
         form-id: u32,
         response-data: option<string>,
-    }
-
-    record dialog-click-action-event-data {
-        player: player,
-        id: string,
-        payload: option<list<u8>>,
-        cancelled: bool,
-    }
-
-    record dialog-show-event-data {
-        player: player,
-        dialog: dialog,
-        cancelled: bool,
-    }
-
-    record dialog-clear-event-data {
-        player: player,
-        cancelled: bool,
     }
 
     record server-command-event-data {
@@ -1917,9 +1898,6 @@ interface event {
         block-grow-event,
         block-place-event,
         bedrock-form-response-event,
-        dialog-click-action-event,
-        dialog-show-event,
-        dialog-clear-event,
         server-command-event,
         server-list-ping-event,
         server-load-event,
@@ -2192,9 +2170,6 @@ interface event {
         block-can-build-event(block-can-build-event-data),
         block-grow-event(block-grow-event-data),
         block-place-event(block-place-event-data),
-        dialog-click-action-event(dialog-click-action-event-data),
-        dialog-show-event(dialog-show-event-data),
-        dialog-clear-event(dialog-clear-event-data),
         bedrock-form-response-event(bedrock-form-response-event-data),
         server-command-event(server-command-event-data),
         server-list-ping-event(server-list-ping-event-data),

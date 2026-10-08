@@ -24,49 +24,26 @@ pub fn write_chunk_data(
         .heightmap
         .lock()
         .map_err(|_| WritingError::Message("heightmap lock poisoned".into()))?;
-    if version >= &JavaMinecraftVersion::V_1_21_5 {
-        write.write_var_int(&VarInt(3))?; // Map size
-
-        let mut write_heightmap = |index: i32, data: &[i64]| -> Result<(), WritingError> {
-            write.write_var_int(&VarInt(index))?;
-            write.write_var_int(&VarInt(data.len() as i32))?;
-            for val in data {
-                write.write_i64_be(*val)?;
-            }
-            Ok(())
-        };
-
-        write_heightmap(1, heightmaps.world_surface.as_deref().unwrap_or(&[0; 37]))?;
-        write_heightmap(4, heightmaps.motion_blocking.as_deref().unwrap_or(&[0; 37]))?;
-        write_heightmap(
-            5,
-            heightmaps
-                .motion_blocking_no_leaves
-                .as_deref()
-                .unwrap_or(&[0; 37]),
-        )?;
-    } else {
-        let mut comp = pumpkin_nbt::compound::NbtCompound::new();
-        if let Some(ref ws) = heightmaps.world_surface {
-            comp.put(
-                "WORLD_SURFACE",
-                pumpkin_nbt::tag::NbtTag::LongArray(ws.to_vec()),
-            );
-        }
-        if let Some(ref mb) = heightmaps.motion_blocking {
-            comp.put(
-                "MOTION_BLOCKING",
-                pumpkin_nbt::tag::NbtTag::LongArray(mb.to_vec()),
-            );
-        }
-        if let Some(ref mbnl) = heightmaps.motion_blocking_no_leaves {
-            comp.put(
-                "MOTION_BLOCKING_NO_LEAVES",
-                pumpkin_nbt::tag::NbtTag::LongArray(mbnl.to_vec()),
-            );
-        }
-        write_compound_nbt(&mut write, &comp, *version)?;
+    let mut comp = pumpkin_nbt::compound::NbtCompound::new();
+    if let Some(ref ws) = heightmaps.world_surface {
+        comp.put(
+            "WORLD_SURFACE",
+            pumpkin_nbt::tag::NbtTag::LongArray(ws.to_vec()),
+        );
     }
+    if let Some(ref mb) = heightmaps.motion_blocking {
+        comp.put(
+            "MOTION_BLOCKING",
+            pumpkin_nbt::tag::NbtTag::LongArray(mb.to_vec()),
+        );
+    }
+    if let Some(ref mbnl) = heightmaps.motion_blocking_no_leaves {
+        comp.put(
+            "MOTION_BLOCKING_NO_LEAVES",
+            pumpkin_nbt::tag::NbtTag::LongArray(mbnl.to_vec()),
+        );
+    }
+    write_compound_nbt(&mut write, &comp, *version)?;
     drop(heightmaps);
 
     {
@@ -82,17 +59,9 @@ pub fn write_chunk_data(
             .read()
             .map_err(|_| WritingError::Message("biome_sections read lock poisoned".into()))?;
 
-        let mut zero_bytes_count = 0;
-
         for (block_palette, biome_palette) in block_sections.iter().zip(biome_sections.iter()) {
             let non_empty_block_count = block_palette.non_air_block_count() as i16;
             blocks_and_biomes_buf.write_i16_be(non_empty_block_count)?;
-            if version >= &JavaMinecraftVersion::V_26_1 {
-                // New in 26.1, fluid count
-                let liquid_count = block_palette.liquid_block_count() as i16;
-                blocks_and_biomes_buf.write_i16_be(liquid_count)?;
-            }
-
             let block_network = block_palette.convert_network();
             blocks_and_biomes_buf.write_u8(block_network.bits_per_entry)?;
 
@@ -116,15 +85,9 @@ pub fn write_chunk_data(
                 NetworkPalette::Direct => {}
             }
 
-            if version <= &JavaMinecraftVersion::V_1_21_4 {
-                blocks_and_biomes_buf.write_list(&block_network.packed_data, |buf, &packed| {
-                    buf.write_i64_be(packed)
-                })?;
-            } else {
-                for packed in &block_network.packed_data {
-                    blocks_and_biomes_buf.write_i64_be(*packed)?;
-                }
-            }
+            blocks_and_biomes_buf.write_list(&block_network.packed_data, |buf, &packed| {
+                buf.write_i64_be(packed)
+            })?;
 
             let biome_network = biome_palette.convert_network();
             blocks_and_biomes_buf.write_u8(biome_network.bits_per_entry)?;
@@ -149,26 +112,9 @@ pub fn write_chunk_data(
                 NetworkPalette::Direct => {}
             }
 
-            if version <= &JavaMinecraftVersion::V_1_21_4 {
-                blocks_and_biomes_buf.write_list(&biome_network.packed_data, |buf, &packed| {
-                    buf.write_i64_be(packed)
-                })?;
-            } else {
-                for packed in &biome_network.packed_data {
-                    blocks_and_biomes_buf.write_i64_be(*packed)?;
-                }
-            }
-
-            if version == &JavaMinecraftVersion::V_1_21_5 {
-                let block_storage_len = block_network.packed_data.len() as i32;
-                let biome_storage_len = biome_network.packed_data.len() as i32;
-                zero_bytes_count += VarInt(block_storage_len).written_size()
-                    + VarInt(biome_storage_len).written_size();
-            }
-        }
-
-        if version == &JavaMinecraftVersion::V_1_21_5 && zero_bytes_count > 0 {
-            blocks_and_biomes_buf.resize(blocks_and_biomes_buf.len() + zero_bytes_count, 0);
+            blocks_and_biomes_buf.write_list(&biome_network.packed_data, |buf, &packed| {
+                buf.write_i64_be(packed)
+            })?;
         }
 
         write.write_var_int(&blocks_and_biomes_buf.len().try_into().map_err(|_| {

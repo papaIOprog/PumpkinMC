@@ -76,17 +76,17 @@ impl CatVariant {
     #[must_use]
     pub const fn texture(&self) -> &'static str {
         match self {
-            Self::AllBlack => "minecraft:entity/cat/cat_all_black",
-            Self::Black => "minecraft:entity/cat/cat_black",
-            Self::BritishShorthair => "minecraft:entity/cat/cat_british_shorthair",
-            Self::Calico => "minecraft:entity/cat/cat_calico",
-            Self::Jellie => "minecraft:entity/cat/cat_jellie",
-            Self::Persian => "minecraft:entity/cat/cat_persian",
-            Self::Ragdoll => "minecraft:entity/cat/cat_ragdoll",
-            Self::Red => "minecraft:entity/cat/cat_red",
-            Self::Siamese => "minecraft:entity/cat/cat_siamese",
-            Self::Tabby => "minecraft:entity/cat/cat_tabby",
-            Self::White => "minecraft:entity/cat/cat_white",
+            Self::AllBlack => "minecraft:entity/cat/all_black",
+            Self::Black => "minecraft:entity/cat/black",
+            Self::BritishShorthair => "minecraft:entity/cat/british_shorthair",
+            Self::Calico => "minecraft:entity/cat/calico",
+            Self::Jellie => "minecraft:entity/cat/jellie",
+            Self::Persian => "minecraft:entity/cat/persian",
+            Self::Ragdoll => "minecraft:entity/cat/ragdoll",
+            Self::Red => "minecraft:entity/cat/red",
+            Self::Siamese => "minecraft:entity/cat/siamese",
+            Self::Tabby => "minecraft:entity/cat/tabby",
+            Self::White => "minecraft:entity/cat/white",
         }
     }
     #[doc = "Returns all vanilla cat variants."]

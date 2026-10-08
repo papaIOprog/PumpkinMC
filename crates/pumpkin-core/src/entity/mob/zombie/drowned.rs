@@ -8,6 +8,7 @@ use pumpkin_nbt::compound::NbtCompound;
 use pumpkin_util::Difficulty;
 
 use crate::entity::ai::control::drowned_move_control::DrownedMoveControl;
+use crate::entity::ai::goal::Goal;
 use crate::entity::ai::goal::active_target::ActiveTargetGoal;
 use crate::entity::ai::goal::drowned_go_to_beach::DrownedGoToBeachGoal;
 use crate::entity::ai::goal::drowned_go_to_water::DrownedGoToWaterGoal;
@@ -15,7 +16,6 @@ use crate::entity::ai::goal::drowned_swim_up::DrownedSwimUpGoal;
 use crate::entity::ai::goal::drowned_trident_attack::DrownedTridentAttackGoal;
 use crate::entity::ai::goal::swim::SwimGoal;
 use crate::entity::ai::goal::zombie_attack::ZombieAttackGoal;
-use crate::entity::ai::goal::Goal;
 use crate::entity::ai::pathfinder::Navigator;
 use crate::entity::ai::pathfinder::node::PathType;
 use crate::entity::living::LivingEntity;
@@ -108,19 +108,17 @@ impl DrownedEntity {
 
         // Vanilla `DrownedEntity` constructor: amphibious navigation, water as cheap to
         // path through as land.
-        {
-            let mut navigator = Navigator::amphibious(false);
-            navigator.set_pathfinding_malus(PathType::Water, 0.0);
-            // A drowned swims, so the navigator treats water as its element even though
-            // its float goal is gone.
-            navigator.set_can_float(true);
-            *drowned
-                .entity
-                .mob_entity
-                .navigator
-                .lock()
-                .unwrap_or_else(PoisonError::into_inner) = navigator;
-        }
+        let mut navigator = Navigator::amphibious(false);
+        navigator.set_pathfinding_malus(PathType::Water, 0.0);
+        // A drowned swims, so the navigator treats water as its element even though
+        // its float goal is gone.
+        navigator.set_can_float(true);
+        *drowned
+            .entity
+            .mob_entity
+            .navigator
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner) = navigator;
 
         // Vanilla `Drowned.DrownedMoveControl`: the drowned steers its own swimming
         // rather than borrowing the walking controller.

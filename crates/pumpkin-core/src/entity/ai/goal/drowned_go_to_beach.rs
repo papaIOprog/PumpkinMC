@@ -8,9 +8,11 @@ use super::{Controls, Goal, ParentHandle};
 use crate::entity::mob::Mob;
 use crate::world::World;
 
-/// Vanilla `Drowned.DrownedGoToBeachGoal`: the night half of the split, and the only
-/// time a drowned climbs out on purpose. It looks for a shore block near the surface
-/// — two blocks of air over something it can stand on — and walks to it.
+/// Vanilla `Drowned.DrownedGoToBeachGoal`: the night half of the split, and the
+/// only time a drowned climbs out on purpose.
+///
+/// It looks for a shore block near the surface — two blocks of air over something
+/// it can stand on — and walks to it.
 pub struct DrownedGoToBeachGoal {
     move_to_target_pos_goal: MoveToTargetPosGoal<Self>,
 }

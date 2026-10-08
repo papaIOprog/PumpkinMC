@@ -107,6 +107,14 @@ fn collect_json_files(dir: &Path, base_dir: &Path, results: &mut Vec<(String, Tr
 
 pub fn build() -> TokenStream {
     let base_dir = Path::new("../../assets/datapack/data/minecraft/trial_spawner");
+    // 1.21.1 embeds the spawner pools in the structure NBT instead of
+    // shipping them as datapack files; assets/vanilla holds the extracted
+    // values.
+    let base_dir = if base_dir.is_dir() {
+        base_dir
+    } else {
+        Path::new("../../assets/vanilla/data/minecraft/trial_spawner")
+    };
     let mut files = Vec::new();
     collect_json_files(base_dir, base_dir, &mut files);
     files.sort_by(|a, b| a.0.cmp(&b.0));

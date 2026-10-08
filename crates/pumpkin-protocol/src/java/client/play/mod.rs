@@ -17,7 +17,6 @@ mod change_difficulty;
 mod chunk_batch_end;
 mod chunk_batch_start;
 pub mod chunk_data;
-mod clear_dialog;
 mod clear_title;
 mod close_container;
 mod combat_death;
@@ -31,7 +30,6 @@ mod disguised_chat_message;
 mod display_objective;
 mod entity_animation;
 mod entity_metadata;
-mod entity_position_sync;
 mod entity_sound_effect;
 mod entity_status;
 mod entity_velocity;
@@ -61,8 +59,6 @@ mod player_position;
 mod player_remove;
 mod player_spawn_data;
 mod player_spawn_position;
-mod recipe_book_add;
-mod recipe_book_settings;
 mod remove_entities;
 mod remove_mob_effect;
 mod reset_score;
@@ -78,18 +74,15 @@ mod set_camera;
 mod set_container_content;
 mod set_container_property;
 mod set_container_slot;
-mod set_cursor_slot;
 mod set_equipment;
 mod set_experience;
 mod set_health;
 mod set_held_item;
 mod set_passengers;
-mod set_player_inventory;
 mod set_player_team;
 mod set_time;
 mod set_title;
 mod set_title_animation;
-mod show_dialog;
 mod sound_effect;
 mod spawn_entity;
 mod stop_sound;
@@ -126,7 +119,6 @@ pub use change_difficulty::*;
 pub use chunk_batch_end::*;
 pub use chunk_batch_start::*;
 pub use chunk_data::*;
-pub use clear_dialog::*;
 pub use clear_title::*;
 pub use close_container::*;
 pub use combat_death::*;
@@ -140,7 +132,6 @@ pub use disguised_chat_message::*;
 pub use display_objective::*;
 pub use entity_animation::*;
 pub use entity_metadata::*;
-pub use entity_position_sync::*;
 pub use entity_sound_effect::*;
 pub use entity_status::*;
 pub use entity_velocity::*;
@@ -170,8 +161,6 @@ pub use player_position::*;
 pub use player_remove::*;
 pub use player_spawn_data::*;
 pub use player_spawn_position::*;
-pub use recipe_book_add::*;
-pub use recipe_book_settings::*;
 pub use remove_entities::*;
 pub use remove_mob_effect::*;
 pub use reset_score::*;
@@ -187,7 +176,6 @@ pub use set_camera::*;
 pub use set_container_content::*;
 pub use set_container_property::*;
 pub use set_container_slot::*;
-pub use set_cursor_slot::*;
 mod set_entity_link;
 pub use set_entity_link::*;
 pub use set_equipment::*;
@@ -196,12 +184,10 @@ pub use set_experience::*;
 pub use set_health::*;
 pub use set_held_item::*;
 pub use set_passengers::*;
-pub use set_player_inventory::*;
 pub use set_player_team::*;
 pub use set_time::*;
 pub use set_title::*;
 pub use set_title_animation::*;
-pub use show_dialog::*;
 pub use sound_effect::*;
 pub use spawn_entity::*;
 pub use stop_sound::*;
@@ -225,9 +211,6 @@ pub use update_objectives::*;
 pub use update_score::*;
 pub use worldevent::*;
 
-mod waypoint;
-pub use waypoint::*;
-
 mod debug_sample;
 pub use debug_sample::*;
 
@@ -249,15 +232,6 @@ pub use custom_report_details::*;
 mod delete_chat;
 pub use delete_chat::*;
 
-mod game_rule_values;
-pub use game_rule_values::*;
-
-mod low_disk_space_warning;
-pub use low_disk_space_warning::*;
-
-mod move_minecart_along_track;
-pub use move_minecart_along_track::*;
-
 mod open_mount_screen;
 pub use open_mount_screen::*;
 
@@ -269,9 +243,6 @@ pub use place_ghost_recipe::*;
 
 mod player_look_at;
 pub use player_look_at::*;
-
-mod player_rotation;
-pub use player_rotation::*;
 
 mod projectile_power;
 pub use projectile_power::*;
@@ -297,29 +268,5 @@ pub use set_simulation_distance::*;
 mod move_vehicle;
 pub use move_vehicle::*;
 
-mod recipe_book_remove;
-pub use recipe_book_remove::*;
-
 mod update_recipes;
 pub use update_recipes::*;
-
-mod debug_block_value;
-pub use debug_block_value::*;
-
-mod debug_chunk_value;
-pub use debug_chunk_value::*;
-
-mod debug_entity_value;
-pub use debug_entity_value::*;
-
-mod debug_event;
-pub use debug_event::*;
-
-mod game_test_highlight_pos;
-pub use game_test_highlight_pos::*;
-
-mod test_instance_block_status;
-pub use test_instance_block_status::*;
-
-mod post_effects;
-pub use post_effects::*;

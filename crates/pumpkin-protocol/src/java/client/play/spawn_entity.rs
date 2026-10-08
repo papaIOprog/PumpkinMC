@@ -107,7 +107,6 @@ impl CSpawnEntity {
         let v1_9 = *version >= JavaMinecraftVersion::V_1_9;
         let v1_14 = *version >= JavaMinecraftVersion::V_1_14;
         let v1_19 = *version >= JavaMinecraftVersion::V_1_19;
-        let v1_21_9 = *version >= JavaMinecraftVersion::V_1_21_9;
 
         let entity_id = read.get_var_int()?;
 
@@ -133,11 +132,7 @@ impl CSpawnEntity {
             )
         };
 
-        let mut velocity = if v1_21_9 {
-            LpVector3d::read(&mut read)?
-        } else {
-            LpVector3d(Vector3::new(0.0, 0.0, 0.0))
-        };
+        let mut velocity = LpVector3d(Vector3::new(0.0, 0.0, 0.0));
 
         let pitch = read.get_u8()?;
         let yaw = read.get_u8()?;
@@ -150,7 +145,7 @@ impl CSpawnEntity {
             VarInt(read.get_i32_be()?)
         };
 
-        if !v1_21_9 && (v1_9 || data.0 > 0) {
+        if v1_9 || data.0 > 0 {
             let vel_x = f64::from(read.get_i16_be()?) / VELOCITY_FACTOR;
             let vel_y = f64::from(read.get_i16_be()?) / VELOCITY_FACTOR;
             let vel_z = f64::from(read.get_i16_be()?) / VELOCITY_FACTOR;
@@ -180,7 +175,6 @@ impl ClientPacket for CSpawnEntity {
         let v1_9 = *version >= JavaMinecraftVersion::V_1_9;
         let v1_14 = *version >= JavaMinecraftVersion::V_1_14;
         let v1_19 = *version >= JavaMinecraftVersion::V_1_19;
-        let v1_21_9 = *version >= JavaMinecraftVersion::V_1_21_9;
 
         write.write_var_int(&self.entity_id)?;
 
@@ -202,10 +196,6 @@ impl ClientPacket for CSpawnEntity {
             write.write_i32_be((self.position.x * 32.0).floor() as i32)?;
             write.write_i32_be((self.position.y * 32.0).floor() as i32)?;
             write.write_i32_be((self.position.z * 32.0).floor() as i32)?;
-        }
-
-        if v1_21_9 {
-            self.velocity.write(&mut write)?;
         }
 
         write.write_u8(self.pitch)?;
@@ -241,68 +231,10 @@ impl ClientPacket for CSpawnEntity {
             write.write_i32_be(data.0)?;
         }
 
-        if !v1_21_9 && (v1_9 || data.0 > 0) {
+        if v1_9 || data.0 > 0 {
             self.velocity.write_legacy(&mut write)?;
         }
 
-        Ok(())
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::CSpawnEntity;
-    use crate::{ClientPacket, VarInt, codec::lp_vector_3d::encode_legacy_velocity_component};
-    use pumpkin_util::version::JavaMinecraftVersion;
-
-    fn legacy_tail(velocity: pumpkin_util::math::vector3::Vector3<f64>) -> [u8; 6] {
-        let x = encode_legacy_velocity_component(velocity.x);
-        let y = encode_legacy_velocity_component(velocity.y);
-        let z = encode_legacy_velocity_component(velocity.z);
-        let xb = x.to_be_bytes();
-        let yb = y.to_be_bytes();
-        let zb = z.to_be_bytes();
-        [xb[0], xb[1], yb[0], yb[1], zb[0], zb[1]]
-    }
-
-    fn encode_spawn(version: JavaMinecraftVersion) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
-        let velocity = pumpkin_util::math::vector3::Vector3::new(0.5, -0.5, 0.25);
-        let packet = CSpawnEntity::new(
-            VarInt(1),
-            uuid::Uuid::nil(),
-            VarInt(1),
-            pumpkin_util::math::vector3::Vector3::new(1.0, 2.0, 3.0),
-            0.0,
-            90.0,
-            90.0,
-            VarInt(42),
-            velocity,
-        );
-        let mut out = Vec::new();
-        packet.write_packet_data(&mut out, &version)?;
-        Ok(out)
-    }
-
-    #[test]
-    fn spawn_entity_uses_legacy_velocity_tail_for_1_21_8() -> Result<(), Box<dyn std::error::Error>>
-    {
-        // V_1_21_7 enum variant represents protocol 772 (used by 1.21.7 and 1.21.8).
-        let velocity = pumpkin_util::math::vector3::Vector3::new(0.5, -0.5, 0.25);
-        let expected_tail = legacy_tail(velocity);
-        let encoded = encode_spawn(JavaMinecraftVersion::V_1_21_7)?;
-
-        assert!(encoded.ends_with(&expected_tail));
-        Ok(())
-    }
-
-    #[test]
-    fn spawn_entity_does_not_use_legacy_velocity_tail_for_1_21_9()
-    -> Result<(), Box<dyn std::error::Error>> {
-        let velocity = pumpkin_util::math::vector3::Vector3::new(0.5, -0.5, 0.25);
-        let expected_tail = legacy_tail(velocity);
-        let encoded = encode_spawn(JavaMinecraftVersion::V_1_21_9)?;
-
-        assert!(!encoded.ends_with(&expected_tail));
         Ok(())
     }
 }

@@ -38,9 +38,7 @@ use pumpkin_core::block::entities::chiseled_bookshelf::ChiseledBookshelfBlockEnt
 use pumpkin_core::block::entities::command_block::CommandBlockEntity as InternalCommandBlockEntity;
 use pumpkin_core::block::entities::comparator::ComparatorBlockEntity as InternalComparatorBlockEntity;
 use pumpkin_core::block::entities::conduit::ConduitBlockEntity as InternalConduitBlockEntity;
-use pumpkin_core::block::entities::copper_golem_statue::CopperGolemStatueBlockEntity as InternalCopperGolemStatueBlockEntity;
 use pumpkin_core::block::entities::crafter::CrafterBlockEntity as InternalCrafterBlockEntity;
-use pumpkin_core::block::entities::creaking_heart::CreakingHeartBlockEntity as InternalCreakingHeartBlockEntity;
 use pumpkin_core::block::entities::daylight_detector::DaylightDetectorBlockEntity as InternalDaylightDetectorBlockEntity;
 use pumpkin_core::block::entities::decorated_pot::DecoratedPotBlockEntity as InternalDecoratedPotBlockEntity;
 use pumpkin_core::block::entities::dispenser::DispenserBlockEntity as InternalDispenserBlockEntity;
@@ -371,9 +369,7 @@ impl WorldHostStateExt for PluginHostState {
             InternalChiseledBookshelfBlockEntity => ChiseledBookshelfBlockEntity,
             InternalComparatorBlockEntity => ComparatorBlockEntity,
             InternalConduitBlockEntity => ConduitBlockEntity,
-            InternalCopperGolemStatueBlockEntity => CopperGolemStatueBlockEntity,
             InternalCrafterBlockEntity => CrafterBlockEntity,
-            InternalCreakingHeartBlockEntity => CreakingHeartBlockEntity,
             InternalDaylightDetectorBlockEntity => DaylightDetectorBlockEntity,
             InternalDecoratedPotBlockEntity => DecoratedPotBlockEntity,
             InternalDispenserBlockEntity => DispenserBlockEntity,

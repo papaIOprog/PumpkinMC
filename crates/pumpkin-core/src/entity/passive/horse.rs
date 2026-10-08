@@ -102,10 +102,7 @@ impl HorseEntity {
     pub fn set_variant(&self, variant: i32) {
         self.variant.store(variant, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::horse::DATA_ID_TYPE_VARIANT,
-            VarInt(variant),
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::horse::VARIANT, VarInt(variant));
     }
 
     #[must_use]
@@ -212,7 +209,7 @@ impl Mob for HorseEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::horse::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::horse::DATA_ID_TYPE_VARIANT,
+            pumpkin_data::tracked_data::horse::VARIANT,
             VarInt(self.get_variant()),
         );
         entity.set_synced_data(

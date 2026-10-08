@@ -47,8 +47,7 @@ use pumpkin_protocol::{
     codec::item_stack_seralizer::OptionalItemStackHash,
     java::{
         client::play::{
-            CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetCursorItem,
-            CSetPlayerInventory, CSetSelectedSlot,
+            CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetSelectedSlot,
         },
         server::play::SlotActionType,
     },
@@ -168,14 +167,8 @@ pub trait InventoryPlayer: Send + Sync {
         total_slots: usize,
     );
 
-    /// Sends a cursor item update packet.
-    fn enqueue_cursor_packet(&self, packet: &CSetCursorItem);
-
     /// Sends a property update packet.
     fn enqueue_property_packet(&self, packet: &CSetContainerProperty);
-
-    /// Sends a player inventory slot update.
-    fn enqueue_slot_set_packet(&self, packet: &CSetPlayerInventory);
 
     /// Sends a selected slot update.
     fn enqueue_set_held_item_packet(&self, packet: &CSetSelectedSlot);
@@ -566,19 +559,19 @@ pub trait ScreenHandler: Send + Sync {
     /// Checks if the cursor stack needs to be synced.
     fn check_cursor_stack_updates(&mut self) {
         let behaviour = self.get_behaviour_mut();
-        if !behaviour.disable_sync {
+        let needs_sync = if behaviour.disable_sync {
+            false
+        } else {
             let cursor_stack = behaviour
                 .cursor_stack
                 .lock()
                 .unwrap_or_else(std::sync::PoisonError::into_inner);
-            if !behaviour.previous_cursor_stack.is_in_sync(&cursor_stack) {
-                behaviour
-                    .previous_cursor_stack
-                    .set_received_stack(cursor_stack.clone());
-                if let Some(sync_handler) = behaviour.sync_handler.as_ref() {
-                    sync_handler.update_cursor_stack(&cursor_stack);
-                }
-            }
+            !behaviour.previous_cursor_stack.is_in_sync(&cursor_stack)
+        };
+        // 1.21.1 has no dedicated cursor packet; the cursor rides in the full
+        // content packet, so a changed cursor resynchronizes the whole screen.
+        if needs_sync {
+            self.sync_state();
         }
     }
 

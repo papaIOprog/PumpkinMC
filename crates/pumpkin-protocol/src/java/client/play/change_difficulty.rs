@@ -1,5 +1,5 @@
 use crate::{
-    ClientPacket, ServerPacket, VarInt,
+    ClientPacket, ServerPacket,
     ser::{NetworkReadExt, NetworkWriteExt, ReadingError, WritingError},
 };
 use pumpkin_data::packet::clientbound::play::CHANGE_DIFFICULTY;
@@ -38,12 +38,8 @@ impl ClientPacket for CChangeDifficulty {
         mut write: impl std::io::Write,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        // Difficulty enum serialized as VarInt in 1.21.6+, and unsigned byte before
-        if *version >= JavaMinecraftVersion::V_1_21_6 {
-            write.write_var_int(&VarInt(i32::from(self.difficulty)))?;
-        } else {
-            write.write_u8(self.difficulty)?;
-        }
+        let _ = version;
+        write.write_u8(self.difficulty)?;
         // Added in 1.14: locked boolean
         if *version >= JavaMinecraftVersion::V_1_14 {
             write.write_bool(self.locked)?;
@@ -54,11 +50,7 @@ impl ClientPacket for CChangeDifficulty {
 
 impl<'a> ServerPacket<'a> for CChangeDifficulty {
     fn read(bytebuf: &mut &'a [u8], version: &JavaMinecraftVersion) -> Result<Self, ReadingError> {
-        let difficulty = if *version >= JavaMinecraftVersion::V_1_21_6 {
-            bytebuf.get_var_int()?.0 as u8
-        } else {
-            bytebuf.get_u8()?
-        };
+        let difficulty = bytebuf.get_u8()?;
         let locked = if *version >= JavaMinecraftVersion::V_1_14 {
             bytebuf.get_bool()?
         } else {

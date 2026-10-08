@@ -69,7 +69,7 @@ mod tests {
     fn keep_alive_roundtrip_modern() {
         let packet = CKeepAlive::new(1234567890123456789);
         let mut buf = Vec::new();
-        let version = JavaMinecraftVersion::V_1_21_4;
+        let version = JavaMinecraftVersion::V_1_21;
         packet.write_packet_data(&mut buf, &version).unwrap();
 
         let mut slice = buf.as_slice();

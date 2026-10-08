@@ -167,7 +167,7 @@ impl PandaEntity {
         self.main_gene.store(gene.id(), Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::MAIN_GENE_ID,
+            pumpkin_data::tracked_data::panda::MAIN_GENE,
             gene.id() as i8,
         );
     }
@@ -181,7 +181,7 @@ impl PandaEntity {
         self.hidden_gene.store(gene.id(), Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::HIDDEN_GENE_ID,
+            pumpkin_data::tracked_data::panda::HIDDEN_GENE,
             gene.id() as i8,
         );
     }
@@ -197,7 +197,7 @@ impl PandaEntity {
         self.flags.store(new_flags, Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::DATA_ID_FLAGS,
+            pumpkin_data::tracked_data::panda::PANDA_FLAGS,
             new_flags as i8,
         );
     }
@@ -293,27 +293,23 @@ impl Mob for PandaEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::panda::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::MAIN_GENE_ID,
+            pumpkin_data::tracked_data::panda::MAIN_GENE,
             self.main_gene.load(Ordering::Relaxed) as i8,
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::HIDDEN_GENE_ID,
+            pumpkin_data::tracked_data::panda::HIDDEN_GENE,
             self.hidden_gene.load(Ordering::Relaxed) as i8,
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::DATA_ID_FLAGS,
+            pumpkin_data::tracked_data::panda::PANDA_FLAGS,
             self.flags.load(Ordering::Relaxed) as i8,
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::UNHAPPY_COUNTER,
-            VarInt(self.unhappy_counter.load(Ordering::Relaxed)),
-        );
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::SNEEZE_COUNTER,
+            pumpkin_data::tracked_data::panda::SNEEZE_PROGRESS,
             VarInt(self.sneeze_counter.load(Ordering::Relaxed)),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::panda::EAT_COUNTER,
+            pumpkin_data::tracked_data::panda::EATING_TICKS,
             VarInt(self.eat_counter.load(Ordering::Relaxed)),
         );
     }

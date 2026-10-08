@@ -109,7 +109,7 @@ impl WitherEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(tracked_data::wither::DATA_ID_INV, VarInt(ticks));
+            .set_synced_data(tracked_data::wither::INVUL_TIMER, VarInt(ticks));
     }
 
     #[must_use]
@@ -126,9 +126,9 @@ impl WitherEntity {
             let old = self.alternative_targets[head].swap(entity_id, Ordering::Relaxed);
             if old != entity_id {
                 let tracker_id = match head {
-                    0 => tracked_data::wither::DATA_TARGET_A,
-                    1 => tracked_data::wither::DATA_TARGET_B,
-                    _ => tracked_data::wither::DATA_TARGET_C,
+                    0 => tracked_data::wither::TRACKED_ENTITY_ID_1,
+                    1 => tracked_data::wither::TRACKED_ENTITY_ID_2,
+                    _ => tracked_data::wither::TRACKED_ENTITY_ID_3,
                 };
                 self.mob_entity
                     .living_entity
@@ -581,19 +581,19 @@ impl Mob for WitherEntity {
     fn mob_init_data_tracker(&self) {
         let entity = &self.mob_entity.living_entity.entity;
         entity.set_synced_data(
-            tracked_data::wither::DATA_TARGET_A,
+            tracked_data::wither::TRACKED_ENTITY_ID_1,
             VarInt(self.get_alternative_target(0)),
         );
         entity.set_synced_data(
-            tracked_data::wither::DATA_TARGET_B,
+            tracked_data::wither::TRACKED_ENTITY_ID_2,
             VarInt(self.get_alternative_target(1)),
         );
         entity.set_synced_data(
-            tracked_data::wither::DATA_TARGET_C,
+            tracked_data::wither::TRACKED_ENTITY_ID_3,
             VarInt(self.get_alternative_target(2)),
         );
         entity.set_synced_data(
-            tracked_data::wither::DATA_ID_INV,
+            tracked_data::wither::INVUL_TIMER,
             VarInt(self.get_invulnerable_ticks()),
         );
     }

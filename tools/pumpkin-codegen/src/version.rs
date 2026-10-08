@@ -63,22 +63,8 @@ pub enum JavaMinecraftVersion {
     V_1_20_3,
     /// 1.20.5: Armored Paws
     V_1_20_5,
-    /// 1.21: Tricky Trials
+    /// 1.21-1.21.1: Tricky Trials
     V_1_21,
-    V_1_21_2,
-    V_1_21_4,
-    /// 1.21.5: Bundles of Bravery
-    V_1_21_5,
-    V_1_21_6,
-    V_1_21_7,
-    V_1_21_9,
-    V_1_21_11,
-    /// 26.1: Tiny Takeover
-    V_26_1,
-    /// 26.2: Chaos Cubed
-    V_26_2,
-    /// 26.3: Wilderness Bound
-    V_26_3,
 }
 
 impl JavaMinecraftVersion {
@@ -130,16 +116,6 @@ impl JavaMinecraftVersion {
             Self::V_1_20_3 => format_ident!("v1_20_3"),
             Self::V_1_20_5 => format_ident!("v1_20_5"),
             Self::V_1_21 => format_ident!("v1_21"),
-            Self::V_1_21_2 => format_ident!("v1_21_2"),
-            Self::V_1_21_4 => format_ident!("v1_21_4"),
-            Self::V_1_21_5 => format_ident!("v1_21_5"),
-            Self::V_1_21_6 => format_ident!("v1_21_6"),
-            Self::V_1_21_7 => format_ident!("v1_21_7"),
-            Self::V_1_21_9 => format_ident!("v1_21_9"),
-            Self::V_1_21_11 => format_ident!("v1_21_11"),
-            Self::V_26_1 => format_ident!("v26_1"),
-            Self::V_26_2 => format_ident!("v26_2"),
-            Self::V_26_3 => format_ident!("v26_3"),
         }
     }
 }
@@ -190,16 +166,6 @@ impl ToTokens for JavaMinecraftVersion {
             Self::V_1_20_3 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_20_3 },
             Self::V_1_20_5 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_20_5 },
             Self::V_1_21 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21 },
-            Self::V_1_21_2 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21_2 },
-            Self::V_1_21_4 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21_4 },
-            Self::V_1_21_5 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21_5 },
-            Self::V_1_21_6 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21_6 },
-            Self::V_1_21_7 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21_7 },
-            Self::V_1_21_9 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21_9 },
-            Self::V_1_21_11 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_1_21_11 },
-            Self::V_26_1 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_26_1 },
-            Self::V_26_2 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_26_2 },
-            Self::V_26_3 => quote! { pumpkin_util::version::JavaMinecraftVersion::V_26_3 },
         });
     }
 }

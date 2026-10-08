@@ -8,10 +8,12 @@ use crate::entity::EntityBase;
 use crate::entity::ai::pathfinder::NavigatorGoal;
 use crate::entity::mob::{Mob, RangedAttackMob};
 
-/// Vanilla `DrownedEntity.DrownedAttackGoal`, the trident throw. Unlike the plain
-/// ranged goal this one only ever runs while the trident is actually in hand, and
-/// only against a target the drowned is allowed to hit (vanilla
-/// `DrownedEntity.okTarget`): something in the water, or anything once night falls.
+/// Vanilla `DrownedEntity.DrownedAttackGoal`, the trident throw.
+///
+/// Unlike the plain ranged goal this one only ever runs while the trident is
+/// actually in hand, and only against a target the drowned is allowed to hit
+/// (vanilla `DrownedEntity.okTarget`): something in the water, or anything once
+/// night falls.
 pub struct DrownedTridentAttackGoal {
     mob: Weak<dyn RangedAttackMob>,
     speed_modifier: f64,

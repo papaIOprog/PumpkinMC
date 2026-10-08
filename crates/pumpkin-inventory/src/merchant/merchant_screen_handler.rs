@@ -501,8 +501,7 @@ mod tests {
         codec::item_stack_seralizer::ItemStackSerializer,
         java::{
             client::play::{
-                CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetCursorItem,
-                CSetPlayerInventory, CSetSelectedSlot,
+                CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetSelectedSlot,
             },
             server::play::SlotActionType,
         },
@@ -599,11 +598,7 @@ mod tests {
         ) {
         }
 
-        fn enqueue_cursor_packet(&self, _packet: &CSetCursorItem) {}
-
         fn enqueue_property_packet(&self, _packet: &CSetContainerProperty) {}
-
-        fn enqueue_slot_set_packet(&self, _packet: &CSetPlayerInventory) {}
 
         fn enqueue_set_held_item_packet(&self, _packet: &CSetSelectedSlot) {}
 

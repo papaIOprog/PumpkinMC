@@ -550,7 +550,7 @@ mod tests {
         };
         let mut bytes = Vec::new();
         Metadata::new(
-            pumpkin_data::tracked_data::area_effect_cloud::DATA_PARTICLE,
+            pumpkin_data::tracked_data::area_effect_cloud::PARTICLE_ID,
             particle,
         )
         .write(&mut bytes, &version)
@@ -558,7 +558,7 @@ mod tests {
 
         assert_eq!(
             bytes[0],
-            pumpkin_data::tracked_data::area_effect_cloud::DATA_PARTICLE.get(&version)
+            pumpkin_data::tracked_data::area_effect_cloud::PARTICLE_ID.get(&version)
         );
         assert_eq!(bytes[1], MetaDataType::PARTICLE.id(version) as u8);
 
@@ -570,8 +570,8 @@ mod tests {
     }
 
     #[test]
-    fn particle_metadata_id_stays_latest_for_26_3() {
-        let (particle_id, data) = encoded_particle(JavaMinecraftVersion::V_26_3);
+    fn particle_metadata_round_trips_id_and_data() {
+        let (particle_id, data) = encoded_particle(JavaMinecraftVersion::V_1_21);
 
         assert_eq!(particle_id, VarInt(29));
         assert_eq!(data, [0x12, 0x34, 0x56, 0x78]);

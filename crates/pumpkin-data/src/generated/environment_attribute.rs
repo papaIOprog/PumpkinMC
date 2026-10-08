@@ -655,28 +655,11 @@ impl BoolKeyframe {
 pub struct DayTimeline;
 impl DayTimeline {
     pub const PERIOD_TICKS: i32 = 24000i32;
-    pub const SKY_LIGHT_LEVEL_KEYFRAMES: &'static [FloatKeyframe] = &[
-        FloatKeyframe::new(133i32, 1f32),
-        FloatKeyframe::new(11867i32, 1f32),
-        FloatKeyframe::new(13670i32, 0.26666668f32),
-        FloatKeyframe::new(22330i32, 0.26666668f32),
-    ];
-    pub const MONSTERS_BURN_KEYFRAMES: &'static [BoolKeyframe] = &[
-        BoolKeyframe::new(12542i32, false),
-        BoolKeyframe::new(23460i32, true),
-    ];
-    pub const BEES_STAY_IN_HIVE_KEYFRAMES: &'static [BoolKeyframe] = &[
-        BoolKeyframe::new(12542i32, true),
-        BoolKeyframe::new(23460i32, false),
-    ];
-    pub const CREAKING_ACTIVE_KEYFRAMES: &'static [BoolKeyframe] = &[
-        BoolKeyframe::new(12600i32, true),
-        BoolKeyframe::new(23401i32, false),
-    ];
-    pub const EYEBLOSSOM_OPEN_KEYFRAMES: &'static [BoolKeyframe] = &[
-        BoolKeyframe::new(12600i32, true),
-        BoolKeyframe::new(23401i32, false),
-    ];
+    pub const SKY_LIGHT_LEVEL_KEYFRAMES: &'static [FloatKeyframe] = &[];
+    pub const MONSTERS_BURN_KEYFRAMES: &'static [BoolKeyframe] = &[];
+    pub const BEES_STAY_IN_HIVE_KEYFRAMES: &'static [BoolKeyframe] = &[];
+    pub const CREAKING_ACTIVE_KEYFRAMES: &'static [BoolKeyframe] = &[];
+    pub const EYEBLOSSOM_OPEN_KEYFRAMES: &'static [BoolKeyframe] = &[];
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum MoonPhase {
@@ -762,33 +745,12 @@ impl MoonPhaseKeyframe {
 pub struct MoonTimeline;
 impl MoonTimeline {
     pub const PERIOD_TICKS: i32 = 192000i32;
-    pub const SURFACE_SLIME_SPAWN_CHANCE_KEYFRAMES: &'static [FloatKeyframe] = &[
-        FloatKeyframe::new(0i32, 0.5f32),
-        FloatKeyframe::new(24000i32, 0.375f32),
-        FloatKeyframe::new(48000i32, 0.25f32),
-        FloatKeyframe::new(72000i32, 0.125f32),
-        FloatKeyframe::new(96000i32, 0f32),
-        FloatKeyframe::new(120000i32, 0.125f32),
-        FloatKeyframe::new(144000i32, 0.25f32),
-        FloatKeyframe::new(168000i32, 0.375f32),
-    ];
-    pub const MOON_PHASE_KEYFRAMES: &'static [MoonPhaseKeyframe] = &[
-        MoonPhaseKeyframe::new(0i32, MoonPhase::FullMoon),
-        MoonPhaseKeyframe::new(24000i32, MoonPhase::WaningGibbous),
-        MoonPhaseKeyframe::new(48000i32, MoonPhase::ThirdQuarter),
-        MoonPhaseKeyframe::new(72000i32, MoonPhase::WaningCrescent),
-        MoonPhaseKeyframe::new(96000i32, MoonPhase::NewMoon),
-        MoonPhaseKeyframe::new(120000i32, MoonPhase::WaxingCrescent),
-        MoonPhaseKeyframe::new(144000i32, MoonPhase::FirstQuarter),
-        MoonPhaseKeyframe::new(168000i32, MoonPhase::WaxingGibbous),
-    ];
+    pub const SURFACE_SLIME_SPAWN_CHANCE_KEYFRAMES: &'static [FloatKeyframe] = &[];
+    pub const MOON_PHASE_KEYFRAMES: &'static [MoonPhaseKeyframe] = &[];
 }
 pub struct EarlyGameTimeline;
 impl EarlyGameTimeline {
-    pub const CAN_PILLAGER_PATROL_SPAWN_KEYFRAMES: &'static [BoolKeyframe] = &[
-        BoolKeyframe::new(0i32, false),
-        BoolKeyframe::new(120000i32, true),
-    ];
+    pub const CAN_PILLAGER_PATROL_SPAWN_KEYFRAMES: &'static [BoolKeyframe] = &[];
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Activity {
@@ -898,20 +860,8 @@ impl ActivityKeyframe {
 pub struct VillagerScheduleTimeline;
 impl VillagerScheduleTimeline {
     pub const PERIOD_TICKS: i32 = 24000i32;
-    pub const VILLAGER_ACTIVITY_KEYFRAMES: &'static [ActivityKeyframe] = &[
-        ActivityKeyframe::new(10i32, Activity::Idle),
-        ActivityKeyframe::new(2000i32, Activity::Work),
-        ActivityKeyframe::new(9000i32, Activity::Meet),
-        ActivityKeyframe::new(11000i32, Activity::Idle),
-        ActivityKeyframe::new(12000i32, Activity::Rest),
-    ];
-    pub const BABY_VILLAGER_ACTIVITY_KEYFRAMES: &'static [ActivityKeyframe] = &[
-        ActivityKeyframe::new(10i32, Activity::Idle),
-        ActivityKeyframe::new(3000i32, Activity::Play),
-        ActivityKeyframe::new(6000i32, Activity::Idle),
-        ActivityKeyframe::new(10000i32, Activity::Play),
-        ActivityKeyframe::new(12000i32, Activity::Rest),
-    ];
+    pub const VILLAGER_ACTIVITY_KEYFRAMES: &'static [ActivityKeyframe] = &[];
+    pub const BABY_VILLAGER_ACTIVITY_KEYFRAMES: &'static [ActivityKeyframe] = &[];
 }
 #[doc = r" Samples a cyclic float keyframe track with linear interpolation across `period_ticks`."]
 #[must_use]

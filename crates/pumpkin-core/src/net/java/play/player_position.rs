@@ -29,12 +29,13 @@ impl JavaClient {
         // Sync position with tracking players only.
         world.send_to_tracking_players_editioned(
             entity,
-            &CEntityPositionSync::new(
+            &CTeleportEntity::new(
                 entity_id.into(),
                 pos,
                 Vector3::new(0.0, 0.0, 0.0),
                 entity.yaw.load(),
                 entity.pitch.load(),
+                &[],
                 on_ground,
             ),
             &bedrock_move_player_packet(entity, pos, CMovePlayer::MODE_TELEPORT, on_ground),

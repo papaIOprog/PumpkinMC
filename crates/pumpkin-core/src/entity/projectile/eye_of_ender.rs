@@ -173,7 +173,7 @@ impl EntityBase for EyeOfEnder {
 
     fn init_data_tracker(&self) {
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::eye_of_ender::ITEM_STACK,
+            pumpkin_data::tracked_data::eye_of_ender::ITEM,
             ItemStackSerializer::from(
                 self.item_stack
                     .lock()
@@ -219,7 +219,7 @@ impl EntityBase for EyeOfEnder {
         }
 
         let metadata = Metadata::new(
-            pumpkin_data::tracked_data::eye_of_ender::ITEM_STACK,
+            pumpkin_data::tracked_data::eye_of_ender::ITEM,
             ItemStackSerializer::from(
                 self.item_stack
                     .lock()

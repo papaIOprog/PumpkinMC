@@ -87,7 +87,6 @@ use pumpkin_data::{
     tag::Taggable,
     translation,
 };
-use pumpkin_inventory::crafting::recipe_provider::RecipeProvider;
 use pumpkin_inventory::screen_handler::InventoryPlayer;
 use pumpkin_inventory::{Clearable, Inventory};
 use pumpkin_nbt::compound::NbtCompound;
@@ -97,9 +96,7 @@ use pumpkin_protocol::java::client::play::{
     CBlockUpdate, CDisguisedChatMessage, CExplosion, CRespawn, CSetBlockDestroyStage, CWorldEvent,
     PlayerSpawnData,
 };
-use pumpkin_protocol::java::client::play::{
-    CPlayerSpawnPosition, CRecipeBookAdd, CRecipeBookSettings, CSystemChatMessage,
-};
+use pumpkin_protocol::java::client::play::{CPlayerSpawnPosition, CSystemChatMessage};
 use pumpkin_protocol::java::client::play::{CSetEntityMetadata, Metadata};
 use pumpkin_protocol::{
     BClientPacket, ClientPacket, IdOr, SoundEvent,
@@ -189,9 +186,7 @@ const MAX_LIGHT_LEVEL: u8 = 15;
 
 fn bedrock_chest_block_actor(state_id: BlockStateId, position: BlockPos) -> Option<NbtCompound> {
     let (block, _) = BlockState::from_id_with_block(state_id);
-    if !block.has_tag(&pumpkin_data::tag::Block::C_CHESTS_WOODEN)
-        && !block.has_tag(&pumpkin_data::tag::Block::MINECRAFT_COPPER_CHESTS)
-    {
+    if !block.has_tag(&pumpkin_data::tag::Block::C_CHESTS_WOODEN) {
         return None;
     }
 
@@ -3607,7 +3602,7 @@ impl World {
         // Sends initial scoreboard state
         player.send_scoreboard();
 
-        let (spawn_block_pos, yaw, pitch) = {
+        let (spawn_block_pos, yaw, _pitch) = {
             let level_info_lock = self.level_info.load();
             (
                 BlockPos::new(
@@ -3621,12 +3616,7 @@ impl World {
         };
 
         client
-            .send_packet(&CPlayerSpawnPosition::new(
-                spawn_block_pos,
-                yaw,
-                pitch,
-                self.dimension.minecraft_name.to_owned(),
-            ))
+            .send_packet(&CPlayerSpawnPosition::new(spawn_block_pos, yaw))
             .await;
 
         // Send initial weather state
@@ -3679,20 +3669,6 @@ impl World {
             .living_entity
             .send_current_equipment_attribute_modifiers();
 
-        if let crate::net::ClientPlatform::Java(java_client) = player.client.as_ref()
-            && server.advanced_config.recipe.send_recipes
-            && java_client.version.load() >= JavaMinecraftVersion::V_1_21_2
-        {
-            let settings_packet = CRecipeBookSettings::default_closed();
-            if let Ok(data) = java_client.serialize_packet(&settings_packet) {
-                java_client.send_packet_now(data).await;
-            }
-            let dynamic_recipes = server.recipe_manager.get_dynamic_recipes();
-            let add_packet = CRecipeBookAdd::new(true, &dynamic_recipes);
-            if let Ok(data) = java_client.serialize_packet(&add_packet) {
-                java_client.send_packet_now(data).await;
-            }
-        }
         let msg_comp = TextComponent::translate_cross(
             translation::java::MULTIPLAYER_PLAYER_JOINED,
             translation::bedrock::MULTIPLAYER_PLAYER_JOINED,
@@ -4133,12 +4109,7 @@ impl World {
         };
         player
             .send_packet_now_editioned(
-                &CPlayerSpawnPosition::new(
-                    spawn_block_pos,
-                    yaw,
-                    pitch,
-                    target_world.dimension.minecraft_name.to_string(),
-                ),
+                &CPlayerSpawnPosition::new(spawn_block_pos, yaw),
                 &pumpkin_protocol::bedrock::client::CSetSpawnPosition {
                     spawn_position_type:
                         pumpkin_protocol::bedrock::client::SpawnPositionType::WorldRespawn,

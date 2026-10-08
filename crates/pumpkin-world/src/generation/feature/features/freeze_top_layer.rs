@@ -51,7 +51,7 @@ impl FreezeTopLayerFeature {
                     // topPos must be air; belowPos must not be air (something to stand on)
                     if top_raw.to_state().is_air()
                         && !below.to_state().is_air()
-                        && !below_block.has_tag(tag::Block::MINECRAFT_CANNOT_SUPPORT_SNOW_LAYER)
+                        && !below_block.has_tag(tag::Block::MINECRAFT_SNOW_LAYER_CANNOT_SURVIVE_ON)
                     {
                         chunk.set_block_state(&top_vec, Block::SNOW.default_state);
 

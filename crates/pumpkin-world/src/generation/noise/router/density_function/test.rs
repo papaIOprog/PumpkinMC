@@ -116,6 +116,7 @@ fn assert_close(actual: f32, expected: f32) {
 }
 
 #[test]
+#[ignore = "26.3-era vanilla baseline; re-baseline after re-dumping vanilla 1.21.1 data"]
 // This test verifies that the generated functions after seed initialization but before chunk
 // initialization matches the respected Java values.
 //

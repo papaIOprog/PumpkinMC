@@ -8,7 +8,6 @@ use pumpkin_data::block_properties::WaterCauldronLikeProperties;
 use pumpkin_data::item::Item;
 use pumpkin_data::item_stack::ItemStack;
 use pumpkin_data::sound::{Sound, SoundCategory};
-use pumpkin_data::tag::Taggable;
 use pumpkin_data::{Block, BlockId, BlockState};
 use pumpkin_world::world::BlockFlags;
 
@@ -279,10 +278,7 @@ impl BlockBehaviour for CauldronBlock {
                     return BlockActionResult::Success;
                 }
 
-                if args
-                    .item_stack
-                    .item
-                    .has_tag(&pumpkin_data::tag::Item::MINECRAFT_SHULKER_BOXES)
+                if args.item_stack.item.registry_key.ends_with("shulker_box")
                     && args.item_stack.item.id != Item::SHULKER_BOX.id
                 {
                     let next_level = props.level - 1;

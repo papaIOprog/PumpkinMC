@@ -84,7 +84,7 @@ impl BlockBehaviour for FallingBlock {
     fn on_place(&self, args: OnPlaceArgs<'_>) -> BlockStateId {
         // Vanilla getPlacementState uses shouldSolidify (own position OR neighbors),
         // so powder placed directly into water hardens even without a water neighbor.
-        if args.block.has_tag(&tag::Block::MINECRAFT_CONCRETE_POWDERS)
+        if args.block.has_tag(&tag::Block::MINECRAFT_CONCRETE_POWDER)
             && Self::should_solidify(args.world, args.position)
             && let Some(name) = args.block.name.strip_suffix("_powder")
             && let Some(concrete) = Block::from_name(name)
@@ -103,7 +103,7 @@ impl BlockBehaviour for FallingBlock {
         &self,
         args: GetStateForNeighborUpdateArgs<'_>,
     ) -> BlockStateId {
-        if args.block.has_tag(&tag::Block::MINECRAFT_CONCRETE_POWDERS)
+        if args.block.has_tag(&tag::Block::MINECRAFT_CONCRETE_POWDER)
             && Self::touches_liquid(args.world, args.position)
             && let Some(name) = args.block.name.strip_suffix("_powder")
             && let Some(concrete) = Block::from_name(name)

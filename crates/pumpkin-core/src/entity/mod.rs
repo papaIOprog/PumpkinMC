@@ -42,8 +42,8 @@ use pumpkin_protocol::{
     codec::var_int::VarInt,
     codec::var_ulong::VarULong,
     java::client::play::{
-        CEntityPositionSync, CEntityVelocity, CPlayerPosition, CSetEntityMetadata, CSetPassengers,
-        CSpawnEntity, Metadata, MetadataSerializer,
+        CEntityVelocity, CPlayerPosition, CSetEntityMetadata, CSetPassengers, CSpawnEntity,
+        CTeleportEntity, Metadata, MetadataSerializer,
     },
 };
 use pumpkin_util::math::vector3::Axis;
@@ -207,7 +207,7 @@ pub trait EntityBase: Send + Sync + std::any::Any {
         if is_baby {
             let mut bedrock_meta = SyncedActorDataList::new();
             bedrock_meta.set_flag(entity_data_key::FLAGS, entity_data_flag::BABY as u8, true);
-            entity.set_synced_data(tracked_data::ageable_mob::DATA_BABY_ID, true);
+            entity.set_synced_data(tracked_data::animal_entity::DATA_BABY_ID, true);
             entity.send_bedrock_actor_data(&bedrock_meta);
         }
     }
@@ -3189,12 +3189,13 @@ impl Entity {
         let chunk_pos = self.chunk_pos.load();
         world.broadcast_to_chunk(
             chunk_pos,
-            &CEntityPositionSync::new(
+            &CTeleportEntity::new(
                 self.entity_id.into(),
                 position,
-                self.velocity.load(),
+                Vector3::new(0.0, 0.0, 0.0),
                 yaw.unwrap_or(self.yaw.load()),
                 pitch.unwrap_or(self.pitch.load()),
+                &[],
                 self.on_ground.load(Ordering::SeqCst),
             ),
         );
@@ -4018,7 +4019,7 @@ impl Entity {
         nbt.put_int("TicksFrozen", self.frozen_ticks.load(Relaxed));
         if let Some(custom_name) = &**self.custom_name.load() {
             let mut tag = custom_name
-                .to_nbt_tag_for_version(&pumpkin_util::version::JavaMinecraftVersion::V_26_3);
+                .to_nbt_tag_for_version(&pumpkin_util::version::JavaMinecraftVersion::V_1_21);
             // A literal string starting with '{' would read back as legacy JSON, so keep it a compound.
             if let NbtTag::String(text) = &tag
                 && text.starts_with('{')

@@ -3,7 +3,6 @@ use crate::entity::ageable::AgeableMob;
 use crate::entity::mob::Mob;
 use pumpkin_data::Block;
 use pumpkin_data::entity::EntityStatus;
-use pumpkin_data::tag::{self, Taggable};
 use pumpkin_data::world::WorldEvent;
 use pumpkin_world::world::BlockFlags;
 use rand::RngExt;
@@ -49,7 +48,7 @@ impl Goal for EatGrassGoal {
         let world = entity.world.load();
 
         let block_at_pos = world.get_block(&block_pos);
-        if block_at_pos.has_tag(&tag::Block::MINECRAFT_EDIBLE_FOR_SHEEP) {
+        if block_at_pos == &Block::GRASS_BLOCK || block_at_pos == &Block::TALL_GRASS {
             return true;
         }
 
@@ -87,7 +86,7 @@ impl Goal for EatGrassGoal {
             let mob_griefing = world.level_info.load().game_rules.mob_griefing;
 
             let block_at_pos = world.get_block(&block_pos);
-            if block_at_pos.has_tag(&tag::Block::MINECRAFT_EDIBLE_FOR_SHEEP) {
+            if block_at_pos == &Block::GRASS_BLOCK || block_at_pos == &Block::TALL_GRASS {
                 if mob_griefing {
                     // Break effects, no drops.
                     world.break_block(&block_pos, None, BlockFlags::SKIP_DROPS);

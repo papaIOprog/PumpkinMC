@@ -14,7 +14,9 @@ use crate::inventory::{Clearable, Inventory};
 use pumpkin_data::data_component_impl::EquipmentSlot;
 use pumpkin_data::item::Item;
 use pumpkin_data::item_stack::ItemStack;
-use pumpkin_protocol::java::client::play::CSetPlayerInventory;
+use pumpkin_protocol::{
+    codec::item_stack_seralizer::ItemStackSerializer, java::client::play::CSetContainerSlot,
+};
 use pumpkin_util::Hand;
 use rustc_hash::FxHashMap;
 use std::any::Any;
@@ -464,10 +466,13 @@ impl PlayerInventory {
             let items_fit =
                 stack.get_max_stack_size() - self.get_stack(room_for_stack as usize).item_count;
             if self.insert_stack(room_for_stack, &mut stack.split(items_fit)) && notify_client {
-                player.enqueue_slot_set_packet(&CSetPlayerInventory::new(
-                    i32::from(room_for_stack).into(),
-                    &self.get_stack(room_for_stack as usize).into(),
-                ));
+                let stack_serializer =
+                    ItemStackSerializer::from(self.get_stack(room_for_stack as usize));
+                player.enqueue_slot_packet(
+                    &CSetContainerSlot::new(0, 0, room_for_stack, &stack_serializer),
+                    None,
+                    0,
+                );
             }
         }
     }

@@ -128,9 +128,8 @@ pub use wit::pumpkin::plugin::{
     entity_types::EntityType,
     event::{self as events_wit, EventType},
     game_events as game_events_wit, gui, i18n, inventory as inventory_wit, ipc, item_stack,
-    java_dialogs, java_packets, particles, permission, player, potions as potions_wit,
-    recipe as recipe_wit, scoreboard, screens as screens_wit, server, statistics as statistics_wit,
-    text, uuid, world,
+    java_packets, particles, permission, player, potions as potions_wit, recipe as recipe_wit,
+    scoreboard, screens as screens_wit, server, statistics as statistics_wit, text, uuid, world,
 };
 
 // Convenience re-exports of commonly-used plugin types so plugin authors can
@@ -185,15 +184,6 @@ pub use worldgen::{ChunkBuffer, ChunkGenerator, GenerationPhase, GeneratorManage
 pub mod advancement {
     pub use crate::wit::pumpkin::plugin::advancement::{
         AdvancementDisplay, AdvancementInfo, AdvancementProgress, FrameType,
-    };
-}
-
-/// Java dialog WIT API re-exports.
-pub mod java_dialog {
-    pub use crate::wit::pumpkin::plugin::java_dialogs::{
-        Action, ActionButton, AfterAction, CustomClickAction, Dialog, DialogBody, DialogInput,
-        DialogInputBool, DialogInputNumberRange, DialogInputSingleOption, DialogInputText,
-        DialogType, Link, LinkLabel, LinkType,
     };
 }
 

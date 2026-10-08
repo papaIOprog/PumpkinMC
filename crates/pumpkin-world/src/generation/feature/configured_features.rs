@@ -80,17 +80,16 @@ pub static CONFIGURED_FEATURES: LazyLock<
     HashMap<pumpkin_data::configured_feature::ConfiguredFeature, ConfiguredFeature>,
 > = LazyLock::new(build_configured_features);
 
+/// In 1.21.1 the `minecraft:can_spawn_from_bone_meal` tag does not exist yet: vanilla
+/// treats every `minecraft:flower`-type configured feature as bone meal-able instead.
 pub static BONE_MEAL_FEATURES: LazyLock<
     HashSet<pumpkin_data::configured_feature::ConfiguredFeature>,
 > = LazyLock::new(|| {
-    pumpkin_data::tag::get_tag_values(
-        pumpkin_data::tag::RegistryKey::WorldgenConfiguredFeature,
-        "minecraft:can_spawn_from_bone_meal",
-    )
-    .into_iter()
-    .flatten()
-    .filter_map(|name| pumpkin_data::configured_feature::ConfiguredFeature::from_name(name))
-    .collect()
+    CONFIGURED_FEATURES
+        .iter()
+        .filter(|(_, feature)| matches!(feature, ConfiguredFeature::Flower(_)))
+        .map(|(key, _)| *key)
+        .collect()
 });
 
 pub enum ConfiguredFeature {
@@ -498,6 +497,7 @@ include!("../../../../pumpkin-data/src/generated/configured_features_generated.r
 
 #[cfg(test)]
 mod tests {
+    use super::super::placed_features::Feature;
     use super::{BONE_MEAL_FEATURES, CONFIGURED_FEATURES, ConfiguredFeature};
     use pumpkin_util::{
         math::position::BlockPos,
@@ -505,11 +505,17 @@ mod tests {
     };
 
     #[test]
-    fn bonemeal_feature_tag_resolves_to_placeable_blocks() {
-        assert_eq!(BONE_MEAL_FEATURES.len(), 8);
+    fn bonemeal_features_resolve_to_placeable_blocks() {
+        assert_eq!(BONE_MEAL_FEATURES.len(), 6);
         let mut random = RandomGenerator::Xoroshiro(Xoroshiro::from_seed(0));
         for key in BONE_MEAL_FEATURES.iter() {
-            let Some(ConfiguredFeature::SimpleBlock(feature)) = CONFIGURED_FEATURES.get(key) else {
+            let Some(ConfiguredFeature::Flower(patch)) = CONFIGURED_FEATURES.get(key) else {
+                panic!("bonemeal feature {key:?} must be a flower feature");
+            };
+            let Feature::Inlined(inner) = &patch.feature.feature else {
+                panic!("bonemeal feature {key:?} must inline its simple block feature");
+            };
+            let ConfiguredFeature::SimpleBlock(feature) = &**inner else {
                 panic!("bonemeal feature {key:?} must place a block");
             };
             assert!(
@@ -522,15 +528,17 @@ mod tests {
     }
 
     #[test]
-    fn bonemeal_features_use_tag_output() {
-        let tag_values = pumpkin_data::tag::get_tag_values(
-            pumpkin_data::tag::RegistryKey::WorldgenConfiguredFeature,
-            "minecraft:can_spawn_from_bone_meal",
-        );
-        assert!(tag_values.is_some());
-        let values = tag_values.unwrap();
-        assert_eq!(values.len(), 8);
-        assert!(values.contains(&"flower_default"));
-        assert!(values.contains(&"wildflower"));
+    fn bonemeal_features_match_vanilla_1_21_1_flowers() {
+        let expected = [
+            pumpkin_data::configured_feature::ConfiguredFeature::FlowerCherry,
+            pumpkin_data::configured_feature::ConfiguredFeature::FlowerDefault,
+            pumpkin_data::configured_feature::ConfiguredFeature::FlowerFlowerForest,
+            pumpkin_data::configured_feature::ConfiguredFeature::FlowerMeadow,
+            pumpkin_data::configured_feature::ConfiguredFeature::FlowerPlain,
+            pumpkin_data::configured_feature::ConfiguredFeature::FlowerSwamp,
+        ];
+        for key in expected {
+            assert!(BONE_MEAL_FEATURES.contains(&key));
+        }
     }
 }

@@ -328,7 +328,7 @@ impl DataComponentCodec<Self> for CustomNameImpl {
     }
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
-        let tag = seq.get_nbt_with_version(&pumpkin_util::version::JavaMinecraftVersion::V_26_2)?;
+        let tag = seq.get_nbt_with_version(&pumpkin_util::version::JavaMinecraftVersion::V_1_21)?;
         let name = tag.as_ref().map_or_else(
             pumpkin_util::text::TextComponent::empty,
             pumpkin_util::text::TextComponent::from_nbt,
@@ -342,7 +342,7 @@ impl DataComponentCodec<Self> for LoreImpl {
         seq.write_var_int(&VarInt(self.lines.len() as i32))?;
         for line in &self.lines {
             seq.write_slice(
-                &line.encode_for_version(&pumpkin_util::version::JavaMinecraftVersion::V_26_2),
+                &line.encode_for_version(&pumpkin_util::version::JavaMinecraftVersion::V_1_21),
             )?;
         }
         Ok(())
@@ -362,7 +362,7 @@ impl DataComponentCodec<Self> for LoreImpl {
         let mut lines = Vec::with_capacity(count as usize);
         for _ in 0..count {
             let tag =
-                seq.get_nbt_with_version(&pumpkin_util::version::JavaMinecraftVersion::V_26_2)?;
+                seq.get_nbt_with_version(&pumpkin_util::version::JavaMinecraftVersion::V_1_21)?;
             let text = tag.as_ref().map_or_else(
                 pumpkin_util::text::TextComponent::empty,
                 pumpkin_util::text::TextComponent::from_nbt,
@@ -462,7 +462,7 @@ impl DataComponentCodec<Self> for CustomDataImpl {
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
         let data = seq
-            .get_compound_nbt_with_version(&pumpkin_util::version::JavaMinecraftVersion::V_26_2)?
+            .get_compound_nbt_with_version(&pumpkin_util::version::JavaMinecraftVersion::V_1_21)?
             .unwrap_or_else(pumpkin_nbt::compound::NbtCompound::new);
         Ok(Self { data })
     }
@@ -1513,7 +1513,7 @@ impl DataComponentCodec<Self> for CanPlaceOnImpl {
             }
             let has_nbt = seq.get_bool()?;
             if has_nbt {
-                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
             }
             let exact_len = seq.get_var_int()?.0;
             for _ in 0..exact_len {
@@ -1572,7 +1572,7 @@ impl DataComponentCodec<Self> for CanBreakImpl {
             }
             let has_nbt = seq.get_bool()?;
             if has_nbt {
-                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
             }
             let exact_len = seq.get_var_int()?.0;
             for _ in 0..exact_len {
@@ -1629,7 +1629,7 @@ impl DataComponentCodec<Self> for AttributeModifiersImpl {
             let _slot = seq.get_var_int()?;
             let display_type = seq.get_var_int()?.0;
             if display_type == 2 {
-                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
             }
         }
         Ok(Self {
@@ -2279,7 +2279,7 @@ impl DataComponentCodec<Self> for WrittenBookContentImpl {
         seq.write_var_int(&VarInt(0))?;
         seq.write_var_int(&VarInt::from(self.pages.len() as i32))?;
         for page in &self.pages {
-            seq.write_slice(&page.encode_for_version(&JavaMinecraftVersion::V_26_2))?;
+            seq.write_slice(&page.encode_for_version(&JavaMinecraftVersion::V_1_21))?;
             seq.write_bool(false)?;
         }
         seq.write_bool(true)
@@ -2295,13 +2295,13 @@ impl DataComponentCodec<Self> for WrittenBookContentImpl {
         let pages_len = seq.get_var_int()?.0 as usize;
         let mut pages = Vec::with_capacity(pages_len);
         for _ in 0..pages_len {
-            let tag = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+            let tag = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
             let comp = tag.as_ref().map_or_else(
                 pumpkin_util::text::TextComponent::empty,
                 pumpkin_util::text::TextComponent::from_nbt,
             );
             if seq.get_bool()? {
-                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
             }
             pages.push(comp);
         }
@@ -2357,7 +2357,7 @@ impl DataComponentCodec<Self> for EntityDataImpl {
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
         let type_id = seq.get_var_int()?.0;
-        let tag = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+        let tag = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
         // Vanilla's TypedEntityData keeps the type apart from the tag.
         //Pumpkin keeps it as "id" in the NBT.
         let entity_type = u16::try_from(type_id)
@@ -2379,7 +2379,7 @@ impl DataComponentCodec<Self> for BucketEntityDataImpl {
     }
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
-        let _nbt = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+        let _nbt = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
         Ok(Self)
     }
 }
@@ -2392,7 +2392,7 @@ impl DataComponentCodec<Self> for BlockEntityDataImpl {
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
         let _type_id = seq.get_var_int()?;
-        let tag = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+        let tag = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
         let nbt = if let Some(NbtTag::Compound(c)) = tag {
             c
         } else {
@@ -2481,7 +2481,7 @@ impl DataComponentCodec<Self> for LodestoneTrackerImpl {
             seq.write_bool(true)?;
             seq.write_string(&target.dimension)?;
             let pos = pumpkin_util::math::position::BlockPos::new(target.x, target.y, target.z);
-            seq.write_block_pos(&pos, &JavaMinecraftVersion::V_26_2)?;
+            seq.write_block_pos(&pos, &JavaMinecraftVersion::V_1_21)?;
         } else {
             seq.write_bool(false)?;
         }
@@ -2491,7 +2491,7 @@ impl DataComponentCodec<Self> for LodestoneTrackerImpl {
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
         let target = if seq.get_bool()? {
             let dimension = seq.get_str()?.to_string();
-            let pos = seq.get_block_pos(&JavaMinecraftVersion::V_26_2)?;
+            let pos = seq.get_block_pos(&JavaMinecraftVersion::V_1_21)?;
             Some(pumpkin_data::data_component_impl::LodestoneTarget {
                 dimension,
                 x: pos.0.x,
@@ -2766,7 +2766,7 @@ impl DataComponentCodec<Self> for BeesImpl {
         let len = seq.get_var_int()?.0 as usize;
         for _ in 0..len {
             let _entity_type = seq.get_var_int()?;
-            let _nbt = seq.get_nbt_with_version(&JavaMinecraftVersion::V_26_2)?;
+            let _nbt = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
             let _ticks = seq.get_var_int()?;
             let _min_ticks = seq.get_var_int()?;
         }

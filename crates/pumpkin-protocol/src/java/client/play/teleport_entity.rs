@@ -66,17 +66,9 @@ impl ClientPacket for CTeleportEntity<'_> {
             write.write_i32_be((self.position.z * 32.0).floor() as i32)?;
         }
 
-        if version >= &JavaMinecraftVersion::V_1_21_2 {
-            write.write_f64_be(self.delta.x)?;
-            write.write_f64_be(self.delta.y)?;
-            write.write_f64_be(self.delta.z)?;
-            write.write_f32_be(self.yaw)?;
-            write.write_f32_be(self.pitch)?;
-            write.write_i32_be(PositionFlag::get_bitfield(self.relatives))?;
-        } else {
-            write.write_u8((self.yaw.rem_euclid(360.0) * 256.0 / 360.0).floor() as u8)?;
-            write.write_u8((self.pitch.rem_euclid(360.0) * 256.0 / 360.0).floor() as u8)?;
-        }
+        let _ = version;
+        write.write_u8((self.yaw.rem_euclid(360.0) * 256.0 / 360.0).floor() as u8)?;
+        write.write_u8((self.pitch.rem_euclid(360.0) * 256.0 / 360.0).floor() as u8)?;
 
         if version >= &JavaMinecraftVersion::V_1_8 {
             write.write_bool(self.on_ground)?;

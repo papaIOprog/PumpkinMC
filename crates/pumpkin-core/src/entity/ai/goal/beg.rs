@@ -49,7 +49,7 @@ impl BegGoal {
         mob.get_mob_entity()
             .living_entity
             .entity
-            .set_synced_data(pumpkin_data::tracked_data::wolf::INTERESTED_ID, value);
+            .set_synced_data(pumpkin_data::tracked_data::wolf::BEGGING, value);
     }
 }
 

@@ -55,7 +55,7 @@ impl BatEntity {
         let below_pos = BlockPos::new(pos.0.x, pos.0.y - 1, pos.0.z);
         if !world
             .get_block(&below_pos)
-            .has_tag(&tag::Block::MINECRAFT_BATS_SPAWNABLE_ON)
+            .has_tag(&tag::Block::MINECRAFT_STONE_ORE_REPLACEABLES)
         {
             return false;
         }
@@ -73,7 +73,7 @@ impl BatEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(tracked_data::bat::DATA_ID_FLAGS, flags);
+            .set_synced_data(tracked_data::bat::BAT_FLAGS, flags);
     }
 
     fn tick_ambient_sound(&self, world: &World, pos: &Vector3<f64>) {
@@ -210,7 +210,7 @@ impl Mob for BatEntity {
     fn mob_init_data_tracker(&self) {
         let entity = self.get_entity();
         let flags: u8 = if self.is_roosting() { ROOSTING_FLAG } else { 0 };
-        entity.set_synced_data(tracked_data::bat::DATA_ID_FLAGS, flags);
+        entity.set_synced_data(tracked_data::bat::BAT_FLAGS, flags);
     }
 
     fn mob_write_nbt(&self, nbt: &mut NbtCompound) {

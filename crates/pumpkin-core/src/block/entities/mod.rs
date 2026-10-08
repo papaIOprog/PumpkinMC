@@ -44,9 +44,7 @@ pub mod brushable_block;
 pub mod calibrated_sculk_sensor;
 pub mod campfire;
 pub mod conduit;
-pub mod copper_golem_statue;
 pub mod crafter;
-pub mod creaking_heart;
 pub mod decorated_pot;
 pub mod dispenser;
 pub mod enchanting_table;
@@ -257,9 +255,6 @@ pub fn block_entity_from_nbt(nbt: &NbtCompound) -> Option<Arc<dyn BlockEntity>> 
         hanging_sign::HangingSignBlockEntity::ID => Some(Arc::new(
             hanging_sign::HangingSignBlockEntity::from_nbt(nbt, pos),
         )),
-        creaking_heart::CreakingHeartBlockEntity::ID => Some(Arc::new(
-            creaking_heart::CreakingHeartBlockEntity::from_nbt(nbt, pos),
-        )),
         enchanting_table::EnchantingTableBlockEntity::ID => Some(Arc::new(
             enchanting_table::EnchantingTableBlockEntity::from_nbt(nbt, pos),
         )),
@@ -315,9 +310,6 @@ pub fn block_entity_from_nbt(nbt: &NbtCompound) -> Option<Arc<dyn BlockEntity>> 
         test_instance_block::TestInstanceBlockBlockEntity::ID => Some(Arc::new(
             test_instance_block::TestInstanceBlockBlockEntity::from_nbt(nbt, pos),
         )),
-        copper_golem_statue::CopperGolemStatueBlockEntity::ID => Some(Arc::new(
-            copper_golem_statue::CopperGolemStatueBlockEntity::from_nbt(nbt, pos),
-        )),
         potent_sulfur::PotentSulfurBlockEntity::ID => Some(Arc::new(
             potent_sulfur::PotentSulfurBlockEntity::from_nbt(nbt, pos),
         )),
@@ -357,9 +349,6 @@ pub fn create_block_entity(
         ))),
         "mob_spawner" => Some(Arc::new(mob_spawner::MobSpawnerBlockEntity::new(
             position, None,
-        ))),
-        "creaking_heart" => Some(Arc::new(creaking_heart::CreakingHeartBlockEntity::new(
-            position,
         ))),
         "piston" => Some(Arc::new(piston::PistonBlockEntity::from_nbt(
             &pumpkin_nbt::compound::NbtCompound::new(),
@@ -432,9 +421,6 @@ pub fn create_block_entity(
         "test_block" => Some(Arc::new(test_block::TestBlockBlockEntity::new(position))),
         "test_instance_block" => Some(Arc::new(
             test_instance_block::TestInstanceBlockBlockEntity::new(position),
-        )),
-        "copper_golem_statue" => Some(Arc::new(
-            copper_golem_statue::CopperGolemStatueBlockEntity::new(position),
         )),
         "potent_sulfur" => Some(Arc::new(potent_sulfur::PotentSulfurBlockEntity::new(
             position,

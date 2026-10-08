@@ -75,7 +75,7 @@ impl AllayEntity {
     pub fn set_dancing(&self, dancing: bool) {
         self.dancing.store(dancing, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(pumpkin_data::tracked_data::allay::DATA_DANCING, dancing);
+        entity.set_synced_data(pumpkin_data::tracked_data::allay::DANCING, dancing);
     }
 
     #[must_use]
@@ -87,7 +87,7 @@ impl AllayEntity {
         self.can_duplicate.store(can_duplicate, Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::allay::DATA_CAN_DUPLICATE,
+            pumpkin_data::tracked_data::allay::CAN_DUPLICATE,
             can_duplicate,
         );
     }
@@ -135,11 +135,11 @@ impl Mob for AllayEntity {
     fn mob_init_data_tracker(&self) {
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::allay::DATA_DANCING,
+            pumpkin_data::tracked_data::allay::DANCING,
             self.is_dancing(),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::allay::DATA_CAN_DUPLICATE,
+            pumpkin_data::tracked_data::allay::CAN_DUPLICATE,
             self.can_duplicate(),
         );
     }

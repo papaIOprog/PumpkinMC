@@ -64,22 +64,8 @@ pub enum JavaMinecraftVersion {
     V_1_20_3,
     /// 1.20.5: Armored Paws.
     V_1_20_5,
-    /// 1.21: Tricky Trials.
+    /// 1.21-1.21.1: Tricky Trials.
     V_1_21,
-    V_1_21_2,
-    V_1_21_4,
-    /// 1.21.5: Bundles of Bravery.
-    V_1_21_5,
-    V_1_21_6,
-    V_1_21_7,
-    V_1_21_9,
-    V_1_21_11,
-    //  26.1: Tiny Takeover
-    V_26_1,
-    // 26.2: Chaos Cubed
-    V_26_2,
-    /// 26.3: Wilderness Bound
-    V_26_3,
     /// Fallback for unrecognized protocol versions.
     Unknown,
 }
@@ -133,16 +119,6 @@ impl JavaMinecraftVersion {
             Self::V_1_20_3 => 765,
             Self::V_1_20_5 => 766,
             Self::V_1_21 => 767,
-            Self::V_1_21_2 => 768,
-            Self::V_1_21_4 => 769,
-            Self::V_1_21_5 => 770,
-            Self::V_1_21_6 => 771,
-            Self::V_1_21_7 => 772,
-            Self::V_1_21_9 => 773,
-            Self::V_1_21_11 => 774,
-            Self::V_26_1 => 775,
-            Self::V_26_2 => 776,
-            Self::V_26_3 => 777,
             Self::Unknown => -1,
         }
     }
@@ -195,16 +171,6 @@ impl JavaMinecraftVersion {
             765 => Self::V_1_20_3,
             766 => Self::V_1_20_5,
             767 => Self::V_1_21,
-            768 => Self::V_1_21_2,
-            769 => Self::V_1_21_4,
-            770 => Self::V_1_21_5,
-            771 => Self::V_1_21_6,
-            772 => Self::V_1_21_7,
-            773 => Self::V_1_21_9,
-            774 => Self::V_1_21_11,
-            775 => Self::V_26_1,
-            776 => Self::V_26_2,
-            777 => Self::V_26_3,
             _ => Self::Unknown,
         }
     }
@@ -272,17 +238,7 @@ impl std::fmt::Display for JavaMinecraftVersion {
             Self::V_1_20_2 => write!(f, "1.20.2"),
             Self::V_1_20_3 => write!(f, "1.20.3"),
             Self::V_1_20_5 => write!(f, "1.20.5"),
-            Self::V_1_21 => write!(f, "1.21"),
-            Self::V_1_21_2 => write!(f, "1.21.2"),
-            Self::V_1_21_4 => write!(f, "1.21.4"),
-            Self::V_1_21_5 => write!(f, "1.21.5"),
-            Self::V_1_21_6 => write!(f, "1.21.6"),
-            Self::V_1_21_7 => write!(f, "1.21.7"),
-            Self::V_1_21_9 => write!(f, "1.21.9"),
-            Self::V_1_21_11 => write!(f, "1.21.11"),
-            Self::V_26_1 => write!(f, "26.1"),
-            Self::V_26_2 => write!(f, "26.2"),
-            Self::V_26_3 => write!(f, "26.3"),
+            Self::V_1_21 => write!(f, "1.21.1"),
             Self::Unknown => write!(f, "unknown"),
         }
     }

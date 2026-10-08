@@ -32,8 +32,6 @@ bindgen!({
         "pumpkin:plugin/player@0.2.0.[method]player.set-permission-level": async | store | trappable,
         "pumpkin:plugin/player@0.2.0.[method]player.teleport": async | store | trappable,
         "pumpkin:plugin/player@0.2.0.[method]player.teleport-world": async | store | trappable,
-        "pumpkin:plugin/player@0.2.0.[method]java-player.show-dialog": async | store | trappable,
-        "pumpkin:plugin/player@0.2.0.[method]java-player.clear-dialog": async | store | trappable,
         "pumpkin:plugin/player@0.2.0.[method]java-player.kick": async | store | trappable,
         "pumpkin:plugin/player@0.2.0.[method]bedrock-player.kick": async | store | trappable,
         "pumpkin:plugin/server@0.2.0.[method]ban-manager.ban-ip": async | store | trappable,

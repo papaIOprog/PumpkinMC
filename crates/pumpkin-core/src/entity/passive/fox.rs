@@ -121,10 +121,7 @@ impl FoxEntity {
     pub fn set_variant(&self, variant: FoxVariant) {
         self.variant.store(variant.id(), Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::fox::TYPE_ID,
-            VarInt(variant.id()),
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::fox::TYPE, VarInt(variant.id()));
     }
 
     fn get_flag(&self, flag: u8) -> bool {
@@ -140,7 +137,7 @@ impl FoxEntity {
         };
         self.flags.store(new_flags, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(pumpkin_data::tracked_data::fox::FLAGS_ID, new_flags);
+        entity.set_synced_data(pumpkin_data::tracked_data::fox::FOX_FLAGS, new_flags);
     }
 
     #[must_use]
@@ -279,11 +276,11 @@ impl Mob for FoxEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::fox::BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::fox::TYPE_ID,
+            pumpkin_data::tracked_data::fox::TYPE,
             VarInt(self.get_variant().id()),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::fox::FLAGS_ID,
+            pumpkin_data::tracked_data::fox::FOX_FLAGS,
             self.flags.load(Ordering::Relaxed),
         );
     }

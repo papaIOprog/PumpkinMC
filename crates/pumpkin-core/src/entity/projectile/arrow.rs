@@ -327,14 +327,14 @@ impl ArrowEntity {
         self.is_critical.store(critical, Ordering::Relaxed);
         let flags = self.get_flags();
         self.entity
-            .set_synced_data(pumpkin_data::tracked_data::abstract_arrow::ID_FLAGS, flags);
+            .set_synced_data(pumpkin_data::tracked_data::arrow::PROJECTILE_FLAGS, flags);
     }
 
     pub fn set_no_physics(&self, no_physics: bool) {
         self.no_physics.store(no_physics, Ordering::Relaxed);
         let flags = self.get_flags();
         self.entity
-            .set_synced_data(pumpkin_data::tracked_data::abstract_arrow::ID_FLAGS, flags);
+            .set_synced_data(pumpkin_data::tracked_data::arrow::PROJECTILE_FLAGS, flags);
     }
 
     #[must_use]
@@ -353,10 +353,8 @@ impl ArrowEntity {
 
     pub fn set_pierce_level(&self, level: u8) {
         self.pierce_level.store(level, Ordering::Relaxed);
-        self.entity.set_synced_data(
-            pumpkin_data::tracked_data::abstract_arrow::PIERCE_LEVEL,
-            level,
-        );
+        self.entity
+            .set_synced_data(pumpkin_data::tracked_data::arrow::PIERCE_LEVEL, level);
     }
 
     #[must_use]
@@ -460,17 +458,15 @@ impl EntityBase for ArrowEntity {
         let entity = self.get_entity();
         let flags = self.get_flags();
         let pierce = self.pierce_level.load(Ordering::Relaxed);
-        let in_ground = self.in_ground.load(Ordering::Relaxed);
 
         if entity.entity_type.id == EntityType::SPECTRAL_ARROW.id {
-            entity.set_synced_data(pumpkin_data::tracked_data::spectral_arrow::ID_FLAGS, flags);
+            entity.set_synced_data(
+                pumpkin_data::tracked_data::spectral_arrow::PROJECTILE_FLAGS,
+                flags,
+            );
             entity.set_synced_data(
                 pumpkin_data::tracked_data::spectral_arrow::PIERCE_LEVEL,
                 pierce,
-            );
-            entity.set_synced_data(
-                pumpkin_data::tracked_data::spectral_arrow::IN_GROUND,
-                in_ground,
             );
         } else {
             let item_stack = self
@@ -478,10 +474,9 @@ impl EntityBase for ArrowEntity {
                 .read()
                 .unwrap_or_else(std::sync::PoisonError::into_inner);
             let color = Self::get_effect_color(&item_stack);
-            entity.set_synced_data(pumpkin_data::tracked_data::arrow::ID_FLAGS, flags);
+            entity.set_synced_data(pumpkin_data::tracked_data::arrow::PROJECTILE_FLAGS, flags);
             entity.set_synced_data(pumpkin_data::tracked_data::arrow::PIERCE_LEVEL, pierce);
-            entity.set_synced_data(pumpkin_data::tracked_data::arrow::IN_GROUND, in_ground);
-            entity.set_synced_data(pumpkin_data::tracked_data::arrow::ID_EFFECT_COLOR, color);
+            entity.set_synced_data(pumpkin_data::tracked_data::arrow::COLOR, color);
         }
 
         if self.is_on_fire() {
@@ -493,7 +488,6 @@ impl EntityBase for ArrowEntity {
         let entity = self.get_entity();
         let flags = self.get_flags();
         let pierce = self.pierce_level.load(Ordering::Relaxed);
-        let in_ground = self.in_ground.load(Ordering::Relaxed);
         let shared_flags = entity.flags.load(Ordering::Relaxed);
 
         let mut buf = Vec::new();
@@ -505,16 +499,14 @@ impl EntityBase for ArrowEntity {
             .write(&mut buf, &version);
         }
         if entity.entity_type.id == EntityType::SPECTRAL_ARROW.id {
-            let _ = Metadata::new(pumpkin_data::tracked_data::spectral_arrow::ID_FLAGS, flags)
-                .write(&mut buf, &version);
             let _ = Metadata::new(
-                pumpkin_data::tracked_data::spectral_arrow::PIERCE_LEVEL,
-                pierce,
+                pumpkin_data::tracked_data::spectral_arrow::PROJECTILE_FLAGS,
+                flags,
             )
             .write(&mut buf, &version);
             let _ = Metadata::new(
-                pumpkin_data::tracked_data::spectral_arrow::IN_GROUND,
-                in_ground,
+                pumpkin_data::tracked_data::spectral_arrow::PIERCE_LEVEL,
+                pierce,
             )
             .write(&mut buf, &version);
         } else {
@@ -523,14 +515,12 @@ impl EntityBase for ArrowEntity {
                 .read()
                 .unwrap_or_else(std::sync::PoisonError::into_inner);
             let color = Self::get_effect_color(&item_stack);
-            let _ = Metadata::new(pumpkin_data::tracked_data::arrow::ID_FLAGS, flags)
+            let _ = Metadata::new(pumpkin_data::tracked_data::arrow::PROJECTILE_FLAGS, flags)
                 .write(&mut buf, &version);
             let _ = Metadata::new(pumpkin_data::tracked_data::arrow::PIERCE_LEVEL, pierce)
                 .write(&mut buf, &version);
-            let _ = Metadata::new(pumpkin_data::tracked_data::arrow::IN_GROUND, in_ground)
-                .write(&mut buf, &version);
             if color != -1 {
-                let _ = Metadata::new(pumpkin_data::tracked_data::arrow::ID_EFFECT_COLOR, color)
+                let _ = Metadata::new(pumpkin_data::tracked_data::arrow::COLOR, color)
                     .write(&mut buf, &version);
             }
         }
@@ -597,10 +587,6 @@ impl EntityBase for ArrowEntity {
                 let block = world.get_block(&pos);
                 if block.is_air() {
                     self.in_ground.store(false, Ordering::Relaxed);
-                    entity.set_synced_data(
-                        pumpkin_data::tracked_data::abstract_arrow::IN_GROUND,
-                        false,
-                    );
                     let mut vel = entity.velocity.load();
                     vel.x *= rand::random::<f64>() * 0.2;
                     vel.y *= rand::random::<f64>() * 0.2;
@@ -858,9 +844,6 @@ impl EntityBase for ArrowEntity {
                 let offset = norm_dir.multiply(0.05, 0.05, 0.05);
                 entity.set_pos(hit_pos.sub(&offset));
                 entity.velocity.store(Vector3::new(0.0, 0.0, 0.0));
-
-                // Notify client that arrow is in ground
-                entity.set_synced_data(pumpkin_data::tracked_data::abstract_arrow::IN_GROUND, true);
 
                 // Play sound with vanilla pitch formula
                 let sound_pitch = 1.2 / (rand::random::<f32>() * 0.2 + 0.9);

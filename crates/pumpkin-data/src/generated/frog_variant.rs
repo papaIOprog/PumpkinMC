@@ -54,9 +54,9 @@ impl FrogVariant {
     #[must_use]
     pub const fn texture(&self) -> &'static str {
         match self {
-            Self::Cold => "minecraft:entity/frog/frog_cold",
-            Self::Temperate => "minecraft:entity/frog/frog_temperate",
-            Self::Warm => "minecraft:entity/frog/frog_warm",
+            Self::Cold => "minecraft:entity/frog/cold_frog",
+            Self::Temperate => "minecraft:entity/frog/temperate_frog",
+            Self::Warm => "minecraft:entity/frog/warm_frog",
         }
     }
     #[doc = "Returns all vanilla frog variants."]

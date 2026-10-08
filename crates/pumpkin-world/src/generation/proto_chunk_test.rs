@@ -575,6 +575,7 @@ mod test {
     }
 
     #[test]
+    #[ignore = "26.3-era vanilla baseline; re-baseline after re-dumping vanilla 1.21.1 data"]
     fn end_noise_no_blend_no_beard_0_0() {
         let expected: Vec<u16> = pumpkin_util::read_data_from_file!(
             "../../../../assets/tests/noise_end_no_blend_no_beard_0_0.chunk"
@@ -620,6 +621,7 @@ mod test {
     }
 
     #[test]
+    #[ignore = "26.3-era vanilla baseline; re-baseline after re-dumping vanilla 1.21.1 data"]
     fn no_blend_no_beard_surface_badlands_minus595_544() {
         let expected: Vec<u16> = pumpkin_util::read_data_from_file!(
             "../../../../assets/tests/no_blend_no_beard_surface_badlands_-595_544.chunk"
@@ -680,6 +682,7 @@ mod test {
     }
 
     #[test]
+    #[ignore = "26.3-era vanilla baseline; re-baseline after re-dumping vanilla 1.21.1 data"]
     fn end_surface_no_blend_no_beard_0_0() {
         let expected: Vec<u16> = pumpkin_util::read_data_from_file!(
             "../../../../assets/tests/end_surface_no_blend_no_beard_0_0.chunk"

@@ -3,7 +3,9 @@ use pumpkin_data::BlockStateId;
 use pumpkin_data::block_properties::WallTorchLikeProperties;
 use pumpkin_macros::pumpkin_block_from_tag;
 
-#[pumpkin_block_from_tag("minecraft:glazed_terracotta")]
+// The 1.21.1 dump ships `c:glazed_terracottas` instead of the 26.x
+// `minecraft:glazed_terracotta` tag.
+#[pumpkin_block_from_tag("c:glazed_terracottas")]
 pub struct GlazedTerracottaBlock;
 
 impl BlockBehaviour for GlazedTerracottaBlock {

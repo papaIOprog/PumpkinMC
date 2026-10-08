@@ -126,7 +126,7 @@ impl MooshroomEntity {
         self.variant.store(variant.id(), Ordering::Relaxed);
         let entity = self.get_entity();
         entity.set_synced_data(
-            pumpkin_data::tracked_data::mooshroom::DATA_TYPE,
+            pumpkin_data::tracked_data::mooshroom::TYPE,
             VarInt(variant.id()),
         );
     }
@@ -179,7 +179,7 @@ impl Mob for MooshroomEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::mooshroom::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::mooshroom::DATA_TYPE,
+            pumpkin_data::tracked_data::mooshroom::TYPE,
             VarInt(self.get_variant().id()),
         );
     }

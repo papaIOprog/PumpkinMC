@@ -43,7 +43,7 @@ impl MushroomPlantBlock {
     ) -> bool {
         let below_pos = pos.down();
         let below_block = block_accessor.get_block(&below_pos);
-        if below_block.has_tag(&tag::Block::MINECRAFT_OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT) {
+        if below_block == &Block::MYCELIUM || below_block == &Block::PODZOL {
             return true;
         }
 
@@ -78,11 +78,7 @@ impl MushroomPlantBlock {
         }
 
         let below_block = world.get_block(&pos.down());
-        let can_place_on = if block == &Block::BROWN_MUSHROOM {
-            below_block.has_tag(&tag::Block::MINECRAFT_HUGE_BROWN_MUSHROOM_CAN_PLACE_ON)
-        } else {
-            below_block.has_tag(&tag::Block::MINECRAFT_HUGE_RED_MUSHROOM_CAN_PLACE_ON)
-        };
+        let can_place_on = below_block.has_tag(&tag::Block::MINECRAFT_DIRT);
         if !can_place_on {
             return false;
         }
@@ -130,7 +126,7 @@ impl MushroomPlantBlock {
 fn place_mushroom_block(world: &Arc<World>, pos: &BlockPos, state_id: BlockStateId) {
     let block = world.get_block(pos);
     let state = world.get_block_state(pos);
-    if state.is_air() || block.has_tag(&tag::Block::MINECRAFT_REPLACEABLE_BY_MUSHROOMS) {
+    if state.is_air() || block.has_tag(&tag::Block::MINECRAFT_REPLACEABLE) {
         world.set_block_state(pos, state_id, BlockFlags::NOTIFY_ALL);
     }
 }

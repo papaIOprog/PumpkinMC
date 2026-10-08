@@ -91,7 +91,7 @@ impl GhastEntity {
     pub fn set_charging(&self, charging: bool) {
         self.is_charging.store(charging, Ordering::Relaxed);
         let entity = &self.mob_entity.living_entity.entity;
-        entity.set_synced_data(tracked_data::ghast::DATA_IS_CHARGING, charging);
+        entity.set_synced_data(tracked_data::ghast::SHOOTING, charging);
     }
 
     #[must_use]
@@ -137,7 +137,7 @@ impl Mob for GhastEntity {
     fn mob_init_data_tracker(&self) {
         let entity = self.get_entity();
         if self.is_charging() {
-            entity.set_synced_data(tracked_data::ghast::DATA_IS_CHARGING, true);
+            entity.set_synced_data(tracked_data::ghast::SHOOTING, true);
         }
     }
 

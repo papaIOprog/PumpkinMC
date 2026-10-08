@@ -25,39 +25,17 @@ impl ChunkHeightmaps {
         mut write: impl Write,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        if *version >= JavaMinecraftVersion::V_1_21_5 {
-            write.write_var_int(&VarInt(3))?; // Map size
-
-            let mut write_heightmap = |index: i32, data: &[i64]| -> Result<(), WritingError> {
-                write.write_var_int(&VarInt(index))?;
-                write.write_var_int(&VarInt(data.len() as i32))?;
-                for val in data {
-                    write.write_i64_be(*val)?;
-                }
-                Ok(())
-            };
-
-            write_heightmap(1, self.world_surface.as_deref().unwrap_or(&[0; 37]))?;
-            write_heightmap(4, self.motion_blocking.as_deref().unwrap_or(&[0; 37]))?;
-            write_heightmap(
-                5,
-                self.motion_blocking_no_leaves
-                    .as_deref()
-                    .unwrap_or(&[0; 37]),
-            )?;
-        } else {
-            let mut comp = NbtCompound::new();
-            if let Some(ref ws) = self.world_surface {
-                comp.put("WORLD_SURFACE", NbtTag::LongArray(ws.clone()));
-            }
-            if let Some(ref mb) = self.motion_blocking {
-                comp.put("MOTION_BLOCKING", NbtTag::LongArray(mb.clone()));
-            }
-            if let Some(ref mbnl) = self.motion_blocking_no_leaves {
-                comp.put("MOTION_BLOCKING_NO_LEAVES", NbtTag::LongArray(mbnl.clone()));
-            }
-            write.write_compound_nbt_with_version(Some(&comp), version)?;
+        let mut comp = NbtCompound::new();
+        if let Some(ref ws) = self.world_surface {
+            comp.put("WORLD_SURFACE", NbtTag::LongArray(ws.clone()));
         }
+        if let Some(ref mb) = self.motion_blocking {
+            comp.put("MOTION_BLOCKING", NbtTag::LongArray(mb.clone()));
+        }
+        if let Some(ref mbnl) = self.motion_blocking_no_leaves {
+            comp.put("MOTION_BLOCKING_NO_LEAVES", NbtTag::LongArray(mbnl.clone()));
+        }
+        write.write_compound_nbt_with_version(Some(&comp), version)?;
         Ok(())
     }
 }

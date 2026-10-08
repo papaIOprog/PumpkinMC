@@ -43,9 +43,7 @@ impl BambooFeature {
                             let podzol_pos = BlockPos::new(xx, podzol_y, zz);
                             let block_id = GenerationCache::get_block_state(chunk, &podzol_pos.0)
                                 .to_block_id();
-                            if block_id
-                                .has_tag(tag::Block::MINECRAFT_BENEATH_BAMBOO_PODZOL_REPLACEABLE)
-                            {
+                            if block_id.has_tag(tag::Block::MINECRAFT_DIRT) {
                                 chunk.set_block_state(&podzol_pos.0, Block::PODZOL.default_state);
                             }
                         }

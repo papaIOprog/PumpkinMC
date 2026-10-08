@@ -86,7 +86,7 @@ impl EntityBase for FallingEntity {
                     None,
                 ) && !would_continue_falling;
                 if may_replace && would_survive {
-                    if block.has_tag(&tag::Block::MINECRAFT_CONCRETE_POWDERS)
+                    if block.has_tag(&tag::Block::MINECRAFT_CONCRETE_POWDER)
                         && FallingBlock::should_solidify(&**world, &landing_pos)
                         && let Some(name) = block.name.strip_suffix("_powder")
                         && let Some(concrete) = Block::from_name(name)
@@ -115,7 +115,7 @@ impl EntityBase for FallingEntity {
 
     fn init_data_tracker(&self) {
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::falling_block::START_POS,
+            pumpkin_data::tracked_data::falling_block::BLOCK_POS,
             self.entity.block_pos.load(),
         );
     }

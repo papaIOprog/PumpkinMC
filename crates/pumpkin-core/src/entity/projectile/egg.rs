@@ -75,7 +75,7 @@ impl EntityBase for EggEntity {
 
         // Sync the item stack so the client renders the correct color/variant
         entity.set_synced_data(
-            pumpkin_data::tracked_data::egg::ITEM_STACK,
+            pumpkin_data::tracked_data::egg::ITEM,
             ItemStackSerializer::from(stack.clone()),
         );
     }

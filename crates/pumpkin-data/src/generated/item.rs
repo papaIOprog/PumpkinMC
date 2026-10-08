@@ -19010,12 +19010,6 @@ impl Item {
             ),
             (BreakSound, &BreakSoundImpl),
             (
-                DamageType,
-                &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::SPEAR,
-                },
-            ),
-            (
                 Enchantments,
                 &EnchantmentsImpl {
                     enchantment: Cow::Borrowed(&[]),
@@ -26820,12 +26814,6 @@ impl Item {
             ),
             (BreakSound, &BreakSoundImpl),
             (
-                DamageType,
-                &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::SPEAR,
-                },
-            ),
-            (
                 Enchantments,
                 &EnchantmentsImpl {
                     enchantment: Cow::Borrowed(&[]),
@@ -34017,12 +34005,6 @@ impl Item {
             ),
             (BreakSound, &BreakSoundImpl),
             (
-                DamageType,
-                &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::SPEAR,
-                },
-            ),
-            (
                 Enchantments,
                 &EnchantmentsImpl {
                     enchantment: Cow::Borrowed(&[]),
@@ -39824,12 +39806,6 @@ impl Item {
                 },
             ),
             (BreakSound, &BreakSoundImpl),
-            (
-                DamageType,
-                &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::SPEAR,
-                },
-            ),
             (
                 Enchantments,
                 &EnchantmentsImpl {
@@ -53689,12 +53665,6 @@ impl Item {
                 },
             ),
             (BreakSound, &BreakSoundImpl),
-            (
-                DamageType,
-                &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::SPEAR,
-                },
-            ),
             (
                 Enchantments,
                 &EnchantmentsImpl {
@@ -76967,12 +76937,6 @@ impl Item {
             ),
             (BreakSound, &BreakSoundImpl),
             (
-                DamageType,
-                &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::SPEAR,
-                },
-            ),
-            (
                 Enchantments,
                 &EnchantmentsImpl {
                     enchantment: Cow::Borrowed(&[]),
@@ -89938,12 +89902,6 @@ impl Item {
                 },
             ),
             (BreakSound, &BreakSoundImpl),
-            (
-                DamageType,
-                &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::SPEAR,
-                },
-            ),
             (
                 CookingFuel,
                 &CookingFuelImpl {

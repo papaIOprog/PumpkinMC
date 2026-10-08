@@ -23,7 +23,7 @@ pub struct LeavesBlock;
 
 #[must_use]
 pub fn get_distance_at(block: &Block, state_id: BlockStateId) -> u8 {
-    if block.has_tag(&tag::Block::MINECRAFT_PREVENTS_NEARBY_LEAF_DECAY) {
+    if block.has_tag(&tag::Block::MINECRAFT_LOGS) {
         0
     } else if block.has_tag(&tag::Block::MINECRAFT_LEAVES) {
         OakLeavesLikeProperties::from_state_id(state_id).distance

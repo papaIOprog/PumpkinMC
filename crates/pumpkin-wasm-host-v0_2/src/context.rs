@@ -1302,33 +1302,6 @@ fn register_raid_event(
     }
 }
 
-fn register_dialog_event(
-    resource: &Context,
-    handler: &Arc<WasmPluginEventHandler>,
-    priority: pumpkin_core::plugin::EventPriority,
-    blocking: bool,
-    event_type: EventType,
-) {
-    use pumpkin_core::plugin::api::events::dialog::{
-        DialogClearEvent, DialogClickActionEvent, DialogShowEvent,
-    };
-
-    match event_type {
-        EventType::DialogClickActionEvent => {
-            register_typed_event::<DialogClickActionEvent>(resource, handler, priority, blocking);
-        }
-        EventType::DialogShowEvent => {
-            register_typed_event::<DialogShowEvent>(resource, handler, priority, blocking);
-        }
-        EventType::DialogClearEvent => {
-            register_typed_event::<DialogClearEvent>(resource, handler, priority, blocking);
-        }
-        _ => {
-            tracing::error!("non-dialog event should not be routed to register_dialog_event");
-        }
-    }
-}
-
 fn register_server_event(
     resource: &Context,
     handler: &Arc<WasmPluginEventHandler>,
@@ -1652,11 +1625,6 @@ impl pumpkin::plugin::context::HostContext for PluginHostState {
             | EventType::RaidStopEvent
             | EventType::RaidTriggerEvent) => {
                 register_raid_event(ctx, &handler, priority, blocking, event_type);
-            }
-            event_type @ (EventType::DialogClickActionEvent
-            | EventType::DialogShowEvent
-            | EventType::DialogClearEvent) => {
-                register_dialog_event(ctx, &handler, priority, blocking, event_type);
             }
             event_type => {
                 register_player_event(ctx, &handler, priority, blocking, event_type);

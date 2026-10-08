@@ -109,7 +109,7 @@ impl CamelEntity {
     pub fn set_dashing(&self, dashing: bool) {
         self.dashing.store(dashing, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(pumpkin_data::tracked_data::camel::DASH, dashing);
+        entity.set_synced_data(pumpkin_data::tracked_data::camel::DASHING, dashing);
     }
 }
 
@@ -165,7 +165,10 @@ impl Mob for CamelEntity {
             pumpkin_data::tracked_data::camel::DATA_ID_FLAGS,
             self.flags.load(Ordering::Relaxed) as i8,
         );
-        entity.set_synced_data(pumpkin_data::tracked_data::camel::DASH, self.is_dashing());
+        entity.set_synced_data(
+            pumpkin_data::tracked_data::camel::DASHING,
+            self.is_dashing(),
+        );
     }
 
     fn mob_interact(&self, player: &Arc<Player>, item_stack: &mut ItemStack) -> bool {

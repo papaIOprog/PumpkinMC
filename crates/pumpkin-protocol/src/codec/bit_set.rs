@@ -97,50 +97,21 @@ impl BitSet {
         Ok(Self(array.into_boxed_slice()))
     }
 
-    /// Since 26.3 bit sets are sent as a little endian byte array without its trailing zero bytes
-    /// instead of a long array.
     pub fn encode_with_version(
         &self,
         write: &mut impl Write,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        if *version < JavaMinecraftVersion::V_26_3 {
-            return self.encode(write);
-        }
-
-        let mut bytes = Vec::with_capacity(self.0.len() * 8);
-        for word in &self.0 {
-            bytes.extend_from_slice(&word.to_le_bytes());
-        }
-        while bytes.last() == Some(&0) {
-            bytes.pop();
-        }
-
-        write.write_var_int(&bytes.len().try_into().map_err(|_| {
-            WritingError::Message(format!("{} isn't representable as a VarInt", bytes.len()))
-        })?)?;
-        write.write_slice(&bytes)
+        let _ = version;
+        self.encode(write)
     }
 
     pub fn decode_with_version(
         read: &mut impl Read,
         version: &JavaMinecraftVersion,
     ) -> Result<Self, ReadingError> {
-        if *version < JavaMinecraftVersion::V_26_3 {
-            return Self::decode(read);
-        }
-
-        let length = Self::checked_len(read.get_var_int()?.0)?;
-        let mut bytes = vec![0u8; length];
-        read.read_bytes_to_buf(&mut bytes)?;
-
-        let mut array = vec![0i64; length.div_ceil(8)];
-        for (word, chunk) in array.iter_mut().zip(bytes.chunks(8)) {
-            let mut buf = [0u8; 8];
-            buf[..chunk.len()].copy_from_slice(chunk);
-            *word = i64::from_le_bytes(buf);
-        }
-        Ok(Self(array.into_boxed_slice()))
+        let _ = version;
+        Self::decode(read)
     }
 }
 
@@ -149,51 +120,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn bitset_26_3_byte_array_round_trip() {
-        let mut bitset = BitSet::default();
-        bitset.set_bit(0, true);
-        bitset.set_bit(8, true);
-        bitset.set_bit(70, true);
-
-        let mut bytes = Vec::new();
-        bitset
-            .encode_with_version(&mut bytes, &JavaMinecraftVersion::V_26_3)
-            .expect("encoding failed");
-
-        // A var int length followed by the little endian bytes, trailing zero bytes trimmed
-        assert_eq!(bytes, vec![9, 0x01, 0x01, 0, 0, 0, 0, 0, 0, 0x40]);
-
-        let decoded =
-            BitSet::decode_with_version(&mut bytes.as_slice(), &JavaMinecraftVersion::V_26_3)
-                .expect("decoding failed");
-        assert!(decoded.get_bit(0));
-        assert!(decoded.get_bit(8));
-        assert!(decoded.get_bit(70));
-        assert!(!decoded.get_bit(1));
-    }
-
-    #[test]
-    fn bitset_26_3_empty_encodes_as_an_empty_byte_array() {
-        let mut bytes = Vec::new();
-        BitSet::default()
-            .encode_with_version(&mut bytes, &JavaMinecraftVersion::V_26_3)
-            .expect("encoding failed");
-
-        assert_eq!(bytes, vec![0]);
-
-        let decoded =
-            BitSet::decode_with_version(&mut bytes.as_slice(), &JavaMinecraftVersion::V_26_3)
-                .expect("decoding failed");
-        assert!(!decoded.get_bit(0));
-    }
-
-    #[test]
-    fn bitset_before_26_3_stays_a_long_array() {
+    fn bitset_is_a_long_array() {
         let bitset = BitSet::from_u64(1);
 
         let mut bytes = Vec::new();
         bitset
-            .encode_with_version(&mut bytes, &JavaMinecraftVersion::V_26_2)
+            .encode_with_version(&mut bytes, &JavaMinecraftVersion::V_1_21)
             .expect("encoding failed");
 
         assert_eq!(bytes, vec![1, 0, 0, 0, 0, 0, 0, 0, 1]);
@@ -204,10 +136,9 @@ mod tests {
         // Negative when read as a var int
         let negative = [0xFF, 0xFF, 0xFF, 0xFF, 0x0F];
 
-        for version in [JavaMinecraftVersion::V_26_3, JavaMinecraftVersion::V_26_2] {
-            let err = BitSet::decode_with_version(&mut negative.as_slice(), &version)
+        let err =
+            BitSet::decode_with_version(&mut negative.as_slice(), &JavaMinecraftVersion::V_1_21)
                 .expect_err("a negative length should be rejected");
-            assert!(matches!(err, ReadingError::TooLarge(_)), "got {err:?}");
-        }
+        assert!(matches!(err, ReadingError::TooLarge(_)), "got {err:?}");
     }
 }

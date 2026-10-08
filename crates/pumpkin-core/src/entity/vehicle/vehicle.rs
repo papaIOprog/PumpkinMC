@@ -280,7 +280,6 @@ mod tests {
         let mut expected = vec![8, 1, 10, 9, 1, 0xff, 0xff, 0xff, 0xff, 0x0f, 10, 3];
         expected.extend(10.0f32.to_be_bytes());
 
-        assert_eq!(wobble_metadata(JavaMinecraftVersion::V_1_21_11), expected);
-        assert_eq!(wobble_metadata(JavaMinecraftVersion::V_26_2), expected);
+        assert_eq!(wobble_metadata(JavaMinecraftVersion::V_1_21), expected);
     }
 }

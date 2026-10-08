@@ -1,7 +1,6 @@
 use pumpkin_data::{
     Block, BlockDirection, BlockState,
     block_properties::{DoubleBlockHalf, TallSeagrassLikeProperties},
-    tag,
 };
 use pumpkin_util::{
     math::position::BlockPos,
@@ -59,11 +58,6 @@ impl SeagrassFeature {
     fn can_survive<T: GenerationCache>(chunk: &T, pos: BlockPos) -> bool {
         let below = pos.down();
         let below_state = GenerationCache::get_block_state(chunk, &below.0);
-        let below_id = below_state.to_block_id();
-
-        if below_id.has_tag(tag::Block::MINECRAFT_CANNOT_SUPPORT_SEAGRASS) {
-            return false;
-        }
 
         below_state.to_state().is_side_solid(BlockDirection::Up)
     }

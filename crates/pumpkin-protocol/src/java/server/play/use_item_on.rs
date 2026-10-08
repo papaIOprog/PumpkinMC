@@ -34,11 +34,7 @@ impl<'a> ServerPacket<'a> for SUseItemOn {
             );
             let inside_block = bytebuf.get_bool()?;
             let (is_against_world_border, sequence) = if *version >= JavaMinecraftVersion::V_1_19 {
-                let is_against_world_border = if *version >= JavaMinecraftVersion::V_1_21_2 {
-                    bytebuf.get_bool()?
-                } else {
-                    false
-                };
+                let is_against_world_border = false;
                 let sequence = bytebuf.get_var_int()?;
                 (is_against_world_border, sequence)
             } else {
@@ -117,9 +113,6 @@ impl crate::ClientPacket for SUseItemOn {
             write.write_f32_be(self.cursor_pos.z)?;
             write.write_bool(self.inside_block)?;
             if *version >= JavaMinecraftVersion::V_1_19 {
-                if *version >= JavaMinecraftVersion::V_1_21_2 {
-                    write.write_bool(self.is_against_world_border)?;
-                }
                 write.write_var_int(&self.sequence)?;
             }
         } else {

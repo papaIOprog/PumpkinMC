@@ -126,7 +126,7 @@ impl WitchEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(tracked_data::witch::DATA_USING_ITEM, drinking);
+            .set_synced_data(tracked_data::witch::DRINKING, drinking);
     }
 
     #[must_use]

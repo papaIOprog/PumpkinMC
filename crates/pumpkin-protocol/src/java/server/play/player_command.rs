@@ -48,30 +48,18 @@ impl<'a> ServerPacket<'a> for SPlayerCommand {
             )
         };
 
-        let action = if version < &JavaMinecraftVersion::V_1_21_6 {
-            match action_id.0 {
-                0 => Ok(Action::StartSneaking),
-                1 => Ok(Action::StopSneaking),
-                2 => Ok(Action::LeaveBed),
-                3 => Ok(Action::StartSprinting),
-                4 => Ok(Action::StopSprinting),
-                5 => Ok(Action::StartHorseJump),
-                6 => Ok(Action::StopHorseJump),
-                7 => Ok(Action::OpenVehicleInventory),
-                8 => Ok(Action::StartFlyingElytra),
-                _ => Err(ReadingError::Message("Invalid player command".to_string())),
-            }
-        } else {
-            match action_id.0 {
-                0 => Ok(Action::LeaveBed),
-                1 => Ok(Action::StartSprinting),
-                2 => Ok(Action::StopSprinting),
-                3 => Ok(Action::StartHorseJump),
-                4 => Ok(Action::StopHorseJump),
-                5 => Ok(Action::OpenVehicleInventory),
-                6 => Ok(Action::StartFlyingElytra),
-                _ => Err(ReadingError::Message("Invalid player command".to_string())),
-            }
+        let _ = version;
+        let action = match action_id.0 {
+            0 => Ok(Action::StartSneaking),
+            1 => Ok(Action::StopSneaking),
+            2 => Ok(Action::LeaveBed),
+            3 => Ok(Action::StartSprinting),
+            4 => Ok(Action::StopSprinting),
+            5 => Ok(Action::StartHorseJump),
+            6 => Ok(Action::StopHorseJump),
+            7 => Ok(Action::OpenVehicleInventory),
+            8 => Ok(Action::StartFlyingElytra),
+            _ => Err(ReadingError::Message("Invalid player command".to_string())),
         }?;
         Ok(Self {
             entity_id,
@@ -88,33 +76,16 @@ impl crate::ClientPacket for SPlayerCommand {
         version: &JavaMinecraftVersion,
     ) -> Result<(), crate::ser::WritingError> {
         use crate::ser::NetworkWriteExt;
-        let action_id = if version < &JavaMinecraftVersion::V_1_21_6 {
-            match self.action {
-                Action::StartSneaking => 0,
-                Action::StopSneaking => 1,
-                Action::LeaveBed => 2,
-                Action::StartSprinting => 3,
-                Action::StopSprinting => 4,
-                Action::StartHorseJump => 5,
-                Action::StopHorseJump => 6,
-                Action::OpenVehicleInventory => 7,
-                Action::StartFlyingElytra => 8,
-            }
-        } else {
-            match self.action {
-                Action::StartSneaking | Action::StopSneaking => {
-                    return Err(crate::ser::WritingError::Message(
-                        "Sneaking action removed in 1.21.6+".into(),
-                    ));
-                }
-                Action::LeaveBed => 0,
-                Action::StartSprinting => 1,
-                Action::StopSprinting => 2,
-                Action::StartHorseJump => 3,
-                Action::StopHorseJump => 4,
-                Action::OpenVehicleInventory => 5,
-                Action::StartFlyingElytra => 6,
-            }
+        let action_id = match self.action {
+            Action::StartSneaking => 0,
+            Action::StopSneaking => 1,
+            Action::LeaveBed => 2,
+            Action::StartSprinting => 3,
+            Action::StopSprinting => 4,
+            Action::StartHorseJump => 5,
+            Action::StopHorseJump => 6,
+            Action::OpenVehicleInventory => 7,
+            Action::StartFlyingElytra => 8,
         };
         if *version >= JavaMinecraftVersion::V_1_8 {
             write.write_var_int(&self.entity_id)?;

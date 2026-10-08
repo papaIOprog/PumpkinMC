@@ -59,8 +59,7 @@ impl BlockBehaviour for AzaleaBlock {
 impl PlantBlockBase for AzaleaBlock {
     fn can_plant_on_top(&self, block_accessor: &dyn BlockAccessor, pos: &BlockPos) -> bool {
         let block_below = block_accessor.get_block(pos);
-        block_below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_AZALEA)
-            || block_below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_VEGETATION)
+        block_below.has_tag(&tag::Block::MINECRAFT_AZALEA_GROWS_ON)
     }
 
     fn can_place_at(&self, block_accessor: &dyn BlockAccessor, block_pos: &BlockPos) -> bool {

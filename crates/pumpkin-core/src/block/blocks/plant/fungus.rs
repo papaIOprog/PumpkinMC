@@ -36,11 +36,9 @@ impl PlantBlockBase for FungusBlock {
         pos: &pumpkin_util::math::position::BlockPos,
     ) -> bool {
         let block = block_accessor.get_block(pos);
-
-        if block == &Block::WARPED_FUNGUS {
-            return block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_WARPED_FUNGUS);
-        }
-        block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CRIMSON_FUNGUS)
+        block.has_tag(&tag::Block::MINECRAFT_NYLIUM)
+            || block == &Block::SOUL_SOIL
+            || block.has_tag(&tag::Block::MINECRAFT_DIRT)
     }
     fn can_place_at(&self, block_accessor: &dyn BlockAccessor, block_pos: &BlockPos) -> bool {
         <Self as PlantBlockBase>::can_plant_on_top(self, block_accessor, &block_pos.down())

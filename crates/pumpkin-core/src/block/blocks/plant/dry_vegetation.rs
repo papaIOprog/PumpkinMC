@@ -104,6 +104,6 @@ fn can_spread_to(world: &crate::world::World, position: BlockPos) -> bool {
 impl PlantBlockBase for DryVegetationBlock {
     fn can_plant_on_top(&self, block_accessor: &dyn BlockAccessor, block_pos: &BlockPos) -> bool {
         let block_below = block_accessor.get_block(block_pos);
-        block_below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_DRY_VEGETATION)
+        block_below.has_tag(&tag::Block::MINECRAFT_DEAD_BUSH_MAY_PLACE_ON)
     }
 }

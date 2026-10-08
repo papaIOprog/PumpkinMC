@@ -89,7 +89,7 @@ impl TurtleEntity {
     pub fn set_laying_egg(&self, laying_egg: bool) {
         self.laying_egg.store(laying_egg, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(pumpkin_data::tracked_data::turtle::LAYING_EGG, laying_egg);
+        entity.set_synced_data(pumpkin_data::tracked_data::turtle::HAS_EGG, laying_egg);
     }
 }
 
@@ -143,7 +143,7 @@ impl Mob for TurtleEntity {
         }
         entity.set_synced_data(pumpkin_data::tracked_data::turtle::HAS_EGG, self.has_egg());
         entity.set_synced_data(
-            pumpkin_data::tracked_data::turtle::LAYING_EGG,
+            pumpkin_data::tracked_data::turtle::HAS_EGG,
             self.is_laying_egg(),
         );
     }

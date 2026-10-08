@@ -111,6 +111,10 @@ data/*
 # Downloaded vanilla datapack
 /assets/datapack/
 
+# Local backup of the previous vanilla datapack dump and extracted vanilla client data
+/assets/datapack_26_3_backup/
+/assets/vanilla/
+
 # project's configurations
 pumpkin.toml
 nethernet-key.der

@@ -76,16 +76,12 @@ impl ProtoNode<'_> {
     const FLAG_IS_EXECUTABLE: u8 = 4;
     const FLAG_HAS_REDIRECT: u8 = 8;
     const FLAG_HAS_SUGGESTION_TYPE: u8 = 16;
-    /// Added in 1.21.6 (bit 0x20). Indicates that the command node is restricted.
-    const FLAG_IS_RESTRICTED: u8 = 32;
 
     pub fn write_to(
         &self,
         write: &mut impl Write,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        let v1_21_6 = *version >= JavaMinecraftVersion::V_1_21_6;
-
         // flags
         let mut redirect_target_on_flag = 0i32;
 
@@ -95,12 +91,9 @@ impl ProtoNode<'_> {
                 name: _,
                 is_executable,
                 redirect_target,
-                restricted,
+                restricted: _,
             } => {
                 let mut n = 1;
-                if restricted && v1_21_6 {
-                    n |= Self::FLAG_IS_RESTRICTED;
-                }
                 if is_executable {
                     n |= Self::FLAG_IS_EXECUTABLE;
                 }
@@ -116,12 +109,9 @@ impl ProtoNode<'_> {
                 parser: _,
                 override_suggestion_type,
                 redirect_target,
-                restricted,
+                restricted: _,
             } => {
                 let mut n = 2;
-                if restricted && v1_21_6 {
-                    n |= Self::FLAG_IS_RESTRICTED;
-                }
                 if override_suggestion_type.is_some() {
                     n |= Self::FLAG_HAS_SUGGESTION_TYPE;
                 }

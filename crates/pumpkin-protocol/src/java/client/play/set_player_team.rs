@@ -39,24 +39,6 @@ pub struct CSetPlayerTeam<'a> {
     pub players: Box<[String]>,
 }
 
-fn nametag_visibility_to_id(s: &str) -> i32 {
-    match s {
-        "never" => 1,
-        "hideForOtherTeams" => 2,
-        "hideForOwnTeam" => 3,
-        _ => 0,
-    }
-}
-
-fn collision_rule_to_id(s: &str) -> i32 {
-    match s {
-        "never" => 1,
-        "pushOtherTeams" => 2,
-        "pushOwnTeam" => 3,
-        _ => 0,
-    }
-}
-
 impl ClientPacket for CSetPlayerTeam<'_> {
     fn write_packet_data(
         &self,
@@ -78,32 +60,11 @@ impl ClientPacket for CSetPlayerTeam<'_> {
                 ));
             };
 
-            if *version >= JavaMinecraftVersion::V_26_2 {
-                write.write_component(params.display_name, version)?;
-                write.write_component(params.player_prefix, version)?;
-                write.write_component(params.player_suffix, version)?;
-                write
-                    .write_var_int(&VarInt(nametag_visibility_to_id(params.nametag_visibility)))?;
-                write.write_var_int(&VarInt(collision_rule_to_id(params.collision_rule)))?;
-                if params.color >= 0 && params.color != 21 {
-                    write.write_bool(true)?;
-                    write.write_var_int(&VarInt(params.color))?;
-                } else {
-                    write.write_bool(false)?;
-                }
-                write.write_i8(params.options)?;
-            } else if *version >= JavaMinecraftVersion::V_1_13 {
+            if *version >= JavaMinecraftVersion::V_1_13 {
                 write.write_component(params.display_name, version)?;
                 write.write_i8(params.options)?;
-                if *version >= JavaMinecraftVersion::V_1_21_5 {
-                    write.write_var_int(&VarInt(nametag_visibility_to_id(
-                        params.nametag_visibility,
-                    )))?;
-                    write.write_var_int(&VarInt(collision_rule_to_id(params.collision_rule)))?;
-                } else {
-                    write.write_string_bounded(params.nametag_visibility, 40)?;
-                    write.write_string_bounded(params.collision_rule, 40)?;
-                }
+                write.write_string_bounded(params.nametag_visibility, 40)?;
+                write.write_string_bounded(params.collision_rule, 40)?;
                 if *version >= JavaMinecraftVersion::V_1_17 {
                     let color_id = if params.color < 0 { 21 } else { params.color };
                     write.write_var_int(&VarInt(color_id))?;

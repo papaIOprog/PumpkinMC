@@ -1,7 +1,6 @@
 use pumpkin_data::{
     Block, BlockId, BlockStateId,
     block_properties::{WallTorchLikeProperties, WheatLikeProperties},
-    tag::{self, Taggable},
 };
 use pumpkin_util::math::position::BlockPos;
 use pumpkin_world::world::BlockAccessor;
@@ -69,10 +68,6 @@ impl BlockBehaviour for AttachedStemBlock {
 impl PlantBlockBase for AttachedStemBlock {
     fn can_plant_on_top(&self, block_accessor: &dyn BlockAccessor, pos: &BlockPos) -> bool {
         let block = block_accessor.get_block(pos);
-        if block == &Block::ATTACHED_PUMPKIN_STEM {
-            block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_PUMPKIN_STEM)
-        } else {
-            block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_MELON_STEM)
-        }
+        block == &Block::FARMLAND
     }
 }

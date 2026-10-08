@@ -31,7 +31,6 @@ pub mod i18n;
 pub mod inventory;
 pub mod ipc;
 pub mod item_stack;
-pub mod java_dialogs;
 pub mod living_entity;
 pub mod logging;
 pub mod mob;
@@ -204,14 +203,8 @@ mod resource_with {
         impl FromResource for plugin::block_entity::ConduitBlockEntity {
             type Internal = Arc<conduit::ConduitBlockEntity>;
         }
-        impl FromResource for plugin::block_entity::CopperGolemStatueBlockEntity {
-            type Internal = Arc<copper_golem_statue::CopperGolemStatueBlockEntity>;
-        }
         impl FromResource for plugin::block_entity::CrafterBlockEntity {
             type Internal = Arc<crafter::CrafterBlockEntity>;
-        }
-        impl FromResource for plugin::block_entity::CreakingHeartBlockEntity {
-            type Internal = Arc<creaking_heart::CreakingHeartBlockEntity>;
         }
         impl FromResource for plugin::block_entity::DaylightDetectorBlockEntity {
             type Internal = Arc<daylight_detector::DaylightDetectorBlockEntity>;

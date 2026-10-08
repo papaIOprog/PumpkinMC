@@ -81,12 +81,13 @@ impl BedrockClient {
             if pos_changed && delta.length_squared() >= 64.0 {
                 world.broadcast_packet_except(
                     &[player.gameprofile.id],
-                    &pumpkin_protocol::java::client::play::CEntityPositionSync::new(
+                    &pumpkin_protocol::java::client::play::CTeleportEntity::new(
                         player.entity_id().into(),
                         new_pos,
                         pumpkin_util::math::vector3::Vector3::new(0.0, 0.0, 0.0),
                         je_yaw,
                         je_pitch,
+                        &[],
                         on_ground,
                     ),
                 );

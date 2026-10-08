@@ -340,6 +340,7 @@ fn value_to_placement_modifier(v: &Value) -> TokenStream {
                 })
             }
         }
+        "minecraft:carving_mask" => quote! { PlacementModifier::CarvingMask },
         other => {
             let msg = format!("unknown placement modifier: {other}");
             quote! { compile_error!(#msg) }

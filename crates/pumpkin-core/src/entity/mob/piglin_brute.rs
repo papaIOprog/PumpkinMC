@@ -96,10 +96,10 @@ impl PiglinBruteEntity {
     pub fn set_immune_to_zombification(&self, immune: bool) {
         self.immune_to_zombification
             .store(immune, Ordering::Relaxed);
-        self.mob_entity.living_entity.entity.set_synced_data(
-            tracked_data::piglin_brute::DATA_IMMUNE_TO_ZOMBIFICATION,
-            immune,
-        );
+        self.mob_entity
+            .living_entity
+            .entity
+            .set_synced_data(tracked_data::piglin_brute::IMMUNE_TO_ZOMBIFICATION, immune);
     }
 
     #[must_use]
@@ -180,10 +180,7 @@ impl Mob for PiglinBruteEntity {
     fn mob_init_data_tracker(&self) {
         let entity = self.get_entity();
         if self.is_immune_to_zombification() {
-            entity.set_synced_data(
-                tracked_data::piglin_brute::DATA_IMMUNE_TO_ZOMBIFICATION,
-                true,
-            );
+            entity.set_synced_data(tracked_data::piglin_brute::IMMUNE_TO_ZOMBIFICATION, true);
         }
     }
 

@@ -34,7 +34,7 @@ impl<'a> ServerPacket<'a> for SChatMessage<'a> {
         let mut signature = None;
         let mut message_count = VarInt(0);
         let mut acknowledged = &[][..];
-        let mut checksum = 0;
+        let checksum = 0;
 
         if version >= &JavaMinecraftVersion::V_1_19 {
             timestamp = read.get_i64_be()?;
@@ -53,10 +53,6 @@ impl<'a> ServerPacket<'a> for SChatMessage<'a> {
                     // Actually, if we just want to compile, let's leave legacy unhandled as it requires more structs
                 }
             }
-        }
-
-        if version >= &JavaMinecraftVersion::V_1_21_5 {
-            checksum = read.get_u8()?;
         }
 
         Ok(Self {
@@ -91,10 +87,6 @@ impl ClientPacket for SChatMessage<'_> {
                 // write_signed_preview dummy
                 write.write_u8(0)?;
             }
-        }
-
-        if version >= &JavaMinecraftVersion::V_1_21_5 {
-            write.write_u8(self.checksum)?;
         }
 
         Ok(())

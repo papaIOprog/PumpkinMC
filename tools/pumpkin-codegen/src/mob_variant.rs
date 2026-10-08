@@ -49,6 +49,11 @@ fn build_entity_variant(
     is_nautilus: bool,
 ) -> TokenStream {
     let dir = Path::new("../../assets/datapack/data/minecraft").join(dir_name);
+    if !dir.is_dir() {
+        // Registries such as cow_variant or the sound variants do not exist in
+        // 1.21.1, so there is nothing to generate for them.
+        return TokenStream::new();
+    }
     let mut variants: BTreeMap<String, EntityVariantJson> = BTreeMap::new();
 
     let mut entries = fs::read_dir(&dir)
@@ -334,6 +339,9 @@ impl SoundVariantJson {
 fn load_sound_variants(dir_name: &str) -> BTreeMap<String, SoundVariantJson> {
     let dir = Path::new("../../assets/datapack/data/minecraft").join(dir_name);
     let mut variants: BTreeMap<String, SoundVariantJson> = BTreeMap::new();
+    if !dir.is_dir() {
+        return variants;
+    }
 
     let mut entries = fs::read_dir(&dir)
         .unwrap_or_else(|e| panic!("read dir {}: {}", dir.display(), e))
@@ -386,6 +394,11 @@ fn build_common_sound_enum(
     has_cat_specifics: bool,
     has_wolf_specifics: bool,
 ) -> TokenStream {
+    if variants.is_empty() {
+        // The registry does not exist in this version, nothing to generate.
+        return TokenStream::new();
+    }
+
     let enum_ident = format_ident!("{enum_name_str}");
 
     let mut enum_variants = Vec::new();

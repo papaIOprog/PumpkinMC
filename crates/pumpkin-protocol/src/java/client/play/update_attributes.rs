@@ -463,23 +463,17 @@ mod tests {
     }
 
     #[test]
-    fn update_attributes_packet_id_for_26_3() {
+    fn update_attributes_packet_id() {
         assert_eq!(
-            CUpdateAttributes::to_id(JavaMinecraftVersion::V_26_3),
-            UPDATE_ATTRIBUTES.to_id(JavaMinecraftVersion::V_26_3)
+            CUpdateAttributes::to_id(JavaMinecraftVersion::V_1_21),
+            UPDATE_ATTRIBUTES.to_id(JavaMinecraftVersion::V_1_21)
         );
-        assert_eq!(CUpdateAttributes::to_id(JavaMinecraftVersion::V_26_3), 134);
+        assert_eq!(CUpdateAttributes::to_id(JavaMinecraftVersion::V_1_21), 117);
     }
 
     #[test]
-    fn armor_attribute_encodes_for_1_21() {
+    fn armor_attribute_encodes() {
         let version = JavaMinecraftVersion::V_1_21;
-        assert_armor_attribute_payload(&encoded_armor_attributes(version), version);
-    }
-
-    #[test]
-    fn armor_attribute_encodes_for_26_2() {
-        let version = JavaMinecraftVersion::V_26_2;
         assert_armor_attribute_payload(&encoded_armor_attributes(version), version);
     }
 }

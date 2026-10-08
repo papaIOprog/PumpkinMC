@@ -70,7 +70,7 @@ impl WitherSkullEntity {
         self.dangerous.store(dangerous, Ordering::Relaxed);
         self.thrown
             .entity
-            .set_synced_data(tracked_data::wither_skull::DATA_DANGEROUS, dangerous);
+            .set_synced_data(tracked_data::wither_skull::CHARGED, dangerous);
     }
 }
 
@@ -91,10 +91,7 @@ impl EntityBase for WitherSkullEntity {
 
     fn init_data_tracker(&self) {
         let entity = self.get_entity();
-        entity.set_synced_data(
-            tracked_data::wither_skull::DATA_DANGEROUS,
-            self.is_dangerous(),
-        );
+        entity.set_synced_data(tracked_data::wither_skull::CHARGED, self.is_dangerous());
     }
 
     fn tick(&self, caller: &dyn EntityBase, _server: &Server) {

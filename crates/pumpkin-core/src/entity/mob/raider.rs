@@ -92,7 +92,7 @@ pub trait Raider: PatrollingMonster {
             .is_celebrating
             .store(celebrating, Ordering::Relaxed);
         let entity = &self.get_mob_entity().living_entity.entity;
-        entity.set_synced_data(tracked_data::pillager::IS_CELEBRATING, celebrating);
+        entity.set_synced_data(tracked_data::pillager::CELEBRATING, celebrating);
     }
 
     fn has_active_raid(&self) -> bool {

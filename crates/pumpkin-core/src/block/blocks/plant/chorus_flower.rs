@@ -71,7 +71,7 @@ impl BlockBehaviour for ChorusFlowerBlock {
                 let below_pos = args.position.down();
                 let (below_block, _) = args.world.get_block_and_state(&below_pos);
 
-                if below_block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CHORUS_FLOWER) {
+                if below_block.has_tag(&tag::Block::C_END_STONES) {
                     grow_upwards = true;
                 } else if below_block == &Block::CHORUS_PLANT {
                     let mut height = 1;
@@ -79,7 +79,7 @@ impl BlockBehaviour for ChorusFlowerBlock {
                         let test_pos = args.position.offset(Vector3::new(0, -(height + 1), 0));
                         let (test_block, _) = args.world.get_block_and_state(&test_pos);
                         if test_block != &Block::CHORUS_PLANT {
-                            if test_block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CHORUS_FLOWER) {
+                            if test_block.has_tag(&tag::Block::C_END_STONES) {
                                 pillar_on_support_block = true;
                             }
                             break;
@@ -202,9 +202,7 @@ pub fn all_neighbors_empty(
 pub fn can_survive(block_accessor: &dyn BlockAccessor, pos: &BlockPos) -> bool {
     let (block_below, _) = block_accessor.get_block_and_state(&pos.down());
 
-    if block_below == &Block::CHORUS_PLANT
-        || block_below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_CHORUS_FLOWER)
-    {
+    if block_below == &Block::CHORUS_PLANT || block_below.has_tag(&tag::Block::C_END_STONES) {
         return true;
     }
 

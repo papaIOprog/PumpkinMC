@@ -1,7 +1,4 @@
-use pumpkin_data::{
-    Block, BlockDirection, BlockState, BlockStateId,
-    tag::{self, Taggable},
-};
+use pumpkin_data::{Block, BlockDirection, BlockState, BlockStateId};
 use pumpkin_macros::pumpkin_block;
 use pumpkin_util::math::position::BlockPos;
 use pumpkin_world::world::BlockAccessor;
@@ -58,7 +55,6 @@ impl PlantBlockBase for SeaGrassBlock {
     }
 }
 #[must_use]
-pub fn supports_seagrass(support_block: &Block, support_block_state: &BlockState) -> bool {
+pub const fn supports_seagrass(_support_block: &Block, support_block_state: &BlockState) -> bool {
     support_block_state.is_side_solid(BlockDirection::Up)
-        && !support_block.has_tag(&tag::Block::MINECRAFT_CANNOT_SUPPORT_SEAGRASS)
 }

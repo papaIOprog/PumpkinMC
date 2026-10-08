@@ -155,17 +155,16 @@ impl TreeFeature {
                         && !visited[n_idx]
                     {
                         let (n_block, n_state) = chunk.get_block_and_state(&neighbor_pos);
-                        let distance =
-                            if n_block.has_tag(&tag::Block::MINECRAFT_PREVENTS_NEARBY_LEAF_DECAY) {
-                                Some(0)
-                            } else if OakLeavesLikeProperties::handles_block_id(n_block.id) {
-                                Some(
-                                    OakLeavesLikeProperties::from_state_id(n_state.id).distance
-                                        as usize,
-                                )
-                            } else {
-                                None
-                            };
+                        let distance = if n_block.has_tag(&tag::Block::MINECRAFT_LOGS) {
+                            Some(0)
+                        } else if OakLeavesLikeProperties::handles_block_id(n_block.id) {
+                            Some(
+                                OakLeavesLikeProperties::from_state_id(n_state.id).distance
+                                    as usize,
+                            )
+                        } else {
+                            None
+                        };
 
                         if let Some(dist) = distance {
                             let new_distance = dist.min(smallest_distance + 1);

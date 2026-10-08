@@ -1,6 +1,6 @@
 use crate::{
     ServerPacket,
-    ser::{NetworkReadExt, NetworkReadSliceExt, ReadingError},
+    ser::{NetworkReadSliceExt, ReadingError},
 };
 use pumpkin_data::packet::serverbound::play::RECIPE_BOOK_SEEN_RECIPE;
 use pumpkin_macros::java_packet;
@@ -15,16 +15,11 @@ pub struct SRecipeBookSeenRecipe {
 
 impl<'a> ServerPacket<'a> for SRecipeBookSeenRecipe {
     fn read(bytebuf: &mut &'a [u8], version: &JavaMinecraftVersion) -> Result<Self, ReadingError> {
-        if *version >= JavaMinecraftVersion::V_1_21_2 {
-            Ok(Self {
-                recipe_display_id: bytebuf.get_var_int()?,
-            })
-        } else {
-            let _recipe = bytebuf.get_str_borrowed()?;
-            Ok(Self {
-                recipe_display_id: VarInt(0),
-            })
-        }
+        let _ = version;
+        let _recipe = bytebuf.get_str_borrowed()?;
+        Ok(Self {
+            recipe_display_id: VarInt(0),
+        })
     }
 }
 

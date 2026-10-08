@@ -142,10 +142,7 @@ impl BeeEntity {
         let new_flags = if val { current | flag } else { current & !flag };
         self.flags.store(new_flags, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::bee::DATA_FLAGS_ID,
-            new_flags as i8,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::bee::BEE_FLAGS, new_flags as i8);
     }
 
     #[must_use]
@@ -274,7 +271,7 @@ impl Mob for BeeEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::bee::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::bee::DATA_FLAGS_ID,
+            pumpkin_data::tracked_data::bee::BEE_FLAGS,
             self.flags.load(Ordering::Relaxed) as i8,
         );
     }

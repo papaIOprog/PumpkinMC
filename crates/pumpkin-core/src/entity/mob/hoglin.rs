@@ -112,10 +112,6 @@ impl HoglinEntity {
     pub fn set_immune_to_zombification(&self, immune: bool) {
         self.immune_to_zombification
             .store(immune, Ordering::Relaxed);
-        self.mob_entity.living_entity.entity.set_synced_data(
-            pumpkin_data::tracked_data::hoglin::DATA_IMMUNE_TO_ZOMBIFICATION,
-            immune,
-        );
     }
 
     pub fn is_converting(&self, world: &World) -> bool {

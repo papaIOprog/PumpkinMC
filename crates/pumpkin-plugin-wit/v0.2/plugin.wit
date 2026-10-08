@@ -39,8 +39,6 @@ world plugin {
     import boss-bar;
     /// Provides Bedrock custom forms.
     import forms;
-    /// Provides Java Edition dialogs.
-    import java-dialogs;
     /// Provides status effect types and instances.
     import status-effect;
     /// Provides block entity types and instances.

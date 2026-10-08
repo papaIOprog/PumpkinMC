@@ -11,35 +11,34 @@ use crate::pumpkin::{
             BrewingStandBlockEntity, BrushableBlockBlockEntity, CalibratedSculkSensorBlockEntity,
             CampfireBlockEntity, ChestBlockEntity, ChiseledBookshelfBlockEntity,
             CommandBlockEntity, ComparatorBlockEntity, ConduitBlockEntity, ContainerBlockEntity,
-            CopperGolemStatueBlockEntity, CrafterBlockEntity, CreakingHeartBlockEntity,
-            DaylightDetectorBlockEntity, DecoratedPotBlockEntity, DispenserBlockEntity,
-            DropperBlockEntity, DyeColor, EnchantingTableBlockEntity, EndGatewayBlockEntity,
-            EndPortalBlockEntity, EnderChestBlockEntity, FurnaceBlockEntity,
+            CrafterBlockEntity, DaylightDetectorBlockEntity, DecoratedPotBlockEntity,
+            DispenserBlockEntity, DropperBlockEntity, DyeColor, EnchantingTableBlockEntity,
+            EndGatewayBlockEntity, EndPortalBlockEntity, EnderChestBlockEntity, FurnaceBlockEntity,
             HangingSignBlockEntity, HopperBlockEntity, HostBannerBlockEntity,
             HostBarrelBlockEntity, HostBeaconBlockEntity, HostBedBlockEntity,
             HostBeehiveBlockEntity, HostBellBlockEntity, HostBlastingFurnaceBlockEntity,
             HostBlockEntity, HostBrewingStandBlockEntity, HostBrushableBlockBlockEntity,
             HostCalibratedSculkSensorBlockEntity, HostCampfireBlockEntity, HostChestBlockEntity,
             HostChiseledBookshelfBlockEntity, HostCommandBlockEntity, HostComparatorBlockEntity,
-            HostConduitBlockEntity, HostContainerBlockEntity, HostCopperGolemStatueBlockEntity,
-            HostCrafterBlockEntity, HostCreakingHeartBlockEntity, HostDaylightDetectorBlockEntity,
-            HostDecoratedPotBlockEntity, HostDispenserBlockEntity, HostDropperBlockEntity,
-            HostEnchantingTableBlockEntity, HostEndGatewayBlockEntity, HostEndPortalBlockEntity,
-            HostEnderChestBlockEntity, HostFurnaceBlockEntity, HostHangingSignBlockEntity,
-            HostHopperBlockEntity, HostJigsawBlockEntity, HostJukeboxBlockEntity,
-            HostLecternBlockEntity, HostMapBlockEntity, HostMobSpawnerBlockEntity,
-            HostPistonBlockEntity, HostPotentSulfurBlockEntity, HostSculkCatalystBlockEntity,
-            HostSculkSensorBlockEntity, HostSculkShriekerBlockEntity, HostShelfBlockEntity,
-            HostShulkerBoxBlockEntity, HostSignBlockEntity, HostSkullBlockEntity,
-            HostSmokerBlockEntity, HostStructureBlockBlockEntity, HostTestBlockBlockEntity,
-            HostTestInstanceBlockBlockEntity, HostTrappedChestBlockEntity,
-            HostTrialSpawnerBlockEntity, HostVaultBlockEntity, JigsawBlockEntity,
-            JukeboxBlockEntity, LecternBlockEntity, MapBlockEntity, MobSpawnerBlockEntity,
-            PistonBlockEntity, PotentSulfurBlockEntity, SculkCatalystBlockEntity,
-            SculkSensorBlockEntity, SculkShriekerBlockEntity, ShelfBlockEntity,
-            ShulkerBoxBlockEntity, SignBlockEntity, SignText, SkullBlockEntity, SmokerBlockEntity,
-            StructureBlockBlockEntity, TestBlockBlockEntity, TestInstanceBlockBlockEntity,
-            TrappedChestBlockEntity, TrialSpawnerBlockEntity, VaultBlockEntity,
+            HostConduitBlockEntity, HostContainerBlockEntity, HostCrafterBlockEntity,
+            HostDaylightDetectorBlockEntity, HostDecoratedPotBlockEntity, HostDispenserBlockEntity,
+            HostDropperBlockEntity, HostEnchantingTableBlockEntity, HostEndGatewayBlockEntity,
+            HostEndPortalBlockEntity, HostEnderChestBlockEntity, HostFurnaceBlockEntity,
+            HostHangingSignBlockEntity, HostHopperBlockEntity, HostJigsawBlockEntity,
+            HostJukeboxBlockEntity, HostLecternBlockEntity, HostMapBlockEntity,
+            HostMobSpawnerBlockEntity, HostPistonBlockEntity, HostPotentSulfurBlockEntity,
+            HostSculkCatalystBlockEntity, HostSculkSensorBlockEntity, HostSculkShriekerBlockEntity,
+            HostShelfBlockEntity, HostShulkerBoxBlockEntity, HostSignBlockEntity,
+            HostSkullBlockEntity, HostSmokerBlockEntity, HostStructureBlockBlockEntity,
+            HostTestBlockBlockEntity, HostTestInstanceBlockBlockEntity,
+            HostTrappedChestBlockEntity, HostTrialSpawnerBlockEntity, HostVaultBlockEntity,
+            JigsawBlockEntity, JukeboxBlockEntity, LecternBlockEntity, MapBlockEntity,
+            MobSpawnerBlockEntity, PistonBlockEntity, PotentSulfurBlockEntity,
+            SculkCatalystBlockEntity, SculkSensorBlockEntity, SculkShriekerBlockEntity,
+            ShelfBlockEntity, ShulkerBoxBlockEntity, SignBlockEntity, SignText, SkullBlockEntity,
+            SmokerBlockEntity, StructureBlockBlockEntity, TestBlockBlockEntity,
+            TestInstanceBlockBlockEntity, TrappedChestBlockEntity, TrialSpawnerBlockEntity,
+            VaultBlockEntity,
         },
         common::BlockPos as WitBlockPos,
         item_stack::ItemStack as WitHostItemStack,
@@ -1096,26 +1095,6 @@ impl HostCrafterBlockEntity for PluginHostState {
     }
 }
 
-impl HostCreakingHeartBlockEntity for PluginHostState {
-    fn get_block_entity(
-        &mut self,
-        res: Resource<CreakingHeartBlockEntity>,
-    ) -> wasmtime::Result<Resource<BlockEntity>> {
-        self.add(self.get(&res)?.clone() as _)
-    }
-
-    fn get_creaking_uuid(
-        &mut self,
-        res: Resource<CreakingHeartBlockEntity>,
-    ) -> wasmtime::Result<Option<String>> {
-        Ok(self.get(&res)?.creaking_uuid.load().map(|u| u.to_string()))
-    }
-
-    fn drop(&mut self, rep: Resource<CreakingHeartBlockEntity>) -> wasmtime::Result<()> {
-        self.drop(rep)
-    }
-}
-
 impl HostEndGatewayBlockEntity for PluginHostState {
     fn get_block_entity(
         &mut self,
@@ -1430,11 +1409,6 @@ impl_basic_block_entity!(
     HostConduitBlockEntity,
     ConduitBlockEntity,
     "conduit block entity"
-);
-impl_basic_block_entity!(
-    HostCopperGolemStatueBlockEntity,
-    CopperGolemStatueBlockEntity,
-    "copper golem statue block entity"
 );
 impl_basic_block_entity!(
     HostDaylightDetectorBlockEntity,

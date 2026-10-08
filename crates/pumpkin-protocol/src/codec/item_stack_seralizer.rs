@@ -323,13 +323,9 @@ impl ItemStackSerializer<'_> {
     ) -> Result<ItemStackSerializer<'static>, ReadingError> {
         if *version >= JavaMinecraftVersion::V_1_20_5 {
             let serializer = Self::read(read)?;
-            if *version < JavaMinecraftVersion::V_26_3 {
-                Ok(ItemStackSerializer(Cow::Owned(
-                    serializer.to_stack_for_version(version),
-                )))
-            } else {
-                Ok(serializer)
-            }
+            Ok(ItemStackSerializer(Cow::Owned(
+                serializer.to_stack_for_version(version),
+            )))
         } else if *version >= JavaMinecraftVersion::V_1_13_2 {
             let present = read.get_bool()?;
             if !present {
@@ -375,35 +371,22 @@ impl ItemStackSerializer<'_> {
         read: &mut impl NetworkReadExt,
         version: &JavaMinecraftVersion,
     ) -> Result<ItemStackSerializer<'static>, ReadingError> {
-        if *version >= JavaMinecraftVersion::V_1_21_5 {
-            Self::read_length_prefixed_optional(read)
-        } else {
-            Self::read_with_version(read, version)
-        }
+        let _ = version;
+        Self::read_with_version(read, version)
     }
 
     pub fn read_template_with_version(
         read: &mut impl NetworkReadExt,
         version: &JavaMinecraftVersion,
     ) -> Result<ItemStackSerializer<'static>, ReadingError> {
-        if *version < JavaMinecraftVersion::V_26_1 {
-            Self::read_with_version(read, version)
-        } else {
-            Self::read_template0(read, version)
-        }
+        Self::read_with_version(read, version)
     }
 
     pub fn read_optional_template_with_version(
         read: &mut impl NetworkReadExt,
         version: &JavaMinecraftVersion,
     ) -> Result<ItemStackSerializer<'static>, ReadingError> {
-        if *version < JavaMinecraftVersion::V_26_1 {
-            Self::read_with_version(read, version)
-        } else if read.get_bool()? {
-            Self::read_template0(read, version)
-        } else {
-            Ok(ItemStackSerializer(Cow::Borrowed(ItemStack::EMPTY)))
-        }
+        Self::read_with_version(read, version)
     }
 
     pub fn read_template0(
@@ -476,7 +459,7 @@ impl ItemStackSerializer<'_> {
     }
 
     pub fn write(&self, write: &mut impl NetworkWriteExt) -> Result<(), WritingError> {
-        self.write_with_version(write, &JavaMinecraftVersion::V_26_3)
+        self.write_with_version(write, &JavaMinecraftVersion::V_1_21)
     }
 
     pub fn read_length_prefixed_optional(
@@ -570,11 +553,7 @@ impl ItemStackSerializer<'_> {
         write: &mut impl NetworkWriteExt,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        if *version >= JavaMinecraftVersion::V_1_21_5 {
-            self.write_length_prefixed_with_version(write, version)
-        } else {
-            self.write_with_version(write, version)
-        }
+        self.write_with_version(write, version)
     }
 
     pub fn write_template_with_version(
@@ -582,11 +561,7 @@ impl ItemStackSerializer<'_> {
         write: &mut impl NetworkWriteExt,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        if *version < JavaMinecraftVersion::V_26_1 {
-            self.write_with_version(write, version)
-        } else {
-            self.write_template0(write, version)
-        }
+        self.write_with_version(write, version)
     }
 
     pub fn write_optional_template_with_version(
@@ -594,14 +569,7 @@ impl ItemStackSerializer<'_> {
         write: &mut impl NetworkWriteExt,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        if *version < JavaMinecraftVersion::V_26_1 {
-            self.write_with_version(write, version)
-        } else if !self.0.is_empty() {
-            write.write_bool(true)?;
-            self.write_template0(write, version)
-        } else {
-            write.write_bool(false)
-        }
+        self.write_with_version(write, version)
     }
 
     pub fn write_template0(
@@ -813,7 +781,7 @@ impl ItemStackTemplateSerializer<'_> {
     }
 
     pub fn write(&self, write: &mut impl NetworkWriteExt) -> Result<(), WritingError> {
-        self.write_with_version(write, &JavaMinecraftVersion::V_26_3)
+        self.write_with_version(write, &JavaMinecraftVersion::V_1_21)
     }
 }
 
@@ -836,7 +804,7 @@ impl ItemStackOptionalTemplateSerializer<'_> {
     }
 
     pub fn write(&self, write: &mut impl NetworkWriteExt) -> Result<(), WritingError> {
-        self.write_with_version(write, &JavaMinecraftVersion::V_26_3)
+        self.write_with_version(write, &JavaMinecraftVersion::V_1_21)
     }
 }
 

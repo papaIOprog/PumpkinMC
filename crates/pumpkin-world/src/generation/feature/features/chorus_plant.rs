@@ -25,13 +25,13 @@ impl ChorusPlantFeature {
     ) -> bool {
         let origin = pos.0;
 
-        // Must be an empty block placed on a supports_chorus_plant block (end_stone)
+        // Must be an empty block placed on an end stone
         if !chunk.is_air(&origin) {
             return false;
         }
         let below = pos.down().0;
         let below_id = GenerationCache::get_block_state(chunk, &below).to_block_id();
-        if !below_id.has_tag(tag::Block::MINECRAFT_SUPPORTS_CHORUS_PLANT) {
+        if !below_id.has_tag(tag::Block::C_END_STONES) {
             return false;
         }
 
@@ -79,7 +79,7 @@ fn set_chorus_plant<T: GenerationCache>(chunk: &mut T, pos: &BlockPos) {
 
     let plant_id = Block::CHORUS_PLANT.id;
     let flower_id = Block::CHORUS_FLOWER.id;
-    let supports = tag::Block::MINECRAFT_SUPPORTS_CHORUS_PLANT;
+    let supports = tag::Block::C_END_STONES;
 
     let props = BrownMushroomBlockLikeProperties {
         down: down_id == plant_id || down_id == flower_id || down_id.has_tag(supports),

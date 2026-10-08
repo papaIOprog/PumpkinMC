@@ -10,7 +10,11 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 struct TrimMaterialJson {
     description: TrimDescriptionJson,
-    palette_id: String,
+    /// 1.21.1 field: the palette is derived as `trims/color/<asset_name>` client-side.
+    #[serde(default)]
+    asset_name: Option<String>,
+    #[serde(default)]
+    palette_id: Option<String>,
 }
 
 #[derive(Deserialize)]
@@ -48,6 +52,7 @@ pub fn build() -> TokenStream {
     let mut from_name_arms = Vec::new();
     let mut to_name_arms = Vec::new();
     let mut asset_id_arms = Vec::new();
+    let mut asset_name_arms = Vec::new();
     let mut palette_id_arms = Vec::new();
     let mut color_arms = Vec::new();
     let mut translation_key_arms = Vec::new();
@@ -56,7 +61,11 @@ pub fn build() -> TokenStream {
     for (name, json) in &materials {
         let variant_ident = format_ident!("{}", name.to_pascal_case());
         let namespaced = format!("minecraft:{name}");
-        let palette_id = &json.palette_id;
+        let asset_name = json.asset_name.as_deref().unwrap_or("");
+        let palette = json
+            .palette_id
+            .clone()
+            .unwrap_or_else(|| format!("minecraft:trims/color/{asset_name}"));
         let color = json.description.color.as_deref().unwrap_or("");
         let translation_key = json.description.translate.as_deref().unwrap_or("");
 
@@ -70,8 +79,11 @@ pub fn build() -> TokenStream {
         asset_id_arms.push(quote! {
             Self::#variant_ident => #namespaced
         });
+        asset_name_arms.push(quote! {
+            Self::#variant_ident => #asset_name
+        });
         palette_id_arms.push(quote! {
-            Self::#variant_ident => #palette_id
+            Self::#variant_ident => #palette
         });
         color_arms.push(quote! {
             Self::#variant_ident => #color
@@ -120,6 +132,14 @@ pub fn build() -> TokenStream {
             pub const fn asset_id(&self) -> &'static str {
                 match self {
                     #(#asset_id_arms,)*
+                }
+            }
+
+            #[doc = "Returns the asset name the client derives the palette from."]
+            #[must_use]
+            pub const fn asset_name(&self) -> &'static str {
+                match self {
+                    #(#asset_name_arms,)*
                 }
             }
 

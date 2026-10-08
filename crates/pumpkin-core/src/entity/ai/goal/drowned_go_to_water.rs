@@ -23,7 +23,10 @@ pub struct DrownedGoToWaterGoal {
 impl DrownedGoToWaterGoal {
     #[must_use]
     pub fn new(speed: f64) -> Box<Self> {
-        Box::new(Self { speed, wanted: None })
+        Box::new(Self {
+            speed,
+            wanted: None,
+        })
     }
 
     /// Vanilla `getWaterPos`: ten draws of a block up to ten out, two up and seven

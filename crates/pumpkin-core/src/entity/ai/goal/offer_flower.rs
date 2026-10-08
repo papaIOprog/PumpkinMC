@@ -1,7 +1,6 @@
 use std::ops::BitOr;
 
-use pumpkin_data::entity::EntityStatus;
-use pumpkin_data::tag::{self, Taggable};
+use pumpkin_data::entity::{EntityStatus, EntityType};
 use rand::RngExt;
 
 use super::{Controls, Goal};
@@ -59,10 +58,7 @@ impl Goal for OfferFlowerGoal {
                 continue;
             }
 
-            if !cand_entity
-                .entity_type
-                .has_tag(&tag::EntityType::MINECRAFT_CANDIDATE_FOR_IRON_GOLEM_GIFT)
-            {
+            if cand_entity.entity_type != &EntityType::VILLAGER {
                 continue;
             }
 
@@ -123,9 +119,7 @@ impl Goal for OfferFlowerGoal {
             if let Some(target) = world.get_entity_by_id(target_id) {
                 let target_entity = target.get_entity();
                 let bb = mob.get_entity().bounding_box.load().expand(6.0, 2.0, 6.0);
-                if target_entity
-                    .entity_type
-                    .has_tag(&tag::EntityType::MINECRAFT_ACCEPTS_IRON_GOLEM_GIFT)
+                if target_entity.entity_type == &EntityType::VILLAGER
                     && bb.intersects(&target_entity.bounding_box.load())
                 {
                     // TODO: hand the poppy over once mobs can hold equipment gifts.

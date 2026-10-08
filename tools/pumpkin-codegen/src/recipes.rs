@@ -101,7 +101,9 @@ pub struct SmithingTrimRecipeStruct {
     template: RecipeIngredientTypes,
     base: RecipeIngredientTypes,
     addition: RecipeIngredientTypes,
-    pattern: String,
+    /// 1.21.1 has no `pattern` field; it is derived from the template item.
+    #[serde(default)]
+    pattern: Option<String>,
 }
 
 impl ToTokens for SmithingTrimRecipeStruct {
@@ -109,7 +111,16 @@ impl ToTokens for SmithingTrimRecipeStruct {
         let template = self.template.to_token_stream();
         let base = self.base.to_token_stream();
         let addition = self.addition.to_token_stream();
-        let pattern = &self.pattern;
+        let pattern = self.pattern.clone().unwrap_or_else(|| {
+            // e.g. `minecraft:bolt_armor_trim_smithing_template` -> `minecraft:bolt`
+            let template_name = self.template.first_alternative();
+            let bare = template_name
+                .strip_prefix("minecraft:")
+                .unwrap_or(&template_name);
+            bare.strip_suffix("_armor_trim_smithing_template")
+                .map(|stem| format!("minecraft:{stem}"))
+                .unwrap_or(template_name)
+        });
 
         tokens.extend(quote! {
             SmithingTrimRecipe {
@@ -176,23 +187,7 @@ impl CookingRecipeStruct {
     fn generate_recipe_id(&self, cooking_type: &str) -> String {
         let result_id = self.result.id.as_deref().unwrap_or("air");
         let result_name = result_id.strip_prefix("minecraft:").unwrap_or(result_id);
-        let ingredient_name = match &self.ingredient {
-            RecipeIngredientTypes::Simple(s) => {
-                if s.starts_with('#') {
-                    // Tagged ingredient - strip # and replace : with _
-                    s.strip_prefix('#').unwrap_or(s).replace(':', "_")
-                } else {
-                    s.strip_prefix("minecraft:").unwrap_or(s).to_string()
-                }
-            }
-            RecipeIngredientTypes::OneOf(items) => {
-                // Use first item for ID generation
-                items
-                    .first()
-                    .map_or("unknown", |s| s.strip_prefix("minecraft:").unwrap_or(s))
-                    .to_string()
-            }
-        };
+        let ingredient_name = self.ingredient.first_alternative();
         format!("minecraft:{result_name}_from_{cooking_type}_{ingredient_name}")
     }
 
@@ -455,30 +450,89 @@ impl ToTokens for RecipeResultStruct {
 /// Deserialized recipe ingredient, which is either a single item/tag or a list of alternatives.
 #[derive(Deserialize)]
 #[serde(untagged)]
+#[derive(Clone)]
 pub enum RecipeIngredientTypes {
     /// A single item registry key or tag (prefixed with `#`).
     Simple(String),
     /// A list of acceptable alternative item registry keys.
     OneOf(Vec<String>),
+    /// 1.21.1 style `{"item": "minecraft:x"}` ingredient.
+    Item { item: String },
+    /// 1.21.1 style `{"tag": "minecraft:x"}` ingredient.
+    Tag { tag: String },
+    /// 1.21.1 style list of item/tag objects.
+    OneOfObjects(Vec<IngredientObject>),
+}
+
+/// A single 1.21.1 ingredient object with either an `item` or a `tag` key.
+#[derive(Deserialize, Clone)]
+pub struct IngredientObject {
+    pub item: Option<String>,
+    pub tag: Option<String>,
+}
+
+impl RecipeIngredientTypes {
+    /// The first item or tag name of this ingredient, for recipe-id generation.
+    fn first_alternative(&self) -> String {
+        let name = match self {
+            Self::Simple(s) => s.clone(),
+            Self::OneOf(items) => items.first().cloned().unwrap_or_default(),
+            Self::Item { item } => item.clone(),
+            Self::Tag { tag } => format!("#{tag}"),
+            Self::OneOfObjects(objects) => objects
+                .first()
+                .and_then(|o| {
+                    o.item
+                        .clone()
+                        .or_else(|| o.tag.clone().map(|t| format!("#{t}")))
+                })
+                .unwrap_or_default(),
+        };
+        let name = name.as_str();
+        let name = if name.is_empty() { "unknown" } else { name };
+        if let Some(tag) = name.strip_prefix('#') {
+            // Tagged ingredient - strip # and replace : with _
+            tag.replace(':', "_")
+        } else {
+            name.strip_prefix("minecraft:").unwrap_or(name).to_string()
+        }
+    }
 }
 
 impl ToTokens for RecipeIngredientTypes {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let name = match self {
-            Self::Simple(ingredient) => {
-                if ingredient.starts_with('#') {
-                    quote! { RecipeIngredientTypes::Tagged(#ingredient) }
-                } else {
-                    quote! { RecipeIngredientTypes::Simple(#ingredient) }
-                }
+        // Flatten to a list of item/tag strings; a lone entry stays `Simple`.
+        let alternatives: Vec<String> = match self {
+            Self::Simple(s) => vec![s.clone()],
+            Self::OneOf(items) => items.clone(),
+            Self::Item { item } => vec![item.clone()],
+            Self::Tag { tag } => vec![format!("#{tag}")],
+            Self::OneOfObjects(objects) => objects
+                .iter()
+                .map(|o| {
+                    if let Some(item) = &o.item {
+                        item.clone()
+                    } else if let Some(tag) = &o.tag {
+                        format!("#{tag}")
+                    } else {
+                        String::new()
+                    }
+                })
+                .collect(),
+        };
+
+        let name = if let [single] = alternatives.as_slice() {
+            if single.starts_with('#') {
+                quote! { RecipeIngredientTypes::Tagged(#single) }
+            } else {
+                quote! { RecipeIngredientTypes::Simple(#single) }
             }
-            Self::OneOf(ingredients) => {
-                let ingredients = ingredients
-                    .iter()
-                    .map(quote::ToTokens::to_token_stream)
-                    .collect::<Vec<_>>();
-                quote! { RecipeIngredientTypes::OneOf(&[#(#ingredients),*]) }
-            }
+        } else {
+            let ingredients = alternatives
+                .iter()
+                .map(quote::ToTokens::to_token_stream)
+                .collect::<Vec<_>>();
+            quote! { RecipeIngredientTypes::OneOf(&[#(#ingredients),*]) }
         };
 
         tokens.extend(name);

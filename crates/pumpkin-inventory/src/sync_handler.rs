@@ -26,9 +26,7 @@ use pumpkin_protocol::{
         item_stack_seralizer::{ItemStackSerializer, OptionalItemStackHash},
         var_int::VarInt,
     },
-    java::client::play::{
-        CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetCursorItem,
-    },
+    java::client::play::{CSetContainerContent, CSetContainerProperty, CSetContainerSlot},
 };
 
 use crate::screen_handler::{InventoryPlayer, ScreenHandlerBehaviour};
@@ -154,25 +152,6 @@ impl SyncHandler {
                 screen_handler.window_type,
                 screen_handler.slots.len(),
             );
-        }
-    }
-
-    /// Updates the cursor item on the client.
-    ///
-    /// Sent when the player's held (cursor) item changes.
-    ///
-    /// # Arguments
-    /// - `stack` - The new cursor item
-    pub fn update_cursor_stack(&self, stack: &ItemStack) {
-        if let Some(player) = self
-            .player
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner)
-            .as_ref()
-        {
-            player.enqueue_cursor_packet(&CSetCursorItem::new(&ItemStackSerializer::from(
-                stack.clone(),
-            )));
         }
     }
 

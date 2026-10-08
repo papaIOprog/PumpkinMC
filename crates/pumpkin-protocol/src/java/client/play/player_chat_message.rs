@@ -1,6 +1,6 @@
 use std::io::Write;
 
-use pumpkin_data::packet::clientbound::play::PLAYER_CHAT;
+use pumpkin_data::packet::clientbound::play::CHAT;
 use pumpkin_macros::java_packet;
 use pumpkin_util::{text::TextComponent, version::JavaMinecraftVersion};
 
@@ -14,7 +14,7 @@ use crate::{
 ///
 /// This packet is the backbone of the modern secure chat system. It includes
 /// tracking indices, digital signatures, and context for reporting.
-#[java_packet(PLAYER_CHAT)]
+#[java_packet(CHAT)]
 pub struct CPlayerChatMessage {
     /// Incremental index for messages sent TO this specific client.
     /// Starts at 0 on login; client disconnects if the sequence is broken.

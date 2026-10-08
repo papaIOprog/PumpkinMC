@@ -29,7 +29,7 @@ impl CocoaBlock {
     ) -> bool {
         let support_pos = pos.offset(facing.to_offset());
         let block = world.get_block(&support_pos);
-        block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_COCOA)
+        block.has_tag(&tag::Block::MINECRAFT_JUNGLE_LOGS)
     }
 }
 

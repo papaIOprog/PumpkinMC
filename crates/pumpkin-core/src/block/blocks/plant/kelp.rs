@@ -5,8 +5,7 @@ use crate::block::{
 };
 use pumpkin_data::BlockStateId;
 use pumpkin_data::block_properties::WaterLikeProperties;
-use pumpkin_data::tag::Taggable;
-use pumpkin_data::{Block, BlockId, tag};
+use pumpkin_data::{Block, BlockId};
 use pumpkin_util::math::position::BlockPos;
 use pumpkin_world::world::{BlockAccessor, BlockFlags};
 pub struct KelpBlock;
@@ -92,9 +91,6 @@ impl PlantBlockBase for KelpBlock {
         // If placing the base kelp block, allow placement on water or on other kelp segments.
         if support_block == &Block::KELP || support_block == &Block::KELP_PLANT {
             return true;
-        }
-        if support_block.has_tag(&tag::Block::MINECRAFT_CANNOT_SUPPORT_KELP) {
-            return false;
         }
         if support_block_state.is_side_solid(pumpkin_data::BlockDirection::Up)
             && support_block.is_solid()

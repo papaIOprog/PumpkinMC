@@ -73,13 +73,13 @@ fn can_place_at(block_accessor: &dyn BlockAccessor, block_pos: &BlockPos) -> boo
         return true;
     }
 
-    if block_below.has_tag(&tag::Block::MINECRAFT_SUPPORTS_SUGAR_CANE) {
+    if block_below.has_tag(&tag::Block::MINECRAFT_DIRT)
+        || block_below.has_tag(&tag::Block::MINECRAFT_SAND)
+    {
         for direction in HorizontalFacing::all() {
             let block = block_accessor.get_block(&block_pos.down().offset(direction.to_offset()));
             // TODO: use fluid
-            if block.has_tag(&tag::Fluid::MINECRAFT_SUPPORTS_SUGAR_CANE_ADJACENTLY)
-                && block.has_tag(&tag::Block::MINECRAFT_SUPPORTS_SUGAR_CANE_ADJACENTLY)
-            {
+            if block == &Block::WATER {
                 return true;
             }
         }

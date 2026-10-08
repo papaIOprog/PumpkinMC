@@ -1,4 +1,4 @@
-use pumpkin_data::{Block, BlockDirection, BlockState, block_properties::KelpLikeProperties, tag};
+use pumpkin_data::{Block, BlockDirection, BlockState, block_properties::KelpLikeProperties};
 use pumpkin_util::{
     math::position::BlockPos,
     random::{RandomGenerator, RandomImpl},
@@ -73,10 +73,6 @@ impl KelpFeature {
         let below = pos.down();
         let below_state = GenerationCache::get_block_state(chunk, &below.0);
         let below_id = below_state.to_block_id();
-
-        if below_id.has_tag(tag::Block::MINECRAFT_CANNOT_SUPPORT_KELP) {
-            return false;
-        }
 
         below_id == Block::KELP.id
             || below_id == Block::KELP_PLANT.id

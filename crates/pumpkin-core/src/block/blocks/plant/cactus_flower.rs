@@ -1,7 +1,6 @@
 use crate::block::blocks::plant::PlantBlockBase;
 use crate::block::{BlockBehaviour, CanPlaceAtArgs, GetStateForNeighborUpdateArgs};
 use pumpkin_data::BlockStateId;
-use pumpkin_data::tag::{self, Taggable};
 use pumpkin_data::{Block, BlockDirection, BlockState};
 use pumpkin_macros::pumpkin_block;
 use pumpkin_util::math::position::BlockPos;
@@ -53,6 +52,5 @@ impl PlantBlockBase for CactusFlowerBlock {
     }
 }
 fn supports_cactus_flower(block: &Block, block_state: &BlockState) -> bool {
-    block.has_tag(&tag::Block::MINECRAFT_SUPPORT_OVERRIDE_CACTUS_FLOWER)
-        || block_state.is_center_solid(BlockDirection::Up)
+    block == &Block::CACTUS || block_state.is_center_solid(BlockDirection::Up)
 }

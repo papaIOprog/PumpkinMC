@@ -12,7 +12,6 @@ pub enum TrimMaterial {
     Netherite,
     Quartz,
     Redstone,
-    Resin,
 }
 impl TrimMaterial {
     #[doc = "Returns the trim material from a resource name (bare or namespaced)."]
@@ -29,7 +28,6 @@ impl TrimMaterial {
             "minecraft:netherite" | "netherite" => Some(Self::Netherite),
             "minecraft:quartz" | "quartz" => Some(Self::Quartz),
             "minecraft:redstone" | "redstone" => Some(Self::Redstone),
-            "minecraft:resin" | "resin" => Some(Self::Resin),
             _ => None,
         }
     }
@@ -52,7 +50,6 @@ impl TrimMaterial {
             Self::Netherite => "netherite",
             Self::Quartz => "quartz",
             Self::Redstone => "redstone",
-            Self::Resin => "resin",
         }
     }
     #[doc = "Returns the fully-qualified asset id of the trim material."]
@@ -69,24 +66,38 @@ impl TrimMaterial {
             Self::Netherite => "minecraft:netherite",
             Self::Quartz => "minecraft:quartz",
             Self::Redstone => "minecraft:redstone",
-            Self::Resin => "minecraft:resin",
+        }
+    }
+    #[doc = "Returns the asset name the client derives the palette from."]
+    #[must_use]
+    pub const fn asset_name(&self) -> &'static str {
+        match self {
+            Self::Amethyst => "amethyst",
+            Self::Copper => "copper",
+            Self::Diamond => "diamond",
+            Self::Emerald => "emerald",
+            Self::Gold => "gold",
+            Self::Iron => "iron",
+            Self::Lapis => "lapis",
+            Self::Netherite => "netherite",
+            Self::Quartz => "quartz",
+            Self::Redstone => "redstone",
         }
     }
     #[doc = "Returns the palette id for texture styling."]
     #[must_use]
     pub const fn palette_id(&self) -> &'static str {
         match self {
-            Self::Amethyst => "minecraft:trim/amethyst",
-            Self::Copper => "minecraft:trim/copper",
-            Self::Diamond => "minecraft:trim/diamond",
-            Self::Emerald => "minecraft:trim/emerald",
-            Self::Gold => "minecraft:trim/gold",
-            Self::Iron => "minecraft:trim/iron",
-            Self::Lapis => "minecraft:trim/lapis",
-            Self::Netherite => "minecraft:trim/netherite",
-            Self::Quartz => "minecraft:trim/quartz",
-            Self::Redstone => "minecraft:trim/redstone",
-            Self::Resin => "minecraft:trim/resin",
+            Self::Amethyst => "minecraft:trims/color/amethyst",
+            Self::Copper => "minecraft:trims/color/copper",
+            Self::Diamond => "minecraft:trims/color/diamond",
+            Self::Emerald => "minecraft:trims/color/emerald",
+            Self::Gold => "minecraft:trims/color/gold",
+            Self::Iron => "minecraft:trims/color/iron",
+            Self::Lapis => "minecraft:trims/color/lapis",
+            Self::Netherite => "minecraft:trims/color/netherite",
+            Self::Quartz => "minecraft:trims/color/quartz",
+            Self::Redstone => "minecraft:trims/color/redstone",
         }
     }
     #[doc = "Returns the hex color code for this material."]
@@ -103,7 +114,6 @@ impl TrimMaterial {
             Self::Netherite => "#625859",
             Self::Quartz => "#E3D4C4",
             Self::Redstone => "#971607",
-            Self::Resin => "#FC7812",
         }
     }
     #[doc = "Returns the translation key describing this trim material."]
@@ -120,7 +130,6 @@ impl TrimMaterial {
             Self::Netherite => "trim_material.minecraft.netherite",
             Self::Quartz => "trim_material.minecraft.quartz",
             Self::Redstone => "trim_material.minecraft.redstone",
-            Self::Resin => "trim_material.minecraft.resin",
         }
     }
     #[doc = "Returns all vanilla trim materials."]
@@ -137,7 +146,6 @@ impl TrimMaterial {
             Self::Netherite,
             Self::Quartz,
             Self::Redstone,
-            Self::Resin,
         ]
     }
 }

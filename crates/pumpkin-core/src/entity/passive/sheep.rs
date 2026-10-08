@@ -87,7 +87,7 @@ impl SheepEntity {
         self.mob_entity
             .living_entity
             .entity
-            .set_synced_data(pumpkin_data::tracked_data::sheep::WOOL_ID, byte as i8);
+            .set_synced_data(pumpkin_data::tracked_data::sheep::COLOR, byte as i8);
     }
 
     pub fn set_color(&self, color: u8) {

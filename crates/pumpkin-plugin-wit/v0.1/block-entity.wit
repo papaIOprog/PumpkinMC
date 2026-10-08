@@ -206,20 +206,11 @@ interface block-entity {
         get-block-entity: func() -> block-entity;
     }
 
-    resource copper-golem-statue-block-entity {
-        get-block-entity: func() -> block-entity;
-    }
-
     resource crafter-block-entity {
         get-block-entity: func() -> block-entity;
         get-container: func() -> container-block-entity;
         get-crafting-ticks-remaining: func() -> s32;
         is-triggered: func() -> bool;
-    }
-
-    resource creaking-heart-block-entity {
-        get-block-entity: func() -> block-entity;
-        get-creaking-uuid: func() -> option<string>;
     }
 
     resource daylight-detector-block-entity {
@@ -389,9 +380,7 @@ interface block-entity {
         chiseled-bookshelf-block-entity(chiseled-bookshelf-block-entity),
         comparator-block-entity(comparator-block-entity),
         conduit-block-entity(conduit-block-entity),
-        copper-golem-statue-block-entity(copper-golem-statue-block-entity),
         crafter-block-entity(crafter-block-entity),
-        creaking-heart-block-entity(creaking-heart-block-entity),
         daylight-detector-block-entity(daylight-detector-block-entity),
         decorated-pot-block-entity(decorated-pot-block-entity),
         dispenser-block-entity(dispenser-block-entity),

@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use pumpkin_data::tag::{self, Taggable};
 use pumpkin_data::{
     Block,
     BlockDirection::{East, North, South, West},
@@ -33,9 +32,7 @@ trait CropBlockBase: PlantBlockBase {
     // `supports_vegetation` check. Crops must override
     // `PlantBlockBase::can_plant_on_top` and delegate here.
     fn can_plant_crop_on_top(&self, block_accessor: &dyn BlockAccessor, pos: &BlockPos) -> bool {
-        block_accessor
-            .get_block(pos)
-            .has_tag(&tag::Block::MINECRAFT_SUPPORTS_CROPS)
+        block_accessor.get_block(pos) == &Block::FARMLAND
     }
 
     fn max_age(&self) -> i32 {

@@ -101,7 +101,10 @@ impl IronGolemEntity {
         self.player_created.store(value, Ordering::Relaxed);
         let entity = self.get_entity();
         let flag: u8 = u8::from(value);
-        entity.set_synced_data(pumpkin_data::tracked_data::iron_golem::FLAGS_ID, flag);
+        entity.set_synced_data(
+            pumpkin_data::tracked_data::iron_golem::IRON_GOLEM_FLAGS,
+            flag,
+        );
     }
 
     pub fn offer_flower(&self, offer: bool) {
@@ -173,7 +176,10 @@ impl Mob for IronGolemEntity {
     fn mob_init_data_tracker(&self) {
         let entity = self.get_entity();
         let flag: u8 = u8::from(self.is_player_created());
-        entity.set_synced_data(pumpkin_data::tracked_data::iron_golem::FLAGS_ID, flag);
+        entity.set_synced_data(
+            pumpkin_data::tracked_data::iron_golem::IRON_GOLEM_FLAGS,
+            flag,
+        );
     }
 
     fn mob_interact(&self, player: &Arc<Player>, item_stack: &mut ItemStack) -> bool {

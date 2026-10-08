@@ -63,7 +63,6 @@ pub mod lectern;
 pub mod shelf;
 pub mod signs;
 pub mod skull_block;
-pub mod straw_bed;
 pub mod wither_skull;
 
 // Lighting, heat & fire
@@ -129,7 +128,6 @@ pub mod abstract_wall_mounting;
 pub mod beacon;
 pub mod brushable_block;
 pub mod cartography_table;
-pub mod creaking_heart;
 pub mod decorated_pot;
 pub mod fletching_table;
 pub mod loom;

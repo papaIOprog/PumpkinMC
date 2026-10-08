@@ -18,8 +18,8 @@ use pumpkin_protocol::{
         packet_decoder::TCPNetworkDecoder,
         packet_encoder::TCPNetworkEncoder,
         server::config::{
-            SAcceptCodeOfConduct, SAcknowledgeFinishConfig, SClientInformationConfig,
-            SConfigCookieResponse, SConfigPong, SConfigResourcePack, SKnownPacks, SPluginMessage,
+            SAcknowledgeFinishConfig, SClientInformationConfig, SConfigCookieResponse, SConfigPong,
+            SConfigResourcePack, SKnownPacks, SPluginMessage,
         },
     },
     packet::MultiVersionJavaPacket,
@@ -537,10 +537,6 @@ impl PendingConnection {
             }
             id if id == SConfigPong::to_id(version) => {
                 let _pong = SConfigPong::read(&mut payload, &version)?;
-                Ok(None)
-            }
-            id if id == SAcceptCodeOfConduct::to_id(version) => {
-                let _accept = SAcceptCodeOfConduct::read(&mut payload, &version)?;
                 Ok(None)
             }
             _ => Err(ReadingError::Message(format!(

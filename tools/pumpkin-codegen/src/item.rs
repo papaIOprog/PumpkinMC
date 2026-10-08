@@ -805,18 +805,27 @@ impl ToTokens for ItemComponents {
             tokens.extend(quote! { (Container, &ContainerImpl { items: Vec::new() }), });
         }
         if let Some(damage_type) = &self.damage_type {
-            let damage_type = format_ident!(
-                "{}",
-                damage_type
-                    .strip_prefix("minecraft:")
-                    .unwrap_or(damage_type)
-                    .to_shouty_snake_case()
+            let known_1_21_1 = !matches!(
+                damage_type.as_str(),
+                // Post-1.21.1 damage types referenced by the newer
+                // extractor item dump; 1.21.1 ships no registry file for
+                // them, so they cannot be resolved to a `DamageType`.
+                "minecraft:spear"
             );
-            tokens.extend(quote! {
-                (DamageType, &DamageTypeImpl {
-                    damage_type: crate::damage::DamageType::#damage_type,
-                }),
-            });
+            if known_1_21_1 {
+                let damage_type = format_ident!(
+                    "{}",
+                    damage_type
+                        .strip_prefix("minecraft:")
+                        .unwrap_or(damage_type)
+                        .to_shouty_snake_case()
+                );
+                tokens.extend(quote! {
+                    (DamageType, &DamageTypeImpl {
+                        damage_type: crate::damage::DamageType::#damage_type,
+                    }),
+                });
+            }
         }
         if self.debug_stick_state.is_some() {
             tokens.extend(quote! { (DebugStickState, &DebugStickStateImpl), });

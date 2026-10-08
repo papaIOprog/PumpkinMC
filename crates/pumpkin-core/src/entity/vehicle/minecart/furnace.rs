@@ -1,9 +1,9 @@
 use std::sync::atomic::{AtomicI32, Ordering};
 
 use crossbeam::atomic::AtomicCell;
+use pumpkin_data::item::Item;
 use pumpkin_data::item_stack::ItemStack;
 use pumpkin_data::particle::Particle;
-use pumpkin_data::tag::{self, Taggable};
 use pumpkin_nbt::compound::NbtCompound;
 use pumpkin_util::math::vector3::Vector3;
 use rand::RngExt;
@@ -27,10 +27,7 @@ impl FurnaceMinecart {
     }
 
     fn set_fueled(entity: &Entity, fueled: bool) {
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::furnace_minecart::ID_FUEL,
-            fueled,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::furnace_minecart::LIT, fueled);
     }
 
     pub(super) fn tick(&self, entity: &Entity) {
@@ -103,9 +100,8 @@ impl FurnaceMinecart {
         item_stack: &mut ItemStack,
     ) -> bool {
         let fuel = self.fuel.load(Ordering::Relaxed);
-        if item_stack
-            .get_item()
-            .has_tag(&tag::Item::MINECRAFT_FURNACE_MINECART_FUEL)
+        let item = item_stack.get_item();
+        if (item.id == Item::COAL.id || item.id == Item::CHARCOAL.id)
             && fuel <= Self::MAX_FUEL - Self::FUEL_PER_ITEM
         {
             self.fuel

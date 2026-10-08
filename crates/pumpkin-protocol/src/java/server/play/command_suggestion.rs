@@ -1,4 +1,4 @@
-use pumpkin_data::packet::serverbound::play::COMMAND_SUGGESTION;
+use pumpkin_data::packet::serverbound::play::COMMAND_SUGGESTIONS;
 use pumpkin_macros::java_packet;
 
 use crate::VarInt;
@@ -9,7 +9,7 @@ use crate::{
 };
 use pumpkin_util::version::JavaMinecraftVersion;
 
-#[java_packet(COMMAND_SUGGESTION)]
+#[java_packet(COMMAND_SUGGESTIONS)]
 pub struct SCommandSuggestion<'a> {
     pub id: VarInt,
     pub command: &'a str,

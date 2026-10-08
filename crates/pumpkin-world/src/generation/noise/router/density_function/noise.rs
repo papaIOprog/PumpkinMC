@@ -1,4 +1,6 @@
-use pumpkin_data::noise_router::{InterpolatedNoiseSamplerData, NoiseData, ShiftedNoiseData};
+use pumpkin_data::noise_router::{
+    InterpolatedNoiseSamplerData, NoiseData, ShiftedNoiseData, WeirdScaledMapper,
+};
 use pumpkin_util::{
     math::{lerp, vector3::Vector3},
     noise::perlin::{Layer, Noise as _, NoiseStack, SmearedPerlinNoise},
@@ -65,6 +67,96 @@ impl StaticIndependentChunkNoiseFunctionComponentImpl for Noise {
 
 pub struct ShiftA {
     sampler: DoublePerlinNoiseSampler,
+}
+
+/// Vanilla `DensityFunctions.WeirdScaledSampler`: quantizes the sampled input
+/// into a rarity with the mapper, then samples the noise at coordinates
+/// divided by that rarity and scales its absolute value back up.
+pub struct WeirdScaledSampler {
+    sampler: DoublePerlinNoiseSampler,
+    input_index: usize,
+    rarity_mapper: WeirdScaledMapper,
+}
+
+impl WeirdScaledSampler {
+    #[must_use]
+    pub const fn new(
+        sampler: DoublePerlinNoiseSampler,
+        input_index: usize,
+        rarity_mapper: WeirdScaledMapper,
+    ) -> Self {
+        Self {
+            sampler,
+            input_index,
+            rarity_mapper,
+        }
+    }
+
+    #[inline]
+    fn transform(&self, input: f32, pos: &Vector3<i32>) -> f32 {
+        let rarity = self.rarity_mapper.map(input);
+        rarity
+            * self
+                .sampler
+                .sample(
+                    f64::from(pos.x) / f64::from(rarity),
+                    f64::from(pos.y) / f64::from(rarity),
+                    f64::from(pos.z) / f64::from(rarity),
+                )
+                .abs()
+    }
+}
+
+impl NoiseFunctionComponentRange for WeirdScaledSampler {
+    #[inline]
+    fn min(&self) -> f32 {
+        0.0
+    }
+
+    #[inline]
+    fn max(&self) -> f32 {
+        self.rarity_mapper.max_rarity() * self.sampler.max_value()
+    }
+}
+
+impl StaticChunkNoiseFunctionComponentImpl for WeirdScaledSampler {
+    fn sample(
+        &self,
+        component_stack: &mut [ChunkNoiseFunctionComponent],
+        pos: &Vector3<i32>,
+    ) -> f32 {
+        let input = ChunkNoiseFunctionComponent::sample_from_stack(
+            &mut component_stack[..=self.input_index],
+            pos,
+        );
+        self.transform(input, pos)
+    }
+
+    fn sample_volume(
+        &self,
+        component_stack: &mut [ChunkNoiseFunctionComponent],
+        buffer: &mut [f32],
+        volume: &DensityVolume,
+    ) {
+        let mut input = DensityBuffer::acquire(volume);
+        ChunkNoiseFunctionComponent::sample_volume_from_stack(
+            &mut component_stack[..=self.input_index],
+            &mut input,
+            volume,
+        );
+        let mut index = 0;
+        for z in 0..volume.size_z {
+            let pos_z = volume.block_z(z);
+            for x in 0..volume.size_x {
+                let pos_x = volume.block_x(x);
+                for y in 0..volume.size_y {
+                    let pos = Vector3::new(pos_x, volume.block_y(y), pos_z);
+                    buffer[index] = self.transform(input[index], &pos);
+                    index += 1;
+                }
+            }
+        }
+    }
 }
 
 impl ShiftA {

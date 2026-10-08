@@ -32,7 +32,7 @@ impl ZombieAttackGoal {
 
 impl Goal for ZombieAttackGoal {
     fn can_start(&mut self, mob: &dyn Mob) -> bool {
-        !self.gate.is_some_and(|gate| !gate(mob)) && self.melee_attack_goal.can_start(mob)
+        self.gate.is_none_or(|gate| gate(mob)) && self.melee_attack_goal.can_start(mob)
     }
 
     fn should_continue(&mut self, mob: &dyn Mob) -> bool {

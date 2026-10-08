@@ -6,7 +6,7 @@ use std::collections::{HashMap, VecDeque};
 use std::f64::consts::TAU;
 use std::num::NonZero;
 use std::str::FromStr;
-use std::sync::atomic::{AtomicBool, AtomicI8, AtomicI32, AtomicU8, AtomicU32, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicI32, AtomicU8, AtomicU32, Ordering};
 use std::sync::{Arc, Mutex, Weak};
 use std::time::{Duration, Instant};
 
@@ -267,14 +267,13 @@ use pumpkin_protocol::codec::var_ulong::VarULong;
 use pumpkin_protocol::java::client::play::{
     Animation, CAcknowledgeBlockChange, CActionBar, CAwardStats, CBlockUpdate, CChangeDifficulty,
     CCloseContainer, CCombatDeath, CCustomPayload, CDisguisedChatMessage, CEntityAnimation,
-    CEntityPositionSync, CEntityVelocity, CGameEvent, CHurtAnimation, CItemCooldown, CMapItemData,
-    COpenBook, COpenScreen, COpenSignEditor, CParticle, CPlayServerLinks, CPlayerAbilities,
-    CPlayerInfoUpdate, CPlayerPosition, CPlayerSpawnPosition, CRespawn, CSetCamera,
-    CSetContainerContent, CSetContainerProperty, CSetContainerSlot, CSetCursorItem, CSetExperience,
-    CSetHealth, CSetPlayerInventory, CSetSelectedSlot, CSoundEffect, CStopSound, CSubtitle,
-    CSystemChatMessage, CTabList, CTitleAnimation, CTitleText, CUnloadChunk, CUpdateMobEffect,
-    CUpdateTime, GameEvent, MapIcon, MapPatch, PlayerAction, PlayerInfoFlags, PlayerSpawnData,
-    PreviousMessage, Statistic,
+    CEntityVelocity, CGameEvent, CHurtAnimation, CItemCooldown, CMapItemData, COpenBook,
+    COpenScreen, COpenSignEditor, CParticle, CPlayServerLinks, CPlayerAbilities, CPlayerInfoUpdate,
+    CPlayerPosition, CPlayerSpawnPosition, CRespawn, CSetCamera, CSetContainerContent,
+    CSetContainerProperty, CSetContainerSlot, CSetExperience, CSetHealth, CSetSelectedSlot,
+    CSoundEffect, CStopSound, CSubtitle, CSystemChatMessage, CTabList, CTeleportEntity,
+    CTitleAnimation, CTitleText, CUnloadChunk, CUpdateMobEffect, CUpdateTime, GameEvent, MapIcon,
+    MapPatch, PlayerAction, PlayerInfoFlags, PlayerSpawnData, PreviousMessage, Statistic,
 };
 use pumpkin_protocol::java::server::play::{
     SClickSlot, SContainerButtonClick, SRenameItem, SlotActionType,
@@ -292,7 +291,6 @@ use pumpkin_world::biome;
 use pumpkin_world::cylindrical_chunk_iterator::Cylindrical;
 
 use crate::block;
-use crate::block::blocks::straw_bed::StrawBedBlock;
 use crate::command::context::command_source::CommandSource;
 use crate::command::node::dispatcher::CommandDispatcher;
 use crate::command::{CommandSender, client_suggestions};
@@ -457,7 +455,6 @@ pub struct Player {
     pub start_mining_time: AtomicI32,
     pub tick_counter: AtomicI32,
     pub mining_pos: Mutex<BlockPos>,
-    pub last_input: AtomicI8,
     /// A counter for teleport IDs used to track pending teleports.
     pub teleport_id_count: AtomicI32,
     /// The pending teleport information, including the teleport ID and target location.
@@ -534,7 +531,6 @@ pub struct Player {
     pub warden_spawn_tracker: std::sync::Mutex<WardenSpawnTracker>,
     pub score: AtomicI32,
     pub spawn_extra_particles_on_fall: AtomicBool,
-    pub post_effects: std::sync::Mutex<Vec<String>>,
     /// Inbound packets waiting to be processed during player tick.
     pub inbound_packets: SegQueue<RawPacket>,
 }
@@ -717,7 +713,7 @@ impl Player {
         }
 
         let supports_player_loaded = match client.as_ref() {
-            ClientPlatform::Java(client) => client.version.load() >= JavaMinecraftVersion::V_1_21_4,
+            ClientPlatform::Java(_) => false,
             ClientPlatform::Bedrock(_) => true,
         };
         let initially_loaded = !supports_player_loaded;
@@ -746,7 +742,6 @@ impl Player {
             raid_omen_position: AtomicCell::new(None),
             tick_counter: AtomicI32::new(0),
             start_mining_time: AtomicI32::new(0),
-            last_input: AtomicI8::new(0),
             carried_item: Mutex::new(None),
             experience_pick_up_delay: Mutex::new(0),
             teleport_id_count: AtomicI32::new(0),
@@ -837,81 +832,8 @@ impl Player {
             warden_spawn_tracker: std::sync::Mutex::new(WardenSpawnTracker::default()),
             score: AtomicI32::new(0),
             spawn_extra_particles_on_fall: AtomicBool::new(false),
-            post_effects: std::sync::Mutex::new(Vec::new()),
             inbound_packets: SegQueue::new(),
         }
-    }
-
-    #[must_use]
-    pub fn get_post_effects(&self) -> Vec<String> {
-        self.post_effects
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner)
-            .clone()
-    }
-
-    #[must_use]
-    pub fn has_post_effect(&self, effect: &str) -> bool {
-        self.post_effects
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner)
-            .iter()
-            .any(|e| e == effect)
-    }
-
-    pub fn add_post_effect(&self, effect: String) -> bool {
-        let mut effects = self
-            .post_effects
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        if effects.iter().any(|e| e == &effect) {
-            return false;
-        }
-        effects.push(effect);
-        self.try_send_client_packet(&pumpkin_protocol::java::client::play::CPostEffects::new(
-            &effects,
-        ));
-        true
-    }
-
-    pub fn remove_post_effect(&self, effect: &str) -> bool {
-        let mut effects = self
-            .post_effects
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        effects.iter().position(|e| e == effect).is_some_and(|pos| {
-            effects.remove(pos);
-            self.try_send_client_packet(&pumpkin_protocol::java::client::play::CPostEffects::new(
-                &effects,
-            ));
-            true
-        })
-    }
-
-    pub fn clear_post_effects(&self) -> usize {
-        let mut effects = self
-            .post_effects
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        if effects.is_empty() {
-            return 0;
-        }
-        let count = effects.len();
-        effects.clear();
-        self.try_send_client_packet(&pumpkin_protocol::java::client::play::CPostEffects::new(
-            &effects,
-        ));
-        count
-    }
-
-    pub fn send_post_effects(&self) {
-        let effects = self
-            .post_effects
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        self.try_send_client_packet(&pumpkin_protocol::java::client::play::CPostEffects::new(
-            &effects,
-        ));
     }
 
     /// Sets the tab list header and footer for Java Edition clients.
@@ -1431,11 +1353,7 @@ impl Player {
         if !victim.damage_with_context(
             victim.as_ref(),
             damage as f32,
-            if is_mace_smash {
-                DamageType::MACE_SMASH
-            } else {
-                DamageType::PLAYER_ATTACK
-            },
+            DamageType::PLAYER_ATTACK,
             None,
             Some(self),
             Some(self),
@@ -1630,10 +1548,16 @@ impl Player {
         }
     }
 
-    pub fn try_send_slot_set_packet(&self, packet: &CSetPlayerInventory) {
+    /// Syncs a single player inventory slot to the client.
+    ///
+    /// 1.21.1 has no dedicated player inventory packet, so Java clients get a
+    /// container slot update for the player inventory container.
+    pub fn try_send_slot_set_packet(&self, slot_index: usize, item: &ItemStack) {
         match self.client.as_ref() {
             ClientPlatform::Java(java) => {
-                if let Ok(data) = java.serialize_packet(packet) {
+                let serializer = ItemStackSerializer::from(item.clone());
+                let packet = CSetContainerSlot::new(0, 0, slot_index as i16, &serializer);
+                if let Ok(data) = java.serialize_packet(&packet) {
                     java.try_enqueue_packet(data);
                 }
             }
@@ -1644,11 +1568,10 @@ impl Player {
                 };
                 use pumpkin_protocol::codec::var_uint::VarUInt;
 
-                let item_stack = &*packet.item.0;
-                let item_desc = NetworkItemStackDescriptor::from(item_stack);
+                let item_desc = NetworkItemStackDescriptor::from(item);
                 let bedrock_packet = CInventorySlot {
                     container_id: VarUInt(0),
-                    slot: VarUInt(packet.slot.0 as u32),
+                    slot: VarUInt(slot_index as u32),
                     full_container_name: Some(FullContainerName {
                         container_name: ContainerName::Inventory,
                         dynamic_id: None,
@@ -1664,10 +1587,7 @@ impl Player {
     }
 
     pub fn sync_hand_slot(&self, slot_index: usize, stack: ItemStack) {
-        self.try_send_slot_set_packet(&CSetPlayerInventory::new(
-            (slot_index as i32).into(),
-            &ItemStackSerializer::from(stack.clone()),
-        ));
+        self.try_send_slot_set_packet(slot_index, &stack);
         self.sync_inventory_to_client();
 
         if slot_index == self.inventory.get_selected_slot() as usize {
@@ -1742,10 +1662,7 @@ impl Player {
                 );
             }
 
-            self.try_send_slot_set_packet(&CSetPlayerInventory::new(
-                (slot_index as i32).into(),
-                &ItemStackSerializer::from(updated_stack.clone()),
-            ));
+            self.try_send_slot_set_packet(slot_index, &updated_stack);
             self.sync_inventory_to_client();
 
             self.living_entity
@@ -1804,7 +1721,7 @@ impl Player {
         dimension: Dimension,
         block_pos: BlockPos,
         yaw: f32,
-        pitch: f32,
+        _pitch: f32,
         forced: bool,
     ) -> bool {
         if !forced
@@ -1845,12 +1762,7 @@ impl Player {
             _ => 0,
         };
         self.client.try_enqueue_packet_editioned(
-            &CPlayerSpawnPosition::new(
-                final_block_pos,
-                yaw,
-                pitch,
-                dimension.minecraft_name.to_owned(),
-            ),
+            &CPlayerSpawnPosition::new(final_block_pos, yaw),
             &pumpkin_protocol::bedrock::client::CSetSpawnPosition {
                 spawn_position_type:
                     pumpkin_protocol::bedrock::client::SpawnPositionType::PlayerRespawn,
@@ -2325,9 +2237,7 @@ impl Player {
         }
 
         let (bed, bed_state) = world.get_block_and_state_id(&bed_pos);
-        if bed == &Block::STRAW_BED {
-            StrawBedBlock::destroy_after_use(&world, bed_pos);
-        } else if bed.has_tag(&tag::Block::MINECRAFT_BEDS) {
+        if bed.has_tag(&tag::Block::MINECRAFT_BEDS) {
             crate::block::blocks::bed::BedBlock::set_occupied(
                 false, &world, bed, &bed_pos, bed_state,
             );
@@ -3113,7 +3023,7 @@ impl Player {
     #[must_use]
     pub fn supports_player_loaded(&self) -> bool {
         match self.client.as_ref() {
-            ClientPlatform::Java(client) => client.version.load() >= JavaMinecraftVersion::V_1_21_4,
+            ClientPlatform::Java(_) => false,
             ClientPlatform::Bedrock(_) => true,
         }
     }
@@ -3440,8 +3350,7 @@ impl Player {
                 .unwrap_or_else(std::sync::PoisonError::into_inner);
             if let Some(vehicle) = vehicle.as_ref() {
                 let entity_type = vehicle.get_entity().entity_type;
-                if entity_type.has_tag(&pumpkin_data::tag::EntityType::MINECRAFT_BOAT)
-                    || entity_type.has_tag(&pumpkin_data::tag::EntityType::C_BOATS)
+                if entity_type.has_tag(&pumpkin_data::tag::EntityType::C_BOATS)
                     || entity_type == &EntityType::OAK_BOAT
                     || entity_type == &EntityType::SPRUCE_BOAT
                     || entity_type == &EntityType::BIRCH_BOAT
@@ -3839,7 +3748,7 @@ impl Player {
     pub fn set_compass_target(&self, pos: pumpkin_util::math::position::BlockPos) {
         use pumpkin_protocol::java::client::play::CPlayerSpawnPosition;
         self.compass_target.store(Some(pos));
-        self.try_send_client_packet(&CPlayerSpawnPosition::new(pos, 0.0, 0.0, String::new()));
+        self.try_send_client_packet(&CPlayerSpawnPosition::new(pos, 0.0));
     }
 
     pub fn get_compass_target(&self) -> Option<pumpkin_util::math::position::BlockPos> {
@@ -5607,10 +5516,7 @@ impl Player {
 
         xp = xp.saturating_sub(xp_used);
 
-        self.try_send_slot_set_packet(&CSetPlayerInventory::new(
-            (slot_index as i32).into(),
-            &ItemStackSerializer::from(updated_stack.clone()),
-        ));
+        self.try_send_slot_set_packet(slot_index, &updated_stack);
         self.sync_inventory_to_client();
 
         self.living_entity
@@ -6858,12 +6764,13 @@ impl EntityBase for Player {
             entity.world.load().broadcast_to_chunk_except(
                 chunk_pos,
                 &[self.living_entity.entity.entity_uuid],
-                &CEntityPositionSync::new(
+                &CTeleportEntity::new(
                     self.living_entity.entity.entity_id.into(),
                     position,
                     Vector3::new(0.0, 0.0, 0.0),
                     yaw,
                     pitch,
+                    &[],
                     entity.on_ground.load(Ordering::SeqCst),
                 ),
             );
@@ -7861,44 +7768,8 @@ impl InventoryPlayer for Player {
         }
     }
 
-    fn enqueue_cursor_packet(&self, packet: &CSetCursorItem) {
-        match self.client.as_ref() {
-            ClientPlatform::Java(java) => {
-                if let Ok(data) = java.serialize_packet(packet) {
-                    java.try_enqueue_packet(data);
-                }
-            }
-            ClientPlatform::Bedrock(bedrock) => {
-                use pumpkin_protocol::bedrock::{
-                    client::inventory_content::CInventoryContent,
-                    network_item::{ContainerName, FullContainerName, NetworkItemStackDescriptor},
-                };
-                use pumpkin_protocol::codec::var_uint::VarUInt;
-
-                let item_desc = NetworkItemStackDescriptor::from(&*packet.stack.0);
-                let bedrock_packet = CInventoryContent {
-                    container_id: VarUInt(59),
-                    slots: vec![item_desc],
-                    full_container_name: FullContainerName {
-                        container_name: ContainerName::Cursor,
-                        dynamic_id: None,
-                    },
-                    storage_item: NetworkItemStackDescriptor::default(),
-                };
-                if let Ok(data) = bedrock.serialize_packet(&bedrock_packet) {
-                    bedrock.try_enqueue_packet(data);
-                }
-            }
-        }
-    }
-
     fn enqueue_property_packet(&self, packet: &CSetContainerProperty) {
         self.try_send_client_packet(packet);
-    }
-
-    fn enqueue_slot_set_packet(&self, packet: &CSetPlayerInventory) {
-        self.try_send_slot_set_packet(packet);
-        self.sync_inventory_to_client();
     }
 
     fn enqueue_set_held_item_packet(&self, packet: &CSetSelectedSlot) {

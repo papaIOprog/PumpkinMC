@@ -129,7 +129,7 @@ impl ItemFrameEntity {
             .unwrap_or_else(std::sync::PoisonError::into_inner) = item_stack;
 
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::item_frame::ITEM,
+            pumpkin_data::tracked_data::item_frame::ITEM_STACK,
             item_serializer,
         );
 
@@ -239,7 +239,7 @@ impl ItemFrameEntity {
             .unwrap_or_else(std::sync::PoisonError::into_inner) = ItemStack::EMPTY.clone();
         let item_serializer = ItemStackSerializer::from(ItemStack::EMPTY.clone());
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::item_frame::ITEM,
+            pumpkin_data::tracked_data::item_frame::ITEM_STACK,
             item_serializer,
         );
 
@@ -332,7 +332,7 @@ impl EntityBase for ItemFrameEntity {
         let rotation = self.get_rotation() as i32;
 
         self.entity.set_synced_data(
-            pumpkin_data::tracked_data::item_frame::ITEM,
+            pumpkin_data::tracked_data::item_frame::ITEM_STACK,
             item_serializer,
         );
         self.entity
@@ -356,7 +356,7 @@ impl EntityBase for ItemFrameEntity {
 
         let mut data = Vec::new();
         let meta_item = Metadata::new(
-            pumpkin_data::tracked_data::item_frame::ITEM,
+            pumpkin_data::tracked_data::item_frame::ITEM_STACK,
             item_serializer,
         );
         let meta_rot = Metadata::new(pumpkin_data::tracked_data::item_frame::ROTATION, rotation);

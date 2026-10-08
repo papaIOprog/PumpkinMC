@@ -22,9 +22,8 @@ use pumpkin_protocol::codec::var_int::VarInt;
 use pumpkin_protocol::codec::var_long::VarLong;
 use pumpkin_protocol::codec::var_ulong::VarULong;
 use pumpkin_protocol::java::client::play::{
-    CEntityPositionSync, CEntityVelocity, CHeadRot, CRemoveEntities, CSetEntityMetadata,
-    CSetEquipment, CSetPassengers, CUpdateEntityPos, CUpdateEntityPosRot, CUpdateEntityRot,
-    Metadata,
+    CEntityVelocity, CHeadRot, CRemoveEntities, CSetEntityMetadata, CSetEquipment, CSetPassengers,
+    CTeleportEntity, CUpdateEntityPos, CUpdateEntityPosRot, CUpdateEntityRot, Metadata,
 };
 use pumpkin_protocol::{BClientPacket, ClientPacket};
 use pumpkin_util::GameMode;
@@ -280,12 +279,13 @@ impl TrackedEntity {
                 world,
             ),
             MoveSync::Absolute => self.send_to_tracking_players(
-                &CEntityPositionSync::new(
+                &CTeleportEntity::new(
                     id,
                     entity.pos.load(),
-                    entity.velocity.load(),
+                    Vector3::new(0.0, 0.0, 0.0),
                     entity.yaw.load(),
                     entity.pitch.load(),
+                    &[],
                     on_ground,
                 ),
                 world,

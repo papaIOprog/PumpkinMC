@@ -187,7 +187,7 @@ impl SnifferEntity {
         let drop_tick = current_ticks as i32 + DIGGING_DROP_SEED_OFFSET_TICKS;
         self.drop_seed_at_tick.store(drop_tick, Ordering::Relaxed);
         entity.set_synced_data(
-            pumpkin_data::tracked_data::sniffer::DROP_SEED_AT_TICK,
+            pumpkin_data::tracked_data::sniffer::FINISH_DIG_TIME,
             VarInt(drop_tick),
         );
         world.send_entity_status(entity, EntityStatus::SnifferDiggingSound, None);
@@ -384,7 +384,7 @@ impl Mob for SnifferEntity {
             VarInt(self.get_state().id()),
         );
         entity.set_synced_data(
-            pumpkin_data::tracked_data::sniffer::DROP_SEED_AT_TICK,
+            pumpkin_data::tracked_data::sniffer::FINISH_DIG_TIME,
             VarInt(self.drop_seed_at_tick.load(Ordering::Relaxed)),
         );
     }

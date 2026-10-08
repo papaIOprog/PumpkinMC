@@ -334,7 +334,8 @@ impl BlockBehaviour for ChestBlock {
 }
 
 /// Copper chests have the same behavior as wooden chests but also oxidize over time.
-#[pumpkin_block_from_tag("minecraft:copper_chests")]
+// `minecraft:copper_chests` is a 26.x tag; use the pumpkin-side c: tag instead.
+#[pumpkin_block_from_tag("c:copper_chests")]
 pub struct CopperChestBlock;
 
 impl

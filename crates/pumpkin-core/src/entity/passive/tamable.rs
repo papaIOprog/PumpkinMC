@@ -47,7 +47,7 @@ pub trait TamableAnimal: Animal {
             flags |= TAME_FLAG;
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::tamable_animal::DATA_FLAGS_ID,
+            pumpkin_data::tracked_data::tameable_entity::DATA_FLAGS_ID,
             flags as i8,
         );
     }
@@ -67,7 +67,7 @@ pub trait TamableAnimal: Animal {
             flags |= TAME_FLAG;
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::tamable_animal::DATA_FLAGS_ID,
+            pumpkin_data::tracked_data::tameable_entity::DATA_FLAGS_ID,
             flags as i8,
         );
     }
@@ -103,7 +103,7 @@ pub trait TamableAnimal: Animal {
         let entity = &mob_entity.living_entity.entity;
         self.get_tamable_data().owner.store(owner);
         entity.set_synced_data(
-            pumpkin_data::tracked_data::tamable_animal::DATA_OWNERUUID_ID,
+            pumpkin_data::tracked_data::tameable_entity::DATA_OWNERUUID_ID,
             owner,
         );
     }

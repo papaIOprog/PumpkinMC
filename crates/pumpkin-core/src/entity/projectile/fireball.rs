@@ -118,7 +118,7 @@ impl FireballEntity {
             .unwrap_or_else(std::sync::PoisonError::into_inner) = new_item.clone();
 
         self.get_entity().set_synced_data(
-            pumpkin_data::tracked_data::fireball::ITEM_STACK,
+            pumpkin_data::tracked_data::fireball::ITEM,
             ItemStackSerializer::from(new_item),
         );
     }
@@ -197,7 +197,7 @@ impl EntityBase for FireballEntity {
             .unwrap_or_else(std::sync::PoisonError::into_inner);
 
         entity.set_synced_data(
-            pumpkin_data::tracked_data::fireball::ITEM_STACK,
+            pumpkin_data::tracked_data::fireball::ITEM,
             ItemStackSerializer::from(stack.clone()),
         );
     }

@@ -79,10 +79,7 @@ impl StriderEntity {
     pub fn set_suffocating(&self, suffocating: bool) {
         self.suffocating.store(suffocating, Ordering::Relaxed);
         let entity = self.get_entity();
-        entity.set_synced_data(
-            pumpkin_data::tracked_data::strider::DATA_SUFFOCATING,
-            suffocating,
-        );
+        entity.set_synced_data(pumpkin_data::tracked_data::strider::COLD, suffocating);
     }
 }
 
@@ -153,7 +150,7 @@ impl Mob for StriderEntity {
             entity.set_synced_data(pumpkin_data::tracked_data::strider::DATA_BABY_ID, true);
         }
         entity.set_synced_data(
-            pumpkin_data::tracked_data::strider::DATA_SUFFOCATING,
+            pumpkin_data::tracked_data::strider::COLD,
             self.is_suffocating(),
         );
     }

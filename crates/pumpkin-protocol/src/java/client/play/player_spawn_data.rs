@@ -16,18 +16,9 @@ pub(super) fn write_game_modes(
     previous_gamemode: i8,
     version: JavaMinecraftVersion,
 ) -> Result<(), WritingError> {
-    if version >= JavaMinecraftVersion::V_26_3 {
-        write.write_var_int(&VarInt(i32::from(game_mode)))?;
-        let previous = if previous_gamemode < 0 {
-            0
-        } else {
-            i32::from(previous_gamemode) + 1
-        };
-        write.write_var_int(&VarInt(previous))
-    } else {
-        write.write_u8(game_mode)?;
-        write.write_i8(previous_gamemode)
-    }
+    let _ = version;
+    write.write_u8(game_mode)?;
+    write.write_i8(previous_gamemode)
 }
 
 /// Reads the current and previous game mode written by [`write_game_modes`].
@@ -35,18 +26,8 @@ pub(super) fn read_game_modes(
     read: &mut &[u8],
     version: JavaMinecraftVersion,
 ) -> Result<(u8, i8), ReadingError> {
-    if version >= JavaMinecraftVersion::V_26_3 {
-        let game_mode = read.get_var_int()?.0 as u8;
-        let previous = read.get_var_int()?.0;
-        let previous_gamemode = if previous <= 0 {
-            -1
-        } else {
-            (previous - 1) as i8
-        };
-        Ok((game_mode, previous_gamemode))
-    } else {
-        Ok((read.get_u8()?, read.get_i8()?))
-    }
+    let _ = version;
+    Ok((read.get_u8()?, read.get_i8()?))
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -126,9 +107,6 @@ impl PlayerSpawnData {
         if version >= &JavaMinecraftVersion::V_1_20 {
             write.write_var_int(&self.portal_cooldown)?;
         }
-        if version >= &JavaMinecraftVersion::V_1_21_2 {
-            write.write_var_int(&self.sealevel)?;
-        }
         Ok(())
     }
 
@@ -186,11 +164,7 @@ impl PlayerSpawnData {
             VarInt(0)
         };
 
-        let sealevel = if version >= &JavaMinecraftVersion::V_1_21_2 {
-            read.get_var_int()?
-        } else {
-            VarInt(63)
-        };
+        let sealevel = VarInt(63);
 
         Ok(Self {
             dimension,

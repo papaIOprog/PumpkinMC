@@ -7,12 +7,12 @@ use std::fs;
 use crate::version::JavaMinecraftVersion;
 
 /// The newest protocol version whose registry data is used as the fallback for unknown versions.
-const LATEST_VERSION: JavaMinecraftVersion = JavaMinecraftVersion::V_26_3;
+const LATEST_VERSION: JavaMinecraftVersion = JavaMinecraftVersion::V_1_21;
 
 /// Generates the `TokenStream` for the `Registry` and `StaticRegistry` structs, version-keyed
 /// static registry data, and the `Registry::get_synced` method.
 pub(crate) fn build() -> TokenStream {
-    let versions = [("26_3", "V_26_3")];
+    let versions = [("1_21", "V_1_21")];
 
     const SYNCED_REGISTRIES: &[&str] = &[
         "worldgen/biome",
@@ -56,6 +56,14 @@ pub(crate) fn build() -> TokenStream {
 
         for &reg_name in SYNCED_REGISTRIES {
             let reg_dir = base_path.join(reg_name);
+            // 1.21.1 hardcodes some synced registries (cat/frog variants,
+            // instruments, pot patterns) in the server jar; assets/vanilla
+            // holds those values.
+            let reg_dir = if reg_dir.is_dir() {
+                reg_dir
+            } else {
+                std::path::Path::new("../../assets/vanilla/data/minecraft").join(reg_name)
+            };
             if !reg_dir.is_dir() {
                 continue;
             }
@@ -207,7 +215,7 @@ pub(crate) fn build() -> TokenStream {
         impl Registry {
             #[must_use]
             pub fn get_synced(_version: JavaMinecraftVersion) -> Vec<Self> {
-                let static_regs = REGISTRY_V_26_3;
+                let static_regs = REGISTRY_V_1_21;
 
                 static_regs.iter().map(|static_reg| {
                     let registry_id = if static_reg.registry_id.contains(':') {
