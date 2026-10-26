@@ -664,16 +664,8 @@ impl DataComponentCodec<Self> for PotionContentsImpl {
             seq.write_bool(false)?;
         }
 
-        // Custom effects list
+        // Custom effects list. 1.21.1 has no custom_name field here.
         serialize_status_effects(&self.custom_effects, seq)?;
-
-        // Custom name (optional)
-        if let Some(name) = &self.custom_name {
-            seq.write_bool(true)?;
-            seq.write_string(name.as_str())?;
-        } else {
-            seq.write_bool(false)?;
-        }
 
         Ok(())
     }
@@ -689,20 +681,14 @@ impl DataComponentCodec<Self> for PotionContentsImpl {
         let has_color = seq.get_bool()?;
         let custom_color = has_color.then(|| seq.get_i32()).transpose()?;
 
-        // Custom effects list
+        // Custom effects list. 1.21.1 has no custom_name field here.
         let custom_effects = deserialize_status_effects(seq)?;
-
-        // Custom name (optional)
-        let has_name = seq.get_bool()?;
-        let custom_name = has_name
-            .then(|| seq.get_str().map(String::from))
-            .transpose()?;
 
         Ok(Self {
             potion_id,
             custom_color,
             custom_effects,
-            custom_name,
+            custom_name: None,
         })
     }
 }
@@ -2890,5 +2876,32 @@ mod tests {
         let decoded = ProfileImpl::deserialize(&mut encoded.as_slice()).unwrap();
         assert_eq!(decoded.name.as_deref(), Some("Notch"));
         assert_eq!(decoded.id, Some([1, 2, 3, 4]));
+    }
+}
+
+#[cfg(test)]
+mod potion_wire_tests {
+    use super::*;
+    use pumpkin_data::data_component_impl::PotionContentsImpl;
+
+    /// 1.21.1 `PotionContents` carries only potion, custom color and custom
+    /// effects; the 26.x `custom_name` optional made every potion one byte long.
+    #[test]
+    fn plain_potion_contents_have_no_trailing_name() {
+        let contents = PotionContentsImpl {
+            potion_id: Some(8),
+            custom_color: None,
+            custom_effects: Vec::new(),
+            custom_name: None,
+        };
+        let mut buf = Vec::new();
+        contents.serialize(&mut buf).unwrap();
+        // optional potion: bool + varint, optional color: bool, effects count
+        assert_eq!(buf, vec![1, 8, 0, 0]);
+
+        let mut reader: &[u8] = &buf;
+        let parsed = PotionContentsImpl::deserialize(&mut reader).unwrap();
+        assert_eq!(parsed.potion_id, Some(8));
+        assert!(reader.is_empty());
     }
 }
