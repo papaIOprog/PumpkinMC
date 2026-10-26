@@ -159,26 +159,24 @@ impl Level {
             None => ("minecraft", dimension.minecraft_name),
         };
 
-        // 26.2 canonical layout: root_folder/dimensions/<namespace>/<name>
-        let canonical_dim_folder = root_folder.join("dimensions").join(namespace).join(name);
+        // Vanilla layout: the overworld lives at the world root, the nether
+        // in DIM-1 and the end in DIM1; only other dimensions use
+        // dimensions/<namespace>/<name> (DimensionType#getStorageFolder).
+        let legacy_dim_folder = match dimension.minecraft_name {
+            name if name == Dimension::OVERWORLD.minecraft_name => Some(root_folder.clone()),
+            name if name == Dimension::THE_NETHER.minecraft_name => Some(root_folder.join("DIM-1")),
+            name if name == Dimension::THE_END.minecraft_name => Some(root_folder.join("DIM1")),
+            _ => None,
+        };
 
-        // Check if canonical 26.2 folder exists, or fall back to pre-26.2 legacy folders
-        let dim_folder = if canonical_dim_folder.exists() {
-            canonical_dim_folder
-        } else if dimension.minecraft_name == Dimension::OVERWORLD.minecraft_name
-            && root_folder.join("region").exists()
-        {
-            root_folder.clone()
-        } else if dimension.minecraft_name == Dimension::THE_NETHER.minecraft_name
-            && root_folder.join("DIM-1").join("region").exists()
-        {
-            root_folder.join("DIM-1")
-        } else if dimension.minecraft_name == Dimension::THE_END.minecraft_name
-            && root_folder.join("DIM1").join("region").exists()
-        {
-            root_folder.join("DIM1")
-        } else {
-            canonical_dim_folder
+        // Prefer the vanilla folder, but keep reading 26.x-style saves that
+        // stored every dimension under dimensions/.
+        let canonical_dim_folder = root_folder.join("dimensions").join(namespace).join(name);
+        let dim_folder = match legacy_dim_folder {
+            Some(legacy) if legacy.join("region").exists() || !canonical_dim_folder.exists() => {
+                legacy
+            }
+            _ => canonical_dim_folder,
         };
 
         let region_folder = dim_folder.join("region");
@@ -1024,35 +1022,47 @@ mod tests {
     use tempfile::TempDir;
 
     #[tokio::test]
-    async fn dimension_paths_26_2() {
+    async fn vanilla_dimension_paths() {
         let temp_dir = TempDir::new().unwrap();
         let root = temp_dir.path().to_path_buf();
         let config = LevelConfig::default();
 
         let overworld_level =
             Level::from_root_folder(&config, root.clone(), 0, Dimension::OVERWORLD);
+        assert_eq!(overworld_level.level_folder.dim_folder, root);
         assert_eq!(
-            overworld_level.level_folder.dim_folder,
-            root.join("dimensions").join("minecraft").join("overworld")
+            overworld_level.level_folder.region_folder,
+            root.join("region")
         );
+
+        let nether_level = Level::from_root_folder(&config, root.clone(), 0, Dimension::THE_NETHER);
+        assert_eq!(nether_level.level_folder.dim_folder, root.join("DIM-1"));
+
+        let end_level = Level::from_root_folder(&config, root.clone(), 0, Dimension::THE_END);
+        assert_eq!(end_level.level_folder.dim_folder, root.join("DIM1"));
+    }
+
+    #[tokio::test]
+    async fn dimension_paths_26_2_still_read() {
+        let temp_dir = TempDir::new().unwrap();
+        let root = temp_dir.path().to_path_buf();
+        let config = LevelConfig::default();
+
+        let old = root
+            .join("dimensions")
+            .join("minecraft")
+            .join("overworld")
+            .join("region");
+        std::fs::create_dir_all(&old).unwrap();
+
+        let overworld_level =
+            Level::from_root_folder(&config, root.clone(), 0, Dimension::OVERWORLD);
         assert_eq!(
             overworld_level.level_folder.region_folder,
             root.join("dimensions")
                 .join("minecraft")
                 .join("overworld")
                 .join("region")
-        );
-
-        let nether_level = Level::from_root_folder(&config, root.clone(), 0, Dimension::THE_NETHER);
-        assert_eq!(
-            nether_level.level_folder.dim_folder,
-            root.join("dimensions").join("minecraft").join("the_nether")
-        );
-
-        let end_level = Level::from_root_folder(&config, root.clone(), 0, Dimension::THE_END);
-        assert_eq!(
-            end_level.level_folder.dim_folder,
-            root.join("dimensions").join("minecraft").join("the_end")
         );
     }
 
