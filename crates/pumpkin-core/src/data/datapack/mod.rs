@@ -125,7 +125,7 @@ impl DatapackManager {
         let datapacks_dir = world_path.join("datapacks");
         structure_loader::clear_dynamic_worldgen_data();
         let mut loaded_packs_vec = Vec::new();
-        let mut all_recipes: Vec<DynamicRecipe> = Vec::new();
+        let mut all_recipes: Vec<DynamicRecipe> = crate::server::recipe::vanilla_recipes();
         let mut all_functions: HashMap<String, Vec<String>> = HashMap::new();
         let mut all_function_tags: HashMap<String, Vec<String>> = HashMap::new();
         let mut all_test_instances: TestInstanceRegistry = HashMap::new();

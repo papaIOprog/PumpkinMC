@@ -593,6 +593,7 @@ impl ToTokens for RecipeCategoryTypes {
 pub fn build() -> TokenStream {
     let dir = std::path::Path::new("../../assets/datapack/data/minecraft/recipe");
     let mut recipes_assets: BTreeMap<String, RecipeTypes> = BTreeMap::new();
+    let mut raw_recipes: BTreeMap<String, String> = BTreeMap::new();
     let mut entries: Vec<_> = fs::read_dir(dir)
         .expect("Missing recipe directory")
         .flatten()
@@ -607,7 +608,8 @@ pub fn build() -> TokenStream {
         let content = fs::read_to_string(&path).expect("Failed to read recipe file");
         let recipe = serde_json::from_str::<RecipeTypes>(&content)
             .unwrap_or_else(|e| panic!("Failed to parse recipe {}: {e}", path.display()));
-        recipes_assets.insert(key, recipe);
+        recipes_assets.insert(key.clone(), recipe);
+        raw_recipes.insert(key, content);
     }
 
     let mut crafting_recipes = Vec::new();
@@ -615,6 +617,15 @@ pub fn build() -> TokenStream {
     let mut stonecutting_recipes = Vec::new();
     let mut smithing_trim_recipes = Vec::new();
     let mut smithing_transform_recipes = Vec::new();
+    // Parallel id lists keep the recipe resource ids next to the statics,
+    // which lost them when the JSON was turned into plain data.
+    let mut crafting_ids = Vec::new();
+    let mut stonecutting_ids = Vec::new();
+    let mut smithing_trim_ids = Vec::new();
+    let mut smithing_transform_ids = Vec::new();
+    // (id, category) of the special crafting recipes, whose payload is only
+    // the category on the wire.
+    let mut special_recipes = Vec::new();
 
     for (recipe_id, recipe) in recipes_assets {
         match recipe {
@@ -640,15 +651,19 @@ pub fn build() -> TokenStream {
             }
             RecipeTypes::CraftingShaped(recipe) => {
                 crafting_recipes.push(recipe.to_token_stream());
+                crafting_ids.push(recipe_id);
             }
             RecipeTypes::CraftingShapeless(recipe) => {
                 crafting_recipes.push(recipe.to_token_stream());
+                crafting_ids.push(recipe_id);
             }
             RecipeTypes::CraftingTransmute(recipe) => {
                 crafting_recipes.push(recipe.to_token_stream());
+                crafting_ids.push(recipe_id);
             }
             RecipeTypes::CraftingDecoratedPot(recipe) => {
                 crafting_recipes.push(recipe.to_token_stream());
+                crafting_ids.push(recipe_id);
             }
             RecipeTypes::Smelting(recipe) => {
                 let mut common_cooking_token = TokenStream::new();
@@ -662,9 +677,11 @@ pub fn build() -> TokenStream {
             }
             RecipeTypes::SmithingTransform(recipe) => {
                 smithing_transform_recipes.push(recipe.to_token_stream());
+                smithing_transform_ids.push(recipe_id);
             }
             RecipeTypes::SmithingTrim(recipe) => {
                 smithing_trim_recipes.push(recipe.to_token_stream());
+                smithing_trim_ids.push(recipe_id);
             }
             RecipeTypes::Smoking(recipe) => {
                 let mut common_cooking_token = TokenStream::new();
@@ -678,6 +695,7 @@ pub fn build() -> TokenStream {
             }
             RecipeTypes::Stonecutting(recipe) => {
                 stonecutting_recipes.push(recipe.to_token_stream());
+                stonecutting_ids.push(recipe_id);
             }
             RecipeTypes::CraftingSpecial
             | RecipeTypes::CraftingSpecialBannerDuplicate
@@ -689,7 +707,19 @@ pub fn build() -> TokenStream {
             | RecipeTypes::CraftingSpecialRepairItem
             | RecipeTypes::CraftingSpecialShieldDecoration
             | RecipeTypes::CraftingDye
-            | RecipeTypes::CraftingImbue => {}
+            | RecipeTypes::CraftingImbue => {
+                // The deserializer drops the category, so read it from the
+                // raw file again; vanilla defaults a missing category to misc.
+                let raw = serde_json::from_str::<serde_json::Value>(&raw_recipes[&recipe_id])
+                    .unwrap_or_default();
+                let category = match raw.get("category").and_then(|c| c.as_str()) {
+                    Some("building") => quote! { RecipeCategoryTypes::Building },
+                    Some("redstone") => quote! { RecipeCategoryTypes::Restone },
+                    Some("equipment") => quote! { RecipeCategoryTypes::Equipment },
+                    _ => quote! { RecipeCategoryTypes::Misc },
+                };
+                special_recipes.push(quote! { (#recipe_id, #category) });
+            }
         }
     }
 
@@ -841,17 +871,38 @@ pub fn build() -> TokenStream {
         pub static RECIPES_CRAFTING: &[CraftingRecipeTypes] = &[
             #(#crafting_recipes),*
         ];
+        /// Recipe ids aligned by index with [`RECIPES_CRAFTING`].
+        pub static RECIPES_CRAFTING_IDS: &[&str] = &[
+            #(#crafting_ids),*
+        ];
         pub static RECIPES_COOKING: &[CookingRecipeType] = &[
             #(#cooking_recipes ),*
         ];
         pub static RECIPES_STONECUTTING: &[StonecutterRecipe] = &[
             #(#stonecutting_recipes),*
         ];
+        /// Recipe ids aligned by index with [`RECIPES_STONECUTTING`].
+        pub static RECIPES_STONECUTTING_IDS: &[&str] = &[
+            #(#stonecutting_ids),*
+        ];
         pub static RECIPES_SMITHING_TRIM: &[SmithingTrimRecipe] = &[
             #(#smithing_trim_recipes),*
         ];
+        /// Recipe ids aligned by index with [`RECIPES_SMITHING_TRIM`].
+        pub static RECIPES_SMITHING_TRIM_IDS: &[&str] = &[
+            #(#smithing_trim_ids),*
+        ];
         pub static RECIPES_SMITHING_TRANSFORM: &[SmithingTransformRecipe] = &[
             #(#smithing_transform_recipes),*
+        ];
+        /// Recipe ids aligned by index with [`RECIPES_SMITHING_TRANSFORM`].
+        pub static RECIPES_SMITHING_TRANSFORM_IDS: &[&str] = &[
+            #(#smithing_transform_ids),*
+        ];
+        /// Special crafting recipes as `(id, category)`; their data is fully
+        /// described by the serializer that the id names.
+        pub static RECIPES_SPECIAL: &[(&str, RecipeCategoryTypes)] = &[
+            #(#special_recipes),*
         ];
 
         #[derive(Clone, Debug, Serialize)]

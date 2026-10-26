@@ -1,7 +1,8 @@
 use pumpkin_data::recipes::RecipeCategoryTypes;
 use pumpkin_protocol::codec::recipe::{
     DynamicRecipe, OwnedBrewingRecipe, OwnedCookingRecipe, OwnedCookingRecipeType,
-    OwnedCraftingRecipe, OwnedRecipeIngredient, OwnedRecipeResult,
+    OwnedCraftingRecipe, OwnedRecipeIngredient, OwnedRecipeResult, OwnedSmithingTransformRecipe,
+    OwnedSmithingTrimRecipe, OwnedSpecialRecipe, OwnedStonecuttingRecipe, SpecialRecipeType,
 };
 use serde_json::Value;
 
@@ -23,7 +24,39 @@ pub fn parse_recipe(namespace: &str, name: &str, json_str: &str) -> Option<Dynam
         "campfire_cooking" => parse_cooking(recipe_id, &value, 600)
             .map(|c| DynamicRecipe::Cooking(OwnedCookingRecipeType::CampfireCooking(c))),
         "brewing" => parse_brewing(recipe_id, &value).map(DynamicRecipe::Brewing),
-        _ => None,
+        "stonecutting" => parse_stonecutting(recipe_id, &value).map(DynamicRecipe::Stonecutting),
+        "smithing_transform" => {
+            parse_smithing_transform(recipe_id, &value).map(DynamicRecipe::SmithingTransform)
+        }
+        "smithing_trim" => parse_smithing_trim(recipe_id, &value).map(DynamicRecipe::SmithingTrim),
+        "crafting_decorated_pot" => Some(DynamicRecipe::Special(OwnedSpecialRecipe {
+            recipe_id,
+            kind: SpecialRecipeType::DecoratedPot,
+            category: parse_category(value.get("category")),
+        })),
+        other => {
+            let kind = match other.strip_prefix("crafting_special_")? {
+                "armordye" => SpecialRecipeType::ArmorDye,
+                "bookcloning" => SpecialRecipeType::BookCloning,
+                "mapcloning" => SpecialRecipeType::MapCloning,
+                "mapextending" => SpecialRecipeType::MapExtending,
+                "firework_rocket" => SpecialRecipeType::FireworkRocket,
+                "firework_star" => SpecialRecipeType::FireworkStar,
+                "firework_star_fade" => SpecialRecipeType::FireworkStarFade,
+                "tippedarrow" => SpecialRecipeType::TippedArrow,
+                "bannerduplicate" => SpecialRecipeType::BannerDuplicate,
+                "shielddecoration" => SpecialRecipeType::ShieldDecoration,
+                "shulkerboxcoloring" => SpecialRecipeType::ShulkerBoxColoring,
+                "suspiciousstew" => SpecialRecipeType::SuspiciousStew,
+                "repairitem" => SpecialRecipeType::RepairItem,
+                _ => return None,
+            };
+            Some(DynamicRecipe::Special(OwnedSpecialRecipe {
+                recipe_id,
+                kind,
+                category: parse_category(value.get("category")),
+            }))
+        }
     }
 }
 
@@ -195,6 +228,53 @@ fn parse_cooking(
         cooking_time,
         experience,
         result,
+    })
+}
+
+fn parse_stonecutting(recipe_id: String, value: &Value) -> Option<OwnedStonecuttingRecipe> {
+    let ingredient = parse_ingredient(value.get("ingredient")?)?;
+    let result = parse_result(value.get("result")?)?;
+    let group = value
+        .get("group")
+        .and_then(Value::as_str)
+        .map(ToString::to_string);
+
+    Some(OwnedStonecuttingRecipe {
+        recipe_id,
+        group,
+        ingredient,
+        result,
+    })
+}
+
+fn parse_smithing_transform(
+    recipe_id: String,
+    value: &Value,
+) -> Option<OwnedSmithingTransformRecipe> {
+    let template = parse_ingredient(value.get("template")?)?;
+    let base = parse_ingredient(value.get("base")?)?;
+    let addition = parse_ingredient(value.get("addition")?)?;
+    let result = parse_result(value.get("result")?)?;
+
+    Some(OwnedSmithingTransformRecipe {
+        recipe_id,
+        template,
+        base,
+        addition,
+        result,
+    })
+}
+
+fn parse_smithing_trim(recipe_id: String, value: &Value) -> Option<OwnedSmithingTrimRecipe> {
+    let template = parse_ingredient(value.get("template")?)?;
+    let base = parse_ingredient(value.get("base")?)?;
+    let addition = parse_ingredient(value.get("addition")?)?;
+
+    Some(OwnedSmithingTrimRecipe {
+        recipe_id,
+        template,
+        base,
+        addition,
     })
 }
 

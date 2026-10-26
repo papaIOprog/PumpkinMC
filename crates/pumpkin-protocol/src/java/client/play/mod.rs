@@ -268,5 +268,7 @@ pub use set_simulation_distance::*;
 mod move_vehicle;
 pub use move_vehicle::*;
 
+mod unlock_recipes;
 mod update_recipes;
+pub use unlock_recipes::*;
 pub use update_recipes::*;

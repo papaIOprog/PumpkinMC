@@ -3237,6 +3237,22 @@ impl World {
 
             client_suggestions::send_c_commands_packet(player, server, &command_dispatcher);
         };
+
+        // PlayerList#placeNewPlayer declares every recipe and the (empty)
+        // recipe book right after the commands packet.
+        let recipes = server.recipe_manager.encoded_client_recipes();
+        client
+            .send_packet(&pumpkin_protocol::java::client::play::CUpdateRecipes::new(
+                &recipes,
+            ))
+            .await;
+        client
+            .send_packet(&pumpkin_protocol::java::client::play::CUnlockRecipes::init(
+                pumpkin_protocol::java::client::play::RecipeBookSettings::default(),
+                Vec::new(),
+            ))
+            .await;
+
         if client.version.load() < JavaMinecraftVersion::V_1_20_2
             && client.version.load() >= JavaMinecraftVersion::V_1_13
         {
@@ -5211,11 +5227,11 @@ impl World {
         if let Some(player) = cause
             && self.is_in_spawn_protection(player, position)
         {
-            player.send_system_message(&TextComponent::translate_cross(
-                pumpkin_data::translation::java::BUILD_SPAWN_PROTECTION,
-                pumpkin_data::translation::java::BUILD_SPAWN_PROTECTION,
-                [TextComponent::text(player.gameprofile.name.clone())],
-            ));
+            // `build.spawn_protection` is a 26.x key; 1.21.1 has no vanilla wording for it
+            player.send_system_message(&TextComponent::text(format!(
+                "{} is under spawn protection",
+                player.gameprofile.name
+            )));
             return None;
         }
 
