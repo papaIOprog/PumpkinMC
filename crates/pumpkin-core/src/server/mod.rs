@@ -235,14 +235,15 @@ impl Server {
         let defaultgamemode = std::sync::Mutex::new(DefaultGamemode {
             gamemode: basic_config.default_gamemode,
         });
-        let players_dir = world_path.join("players");
+        // 1.21.1 keeps player data and advancements at the world root; the
+        // 26.x "players" folder makes vanilla refuse to load the save.
         let player_data_storage = ServerPlayerData::new(
-            players_dir.join("data"),
+            world_path.join("playerdata"),
             Duration::from_secs(advanced_config.player_data.save_player_cron_interval),
             advanced_config.player_data.save_player_data,
         );
         let advancement_manager = Arc::new(AdvancementManager::new(
-            players_dir.clone(),
+            world_path.clone(),
             advanced_config.advancement.save_advancements,
         ));
         let white_list = AtomicBool::new(basic_config.white_list);

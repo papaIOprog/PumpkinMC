@@ -370,7 +370,10 @@ impl ChunkData {
             },
         );
         let mut block_ticks = Vec::new();
-        if let Some(list) = root_tag.get_list("block_ticks") {
+        if let Some(list) = root_tag
+            .get_list("TileTicks")
+            .or_else(|| root_tag.get_list("block_ticks"))
+        {
             for tag in list {
                 if let pumpkin_nbt::tag::NbtTag::Compound(compound) = tag
                     && let Some(tick) = parse_scheduled_tick::<&'static Block>(compound)
@@ -381,7 +384,10 @@ impl ChunkData {
         }
 
         let mut fluid_ticks = Vec::new();
-        if let Some(list) = root_tag.get_list("fluid_ticks") {
+        if let Some(list) = root_tag
+            .get_list("LiquidTicks")
+            .or_else(|| root_tag.get_list("fluid_ticks"))
+        {
             for tag in list {
                 if let pumpkin_nbt::tag::NbtTag::Compound(compound) = tag
                     && let Some(tick) = parse_scheduled_tick::<&'static Fluid>(compound)
@@ -415,7 +421,7 @@ impl ChunkData {
                 ChunkStatus::Terrain
             }
             "minecraft:features" => ChunkStatus::Features,
-            "minecraft:initialize_light" => ChunkStatus::InitializeLight,
+            "minecraft:initialize_light" | "minecraft:heightmaps" => ChunkStatus::InitializeLight,
             "minecraft:light" => ChunkStatus::Light,
             "minecraft:spawn" => ChunkStatus::Spawn,
             "minecraft:full" => ChunkStatus::Full,
@@ -502,10 +508,11 @@ impl ChunkData {
             ChunkStatus::StructureStarts => "minecraft:structure_starts",
             ChunkStatus::StructureReferences => "minecraft:structure_references",
             ChunkStatus::Biomes => "minecraft:biomes",
-            ChunkStatus::Terrain => "minecraft:terrain",
+            ChunkStatus::Terrain => "minecraft:noise",
             ChunkStatus::Features => "minecraft:features",
-            ChunkStatus::InitializeLight => "minecraft:initialize_light",
-            ChunkStatus::Light => "minecraft:light",
+            // 26.x split lighting into two stages; 1.21.1 only knows
+            // "light" for both.
+            ChunkStatus::InitializeLight | ChunkStatus::Light => "minecraft:light",
             ChunkStatus::Spawn => "minecraft:spawn",
             ChunkStatus::Full => "minecraft:full",
         };
@@ -613,7 +620,7 @@ impl ChunkData {
             tick_comp.put_string("i", tick.value.to_resource_location());
             block_ticks_list.push(NbtTag::Compound(tick_comp));
         }
-        root_compound.put_list("block_ticks", block_ticks_list);
+        root_compound.put_list("TileTicks", block_ticks_list);
 
         let mut fluid_ticks_list = Vec::new();
         for tick in self.fluid_ticks.to_vec() {
@@ -626,7 +633,7 @@ impl ChunkData {
             tick_comp.put_string("i", tick.value.to_resource_location());
             fluid_ticks_list.push(NbtTag::Compound(tick_comp));
         }
-        root_compound.put_list("fluid_ticks", fluid_ticks_list);
+        root_compound.put_list("LiquidTicks", fluid_ticks_list);
 
         let mut block_entities_list = Vec::new();
         for entity_comp in block_entities_nbt {

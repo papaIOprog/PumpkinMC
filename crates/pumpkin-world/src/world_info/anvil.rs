@@ -6,6 +6,7 @@ use std::{
 };
 use tracing::error;
 
+use pumpkin_data::game_rules::{GameRule, GameRuleRegistry};
 use pumpkin_nbt::{
     compound::NbtCompound,
     nbt_compress::{read_gzip_compound_tag, write_gzip_compound_tag},
@@ -150,12 +151,61 @@ fn stored_world_seed(level_folder: &Path, data: &NbtCompound) -> Option<i64> {
         })
 }
 
-fn put_world_gen_settings_seed(data: &mut NbtCompound, seed: i64) {
-    let mut world_gen_settings = data
-        .get_compound(WORLD_GEN_SETTINGS_TAG)
-        .cloned()
-        .unwrap_or_default();
+fn put_world_gen_settings(data: &mut NbtCompound, seed: i64) {
+    let noise_generator = |seed: i64, settings: &str, preset: Option<&str>| {
+        let mut biome_source = NbtCompound::new();
+        if let Some(preset) = preset {
+            biome_source.put_string("preset", preset.to_string());
+        }
+        biome_source.put_string(
+            "type",
+            match preset {
+                Some(_) => "minecraft:multi_noise",
+                None => "minecraft:the_end",
+            }
+            .to_string(),
+        );
+
+        let mut generator = NbtCompound::new();
+        generator.put_string("type", "minecraft:noise".to_string());
+        generator.put_long("seed", seed);
+        generator.put_string("settings", settings.to_string());
+        generator.put_compound("biome_source", biome_source);
+        generator
+    };
+
+    let mut dimensions = NbtCompound::new();
+    for (name, dimension_type, settings, preset) in [
+        (
+            "minecraft:overworld",
+            "minecraft:overworld",
+            "minecraft:overworld",
+            Some("minecraft:overworld"),
+        ),
+        (
+            "minecraft:the_nether",
+            "minecraft:the_nether",
+            "minecraft:nether",
+            Some("minecraft:nether"),
+        ),
+        (
+            "minecraft:the_end",
+            "minecraft:the_end",
+            "minecraft:end",
+            None,
+        ),
+    ] {
+        let mut dimension = NbtCompound::new();
+        dimension.put_string("type", dimension_type.to_string());
+        dimension.put_compound("generator", noise_generator(seed, settings, preset));
+        dimensions.put_compound(name, dimension);
+    }
+
+    let mut world_gen_settings = NbtCompound::new();
     world_gen_settings.put_long("seed", seed);
+    world_gen_settings.put_bool("generate_features", true);
+    world_gen_settings.put_bool("bonus_chest", false);
+    world_gen_settings.put_compound("dimensions", dimensions);
     data.put_compound(WORLD_GEN_SETTINGS_TAG, world_gen_settings);
 }
 
@@ -276,7 +326,7 @@ fn level_data_from_nbt(data: &NbtCompound, seed: i64) -> LevelData {
     if let Some(level_version) = data.get_int("version") {
         level_data.level_version = level_version;
     }
-    if let Some(map_id) = data.get_int("map_id") {
+    if let Some(map_id) = data.get_int("map").or_else(|| data.get_int("map_id")) {
         level_data.map_id = map_id;
     }
     if let Some(day_time) = data.get_long("DayTime") {
@@ -303,34 +353,10 @@ fn level_data_to_nbt(info: &LevelData, data: &mut NbtCompound) {
     data.put_compound("DataPacks", data_packs_to_nbt(&info.data_packs));
     data.put_int("DataVersion", info.data_version);
 
-    // 26.2 difficulty_settings
-    let mut diff_comp = NbtCompound::new();
-    let diff_name = match info.difficulty {
-        Difficulty::Peaceful => "peaceful",
-        Difficulty::Easy => "easy",
-        Difficulty::Normal => "normal",
-        Difficulty::Hard => "hard",
-    };
-    diff_comp.put_string("difficulty", diff_name.to_string());
-    diff_comp.put_bool("hardcore", false);
-    diff_comp.put_bool("locked", info.difficulty_locked);
-    data.put_compound("difficulty_settings", diff_comp);
-
     data.put_byte("Difficulty", info.difficulty as i8);
     data.put_bool("DifficultyLocked", info.difficulty_locked);
     data.put_long("LastPlayed", info.last_played);
     data.put_string("LevelName", info.level_name.clone());
-
-    // 26.2 spawn
-    let mut spawn_comp = NbtCompound::new();
-    spawn_comp.put_string("dimension", "minecraft:overworld".to_string());
-    spawn_comp.put(
-        "pos",
-        NbtTag::IntArray(vec![info.spawn_x, info.spawn_y, info.spawn_z]),
-    );
-    spawn_comp.put_float("pitch", info.spawn_pitch);
-    spawn_comp.put_float("yaw", info.spawn_yaw);
-    data.put_compound("spawn", spawn_comp);
 
     data.put_int("SpawnX", info.spawn_x);
     data.put_int("SpawnY", info.spawn_y);
@@ -339,8 +365,26 @@ fn level_data_to_nbt(info: &LevelData, data: &mut NbtCompound) {
     data.put_float("SpawnPitch", info.spawn_pitch);
     data.put_compound("Version", world_version_to_nbt(&info.world_version));
     data.put_int("version", info.level_version);
-    data.put_int("map_id", info.map_id);
-    put_world_gen_settings_seed(data, info.world_gen_settings.seed);
+    data.put_int("map", info.map_id);
+    data.put_long("Time", info.day_time);
+    data.put_long("DayTime", info.day_time);
+    data.put_compound("GameRules", game_rules_to_level_dat(&info.game_rules));
+    // 1.21.1 expects the end-dragon fight state in level.dat; an empty
+    // compound matches a world where the fight has not happened.
+    let mut dragon_fight = NbtCompound::new();
+    dragon_fight.put_bool("DragonKilled", false);
+    dragon_fight.put_bool("PreviouslyKilled", false);
+    data.put_compound("DragonFight", dragon_fight);
+    put_world_gen_settings(data, info.world_gen_settings.seed);
+}
+
+/// Vanilla stores game rules in level.dat as bare names with string values.
+fn game_rules_to_level_dat(rules: &GameRuleRegistry) -> NbtCompound {
+    let mut compound = NbtCompound::new();
+    for rule in GameRule::all() {
+        compound.put_string(&rule.to_string(), rules.get(rule).to_string());
+    }
+    compound
 }
 
 fn stamp_current_version(level_data: &mut LevelData) {
@@ -540,7 +584,7 @@ pub struct LevelDat {
 #[cfg(test)]
 mod test {
 
-    use pumpkin_data::game_rules::GameRuleRegistry;
+    use pumpkin_data::game_rules::{GameRule, GameRuleRegistry};
     use pumpkin_nbt::{
         compound::NbtCompound,
         nbt_compress::{read_gzip_compound_tag, write_gzip_compound_tag},
@@ -853,7 +897,7 @@ mod test {
         assert_eq!(data.get_float("SpawnAngle"), Some(45.0));
         assert_eq!(data.get_double("BorderSize"), Some(2048.0));
         assert_eq!(data.get_double("BorderCenterX"), Some(8.0));
-        assert_eq!(data.get_int("map_id"), Some(3));
+        assert_eq!(data.get_int("map"), Some(3));
         assert!(data.get_long("LastPlayed").is_some_and(|played| played > 0));
 
         let version = data.get_compound("Version").unwrap();
@@ -988,7 +1032,7 @@ mod test {
         let temp_dir = TempDir::new().unwrap();
 
         let mut data_comp = NbtCompound::new();
-        data_comp.put_int("DataVersion", 4903);
+        data_comp.put_int("DataVersion", 3955);
         data_comp.put_int("version", 19133);
         data_comp.put_string("LevelName", "26.2 Test".to_string());
         data_comp.put_long("LastPlayed", 123456789);
@@ -1033,7 +1077,7 @@ mod test {
                 dimension_type: "minecraft:overworld".to_string(),
             },
         );
-        write_world_gen_settings(temp_dir.path(), &wgs, 4903).unwrap();
+        write_world_gen_settings(temp_dir.path(), &wgs, 3955).unwrap();
 
         let loaded = AnvilLevelInfo.read_world_info(temp_dir.path()).unwrap();
         assert_eq!(loaded.spawn_x, 42);
