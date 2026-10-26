@@ -1,4 +1,3 @@
-use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
 
@@ -12,6 +11,9 @@ struct CatVariantJson {
     asset_id: String,
     #[serde(default)]
     baby_asset_id: Option<String>,
+    /// Registration order for dirs that mirror a code-registered registry.
+    #[serde(default)]
+    order: Option<u32>,
 }
 
 pub fn build() -> TokenStream {
@@ -24,7 +26,7 @@ pub fn build() -> TokenStream {
         Path::new("../../assets/vanilla/data/minecraft/cat_variant")
     };
 
-    let mut variants: BTreeMap<String, CatVariantJson> = BTreeMap::new();
+    let mut variants: Vec<(String, CatVariantJson)> = Vec::new();
 
     let mut entries = fs::read_dir(dir)
         .expect("read cat_variant dir")
@@ -42,8 +44,14 @@ pub fn build() -> TokenStream {
         let content = fs::read_to_string(&path).expect("read cat_variant file");
         let json: CatVariantJson = serde_json::from_str(&content).expect("parse cat_variant JSON");
 
-        variants.insert(stem, json);
+        variants.push((stem, json));
     }
+
+    // The vanilla fallback dir lists entries in registry registration order;
+    // datapack dirs carry no order and keep the file-name sort.
+    variants.sort_by(|(a, ja), (b, jb)| {
+        (ja.order.unwrap_or(u32::MAX), a).cmp(&(jb.order.unwrap_or(u32::MAX), b))
+    });
 
     let mut enum_variants = Vec::new();
     let mut from_name_arms = Vec::new();

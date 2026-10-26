@@ -135,7 +135,7 @@ impl MoveControlTrait for DrownedMoveControl {
         // the water travel turns into motion — and push the velocity the same way.
         let speed = living.movement_input.load().z;
         let speed = if speed.abs() < 1.0e-6 {
-            living.get_attribute_value(&Attributes::MOVEMENT_SPEED)
+            living.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED)
         } else {
             speed
         };

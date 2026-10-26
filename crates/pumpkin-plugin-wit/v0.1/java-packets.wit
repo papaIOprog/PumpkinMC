@@ -205,6 +205,9 @@ interface java-packets {
     left-paddle: bool,
     right-paddle: bool,
   }
+  record s-pick-item {
+    slot-to-use: s32,
+  }
   record s-play-ping-request {
     payload: s64,
   }
@@ -683,7 +686,6 @@ interface java-packets {
     item-stack,
     item-predicate,
     color,
-    hex-color,
     component,
     style,
     message,
@@ -714,14 +716,12 @@ interface java-packets {
     resource-or-tag-key(argument-type-resource-or-tag-key),
     %resource(argument-type-resource),
     resource-key(argument-type-resource-key),
-    resource-selector,
     template-mirror,
     template-rotation,
     heightmap,
     loot-table,
     loot-predicate,
     loot-modifier,
-    dialog,
     uuid,
   }
   enum string-proto-arg-behavior {
@@ -1017,7 +1017,6 @@ interface java-packets {
     signature: list<u8>,
   }
   record c-player-chat-message {
-    global-index: s32,
     sender: uuid,
     index: s32,
     message-signature: option<list<u8>>,
@@ -1416,7 +1415,7 @@ interface java-packets {
     s-lock-difficulty(s-lock-difficulty),
     s-move-vehicle(s-move-vehicle),
     s-paddle-boat(s-paddle-boat),
-    s-pick-item,
+    s-pick-item(s-pick-item),
     s-play-ping-request(s-play-ping-request),
     s-place-recipe(s-place-recipe),
     s-player-abilities(s-player-abilities),

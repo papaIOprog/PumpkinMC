@@ -269,13 +269,13 @@ impl EndermanEntity {
                     operation: ModifierOperation::Add,
                 };
 
-                living.update_attribute(&Attributes::MOVEMENT_SPEED, |inst| {
+                living.update_attribute(&Attributes::GENERIC_MOVEMENT_SPEED, |inst| {
                     inst.add_or_replace_modifier(modifier);
                 });
 
                 crate::entity::attributes::send_attribute_updates_for_living(
                     living,
-                    vec![Attributes::MOVEMENT_SPEED],
+                    vec![Attributes::GENERIC_MOVEMENT_SPEED],
                 );
             }
         } else {
@@ -284,13 +284,13 @@ impl EndermanEntity {
             if self.speed_boosted.swap(false, Ordering::Relaxed) {
                 let living = &self.mob_entity.living_entity;
 
-                living.update_attribute(&Attributes::MOVEMENT_SPEED, |inst| {
+                living.update_attribute(&Attributes::GENERIC_MOVEMENT_SPEED, |inst| {
                     inst.remove_modifier(ENDERMAN_SPEED_BOOST_ID);
                 });
 
                 crate::entity::attributes::send_attribute_updates_for_living(
                     living,
-                    vec![Attributes::MOVEMENT_SPEED],
+                    vec![Attributes::GENERIC_MOVEMENT_SPEED],
                 );
             }
         }

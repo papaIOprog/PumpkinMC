@@ -17,7 +17,8 @@ pub struct FlowerbedBlock;
 
 impl BlockMetadata for FlowerbedBlock {
     fn ids() -> Box<[BlockId]> {
-        [BlockId::PINK_PETALS, BlockId::WILDFLOWERS].into()
+        // 1.21.1 has only pink petals; wildflowers are 26.x content.
+        [BlockId::PINK_PETALS].into()
     }
 }
 

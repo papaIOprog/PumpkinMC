@@ -8,30 +8,8 @@ pub struct BundleItem;
 
 impl ItemMetadata for BundleItem {
     fn ids() -> Box<[u16]> {
-        // The `minecraft:bundles` item tag is 26.x only; 1.21.1 bundles are a
-        // fixed set of items.
-        [
-            Item::BUNDLE,
-            Item::WHITE_BUNDLE,
-            Item::ORANGE_BUNDLE,
-            Item::MAGENTA_BUNDLE,
-            Item::LIGHT_BLUE_BUNDLE,
-            Item::YELLOW_BUNDLE,
-            Item::LIME_BUNDLE,
-            Item::PINK_BUNDLE,
-            Item::GRAY_BUNDLE,
-            Item::LIGHT_GRAY_BUNDLE,
-            Item::CYAN_BUNDLE,
-            Item::PURPLE_BUNDLE,
-            Item::BLUE_BUNDLE,
-            Item::BROWN_BUNDLE,
-            Item::GREEN_BUNDLE,
-            Item::RED_BUNDLE,
-            Item::BLACK_BUNDLE,
-        ]
-        .iter()
-        .map(|item| item.id)
-        .collect()
+        // Colored bundles are 1.21.2+; 1.21.1 has only the plain bundle.
+        [Item::BUNDLE.id].into()
     }
 }
 

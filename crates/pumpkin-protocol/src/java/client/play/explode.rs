@@ -117,9 +117,6 @@ impl ClientPacket for CExplosion {
             }
         }
 
-        // Block count: 0
-        write.write_var_int(&VarInt(0))?;
-
         Ok(())
     }
 }

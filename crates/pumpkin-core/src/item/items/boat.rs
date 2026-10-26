@@ -9,6 +9,7 @@ use pumpkin_data::Block;
 use pumpkin_data::entity::EntityType;
 use pumpkin_data::fluid::Fluid;
 use pumpkin_data::item::Item;
+use pumpkin_data::tag::Taggable;
 use pumpkin_util::math::boundingbox::{BoundingBox, EntityDimensions};
 use pumpkin_util::math::position::BlockPos;
 use pumpkin_util::math::vector3::Vector3;
@@ -18,35 +19,13 @@ use crate::world::World;
 pub struct BoatItem;
 
 impl BoatItem {
-    /// Maps boat item to corresponding entity type
+    /// Maps boat item to corresponding entity type. 1.21.1 has one boat entity
+    /// type per kind; the wood variant is carried by the item.
     pub(crate) fn item_to_entity(item: &Item) -> &'static EntityType {
-        match item.id {
-            val if val == Item::OAK_BOAT.id => &EntityType::OAK_BOAT,
-            val if val == Item::OAK_CHEST_BOAT.id => &EntityType::OAK_CHEST_BOAT,
-            val if val == Item::SPRUCE_BOAT.id => &EntityType::SPRUCE_BOAT,
-            val if val == Item::SPRUCE_CHEST_BOAT.id => &EntityType::SPRUCE_CHEST_BOAT,
-            val if val == Item::BIRCH_BOAT.id => &EntityType::BIRCH_BOAT,
-            val if val == Item::BIRCH_CHEST_BOAT.id => &EntityType::BIRCH_CHEST_BOAT,
-            val if val == Item::JUNGLE_BOAT.id => &EntityType::JUNGLE_BOAT,
-            val if val == Item::JUNGLE_CHEST_BOAT.id => &EntityType::JUNGLE_CHEST_BOAT,
-            val if val == Item::ACACIA_BOAT.id => &EntityType::ACACIA_BOAT,
-            val if val == Item::ACACIA_CHEST_BOAT.id => &EntityType::ACACIA_CHEST_BOAT,
-            val if val == Item::DARK_OAK_BOAT.id => &EntityType::DARK_OAK_BOAT,
-            val if val == Item::DARK_OAK_CHEST_BOAT.id => &EntityType::DARK_OAK_CHEST_BOAT,
-            val if val == Item::MANGROVE_BOAT.id => &EntityType::MANGROVE_BOAT,
-            val if val == Item::MANGROVE_CHEST_BOAT.id => &EntityType::MANGROVE_CHEST_BOAT,
-            val if val == Item::CHERRY_BOAT.id => &EntityType::CHERRY_BOAT,
-            val if val == Item::CHERRY_CHEST_BOAT.id => &EntityType::CHERRY_CHEST_BOAT,
-            val if val == Item::PALE_OAK_BOAT.id => &EntityType::PALE_OAK_BOAT,
-            val if val == Item::PALE_OAK_CHEST_BOAT.id => &EntityType::PALE_OAK_CHEST_BOAT,
-            val if val == Item::POPLAR_BOAT.id => &EntityType::POPLAR_BOAT,
-            val if val == Item::POPLAR_CHEST_BOAT.id => &EntityType::POPLAR_CHEST_BOAT,
-            val if val == Item::BAMBOO_RAFT.id => &EntityType::BAMBOO_RAFT,
-            val if val == Item::BAMBOO_CHEST_RAFT.id => &EntityType::BAMBOO_CHEST_RAFT,
-            _ => {
-                tracing::error!("Unknown boat item ID: {}", item.id);
-                &EntityType::OAK_BOAT
-            }
+        if item.has_tag(&pumpkin_data::tag::Item::MINECRAFT_CHEST_BOATS) {
+            &EntityType::CHEST_BOAT
+        } else {
+            &EntityType::BOAT
         }
     }
 
@@ -79,10 +58,6 @@ impl ItemMetadata for BoatItem {
             Item::MANGROVE_CHEST_BOAT.id,
             Item::CHERRY_BOAT.id,
             Item::CHERRY_CHEST_BOAT.id,
-            Item::PALE_OAK_BOAT.id,
-            Item::PALE_OAK_CHEST_BOAT.id,
-            Item::POPLAR_BOAT.id,
-            Item::POPLAR_CHEST_BOAT.id,
             Item::BAMBOO_RAFT.id,
             Item::BAMBOO_CHEST_RAFT.id,
         ]

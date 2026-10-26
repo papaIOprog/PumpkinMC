@@ -566,7 +566,7 @@ impl PathNavigation {
     }
 
     fn mob_max_follow_range(&self, entity: &LivingEntity) -> f32 {
-        let follow_range = entity.get_attribute_value(&Attributes::FOLLOW_RANGE) as f32;
+        let follow_range = entity.get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE) as f32;
         follow_range.max(self.required_path_length)
     }
 
@@ -848,7 +848,7 @@ impl PathNavigation {
     pub fn do_stuck_detection(&mut self, mob_pos: Vector3<f64>, entity: &LivingEntity) {
         let world_age = entity.entity.world.load().get_world_age() as u64;
         if self.tick_count.saturating_sub(self.last_stuck_check) > 100 {
-            let speed = entity.get_attribute_value(&Attributes::MOVEMENT_SPEED) as f32;
+            let speed = entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED) as f32;
             let effective_speed = if speed >= 1.0 { speed } else { speed * speed };
             let threshold_distance = effective_speed * 100.0 * 0.25;
             let dx = mob_pos.x - self.last_stuck_check_pos.x;
@@ -882,7 +882,7 @@ impl PathNavigation {
                     f64::from(pos.0.z) + 0.5,
                 );
                 let dist_to_node = (mob_pos - node_center).length();
-                let speed = entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+                let speed = entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
                 self.timeout_limit = if speed > 0.0 {
                     dist_to_node / speed * 20.0
                 } else {
@@ -1144,13 +1144,13 @@ impl PathNavigation {
                 entity.entity.body_yaw.store(target_yaw);
 
                 let mob_speed =
-                    goal.speed * entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+                    goal.speed * entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
 
                 entity
                     .movement_input
                     .store(Vector3::new(0.0, 0.0, mob_speed));
 
-                let step_height = entity.get_attribute_value(&Attributes::STEP_HEIGHT);
+                let step_height = entity.get_attribute_value(&Attributes::GENERIC_STEP_HEIGHT);
                 let jump_distance = 1.0f64.max(f64::from(self.mob_width));
 
                 if (dy > step_height || f64::from(next_block.0.y) > current_pos.y)
@@ -1552,11 +1552,11 @@ impl PathNavigationTrait for FlyingPathNavigation {
                 entity.entity.body_yaw.store(desired_yaw);
                 entity.entity.pitch.store(desired_pitch);
 
-                let flying_speed = entity.get_attribute_value(&Attributes::FLYING_SPEED);
+                let flying_speed = entity.get_attribute_value(&Attributes::GENERIC_FLYING_SPEED);
                 let base_speed = if flying_speed > 0.0 {
                     flying_speed
                 } else {
-                    entity.get_attribute_value(&Attributes::MOVEMENT_SPEED)
+                    entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED)
                 };
                 let speed = self.inner.speed_modifier * base_speed;
                 let y_input = if dy.abs() > 0.1 {
@@ -1858,7 +1858,7 @@ impl PathNavigationTrait for WaterBoundPathNavigation {
                 entity.entity.pitch.store(desired_pitch);
 
                 let speed = self.inner.speed_modifier
-                    * entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+                    * entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
                 let y_input = if dy.abs() > 0.1 {
                     if dy > 0.0 { speed } else { -speed }
                 } else {
@@ -2128,7 +2128,7 @@ impl PathNavigationTrait for WallClimberNavigation {
                 entity.entity.body_yaw.store(desired_yaw);
 
                 let speed = self.inner.inner.speed_modifier
-                    * entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+                    * entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
                 entity.movement_input.store(Vector3::new(0.0, 0.0, speed));
                 if dy > 0.0 {
                     entity.jumping.store(true, Ordering::SeqCst);
@@ -2396,7 +2396,7 @@ impl PathNavigationTrait for AmphibiousPathNavigation {
                     entity.entity.pitch.store(desired_pitch);
 
                     let speed = self.inner.speed_modifier
-                        * entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+                        * entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
                     let y_input = if dy.abs() > 0.1 {
                         if dy > 0.0 { speed } else { -speed }
                     } else {

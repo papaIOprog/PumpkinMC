@@ -61,10 +61,12 @@ impl MoveControlTrait for FlyingMoveControl {
                 .store(self.change_angle(entity.yaw.load(), y_rot_d, 90.0));
 
             let speed = if entity.on_ground.load(Ordering::Relaxed) {
-                let movement_speed = living_entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+                let movement_speed =
+                    living_entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
                 (self.speed_modifier * movement_speed) as f32
             } else {
-                let flying_speed = living_entity.get_attribute_value(&Attributes::FLYING_SPEED);
+                let flying_speed =
+                    living_entity.get_attribute_value(&Attributes::GENERIC_FLYING_SPEED);
                 (self.speed_modifier * flying_speed) as f32
             };
 

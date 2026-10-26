@@ -962,7 +962,7 @@ impl MineShaftCorridor {
                             world_pos.x,
                             py,
                             world_pos.z,
-                            Block::IRON_CHAIN.default_state,
+                            Block::CHAIN.default_state,
                         );
                     }
                     return;

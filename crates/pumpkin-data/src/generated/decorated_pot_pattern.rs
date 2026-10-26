@@ -2,6 +2,7 @@
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 #[repr(u32)]
 pub enum DecoratedPotPattern {
+    Blank,
     Angler,
     Archer,
     ArmsUp,
@@ -31,6 +32,7 @@ impl DecoratedPotPattern {
     #[must_use]
     pub fn from_name(name: &str) -> Option<Self> {
         match name {
+            "minecraft:blank" | "blank" => Some(Self::Blank),
             "minecraft:angler" | "angler" => Some(Self::Angler),
             "minecraft:archer" | "archer" => Some(Self::Archer),
             "minecraft:arms_up" | "arms_up" => Some(Self::ArmsUp),
@@ -66,6 +68,7 @@ impl DecoratedPotPattern {
     #[must_use]
     pub const fn to_name(&self) -> &'static str {
         match self {
+            Self::Blank => "blank",
             Self::Angler => "angler",
             Self::Archer => "archer",
             Self::ArmsUp => "arms_up",
@@ -95,35 +98,37 @@ impl DecoratedPotPattern {
     #[must_use]
     pub const fn asset_id(&self) -> &'static str {
         match self {
-            Self::Angler => "minecraft:angler_pottery_pattern",
-            Self::Archer => "minecraft:archer_pottery_pattern",
-            Self::ArmsUp => "minecraft:arms_up_pottery_pattern",
-            Self::Blade => "minecraft:blade_pottery_pattern",
-            Self::Brewer => "minecraft:brewer_pottery_pattern",
-            Self::Burn => "minecraft:burn_pottery_pattern",
-            Self::Danger => "minecraft:danger_pottery_pattern",
-            Self::Explorer => "minecraft:explorer_pottery_pattern",
-            Self::Flow => "minecraft:flow_pottery_pattern",
-            Self::Friend => "minecraft:friend_pottery_pattern",
-            Self::Guster => "minecraft:guster_pottery_pattern",
-            Self::Heart => "minecraft:heart_pottery_pattern",
-            Self::Heartbreak => "minecraft:heartbreak_pottery_pattern",
-            Self::Howl => "minecraft:howl_pottery_pattern",
-            Self::Miner => "minecraft:miner_pottery_pattern",
-            Self::Mourner => "minecraft:mourner_pottery_pattern",
-            Self::Plenty => "minecraft:plenty_pottery_pattern",
-            Self::Prize => "minecraft:prize_pottery_pattern",
-            Self::Scrape => "minecraft:scrape_pottery_pattern",
-            Self::Sheaf => "minecraft:sheaf_pottery_pattern",
-            Self::Shelter => "minecraft:shelter_pottery_pattern",
-            Self::Skull => "minecraft:skull_pottery_pattern",
-            Self::Snort => "minecraft:snort_pottery_pattern",
+            Self::Blank => "minecraft:blank",
+            Self::Angler => "minecraft:angler",
+            Self::Archer => "minecraft:archer",
+            Self::ArmsUp => "minecraft:arms_up",
+            Self::Blade => "minecraft:blade",
+            Self::Brewer => "minecraft:brewer",
+            Self::Burn => "minecraft:burn",
+            Self::Danger => "minecraft:danger",
+            Self::Explorer => "minecraft:explorer",
+            Self::Flow => "minecraft:flow",
+            Self::Friend => "minecraft:friend",
+            Self::Guster => "minecraft:guster",
+            Self::Heart => "minecraft:heart",
+            Self::Heartbreak => "minecraft:heartbreak",
+            Self::Howl => "minecraft:howl",
+            Self::Miner => "minecraft:miner",
+            Self::Mourner => "minecraft:mourner",
+            Self::Plenty => "minecraft:plenty",
+            Self::Prize => "minecraft:prize",
+            Self::Scrape => "minecraft:scrape",
+            Self::Sheaf => "minecraft:sheaf",
+            Self::Shelter => "minecraft:shelter",
+            Self::Skull => "minecraft:skull",
+            Self::Snort => "minecraft:snort",
         }
     }
     #[doc = "Returns all vanilla decorated pot patterns."]
     #[must_use]
     pub const fn all() -> &'static [Self] {
         &[
+            Self::Blank,
             Self::Angler,
             Self::Archer,
             Self::ArmsUp,

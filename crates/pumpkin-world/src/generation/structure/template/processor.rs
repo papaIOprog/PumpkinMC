@@ -641,7 +641,7 @@ fn process_blackstone_replace(state: &'static BlockState) -> &'static BlockState
         BlockId::COBBLESTONE_WALL | BlockId::MOSSY_COBBLESTONE_WALL => {
             replace_preserving_properties(state, &Block::BLACKSTONE_WALL)
         }
-        BlockId::IRON_BARS => replace_preserving_properties(state, &Block::IRON_CHAIN),
+        BlockId::IRON_BARS => replace_preserving_properties(state, &Block::CHAIN),
         _ => state,
     }
 }

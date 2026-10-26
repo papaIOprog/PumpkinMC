@@ -1,5 +1,6 @@
 use pumpkin_data::packet::clientbound::config::DISCONNECT;
 use pumpkin_macros::java_packet;
+use pumpkin_util::text::TextComponent;
 
 use crate::ClientPacket;
 use crate::ser::NetworkWriteExt;
@@ -7,12 +8,12 @@ use pumpkin_util::version::JavaMinecraftVersion;
 
 #[java_packet(DISCONNECT)]
 pub struct CConfigDisconnect<'a> {
-    pub reason: &'a str,
+    pub reason: &'a TextComponent,
 }
 
 impl<'a> CConfigDisconnect<'a> {
     #[must_use]
-    pub const fn new(reason: &'a str) -> Self {
+    pub const fn new(reason: &'a TextComponent) -> Self {
         Self { reason }
     }
 }
@@ -21,9 +22,8 @@ impl ClientPacket for CConfigDisconnect<'_> {
     fn write_packet_data(
         &self,
         mut write: impl std::io::Write,
-        _version: &JavaMinecraftVersion,
+        version: &JavaMinecraftVersion,
     ) -> Result<(), crate::ser::WritingError> {
-        write.write_string(self.reason)?;
-        Ok(())
+        write.write_component(self.reason, version)
     }
 }

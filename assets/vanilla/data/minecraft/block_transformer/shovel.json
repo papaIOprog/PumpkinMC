@@ -1,0 +1,87 @@
+[
+ {
+  "block_state_provider": {
+   "type": "minecraft:rule",
+   "rules": [
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "grass_block"
+      ]
+     },
+     "then": {
+      "type": "minecraft:simple_state_provider",
+      "state": "dirt_path"
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "dirt"
+      ]
+     },
+     "then": {
+      "type": "minecraft:simple_state_provider",
+      "state": "dirt_path"
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "podzol"
+      ]
+     },
+     "then": {
+      "type": "minecraft:simple_state_provider",
+      "state": "dirt_path"
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "coarse_dirt"
+      ]
+     },
+     "then": {
+      "type": "minecraft:simple_state_provider",
+      "state": "dirt_path"
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "mycelium"
+      ]
+     },
+     "then": {
+      "type": "minecraft:simple_state_provider",
+      "state": "dirt_path"
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "rooted_dirt"
+      ]
+     },
+     "then": {
+      "type": "minecraft:simple_state_provider",
+      "state": "dirt_path"
+     }
+    }
+   ]
+  },
+  "item_damage_per_use": 1,
+  "sound": "item.shovel.flatten",
+  "update_from_neighbors": true,
+  "disallowed_faces": [
+   "down"
+  ]
+ }
+]

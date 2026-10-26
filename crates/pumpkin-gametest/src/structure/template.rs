@@ -172,7 +172,7 @@ fn resolve_palette(structure: &NbtCompound) -> GameTestResult<Vec<PaletteEntry>>
             invalid_structure(format!("Unknown block '{name}' in structure palette"))
         })?;
 
-        let mut test_mode = None;
+        let test_mode = None;
         let state = if let Some(properties) = entry.get_compound("Properties") {
             let mut property_pairs = Vec::with_capacity(properties.child_tags.len());
             for (property_name, property_value) in &properties.child_tags {
@@ -181,15 +181,6 @@ fn resolve_palette(structure: &NbtCompound) -> GameTestResult<Vec<PaletteEntry>>
                         "Block '{name}' property '{property_name}' in palette entry {index} is not a string"
                     ))
                 })?;
-                if block == &Block::TEST_BLOCK && property_name.as_ref() == "mode" {
-                    test_mode = Some(TestBlockMode::from_serialized_name(property_value).ok_or_else(
-                        || {
-                            invalid_structure(format!(
-                                "Unknown test block mode '{property_value}' in palette entry {index}"
-                            ))
-                        },
-                    )?);
-                }
                 property_pairs.push((property_name.as_ref(), property_value));
             }
 
@@ -203,11 +194,6 @@ fn resolve_palette(structure: &NbtCompound) -> GameTestResult<Vec<PaletteEntry>>
         } else {
             block.default_state
         };
-
-        if block == &Block::TEST_BLOCK && test_mode.is_none() {
-            // TestBlockMode.START is the first/default enum value in the 26.2 server source.
-            test_mode = Some(TestBlockMode::Start);
-        }
 
         states.push(PaletteEntry {
             state: state.id,

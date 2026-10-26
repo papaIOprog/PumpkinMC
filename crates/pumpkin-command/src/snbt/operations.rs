@@ -1,4 +1,3 @@
-use pumpkin_data::translation;
 use pumpkin_nbt::{nbt_ops::NbtOps, tag::NbtTag};
 use pumpkin_util::uuid::parse_uuid_vec;
 
@@ -6,13 +5,13 @@ use crate::{errors::error_types::CommandErrorType, parser::Parser, snbt::SnbtPar
 use pumpkin_codecs::DynamicOps;
 
 pub const EXPECTED_NUMBER_OR_BOOLEAN: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_NUMBER_OR_BOOLEAN,
-    translation::java::SNBT_PARSER_EXPECTED_NUMBER_OR_BOOLEAN,
+    "Expected a number or a boolean",
+    "Expected a number or a boolean",
 );
 
 pub const EXPECTED_STRING_UUID: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_STRING_UUID,
-    translation::java::SNBT_PARSER_EXPECTED_STRING_UUID,
+    "Expected a string representing a valid UUID",
+    "Expected a string representing a valid UUID",
 );
 
 /// Represents an *operation* that can take *operands* and return a required *result*.

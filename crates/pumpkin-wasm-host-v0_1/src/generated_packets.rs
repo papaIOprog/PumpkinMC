@@ -19,8 +19,9 @@ pub fn serialize_java_packet(
 ) -> Option<Bytes> {
     match packet {
         ClientboundPacket::ConfigCConfigDisconnect(data) => {
+            let component_reason = pumpkin_util::text::TextComponent::text(data.reason.clone());
             let p = pumpkin_protocol::java::client::config::CConfigDisconnect {
-                reason: &data.reason,
+                reason: &component_reason,
             };
             let mut buf = Vec::new();
             pumpkin_core::net::java::JavaClient::write_packet_for_version(&p, version, &mut buf)
@@ -1229,6 +1230,15 @@ pub fn deserialize_java_serverbound_packet(
                 },
             ))
         }
+        id if id == pumpkin_protocol::java::server::play::SPickItem::to_id(version) => {
+            use pumpkin_protocol::ServerPacket;
+            let p = <pumpkin_protocol::java::server::play::SPickItem as pumpkin_protocol::ServerPacket>::read(&mut payload, &version).ok()?;
+            Some(ServerboundPacket::SPickItem(
+                crate::pumpkin::plugin::java_packets::SPickItem {
+                    slot_to_use: p.slot_to_use.0.try_into().unwrap(),
+                },
+            ))
+        }
         id if id == pumpkin_protocol::java::server::play::SPlayPingRequest::to_id(version) => {
             use pumpkin_protocol::ServerPacket;
             let p = <pumpkin_protocol::java::server::play::SPlayPingRequest as pumpkin_protocol::ServerPacket>::read(&mut payload, &version).ok()?;
@@ -1562,7 +1572,7 @@ impl ToWitClientboundJava for pumpkin_protocol::java::client::config::CConfigDis
     fn to_wit(&self) -> ClientboundPacket {
         ClientboundPacket::ConfigCConfigDisconnect(
             crate::pumpkin::plugin::java_packets::ConfigCConfigDisconnect {
-                reason: self.reason.to_string(),
+                reason: serde_json::to_string(&self.reason).unwrap_or_default(),
             },
         )
     }

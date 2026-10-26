@@ -9,6 +9,13 @@ pub fn build() -> TokenStream {
     let data_component: BTreeMap<String, u8> =
         serde_json::from_str(&fs::read_to_string("../../assets/data_component.json").unwrap())
             .expect("Failed to parse data_component.json");
+    // Components added after 1.21.1 have no wire id. They stay in the enum as
+    // internal variants for server-side item metadata and are never accepted
+    // from the wire (try_from_id only covers the synced registry).
+    let internal: BTreeMap<String, u8> = serde_json::from_str(
+        &fs::read_to_string("../../assets/data_component_internal.json").unwrap(),
+    )
+    .expect("Failed to parse data_component_internal.json");
 
     let mut enum_variants = TokenStream::new();
     let mut id_to_enum = TokenStream::new();
@@ -17,7 +24,28 @@ pub fn build() -> TokenStream {
     let mut data_component_vec = data_component.iter().collect::<Vec<_>>();
     data_component_vec.sort_by_key(|(_, i)| **i);
 
-    for (raw_name, raw_value) in &data_component_vec {
+    let mut next_internal_id = data_component_vec
+        .last()
+        .map_or(0, |(_, i)| **i)
+        .saturating_add(1);
+
+    let mut internal_vec = internal.iter().collect::<Vec<_>>();
+    internal_vec.sort_by_key(|(_, i)| **i);
+
+    // (name, wire id when the component is part of the synced registry)
+    let all_entries: Vec<(&String, Option<u8>)> = data_component_vec
+        .iter()
+        .map(|(n, i)| (*n, Some(**i)))
+        .chain(internal_vec.iter().map(|(n, _)| (*n, None)))
+        .collect();
+
+    for (raw_name, wire_id) in all_entries {
+        let on_wire = wire_id.is_some();
+        let raw_value = wire_id.unwrap_or_else(|| {
+            let id = next_internal_id;
+            next_internal_id += 1;
+            id
+        });
         let strip_name = raw_name
             .strip_prefix("minecraft:")
             .unwrap()
@@ -30,9 +58,11 @@ pub fn build() -> TokenStream {
             #pascal_case = #raw_value,
         });
 
-        id_to_enum.extend(quote! {
-            #raw_value => Some(Self::#pascal_case),
-        });
+        if on_wire {
+            id_to_enum.extend(quote! {
+                #raw_value => Some(Self::#pascal_case),
+            });
+        }
 
         // TODO use phf
         name_to_enum.extend(quote! {

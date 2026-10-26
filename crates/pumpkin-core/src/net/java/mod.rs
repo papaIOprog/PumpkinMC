@@ -15,8 +15,8 @@ use pumpkin_protocol::java::server::play::{
     SCommandSuggestion, SConfigurationAcknowledged, SConfirmTeleport, SContainerButtonClick,
     SContainerSlotStateChanged, SCookieResponse as SPCookieResponse, SCustomPayload,
     SDebugSampleSubscription, SEditBook, SEntityTagQuery, SInteract, SJigsawGenerate,
-    SLockDifficulty, SMoveVehicle, SPaddleBoat, SPlaceRecipe, SPlayPingRequest, SPlayPong,
-    SPlayResourcePack, SPlayerAbilities, SPlayerAction, SPlayerCommand, SPlayerPosition,
+    SLockDifficulty, SMoveVehicle, SPaddleBoat, SPickItem, SPlaceRecipe, SPlayPingRequest,
+    SPlayPong, SPlayResourcePack, SPlayerAbilities, SPlayerAction, SPlayerCommand, SPlayerPosition,
     SPlayerPositionRotation, SPlayerRotation, SPlayerSession, SRecipeBookChangeSettings,
     SRecipeBookSeenRecipe, SRenameItem, SSeenAdvancement, SSelectTrade, SSetBeacon,
     SSetCommandBlock, SSetCommandMinecart, SSetCreativeSlot, SSetHeldItem, SSetJigsawBlock,
@@ -528,8 +528,7 @@ impl JavaClient {
                 self.serialize_packet(&packet).ok()
             }
             ConnectionState::Config => {
-                let reason_text = reason.clone().get_text();
-                let packet = CConfigDisconnect::new(&reason_text);
+                let packet = CConfigDisconnect::new(reason);
                 self.serialize_packet(&packet).ok()
             }
             ConnectionState::Play => {
@@ -830,6 +829,9 @@ impl JavaClient {
             }
             id if id == SPaddleBoat::to_id(version) => {
                 self.handle_paddle_boat(player, &SPaddleBoat::read(&mut payload, &version)?);
+            }
+            id if id == SPickItem::to_id(version) => {
+                self.handle_pick_item(player, &SPickItem::read(&mut payload, &version)?);
             }
             id if id == SInteract::to_id(version) => {
                 self.handle_interact(player, &SInteract::read(&mut payload, &version)?, server);

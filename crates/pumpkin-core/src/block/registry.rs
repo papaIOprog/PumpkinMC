@@ -13,7 +13,7 @@ use crate::block::blocks::cake::CakeBlock;
 use crate::block::blocks::campfire::CampfireBlock;
 use crate::block::blocks::candle_cakes::CandleCakeBlock;
 use crate::block::blocks::candles::CandleBlock;
-use crate::block::blocks::carpet::{CarpetBlock, MossCarpetBlock, PaleMossCarpetBlock};
+use crate::block::blocks::carpet::{CarpetBlock, MossCarpetBlock};
 use crate::block::blocks::cartography_table::CartographyTableBlock;
 use crate::block::blocks::carved_pumpkin::CarvedPumpkinBlock;
 use crate::block::blocks::cauldron::CauldronBlock;
@@ -69,9 +69,7 @@ use crate::block::blocks::plant::bamboo::BambooBlock;
 use crate::block::blocks::plant::bamboo_sapling::BambooSaplingBlock;
 use crate::block::blocks::plant::big_dripleaf::BigDripleafBlock;
 use crate::block::blocks::plant::big_dripleaf_stem::BigDripleafStemBlock;
-use crate::block::blocks::plant::bush::BushBlock;
 use crate::block::blocks::plant::cactus::CactusBlock;
-use crate::block::blocks::plant::cactus_flower::CactusFlowerBlock;
 use crate::block::blocks::plant::cave_vines::CaveVinesBlock;
 use crate::block::blocks::plant::chorus_flower::ChorusFlowerBlock;
 use crate::block::blocks::plant::chorus_plant::ChorusPlantBlock;
@@ -85,13 +83,11 @@ use crate::block::blocks::plant::crop::sweet_berry_bush::SweetBerryBushBlock;
 use crate::block::blocks::plant::crop::torch_flower::TorchFlowerBlock;
 use crate::block::blocks::plant::crop::wheat::WheatBlock;
 use crate::block::blocks::plant::dry_vegetation::DryVegetationBlock;
-use crate::block::blocks::plant::eyeblossom::EyeblossomBlock;
 use crate::block::blocks::plant::flower::FlowerBlock;
 use crate::block::blocks::plant::flowerbed::FlowerbedBlock;
 use crate::block::blocks::plant::fungus::FungusBlock;
 use crate::block::blocks::plant::hanging_roots::HangingRootsBlock;
 use crate::block::blocks::plant::kelp::KelpBlock;
-use crate::block::blocks::plant::leaf_litter::LeafLitterBlock;
 use crate::block::blocks::plant::lily_pad::LilyPadBlock;
 use crate::block::blocks::plant::mangrove_propagule::MangrovePropaguleBlock;
 use crate::block::blocks::plant::mushroom_plant::MushroomPlantBlock;
@@ -100,7 +96,6 @@ use crate::block::blocks::plant::roots::RootsBlock;
 use crate::block::blocks::plant::sapling::SaplingBlock;
 use crate::block::blocks::plant::sea_pickles::SeaPickleBlock;
 use crate::block::blocks::plant::seagrass::SeaGrassBlock;
-use crate::block::blocks::plant::shelf_mushroom::ShelfMushroomBlock;
 use crate::block::blocks::plant::short_plant::ShortPlantBlock;
 use crate::block::blocks::plant::small_dripleaf::SmallDripleafBlock;
 use crate::block::blocks::plant::spore_blossom::SporeBlossomBlock;
@@ -143,7 +138,6 @@ use crate::block::blocks::scaffolding::ScaffoldingBlock;
 use crate::block::blocks::sculk::sculk_catalyst::SculkCatalystBlock;
 use crate::block::blocks::sculk::sculk_shrieker::SculkShriekerBlock;
 use crate::block::blocks::sculk::sculk_vein::MultifaceBlock;
-use crate::block::blocks::shelf::ShelfBlock;
 use crate::block::blocks::signs::SignBlock;
 use crate::block::blocks::slabs::SlabBlock;
 use crate::block::blocks::slime::SlimeBlock;
@@ -157,7 +151,6 @@ use crate::block::blocks::spreading_snowy_block::{MyceliumBlock, PodzolBlock};
 use crate::block::blocks::stairs::StairBlock;
 use crate::block::blocks::structure_block::StructureBlock;
 use crate::block::blocks::structure_void::StructureVoidBlock;
-use crate::block::blocks::test_block::{TestBlock, TestInstanceBlock};
 use crate::block::blocks::tinted_glass::TintedGlassBlock;
 use crate::block::blocks::tnt::TNTBlock;
 use crate::block::blocks::torches::TorchBlock;
@@ -229,9 +222,8 @@ use crate::block::blocks::skull_block::SkullBlock;
 use crate::block::blocks::smoker::SmokerBlock;
 use crate::block::blocks::stonecutter::StonecutterBlock;
 use crate::block::blocks::weathering_copper::{
-    WeatheringCopperBlock, WeatheringCopperChainBlock, WeatheringCopperDoorBlock,
-    WeatheringCopperGrateBlock, WeatheringCopperSlabBlock, WeatheringCopperStairBlock,
-    WeatheringCopperTrapDoorBlock,
+    WeatheringCopperBlock, WeatheringCopperDoorBlock, WeatheringCopperGrateBlock,
+    WeatheringCopperSlabBlock, WeatheringCopperStairBlock, WeatheringCopperTrapDoorBlock,
 };
 
 #[must_use]
@@ -254,7 +246,6 @@ pub fn default_registry() -> Arc<BlockRegistry> {
     manager.register(WitherSkeletonSkullBlock);
     manager.register(CampfireBlock);
     manager.register(MossCarpetBlock);
-    manager.register(PaleMossCarpetBlock);
     manager.register(ChestBlock);
     manager.register(TrappedChestBlock);
     manager.register(CopperChestBlock);
@@ -302,8 +293,6 @@ pub fn default_registry() -> Arc<BlockRegistry> {
     manager.register(SmithingTableBlock);
     manager.register(FletchingTableBlock);
     manager.register(StructureBlock);
-    manager.register(TestBlock);
-    manager.register(TestInstanceBlock);
     manager.register(ShortPlantBlock);
     manager.register(DryVegetationBlock);
     manager.register(LilyPadBlock);
@@ -316,9 +305,7 @@ pub fn default_registry() -> Arc<BlockRegistry> {
     manager.register(SnifferEggBlock);
     manager.register(TurtleEggBlock);
     manager.register(BrushableBlock);
-    manager.register(BushBlock);
     manager.register(FlowerBlock);
-    manager.register(EyeblossomBlock);
     manager.register(PotatoBlock);
     manager.register(BeetrootBlock);
     manager.register(TorchFlowerBlock);
@@ -336,9 +323,7 @@ pub fn default_registry() -> Arc<BlockRegistry> {
     manager.register(TorchBlock);
     manager.register(TrapDoorBlock);
     manager.register(MushroomPlantBlock);
-    manager.register(ShelfMushroomBlock);
     manager.register(FlowerbedBlock);
-    manager.register(LeafLitterBlock);
     manager.register(WallBlock);
     manager.register(RootsBlock);
     manager.register(NetherPortalBlock);
@@ -351,14 +336,12 @@ pub fn default_registry() -> Arc<BlockRegistry> {
 
     // Weathering copper blocks
     manager.register(WeatheringCopperBlock);
-    manager.register(WeatheringCopperChainBlock);
     manager.register(WeatheringCopperDoorBlock);
     manager.register(WeatheringCopperGrateBlock);
     manager.register(WeatheringCopperSlabBlock);
     manager.register(WeatheringCopperStairBlock);
     manager.register(WeatheringCopperTrapDoorBlock);
     manager.register(CommandBlock);
-    manager.register(TestBlock);
     manager.register(JigsawBlock);
     manager.register(ComposterBlock);
     manager.register(CauldronBlock);
@@ -376,7 +359,6 @@ pub fn default_registry() -> Arc<BlockRegistry> {
     manager.register(CandleCakeBlock);
     manager.register(SkullBlock);
     manager.register(ChiseledBookshelfBlock);
-    manager.register(ShelfBlock);
     manager.register(LecternBlock);
     manager.register(DragonEggBlock);
     manager.register(StemBlock);
@@ -396,7 +378,6 @@ pub fn default_registry() -> Arc<BlockRegistry> {
     manager.register(DripstoneBlock);
     manager.register(TwistingVinesBlock);
     manager.register(WeepingVinesBlock);
-    manager.register(CactusFlowerBlock);
     manager.register(SmallDripleafBlock);
     manager.register(BigDripleafStemBlock);
     manager.register(BigDripleafBlock);
@@ -719,13 +700,10 @@ impl BlockRegistry {
             };
 
         if world.is_in_spawn_protection(player, &final_block_pos) {
-            player.send_system_message(&pumpkin_util::text::TextComponent::translate_cross(
-                pumpkin_data::translation::java::BUILD_SPAWN_PROTECTION,
-                pumpkin_data::translation::java::BUILD_SPAWN_PROTECTION,
-                [pumpkin_util::text::TextComponent::text(
-                    player.gameprofile.name.clone(),
-                )],
-            ));
+            player.send_system_message(&pumpkin_util::text::TextComponent::text(format!(
+                "{} is under spawn protection",
+                player.gameprofile.name
+            )));
             return Ok(None);
         }
 
@@ -1555,7 +1533,6 @@ mod replacement_tests {
             (&Block::WATER, true),
             (&Block::SHORT_GRASS, true),
             (&Block::GLOW_LICHEN, true),
-            (&Block::RESIN_CLUMP, true),
             (&Block::STONE, false),
             (&Block::OAK_SLAB, false),
         ] {

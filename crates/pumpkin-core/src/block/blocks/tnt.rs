@@ -4,7 +4,6 @@ use pumpkin_data::block_properties::TntLikeProperties;
 use pumpkin_data::game_event::GameEvent;
 use pumpkin_data::item::Item;
 use pumpkin_data::sound::SoundCategory;
-use pumpkin_data::translation;
 use pumpkin_macros::pumpkin_block;
 use pumpkin_util::GameMode;
 use pumpkin_util::math::position::BlockPos;
@@ -131,10 +130,8 @@ impl BlockBehaviour for TNTBlock {
             }
             BlockActionResult::Success
         } else if !args.world.level_info.load().game_rules.tnt_explodes {
-            args.player.send_system_message_raw(
-                &TextComponent::translate(translation::java::BLOCK_MINECRAFT_TNT_DISABLED, []),
-                true,
-            );
+            args.player
+                .send_system_message_raw(&TextComponent::text("TNT is disabled"), true);
             BlockActionResult::Pass
         } else {
             BlockActionResult::Success

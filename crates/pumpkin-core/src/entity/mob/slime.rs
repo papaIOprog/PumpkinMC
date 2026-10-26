@@ -113,25 +113,25 @@ impl SlimeEntity {
                 .attributes
                 .write()
                 .unwrap_or_else(std::sync::PoisonError::into_inner);
-            if let Some(health) = attributes.get_mut(&Attributes::MAX_HEALTH.id) {
+            if let Some(health) = attributes.get_mut(&Attributes::GENERIC_MAX_HEALTH.id) {
                 health.base_value = (actual_size * actual_size) as f64;
                 health.dirty.store(true, Ordering::Relaxed);
             }
-            if let Some(speed) = attributes.get_mut(&Attributes::MOVEMENT_SPEED.id) {
+            if let Some(speed) = attributes.get_mut(&Attributes::GENERIC_MOVEMENT_SPEED.id) {
                 speed.base_value = (0.2 + 0.1 * actual_size as f32) as f64;
                 speed.dirty.store(true, Ordering::Relaxed);
             }
-            if let Some(damage) = attributes.get_mut(&Attributes::ATTACK_DAMAGE.id) {
+            if let Some(damage) = attributes.get_mut(&Attributes::GENERIC_ATTACK_DAMAGE.id) {
                 damage.base_value = actual_size as f64;
                 damage.dirty.store(true, Ordering::Relaxed);
             }
         }
 
         if update_health {
-            let max_health = self
-                .entity
-                .living_entity
-                .get_attribute_value(&Attributes::MAX_HEALTH) as f32;
+            let max_health =
+                self.entity
+                    .living_entity
+                    .get_attribute_value(&Attributes::GENERIC_MAX_HEALTH) as f32;
             self.entity.living_entity.health.store(max_health);
         }
 

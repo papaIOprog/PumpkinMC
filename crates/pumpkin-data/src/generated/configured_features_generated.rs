@@ -46,8 +46,7 @@ fn build_configured_features()
             TreeDecorator, alter_ground::AlterGroundTreeDecorator,
             attached_to_leaves::AttachedToLeavesTreeDecorator,
             attached_to_logs::AttachedToLogsTreeDecorator, beehive::BeehiveTreeDecorator,
-            cocoa::CocoaTreeDecorator, creaking_heart::CreakingHeartTreeDecorator,
-            leave_vine::LeavesVineTreeDecorator, pale_moss::PaleMossTreeDecorator,
+            cocoa::CocoaTreeDecorator, leave_vine::LeavesVineTreeDecorator,
             place_on_ground::PlaceOnGroundTreeDecorator, trunk_vine::TrunkVineTreeDecorator,
         },
         tree::foliage::{

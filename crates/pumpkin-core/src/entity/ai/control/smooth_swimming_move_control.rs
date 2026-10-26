@@ -86,7 +86,8 @@ impl MoveControlTrait for SmoothSwimmingMoveControl {
             entity.body_yaw.store(new_yaw);
             entity.head_yaw.store(new_yaw);
 
-            let movement_speed = living_entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+            let movement_speed =
+                living_entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
             let speed = (self.speed_modifier * movement_speed) as f32;
 
             if entity.touching_water.load(Ordering::Relaxed) {

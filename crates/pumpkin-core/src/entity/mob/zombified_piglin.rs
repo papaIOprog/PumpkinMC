@@ -134,11 +134,9 @@ impl Mob for ZombifiedPiglinEntity {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
 
-        let weapon = if rand::random_range(0..20) == 0 {
-            &Item::GOLDEN_SPEAR
-        } else {
-            &Item::GOLDEN_SWORD
-        };
+        // TODO(1.21.1): zombie piglins carried only a golden sword in 1.21.1; the
+        // golden spear is 26.x content.
+        let weapon = &Item::GOLDEN_SWORD;
         equipment.put(&EquipmentSlot::MAIN_HAND, ItemStack::new(1, weapon));
     }
 

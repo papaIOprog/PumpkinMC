@@ -29,12 +29,6 @@ pub const ERROR_CANT_REMOVE: CommandErrorType<1> = CommandErrorType::new(
     translation::java::COMMANDS_SCHEDULE_CLEARED_FAILURE,
 );
 
-#[expect(dead_code)]
-pub const ERROR_MACRO: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::COMMANDS_SCHEDULE_MACRO,
-    translation::java::COMMANDS_SCHEDULE_MACRO,
-);
-
 struct FunctionSuggestionProvider;
 
 impl SuggestionProvider for FunctionSuggestionProvider {

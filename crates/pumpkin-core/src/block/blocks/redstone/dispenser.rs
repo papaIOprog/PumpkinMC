@@ -667,7 +667,7 @@ impl DispenserBlock {
         let entity = Entity::new(
             ctx.world.clone(),
             Self::projectile_spawn_position(ctx),
-            &EntityType::SPLASH_POTION,
+            &EntityType::POTION,
         );
         let potion = SplashPotionEntity::new(entity);
         potion.set_item_stack(projectile);
@@ -689,7 +689,7 @@ impl DispenserBlock {
         let entity = Entity::new(
             ctx.world.clone(),
             Self::projectile_spawn_position(ctx),
-            &EntityType::LINGERING_POTION,
+            &EntityType::POTION,
         );
         let potion = LingeringPotionEntity::new(entity);
         potion.set_item_stack(projectile);

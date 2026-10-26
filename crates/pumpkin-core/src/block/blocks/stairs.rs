@@ -11,7 +11,7 @@ use pumpkin_world::world::BlockFlags;
 use crate::block::{BlockBehaviour, OnNeighborUpdateArgs, OnPlaceArgs, PathComputationType};
 use crate::world::World;
 
-type StairsProperties = pumpkin_data::block_properties::WhiteWoolStairsLikeProperties;
+type StairsProperties = pumpkin_data::block_properties::OakStairsLikeProperties;
 
 #[pumpkin_block_from_tag("minecraft:stairs")]
 pub struct StairBlock;

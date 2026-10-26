@@ -87,14 +87,15 @@ impl MoveControlTrait for MoveControl {
                 .yaw
                 .store(self.change_angle(entity.yaw.load(), y_rot_d, 90.0));
 
-            let movement_speed = living_entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+            let movement_speed =
+                living_entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
             let speed = self.speed_modifier * movement_speed;
             living_entity
                 .movement_input
                 .store(Vector3::new(0.0, 0.0, speed));
 
             // TODO: Jump if needed (based on collision and height difference)
-            let step_height = living_entity.get_attribute_value(&Attributes::STEP_HEIGHT);
+            let step_height = living_entity.get_attribute_value(&Attributes::GENERIC_STEP_HEIGHT);
             if yd > step_height
                 && xd * xd + zd * zd < 1.0f64.max(entity.entity_dimension.load().width as f64)
             {
@@ -102,7 +103,8 @@ impl MoveControlTrait for MoveControl {
                 self.operation = Operation::Jumping;
             }
         } else if self.operation == Operation::Jumping {
-            let movement_speed = living_entity.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+            let movement_speed =
+                living_entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
             let speed = self.speed_modifier * movement_speed;
             living_entity
                 .movement_input
@@ -237,7 +239,7 @@ impl MoveControl {
         // it is what the water travel turns into motion — and push the velocity.
         let speed = living_entity.movement_input.load().z;
         let speed = if speed.abs() < 1.0e-6 {
-            living_entity.get_attribute_value(&Attributes::MOVEMENT_SPEED)
+            living_entity.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED)
         } else {
             speed
         };

@@ -578,7 +578,7 @@ impl PiglinEntity {
     fn refresh_nearest_visible_player(&self) {
         let living = &self.mob_entity.living_entity;
         let pos = living.entity.pos.load();
-        let follow_range = living.get_attribute_value(&Attributes::FOLLOW_RANGE);
+        let follow_range = living.get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
 
         let mut players = living
             .entity
@@ -1022,8 +1022,6 @@ impl Mob for PiglinEntity {
 
             let weapon = if rand::random::<f32>() < 0.5 {
                 &Item::CROSSBOW
-            } else if rand::random_range(0..10) == 0 {
-                &Item::GOLDEN_SPEAR
             } else {
                 &Item::GOLDEN_SWORD
             };

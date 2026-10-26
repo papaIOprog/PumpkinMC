@@ -201,16 +201,17 @@ impl CommandExecutor for BaseResetExecutor {
             vec![attribute.clone()],
         );
 
+        // `base reset` is not part of 1.21.1, so there is no vanilla translation key
         context.source.send_feedback(
-            TextComponent::translate_cross(
-                translation::java::COMMANDS_ATTRIBUTE_BASE_VALUE_RESET_SUCCESS,
-                translation::java::COMMANDS_ATTRIBUTE_BASE_VALUE_RESET_SUCCESS,
-                [
-                    TextComponent::translate(attribute_translation_key(&attribute), []),
-                    target.get_name(),
-                    TextComponent::text(default_val.to_string()),
-                ],
-            ),
+            TextComponent::text("Base value for attribute ")
+                .add_child(TextComponent::translate(
+                    attribute_translation_key(&attribute),
+                    [],
+                ))
+                .add_child(TextComponent::text(" for entity "))
+                .add_child(target.get_name())
+                .add_child(TextComponent::text(" reset to "))
+                .add_child(TextComponent::text(default_val.to_string())),
             true,
         );
 

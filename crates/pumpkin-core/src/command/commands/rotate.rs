@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use pumpkin_data::translation;
 use pumpkin_util::PermissionLvl;
 use pumpkin_util::math::vector3::Vector3;
 use pumpkin_util::permission::{Permission, PermissionDefault, PermissionRegistry};
@@ -46,14 +45,10 @@ fn rotate_entity(target: &Arc<dyn EntityBase>, yaw: f32, pitch: f32) {
 
 fn send_success_message(context: &CommandContext, target: &dyn EntityBase) {
     let target_name = target.get_display_name();
-    context.source.send_feedback(
-        TextComponent::translate_cross(
-            translation::java::COMMANDS_ROTATE_SUCCESS,
-            translation::java::COMMANDS_ROTATE_SUCCESS,
-            [target_name],
-        ),
-        true,
-    );
+    // `/rotate` is not part of 1.21.1, so there is no vanilla translation key
+    context
+        .source
+        .send_feedback(TextComponent::text("Rotated ").add_child(target_name), true);
 }
 
 struct RotateToRotationExecutor;

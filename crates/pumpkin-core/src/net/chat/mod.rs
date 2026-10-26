@@ -355,11 +355,6 @@ impl OutgoingChatMessage {
                 let filtered_message = message.filter_by_bool(filtered);
                 if !filtered_message.is_fully_filtered() {
                     let messages_sent = VarInt(filtered_message.link.index);
-                    let messages_received: i32 = player
-                        .chat_session
-                        .lock()
-                        .unwrap_or_else(std::sync::PoisonError::into_inner)
-                        .messages_received;
 
                     let sender_last_seen = {
                         let cache = player
@@ -370,7 +365,6 @@ impl OutgoingChatMessage {
                     };
 
                     let je_packet = CPlayerChatMessage::new(
-                        VarInt(messages_received),
                         filtered_message.sender(),
                         messages_sent,
                         filtered_message.signature.clone(),

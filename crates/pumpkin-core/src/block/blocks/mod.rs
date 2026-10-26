@@ -28,7 +28,6 @@ pub mod jigsaw;
 pub mod note;
 pub mod piston;
 pub mod redstone;
-pub mod test_block;
 
 // Doors, gates & openings
 pub mod doors;
@@ -60,7 +59,6 @@ pub mod conduit;
 pub mod flower_pots;
 pub mod jukebox;
 pub mod lectern;
-pub mod shelf;
 pub mod signs;
 pub mod skull_block;
 pub mod wither_skull;

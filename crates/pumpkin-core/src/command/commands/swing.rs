@@ -4,11 +4,10 @@ use crate::command::argument_builder::{ArgumentBuilder, argument, command, liter
 use crate::command::argument_types::entity::EntityArgumentType;
 use crate::command::context::command_context::CommandContext;
 use crate::command::context::command_source::CommandSource;
-use crate::command::errors::error_types::CommandErrorType;
+use crate::command::errors::error_types::LiteralCommandErrorType;
 use crate::command::node::dispatcher::CommandDispatcher;
 use crate::command::node::{CommandExecutor, CommandExecutorResult};
 use crate::entity::EntityBase;
-use pumpkin_data::translation;
 use pumpkin_util::PermissionLvl;
 use pumpkin_util::permission::{Permission, PermissionDefault, PermissionRegistry};
 use pumpkin_util::text::TextComponent;
@@ -19,10 +18,8 @@ const PERMISSION: &str = "minecraft:command.swing";
 
 const ARG_TARGETS: &str = "targets";
 
-const ERROR_NO_LIVING_ENTITY: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::COMMANDS_SWING_FAILED_NOTLIVING,
-    translation::java::COMMANDS_SWING_FAILED_NOTLIVING,
-);
+const ERROR_NO_LIVING_ENTITY: LiteralCommandErrorType =
+    LiteralCommandErrorType::new("Target is not a living entity");
 
 #[derive(Clone, Copy)]
 enum HandType {
@@ -57,17 +54,9 @@ fn perform_swing(
 
     let msg = if living_count == 1 {
         let target = first_living.unwrap_or(&targets[0]);
-        TextComponent::translate_cross(
-            translation::java::COMMANDS_SWING_SUCCESS_SINGLE,
-            translation::java::COMMANDS_SWING_SUCCESS_SINGLE,
-            [target.get_display_name()],
-        )
+        TextComponent::text("Swung the arm of ").add_child(target.get_display_name())
     } else {
-        TextComponent::translate_cross(
-            translation::java::COMMANDS_SWING_SUCCESS_MULTIPLE,
-            translation::java::COMMANDS_SWING_SUCCESS_MULTIPLE,
-            [TextComponent::text(living_count.to_string())],
-        )
+        TextComponent::text(format!("Swung the arm of {living_count} entities"))
     };
 
     source.send_feedback(msg, true);

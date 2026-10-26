@@ -1,0 +1,1126 @@
+[
+ {
+  "block_state_provider": {
+   "type": "minecraft:rule",
+   "rules": [
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oak_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_oak_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oak_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_oak_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "dark_oak_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_dark_oak_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "dark_oak_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_dark_oak_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "acacia_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_acacia_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "acacia_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_acacia_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "cherry_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_cherry_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "cherry_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_cherry_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "birch_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_birch_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "birch_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_birch_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "jungle_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_jungle_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "jungle_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_jungle_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "spruce_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_spruce_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "spruce_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_spruce_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "mangrove_wood"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_mangrove_wood"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "mangrove_log"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_mangrove_log"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "warped_stem"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_warped_stem"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "warped_hyphae"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_warped_hyphae"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "crimson_stem"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_crimson_stem"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "crimson_hyphae"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_crimson_hyphae"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "bamboo_block"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "stripped_bamboo_block"
+      }
+     }
+    }
+   ]
+  },
+  "item_damage_per_use": 1,
+  "sound": "item.axe.strip",
+  "update_from_neighbors": true
+ },
+ {
+  "block_state_provider": {
+   "type": "minecraft:rule",
+   "rules": [
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "copper_block"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_block"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "weathered_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oxidized_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "chiseled_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "chiseled_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "weathered_chiseled_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_chiseled_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oxidized_chiseled_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_chiseled_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "cut_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "cut_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "weathered_cut_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_cut_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oxidized_cut_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_cut_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "copper_door"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_door"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "weathered_copper_door"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_door"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oxidized_copper_door"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_door"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "copper_trapdoor"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_trapdoor"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "weathered_copper_trapdoor"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_trapdoor"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oxidized_copper_trapdoor"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_trapdoor"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "copper_grate"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_grate"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "weathered_copper_grate"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_grate"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oxidized_copper_grate"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_grate"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "copper_bulb"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_bulb"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "weathered_copper_bulb"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_bulb"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "oxidized_copper_bulb"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_bulb"
+      }
+     }
+    }
+   ]
+  },
+  "item_damage_per_use": 1,
+  "sound": "item.axe.scrape",
+  "update_from_neighbors": true,
+  "particle": "scrape"
+ },
+ {
+  "block_state_provider": {
+   "type": "minecraft:rule",
+   "rules": [
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_chiseled_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "chiseled_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_copper_block"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_block"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_copper_bulb"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_bulb"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_copper_door"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_door"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_copper_grate"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_grate"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_copper_trapdoor"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "copper_trapdoor"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_cut_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "cut_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_cut_copper_slab"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "cut_copper_slab"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_cut_copper_stairs"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "cut_copper_stairs"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_chiseled_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_chiseled_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_copper_bulb"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_bulb"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_copper_door"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_door"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_copper_grate"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_grate"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_copper_trapdoor"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_copper_trapdoor"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_cut_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_cut_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_cut_copper_slab"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_cut_copper_slab"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_exposed_cut_copper_stairs"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "exposed_cut_copper_stairs"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_chiseled_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_chiseled_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_copper_bulb"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_copper_bulb"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_copper_door"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_copper_door"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_copper_grate"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_copper_grate"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_copper_trapdoor"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_copper_trapdoor"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_cut_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_cut_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_cut_copper_slab"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_cut_copper_slab"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_oxidized_cut_copper_stairs"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "oxidized_cut_copper_stairs"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_chiseled_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_chiseled_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_copper_bulb"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_bulb"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_copper_door"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_door"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_copper_grate"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_grate"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_copper_trapdoor"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_copper_trapdoor"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_cut_copper"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_cut_copper"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_cut_copper_slab"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_cut_copper_slab"
+      }
+     }
+    },
+    {
+     "if_true": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+       "waxed_weathered_cut_copper_stairs"
+      ]
+     },
+     "then": {
+      "type": "minecraft:copy_properties",
+      "source": {
+       "id": "weathered_cut_copper_stairs"
+      }
+     }
+    }
+   ]
+  },
+  "item_damage_per_use": 1,
+  "sound": "item.axe.wax_off",
+  "update_from_neighbors": true,
+  "particle": "wax_off"
+ }
+]

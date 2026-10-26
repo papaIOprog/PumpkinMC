@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use futures::executor::block_on;
-use pumpkin_data::translation::java;
 use pumpkin_gametest::{GameTestBatchReport, GameTestReporter, GameTestRetryOptions};
 use pumpkin_protocol::java::client::play::SuggestionProviders;
 use pumpkin_util::PermissionLvl;
@@ -18,7 +17,7 @@ use crate::command::argument_types::core::bool::BoolArgumentType;
 use crate::command::argument_types::core::integer::IntegerArgumentType;
 use crate::command::context::command_context::CommandContext;
 use crate::command::errors::command_syntax_error::CommandSyntaxError;
-use crate::command::errors::error_types::CommandErrorType;
+use crate::command::errors::error_types::LiteralCommandErrorType;
 use crate::command::node::dispatcher::CommandDispatcher;
 use crate::command::node::{CommandExecutor, CommandExecutorResult};
 use crate::command::string_reader::StringReader;
@@ -40,10 +39,10 @@ const DEFAULT_TESTS_PER_ROW: i32 = 8;
 
 const TEST_INSTANCE_REGISTRY: Identifier = Identifier::parse_static("minecraft:test_instance");
 
-const TEST_NOT_FOUND_ERROR: CommandErrorType<2> = CommandErrorType::new(
-    java::ARGUMENT_RESOURCE_SELECTOR_NOT_FOUND,
-    java::ARGUMENT_RESOURCE_SELECTOR_NOT_FOUND,
-);
+// The 1.21.1 language files have no test-command keys, so this command
+// reports its messages untranslated.
+const TEST_NOT_FOUND_ERROR: LiteralCommandErrorType =
+    LiteralCommandErrorType::new("Can't find test instance");
 
 struct CommandTestReporter {
     sender: CommandSender,
@@ -129,9 +128,11 @@ impl CommandExecutor for RunExecutor {
             .collect();
 
         if selected.is_empty() {
-            return Err(TEST_NOT_FOUND_ERROR.create_without_context(
-                TextComponent::text(selector.to_string()),
-                TextComponent::text(TEST_INSTANCE_REGISTRY.to_string()),
+            return Err(CommandSyntaxError::create_without_context(
+                &TEST_NOT_FOUND_ERROR,
+                TextComponent::text(format!(
+                    "Can't find test instance '{selector}' of registry {TEST_INSTANCE_REGISTRY}"
+                )),
             ));
         }
 
@@ -172,13 +173,10 @@ impl CommandExecutor for RunExecutor {
         let base_x = context.source.position.x.floor() as i32;
         let base_z = context.source.position.z.floor() as i32 + TEST_POS_Z_OFFSET_FROM_PLAYER;
 
-        context
-            .source
-            .send_message(pumpkin_macros::translate_cross!(
-                java::COMMANDS_TEST_RUN_RUNNING,
-                java::COMMANDS_TEST_RUN_RUNNING,
-                TextComponent::text(selected.len().to_string()),
-            ));
+        context.source.send_message(TextComponent::text(format!(
+            "Running {} tests...",
+            selected.len()
+        )));
 
         let report = Arc::new(GameTestBatchReport::new(
             Arc::new(CommandTestReporter {

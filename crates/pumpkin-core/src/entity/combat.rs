@@ -69,7 +69,7 @@ pub fn knockback_after_resistance(strength: f64, resistance: f64) -> f64 {
 
 pub fn handle_knockback(attacker: &Entity, victim: &dyn EntityBase, strength: f64) {
     let resistance = victim.get_living_entity().map_or(0.0, |living| {
-        living.get_attribute_value(&Attributes::KNOCKBACK_RESISTANCE)
+        living.get_attribute_value(&Attributes::GENERIC_KNOCKBACK_RESISTANCE)
     });
     let strength = knockback_after_resistance(strength * 0.5, resistance);
 

@@ -43,15 +43,10 @@ pub const TRIAL_CHAMBER_BREEZE_OMINOUS: TrialSpawnerConfigData = TrialSpawnerCon
     spawn_range: 4i32,
     total_mobs: 4f32,
     simultaneous_mobs: 2f32,
-    total_mobs_added_per_player: 1f32,
-    simultaneous_mobs_added_per_player: 0.5f32,
-    ticks_between_spawn: 20i32,
-    spawn_potentials: &[WeightedSpawnData {
-        entity_id: "minecraft:breeze",
-        equipment_loot_table: None,
-        equipment_slot_drop_chances: None,
-        weight: 1i32,
-    }],
+    total_mobs_added_per_player: 2f32,
+    simultaneous_mobs_added_per_player: 1f32,
+    ticks_between_spawn: 40i32,
+    spawn_potentials: &[],
     loot_tables_to_eject: &[
         WeightedLootTable {
             loot_table: "minecraft:spawners/ominous/trial_chamber/key",
@@ -83,10 +78,10 @@ pub const TRIAL_CHAMBER_MELEE_HUSK_NORMAL: TrialSpawnerConfigData = TrialSpawner
 pub const TRIAL_CHAMBER_MELEE_HUSK_OMINOUS: TrialSpawnerConfigData = TrialSpawnerConfigData {
     spawn_range: 4i32,
     total_mobs: 6f32,
-    simultaneous_mobs: 3f32,
+    simultaneous_mobs: 2f32,
     total_mobs_added_per_player: 2f32,
-    simultaneous_mobs_added_per_player: 0.5f32,
-    ticks_between_spawn: 20i32,
+    simultaneous_mobs_added_per_player: 1f32,
+    ticks_between_spawn: 40i32,
     spawn_potentials: &[WeightedSpawnData {
         entity_id: "minecraft:husk",
         equipment_loot_table: Some("minecraft:equipment/trial_chamber_melee"),
@@ -126,14 +121,9 @@ pub const TRIAL_CHAMBER_MELEE_SPIDER_OMINOUS: TrialSpawnerConfigData = TrialSpaw
     total_mobs: 12f32,
     simultaneous_mobs: 4f32,
     total_mobs_added_per_player: 2f32,
-    simultaneous_mobs_added_per_player: 0.5f32,
-    ticks_between_spawn: 20i32,
-    spawn_potentials: &[WeightedSpawnData {
-        entity_id: "minecraft:spider",
-        equipment_loot_table: None,
-        equipment_slot_drop_chances: None,
-        weight: 1i32,
-    }],
+    simultaneous_mobs_added_per_player: 1f32,
+    ticks_between_spawn: 40i32,
+    spawn_potentials: &[],
     loot_tables_to_eject: &[
         WeightedLootTable {
             loot_table: "minecraft:spawners/ominous/trial_chamber/key",
@@ -165,10 +155,10 @@ pub const TRIAL_CHAMBER_MELEE_ZOMBIE_NORMAL: TrialSpawnerConfigData = TrialSpawn
 pub const TRIAL_CHAMBER_MELEE_ZOMBIE_OMINOUS: TrialSpawnerConfigData = TrialSpawnerConfigData {
     spawn_range: 4i32,
     total_mobs: 6f32,
-    simultaneous_mobs: 3f32,
+    simultaneous_mobs: 2f32,
     total_mobs_added_per_player: 2f32,
-    simultaneous_mobs_added_per_player: 0.5f32,
-    ticks_between_spawn: 20i32,
+    simultaneous_mobs_added_per_player: 1f32,
+    ticks_between_spawn: 40i32,
     spawn_potentials: &[WeightedSpawnData {
         entity_id: "minecraft:zombie",
         equipment_loot_table: Some("minecraft:equipment/trial_chamber_melee"),
@@ -208,10 +198,10 @@ pub const TRIAL_CHAMBER_RANGED_POISON_SKELETON_OMINOUS: TrialSpawnerConfigData =
     TrialSpawnerConfigData {
         spawn_range: 4i32,
         total_mobs: 6f32,
-        simultaneous_mobs: 3f32,
+        simultaneous_mobs: 2f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 0.5f32,
-        ticks_between_spawn: 20i32,
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
         spawn_potentials: &[WeightedSpawnData {
             entity_id: "minecraft:bogged",
             equipment_loot_table: Some("minecraft:equipment/trial_chamber_ranged"),
@@ -249,10 +239,10 @@ pub const TRIAL_CHAMBER_RANGED_SKELETON_NORMAL: TrialSpawnerConfigData = TrialSp
 pub const TRIAL_CHAMBER_RANGED_SKELETON_OMINOUS: TrialSpawnerConfigData = TrialSpawnerConfigData {
     spawn_range: 4i32,
     total_mobs: 6f32,
-    simultaneous_mobs: 3f32,
+    simultaneous_mobs: 2f32,
     total_mobs_added_per_player: 2f32,
-    simultaneous_mobs_added_per_player: 0.5f32,
-    ticks_between_spawn: 20i32,
+    simultaneous_mobs_added_per_player: 1f32,
+    ticks_between_spawn: 40i32,
     spawn_potentials: &[WeightedSpawnData {
         entity_id: "minecraft:skeleton",
         equipment_loot_table: Some("minecraft:equipment/trial_chamber_ranged"),
@@ -290,10 +280,10 @@ pub const TRIAL_CHAMBER_RANGED_STRAY_NORMAL: TrialSpawnerConfigData = TrialSpawn
 pub const TRIAL_CHAMBER_RANGED_STRAY_OMINOUS: TrialSpawnerConfigData = TrialSpawnerConfigData {
     spawn_range: 4i32,
     total_mobs: 6f32,
-    simultaneous_mobs: 3f32,
+    simultaneous_mobs: 2f32,
     total_mobs_added_per_player: 2f32,
-    simultaneous_mobs_added_per_player: 0.5f32,
-    ticks_between_spawn: 20i32,
+    simultaneous_mobs_added_per_player: 1f32,
+    ticks_between_spawn: 40i32,
     spawn_potentials: &[WeightedSpawnData {
         entity_id: "minecraft:stray",
         equipment_loot_table: Some("minecraft:equipment/trial_chamber_ranged"),
@@ -333,10 +323,10 @@ pub const TRIAL_CHAMBER_SLOW_RANGED_POISON_SKELETON_OMINOUS: TrialSpawnerConfigD
     TrialSpawnerConfigData {
         spawn_range: 4i32,
         total_mobs: 6f32,
-        simultaneous_mobs: 4f32,
+        simultaneous_mobs: 2f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 2f32,
-        ticks_between_spawn: 160i32,
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
         spawn_potentials: &[WeightedSpawnData {
             entity_id: "minecraft:bogged",
             equipment_loot_table: Some("minecraft:equipment/trial_chamber_ranged"),
@@ -376,10 +366,10 @@ pub const TRIAL_CHAMBER_SLOW_RANGED_SKELETON_OMINOUS: TrialSpawnerConfigData =
     TrialSpawnerConfigData {
         spawn_range: 4i32,
         total_mobs: 6f32,
-        simultaneous_mobs: 4f32,
+        simultaneous_mobs: 2f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 2f32,
-        ticks_between_spawn: 160i32,
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
         spawn_potentials: &[WeightedSpawnData {
             entity_id: "minecraft:skeleton",
             equipment_loot_table: Some("minecraft:equipment/trial_chamber_ranged"),
@@ -418,10 +408,10 @@ pub const TRIAL_CHAMBER_SLOW_RANGED_STRAY_OMINOUS: TrialSpawnerConfigData =
     TrialSpawnerConfigData {
         spawn_range: 4i32,
         total_mobs: 6f32,
-        simultaneous_mobs: 4f32,
+        simultaneous_mobs: 2f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 2f32,
-        ticks_between_spawn: 160i32,
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
         spawn_potentials: &[WeightedSpawnData {
             entity_id: "minecraft:stray",
             equipment_loot_table: Some("minecraft:equipment/trial_chamber_ranged"),
@@ -463,8 +453,8 @@ pub const TRIAL_CHAMBER_SMALL_MELEE_BABY_ZOMBIE_OMINOUS: TrialSpawnerConfigData 
         total_mobs: 6f32,
         simultaneous_mobs: 2f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 0.5f32,
-        ticks_between_spawn: 20i32,
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
         spawn_potentials: &[WeightedSpawnData {
             entity_id: "minecraft:zombie",
             equipment_loot_table: Some("minecraft:equipment/trial_chamber_melee"),
@@ -506,14 +496,9 @@ pub const TRIAL_CHAMBER_SMALL_MELEE_CAVE_SPIDER_OMINOUS: TrialSpawnerConfigData 
         total_mobs: 12f32,
         simultaneous_mobs: 4f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 0.5f32,
-        ticks_between_spawn: 20i32,
-        spawn_potentials: &[WeightedSpawnData {
-            entity_id: "minecraft:cave_spider",
-            equipment_loot_table: None,
-            equipment_slot_drop_chances: None,
-            weight: 1i32,
-        }],
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
+        spawn_potentials: &[],
         loot_tables_to_eject: &[
             WeightedLootTable {
                 loot_table: "minecraft:spawners/ominous/trial_chamber/key",
@@ -549,14 +534,9 @@ pub const TRIAL_CHAMBER_SMALL_MELEE_SILVERFISH_OMINOUS: TrialSpawnerConfigData =
         total_mobs: 12f32,
         simultaneous_mobs: 4f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 0.5f32,
-        ticks_between_spawn: 20i32,
-        spawn_potentials: &[WeightedSpawnData {
-            entity_id: "minecraft:silverfish",
-            equipment_loot_table: None,
-            equipment_slot_drop_chances: None,
-            weight: 1i32,
-        }],
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
+        spawn_potentials: &[],
         loot_tables_to_eject: &[
             WeightedLootTable {
                 loot_table: "minecraft:spawners/ominous/trial_chamber/key",
@@ -599,22 +579,9 @@ pub const TRIAL_CHAMBER_SMALL_MELEE_SLIME_OMINOUS: TrialSpawnerConfigData =
         total_mobs: 12f32,
         simultaneous_mobs: 4f32,
         total_mobs_added_per_player: 2f32,
-        simultaneous_mobs_added_per_player: 0.5f32,
-        ticks_between_spawn: 20i32,
-        spawn_potentials: &[
-            WeightedSpawnData {
-                entity_id: "minecraft:slime",
-                equipment_loot_table: None,
-                equipment_slot_drop_chances: None,
-                weight: 3i32,
-            },
-            WeightedSpawnData {
-                entity_id: "minecraft:slime",
-                equipment_loot_table: None,
-                equipment_slot_drop_chances: None,
-                weight: 1i32,
-            },
-        ],
+        simultaneous_mobs_added_per_player: 1f32,
+        ticks_between_spawn: 40i32,
+        spawn_potentials: &[],
         loot_tables_to_eject: &[
             WeightedLootTable {
                 loot_table: "minecraft:spawners/ominous/trial_chamber/key",
@@ -636,100 +603,100 @@ pub fn get_trial_spawner_config(key: &str) -> Option<&'static TrialSpawnerConfig
         "trial_chamber/breeze/ominous" | "minecraft:trial_chamber/breeze/ominous" => {
             Some(&TRIAL_CHAMBER_BREEZE_OMINOUS)
         }
-        "trial_chamber/melee/husk/normal" | "minecraft:trial_chamber/melee/husk/normal" => {
+        "trial_chamber/melee_husk/normal" | "minecraft:trial_chamber/melee_husk/normal" => {
             Some(&TRIAL_CHAMBER_MELEE_HUSK_NORMAL)
         }
-        "trial_chamber/melee/husk/ominous" | "minecraft:trial_chamber/melee/husk/ominous" => {
+        "trial_chamber/melee_husk/ominous" | "minecraft:trial_chamber/melee_husk/ominous" => {
             Some(&TRIAL_CHAMBER_MELEE_HUSK_OMINOUS)
         }
-        "trial_chamber/melee/spider/normal" | "minecraft:trial_chamber/melee/spider/normal" => {
+        "trial_chamber/melee_spider/normal" | "minecraft:trial_chamber/melee_spider/normal" => {
             Some(&TRIAL_CHAMBER_MELEE_SPIDER_NORMAL)
         }
-        "trial_chamber/melee/spider/ominous" | "minecraft:trial_chamber/melee/spider/ominous" => {
+        "trial_chamber/melee_spider/ominous" | "minecraft:trial_chamber/melee_spider/ominous" => {
             Some(&TRIAL_CHAMBER_MELEE_SPIDER_OMINOUS)
         }
-        "trial_chamber/melee/zombie/normal" | "minecraft:trial_chamber/melee/zombie/normal" => {
+        "trial_chamber/melee_zombie/normal" | "minecraft:trial_chamber/melee_zombie/normal" => {
             Some(&TRIAL_CHAMBER_MELEE_ZOMBIE_NORMAL)
         }
-        "trial_chamber/melee/zombie/ominous" | "minecraft:trial_chamber/melee/zombie/ominous" => {
+        "trial_chamber/melee_zombie/ominous" | "minecraft:trial_chamber/melee_zombie/ominous" => {
             Some(&TRIAL_CHAMBER_MELEE_ZOMBIE_OMINOUS)
         }
-        "trial_chamber/ranged/poison_skeleton/normal"
-        | "minecraft:trial_chamber/ranged/poison_skeleton/normal" => {
+        "trial_chamber/ranged_poison_skeleton/normal"
+        | "minecraft:trial_chamber/ranged_poison_skeleton/normal" => {
             Some(&TRIAL_CHAMBER_RANGED_POISON_SKELETON_NORMAL)
         }
-        "trial_chamber/ranged/poison_skeleton/ominous"
-        | "minecraft:trial_chamber/ranged/poison_skeleton/ominous" => {
+        "trial_chamber/ranged_poison_skeleton/ominous"
+        | "minecraft:trial_chamber/ranged_poison_skeleton/ominous" => {
             Some(&TRIAL_CHAMBER_RANGED_POISON_SKELETON_OMINOUS)
         }
-        "trial_chamber/ranged/skeleton/normal"
-        | "minecraft:trial_chamber/ranged/skeleton/normal" => {
+        "trial_chamber/ranged_skeleton/normal"
+        | "minecraft:trial_chamber/ranged_skeleton/normal" => {
             Some(&TRIAL_CHAMBER_RANGED_SKELETON_NORMAL)
         }
-        "trial_chamber/ranged/skeleton/ominous"
-        | "minecraft:trial_chamber/ranged/skeleton/ominous" => {
+        "trial_chamber/ranged_skeleton/ominous"
+        | "minecraft:trial_chamber/ranged_skeleton/ominous" => {
             Some(&TRIAL_CHAMBER_RANGED_SKELETON_OMINOUS)
         }
-        "trial_chamber/ranged/stray/normal" | "minecraft:trial_chamber/ranged/stray/normal" => {
+        "trial_chamber/ranged_stray/normal" | "minecraft:trial_chamber/ranged_stray/normal" => {
             Some(&TRIAL_CHAMBER_RANGED_STRAY_NORMAL)
         }
-        "trial_chamber/ranged/stray/ominous" | "minecraft:trial_chamber/ranged/stray/ominous" => {
+        "trial_chamber/ranged_stray/ominous" | "minecraft:trial_chamber/ranged_stray/ominous" => {
             Some(&TRIAL_CHAMBER_RANGED_STRAY_OMINOUS)
         }
-        "trial_chamber/slow_ranged/poison_skeleton/normal"
-        | "minecraft:trial_chamber/slow_ranged/poison_skeleton/normal" => {
+        "trial_chamber/slow_ranged_poison_skeleton/normal"
+        | "minecraft:trial_chamber/slow_ranged_poison_skeleton/normal" => {
             Some(&TRIAL_CHAMBER_SLOW_RANGED_POISON_SKELETON_NORMAL)
         }
-        "trial_chamber/slow_ranged/poison_skeleton/ominous"
-        | "minecraft:trial_chamber/slow_ranged/poison_skeleton/ominous" => {
+        "trial_chamber/slow_ranged_poison_skeleton/ominous"
+        | "minecraft:trial_chamber/slow_ranged_poison_skeleton/ominous" => {
             Some(&TRIAL_CHAMBER_SLOW_RANGED_POISON_SKELETON_OMINOUS)
         }
-        "trial_chamber/slow_ranged/skeleton/normal"
-        | "minecraft:trial_chamber/slow_ranged/skeleton/normal" => {
+        "trial_chamber/slow_ranged_skeleton/normal"
+        | "minecraft:trial_chamber/slow_ranged_skeleton/normal" => {
             Some(&TRIAL_CHAMBER_SLOW_RANGED_SKELETON_NORMAL)
         }
-        "trial_chamber/slow_ranged/skeleton/ominous"
-        | "minecraft:trial_chamber/slow_ranged/skeleton/ominous" => {
+        "trial_chamber/slow_ranged_skeleton/ominous"
+        | "minecraft:trial_chamber/slow_ranged_skeleton/ominous" => {
             Some(&TRIAL_CHAMBER_SLOW_RANGED_SKELETON_OMINOUS)
         }
-        "trial_chamber/slow_ranged/stray/normal"
-        | "minecraft:trial_chamber/slow_ranged/stray/normal" => {
+        "trial_chamber/slow_ranged_stray/normal"
+        | "minecraft:trial_chamber/slow_ranged_stray/normal" => {
             Some(&TRIAL_CHAMBER_SLOW_RANGED_STRAY_NORMAL)
         }
-        "trial_chamber/slow_ranged/stray/ominous"
-        | "minecraft:trial_chamber/slow_ranged/stray/ominous" => {
+        "trial_chamber/slow_ranged_stray/ominous"
+        | "minecraft:trial_chamber/slow_ranged_stray/ominous" => {
             Some(&TRIAL_CHAMBER_SLOW_RANGED_STRAY_OMINOUS)
         }
-        "trial_chamber/small_melee/baby_zombie/normal"
-        | "minecraft:trial_chamber/small_melee/baby_zombie/normal" => {
+        "trial_chamber/small_melee_baby_zombie/normal"
+        | "minecraft:trial_chamber/small_melee_baby_zombie/normal" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_BABY_ZOMBIE_NORMAL)
         }
-        "trial_chamber/small_melee/baby_zombie/ominous"
-        | "minecraft:trial_chamber/small_melee/baby_zombie/ominous" => {
+        "trial_chamber/small_melee_baby_zombie/ominous"
+        | "minecraft:trial_chamber/small_melee_baby_zombie/ominous" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_BABY_ZOMBIE_OMINOUS)
         }
-        "trial_chamber/small_melee/cave_spider/normal"
-        | "minecraft:trial_chamber/small_melee/cave_spider/normal" => {
+        "trial_chamber/small_melee_cave_spider/normal"
+        | "minecraft:trial_chamber/small_melee_cave_spider/normal" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_CAVE_SPIDER_NORMAL)
         }
-        "trial_chamber/small_melee/cave_spider/ominous"
-        | "minecraft:trial_chamber/small_melee/cave_spider/ominous" => {
+        "trial_chamber/small_melee_cave_spider/ominous"
+        | "minecraft:trial_chamber/small_melee_cave_spider/ominous" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_CAVE_SPIDER_OMINOUS)
         }
-        "trial_chamber/small_melee/silverfish/normal"
-        | "minecraft:trial_chamber/small_melee/silverfish/normal" => {
+        "trial_chamber/small_melee_silverfish/normal"
+        | "minecraft:trial_chamber/small_melee_silverfish/normal" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_SILVERFISH_NORMAL)
         }
-        "trial_chamber/small_melee/silverfish/ominous"
-        | "minecraft:trial_chamber/small_melee/silverfish/ominous" => {
+        "trial_chamber/small_melee_silverfish/ominous"
+        | "minecraft:trial_chamber/small_melee_silverfish/ominous" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_SILVERFISH_OMINOUS)
         }
-        "trial_chamber/small_melee/slime/normal"
-        | "minecraft:trial_chamber/small_melee/slime/normal" => {
+        "trial_chamber/small_melee_slime/normal"
+        | "minecraft:trial_chamber/small_melee_slime/normal" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_SLIME_NORMAL)
         }
-        "trial_chamber/small_melee/slime/ominous"
-        | "minecraft:trial_chamber/small_melee/slime/ominous" => {
+        "trial_chamber/small_melee_slime/ominous"
+        | "minecraft:trial_chamber/small_melee_slime/ominous" => {
             Some(&TRIAL_CHAMBER_SMALL_MELEE_SLIME_OMINOUS)
         }
         _ => None,

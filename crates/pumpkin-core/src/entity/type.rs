@@ -45,8 +45,8 @@ use crate::entity::mob::ravager::RavagerEntity;
 use crate::entity::mob::shulker::ShulkerEntity;
 use crate::entity::mob::silverfish::SilverfishEntity;
 use crate::entity::mob::skeleton::{
-    bogged::BoggedSkeletonEntity, parched::ParchedSkeletonEntity, skeleton::SkeletonEntity,
-    stray::StraySkeletonEntity, wither::WitherSkeletonEntity,
+    bogged::BoggedSkeletonEntity, skeleton::SkeletonEntity, stray::StraySkeletonEntity,
+    wither::WitherSkeletonEntity,
 };
 use crate::entity::mob::slime::SlimeEntity;
 use crate::entity::mob::spider::SpiderEntity;
@@ -107,7 +107,6 @@ use crate::entity::projectile::ender_pearl::EnderPearlEntity;
 use crate::entity::projectile::eye_of_ender::EyeOfEnder;
 use crate::entity::projectile::fireball::FireballEntity;
 use crate::entity::projectile::firework_rocket::FireworkRocketEntity;
-use crate::entity::projectile::lingering_potion::LingeringPotionEntity;
 use crate::entity::projectile::llama_spit::LlamaSpitEntity;
 use crate::entity::projectile::shulker_bullet::ShulkerBulletEntity;
 use crate::entity::projectile::small_fireball::SmallFireballEntity;
@@ -144,7 +143,6 @@ pub fn from_type(
         // Skeleton
         id if id == EntityType::SKELETON.id => SkeletonEntity::new(entity),
         id if id == EntityType::BOGGED.id => BoggedSkeletonEntity::new(entity),
-        id if id == EntityType::PARCHED.id => ParchedSkeletonEntity::new(entity),
         id if id == EntityType::WITHER_SKELETON.id => WitherSkeletonEntity::new(entity),
         id if id == EntityType::STRAY.id => StraySkeletonEntity::new(entity),
 
@@ -299,33 +297,11 @@ pub fn from_type(
         id if id == EntityType::MARKER.id => MarkerEntity::new(entity),
         id if id == EntityType::INTERACTION.id => InteractionEntity::new(entity),
         id if id == EntityType::FIREWORK_ROCKET.id => Arc::new(FireworkRocketEntity::new(entity)),
-        id if id == EntityType::SPLASH_POTION.id => Arc::new(SplashPotionEntity::new(entity)),
-        id if id == EntityType::LINGERING_POTION.id => Arc::new(LingeringPotionEntity::new(entity)),
+        // 1.21.1 has a single potion entity type; lingering-ness comes from the item.
+        id if id == EntityType::POTION.id => Arc::new(SplashPotionEntity::new(entity)),
         id if id == EntityType::LLAMA_SPIT.id => Arc::new(LlamaSpitEntity::new(entity)),
         id if id == EntityType::EYE_OF_ENDER.id => Arc::new(EyeOfEnder::new(entity)),
-        id if id == EntityType::ACACIA_BOAT.id
-            || id == EntityType::ACACIA_CHEST_BOAT.id
-            || id == EntityType::BIRCH_BOAT.id
-            || id == EntityType::BIRCH_CHEST_BOAT.id
-            || id == EntityType::DARK_OAK_BOAT.id
-            || id == EntityType::DARK_OAK_CHEST_BOAT.id
-            || id == EntityType::JUNGLE_BOAT.id
-            || id == EntityType::JUNGLE_CHEST_BOAT.id
-            || id == EntityType::MANGROVE_BOAT.id
-            || id == EntityType::MANGROVE_CHEST_BOAT.id
-            || id == EntityType::OAK_BOAT.id
-            || id == EntityType::OAK_CHEST_BOAT.id
-            || id == EntityType::PALE_OAK_BOAT.id
-            || id == EntityType::PALE_OAK_CHEST_BOAT.id
-            || id == EntityType::SPRUCE_BOAT.id
-            || id == EntityType::SPRUCE_CHEST_BOAT.id
-            || id == EntityType::BAMBOO_RAFT.id
-            || id == EntityType::BAMBOO_CHEST_RAFT.id
-            || id == EntityType::CHERRY_BOAT.id
-            || id == EntityType::CHERRY_CHEST_BOAT.id
-            || id == EntityType::POPLAR_BOAT.id
-            || id == EntityType::POPLAR_CHEST_BOAT.id =>
-        {
+        id if id == EntityType::BOAT.id || id == EntityType::CHEST_BOAT.id => {
             Arc::new(BoatEntity::new(entity))
         }
         // Fallback Entity
@@ -379,9 +355,8 @@ pub fn check_spawn_rules(
         return mob::MobEntity::check_any_light_monster_spawn_rules(world, pos);
     }
 
-    // Surface monsters (Husk, Parched, Camel Husk)
-    if id == EntityType::HUSK.id || id == EntityType::PARCHED.id || id == EntityType::CAMEL_HUSK.id
-    {
+    // Surface monsters (Husk)
+    if id == EntityType::HUSK.id {
         return mob::MobEntity::check_surface_monsters_spawn_rules(world, pos, is_thundering);
     }
 
@@ -432,11 +407,6 @@ pub fn check_spawn_rules(
             return false;
         }
         return mob::MobEntity::check_mob_spawn_rules(world, pos);
-    }
-
-    // Sulfur Cube
-    if id == EntityType::SULFUR_CUBE.id {
-        return true;
     }
 
     // Slime

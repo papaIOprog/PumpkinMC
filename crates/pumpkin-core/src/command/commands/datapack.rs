@@ -10,7 +10,7 @@ use tracing::error;
 use crate::command::argument_builder::{ArgumentBuilder, argument, command, literal};
 use crate::command::argument_types::core::string::StringArgumentType;
 use crate::command::context::command_context::CommandContext;
-use crate::command::errors::error_types::CommandErrorType;
+use crate::command::errors::error_types::{CommandErrorType, LiteralCommandErrorType};
 use crate::command::node::dispatcher::CommandDispatcher;
 use crate::command::node::{CommandExecutor, CommandExecutorResult};
 use crate::command::suggestion::provider::{SuggestionProvider, SuggestionProviderResult};
@@ -35,20 +35,14 @@ static ERROR_DISABLE_FAILED: CommandErrorType<1> = CommandErrorType::new(
     translation::java::COMMANDS_DATAPACK_DISABLE_FAILED,
 );
 
-static ERROR_CREATE_ALREADY_EXISTS: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::COMMANDS_DATAPACK_CREATE_ALREADY_EXISTS,
-    translation::java::COMMANDS_DATAPACK_CREATE_ALREADY_EXISTS,
-);
+static ERROR_CREATE_ALREADY_EXISTS: LiteralCommandErrorType =
+    LiteralCommandErrorType::new("A datapack with that name already exists");
 
-static ERROR_CREATE_INVALID_NAME: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::COMMANDS_DATAPACK_CREATE_INVALID_NAME,
-    translation::java::COMMANDS_DATAPACK_CREATE_INVALID_NAME,
-);
+static ERROR_CREATE_INVALID_NAME: LiteralCommandErrorType =
+    LiteralCommandErrorType::new("Invalid datapack name");
 
-static ERROR_CREATE_IO_FAILURE: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::COMMANDS_DATAPACK_CREATE_IO_FAILURE,
-    translation::java::COMMANDS_DATAPACK_CREATE_IO_FAILURE,
-);
+static ERROR_CREATE_IO_FAILURE: LiteralCommandErrorType =
+    LiteralCommandErrorType::new("Failed to create the datapack");
 
 fn get_enabled_packs(server: &Server) -> Vec<String> {
     crate::data::datapack::DatapackManager::get_enabled_packs(server)
@@ -422,8 +416,7 @@ impl CommandExecutor for DatapackCreateExecutor {
         let description = StringArgumentType::get(context, "description").unwrap_or(name_str);
 
         if !is_valid_pack_name(name_str) {
-            return Err(ERROR_CREATE_INVALID_NAME
-                .create_without_context(TextComponent::text(name_str.to_string())));
+            return Err(ERROR_CREATE_INVALID_NAME.create_without_context());
         }
 
         let server = context.server();
@@ -431,15 +424,13 @@ impl CommandExecutor for DatapackCreateExecutor {
         let pack_dir = datapacks_dir.join(name_str);
 
         if pack_dir.exists() {
-            return Err(ERROR_CREATE_ALREADY_EXISTS
-                .create_without_context(TextComponent::text(name_str.to_string())));
+            return Err(ERROR_CREATE_ALREADY_EXISTS.create_without_context());
         }
 
         let data_dir = pack_dir.join("data");
         if let Err(err) = fs::create_dir_all(&data_dir) {
             error!("Failed to create datapack directory: {err}");
-            return Err(ERROR_CREATE_IO_FAILURE
-                .create_without_context(TextComponent::text(name_str.to_string())));
+            return Err(ERROR_CREATE_IO_FAILURE.create_without_context());
         }
 
         let mcmeta_content = serde_json::json!({
@@ -454,23 +445,17 @@ impl CommandExecutor for DatapackCreateExecutor {
             Ok(s) => s,
             Err(err) => {
                 error!("Failed to serialize pack.mcmeta: {err}");
-                return Err(ERROR_CREATE_IO_FAILURE
-                    .create_without_context(TextComponent::text(name_str.to_string())));
+                return Err(ERROR_CREATE_IO_FAILURE.create_without_context());
             }
         };
 
         if let Err(err) = fs::write(&mcmeta_path, mcmeta_str) {
             error!("Failed to write pack.mcmeta: {err}");
-            return Err(ERROR_CREATE_IO_FAILURE
-                .create_without_context(TextComponent::text(name_str.to_string())));
+            return Err(ERROR_CREATE_IO_FAILURE.create_without_context());
         }
 
         context.source.send_feedback(
-            TextComponent::translate_cross(
-                translation::java::COMMANDS_DATAPACK_CREATE_SUCCESS,
-                translation::java::COMMANDS_DATAPACK_CREATE_SUCCESS,
-                [TextComponent::text(name_str.to_string())],
-            ),
+            TextComponent::text(format!("Created datapack {name_str}")),
             true,
         );
 

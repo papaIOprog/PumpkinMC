@@ -30,6 +30,7 @@ pub fn build() -> String {
         let name = raw_name
             .strip_prefix("minecraft:")
             .unwrap_or(&raw_name)
+            .replace('.', "-")
             .replace('_', "-");
         attribute_enum.case(name);
     }

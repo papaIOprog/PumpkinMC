@@ -14,7 +14,7 @@ use pumpkin_util::math::position::BlockPos;
 
 type FenceGateProperties = pumpkin_data::block_properties::OakFenceGateLikeProperties;
 type FenceLikeProperties = pumpkin_data::block_properties::OakFenceLikeProperties;
-type WallProperties = pumpkin_data::block_properties::ResinBrickWallLikeProperties;
+type WallProperties = pumpkin_data::block_properties::CobblestoneWallLikeProperties;
 
 #[pumpkin_block_from_tag("minecraft:walls")]
 pub struct WallBlock;

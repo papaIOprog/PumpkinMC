@@ -29,7 +29,7 @@ impl MobEntity {
                 .attributes
                 .write()
                 .unwrap_or_else(std::sync::PoisonError::into_inner);
-            if let Some(follow_range) = attributes.get_mut(&Attributes::FOLLOW_RANGE.id)
+            if let Some(follow_range) = attributes.get_mut(&Attributes::GENERIC_FOLLOW_RANGE.id)
                 && !follow_range
                     .modifiers
                     .iter()

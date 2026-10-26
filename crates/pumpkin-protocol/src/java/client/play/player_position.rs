@@ -104,7 +104,7 @@ impl<'a> ServerPacket<'a> for CPlayerPosition {
         } else {
             VarInt(0)
         };
-        if version >= &JavaMinecraftVersion::V_1_20_2 {
+        if version >= &JavaMinecraftVersion::V_1_17 && version <= &JavaMinecraftVersion::V_1_19_3 {
             let _ = read.get_bool()?;
         }
         Ok(Self {

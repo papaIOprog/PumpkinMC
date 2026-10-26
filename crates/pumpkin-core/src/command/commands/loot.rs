@@ -69,8 +69,8 @@ static ERROR_NO_ENTITY_LOOT_TABLE: CommandErrorType<1> = CommandErrorType::new(
 );
 
 static ERROR_NO_BLOCK_LOOT_TABLE: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::COMMANDS_DROP_NO_LOOT_TABLE_BLOCK,
-    translation::java::COMMANDS_DROP_NO_LOOT_TABLE_BLOCK,
+    translation::bedrock::COMMANDS_LOOT_FAILURE_ENTITYNOLOOTTABLE,
+    "Block '%s' has no loot table",
 );
 
 static ERROR_NOT_CONTAINER: CommandErrorType<3> = CommandErrorType::new(

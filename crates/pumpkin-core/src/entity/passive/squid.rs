@@ -131,7 +131,8 @@ impl SquidMovement {
             entity.body_yaw.store(body_yaw);
             entity.yaw.store(body_yaw);
         } else {
-            let fall = entity.velocity.load().y - living.get_attribute_value(&Attributes::GRAVITY);
+            let fall =
+                entity.velocity.load().y - living.get_attribute_value(&Attributes::GENERIC_GRAVITY);
             entity.velocity.store(Vector3::new(0.0, fall * 0.98, 0.0));
         }
     }

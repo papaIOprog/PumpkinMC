@@ -197,3 +197,43 @@ mod tests {
         assert_armor_payload(&encoded_armor(version), version);
     }
 }
+
+#[cfg(test)]
+mod continuation_tests {
+    use super::*;
+    use pumpkin_data::item::Item;
+    use pumpkin_data::item_stack::ItemStack;
+
+    #[test]
+    fn multi_entry_packets_set_the_continuation_bit() {
+        let equipment = vec![
+            (
+                0i8,
+                ItemStackSerializer::from(ItemStack::new(1, &Item::DIAMOND_SWORD)),
+            ),
+            (
+                2i8,
+                ItemStackSerializer::from(ItemStack::new(1, &Item::DIAMOND_BOOTS)),
+            ),
+            (
+                3i8,
+                ItemStackSerializer::from(ItemStack::new(1, &Item::DIAMOND_LEGGINGS)),
+            ),
+        ];
+        let packet = CSetEquipment::new(VarInt(1), equipment);
+        let mut bytes = Vec::new();
+        packet
+            .write_packet_data(&mut bytes, &JavaMinecraftVersion::V_1_21)
+            .unwrap();
+
+        // entity id
+        assert_eq!(bytes[0], 1);
+        // Non-last entries carry the continuation bit; the last one does not.
+        assert_eq!(bytes[1] & 0x80, 0x80, "first entry must continue");
+        assert_eq!(bytes[1] & 0x7f, 0);
+        assert_eq!(bytes[7] & 0x80, 0x80, "second entry must continue");
+        assert_eq!(bytes[7] & 0x7f, 2);
+        assert_eq!(bytes[13] & 0x80, 0, "last entry must terminate");
+        assert_eq!(bytes[13] & 0x7f, 3);
+    }
+}

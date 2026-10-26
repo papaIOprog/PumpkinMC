@@ -338,7 +338,6 @@ pub(crate) fn get_block_entity_id(block_name: &str) -> Option<&'static str> {
         "trial_spawner" => Some("minecraft:trial_spawner"),
         "vault" => Some("minecraft:vault"),
         "crafter" => Some("minecraft:crafter"),
-        "creaking_heart" => Some("minecraft:creaking_heart"),
         "chiseled_bookshelf" => Some("minecraft:chiseled_bookshelf"),
         "beehive" | "bee_nest" => Some("minecraft:beehive"),
         "campfire" | "soul_campfire" => Some("minecraft:campfire"),

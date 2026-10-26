@@ -16,9 +16,6 @@ use crate::{
 /// tracking indices, digital signatures, and context for reporting.
 #[java_packet(CHAT)]
 pub struct CPlayerChatMessage {
-    /// Incremental index for messages sent TO this specific client.
-    /// Starts at 0 on login; client disconnects if the sequence is broken.
-    pub global_index: VarInt,
     /// The UUID of the player who sent the message.
     pub sender: uuid::Uuid,
     /// Incremental index for messages sent BY the sender player.
@@ -54,7 +51,6 @@ impl CPlayerChatMessage {
     #[expect(clippy::too_many_arguments)]
     #[must_use]
     pub const fn new(
-        global_index: VarInt,
         sender: uuid::Uuid,
         index: VarInt,
         message_signature: Option<Box<[u8]>>,
@@ -69,7 +65,6 @@ impl CPlayerChatMessage {
         target_name: Option<TextComponent>,
     ) -> Self {
         Self {
-            global_index,
             sender,
             index,
             message_signature,
@@ -93,7 +88,6 @@ impl ClientPacket for CPlayerChatMessage {
         mut write: impl Write,
         version: &JavaMinecraftVersion,
     ) -> Result<(), WritingError> {
-        write.write_var_int(&self.global_index)?;
         write.write_uuid(&self.sender)?;
         write.write_var_int(&self.index)?;
         write.write_option(&self.message_signature, |p, v| p.write_slice(v))?;

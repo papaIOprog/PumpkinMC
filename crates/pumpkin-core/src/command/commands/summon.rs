@@ -22,7 +22,7 @@ const DESCRIPTION: &str = "Spawns an entity at position.";
 const PERMISSION: &str = "minecraft:command.summon";
 
 const ERROR_FAILED_PEACEFUL: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::COMMANDS_SUMMON_FAILED_PEACEFUL,
+    translation::java::COMMANDS_SUMMON_FAILED,
     translation::bedrock::COMMANDS_SUMMON_FAILED,
 );
 const ERROR_DUPLICATE_UUID: CommandErrorType<0> = CommandErrorType::new(
@@ -138,7 +138,6 @@ pub fn register(dispatcher: &mut CommandDispatcher, registry: &PermissionRegistr
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::command::commands::fetchprofile;
     use crate::command::context::command_source::CommandSource;
     use std::sync::Arc;
 
@@ -147,8 +146,6 @@ mod tests {
         let mut dispatcher = CommandDispatcher::new();
         let registry = PermissionRegistry::default();
 
-        // Register fetchprofile first to ensure its "entity" argument doesn't collide
-        fetchprofile::register(&mut dispatcher, &registry);
         register(&mut dispatcher, &registry);
 
         let source = Arc::new(CommandSource::dummy());
@@ -165,7 +162,6 @@ mod tests {
         let mut dispatcher = CommandDispatcher::new();
         let registry = PermissionRegistry::default();
 
-        fetchprofile::register(&mut dispatcher, &registry);
         register(&mut dispatcher, &registry);
 
         let source = Arc::new(CommandSource::dummy());

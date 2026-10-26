@@ -1,8 +1,7 @@
 use pumpkin_data::tag::Taggable;
-use pumpkin_data::{Block, BlockDirection, BlockId, BlockStateId, tag};
+use pumpkin_data::{BlockId, BlockStateId, tag};
 use pumpkin_util::math::position::BlockPos;
-use pumpkin_world::world::{BlockAccessor, BlockFlags};
-use rand::seq::SliceRandom;
+use pumpkin_world::world::BlockAccessor;
 
 use crate::block::{
     BlockBehaviour, BlockMetadata, CanPlaceAtArgs, GetStateForNeighborUpdateArgs,
@@ -13,52 +12,11 @@ pub struct DryVegetationBlock;
 
 impl BlockMetadata for DryVegetationBlock {
     fn ids() -> Box<[BlockId]> {
-        [
-            BlockId::DEAD_BUSH,
-            BlockId::TALL_DRY_GRASS,
-            BlockId::SHORT_DRY_GRASS,
-        ]
-        .into()
+        [BlockId::DEAD_BUSH].into()
     }
 }
 
 impl BlockBehaviour for DryVegetationBlock {
-    fn is_valid_bonemeal_target(&self, args: crate::block::BonemealArgs<'_>) -> bool {
-        if args.block == &Block::SHORT_DRY_GRASS {
-            return true;
-        }
-        args.block == &Block::TALL_DRY_GRASS
-            && horizontal_directions().into_iter().any(|direction| {
-                can_spread_to(args.world, args.position.offset(direction.to_offset()))
-            })
-    }
-
-    fn perform_bonemeal(&self, args: crate::block::BonemealArgs<'_>) {
-        {
-            if args.block == &Block::SHORT_DRY_GRASS {
-                args.world.set_block_state(
-                    args.position,
-                    Block::TALL_DRY_GRASS.default_state.id,
-                    BlockFlags::NOTIFY_ALL,
-                );
-                return;
-            }
-
-            let mut directions = horizontal_directions();
-            directions.shuffle(&mut rand::rng());
-            if let Some(position) = directions.into_iter().find_map(|direction| {
-                let position = args.position.offset(direction.to_offset());
-                can_spread_to(args.world, position).then_some(position)
-            }) {
-                args.world.set_block_state(
-                    &position,
-                    Block::SHORT_DRY_GRASS.default_state.id,
-                    BlockFlags::NOTIFY_ALL,
-                );
-            }
-        }
-    }
-
     fn can_place_at(&self, args: CanPlaceAtArgs<'_>) -> bool {
         <Self as PlantBlockBase>::can_place_at(self, args.block_accessor, args.position)
     }
@@ -74,31 +32,6 @@ impl BlockBehaviour for DryVegetationBlock {
             args.state_id,
         )
     }
-}
-
-const fn horizontal_directions() -> [BlockDirection; 4] {
-    [
-        BlockDirection::North,
-        BlockDirection::South,
-        BlockDirection::West,
-        BlockDirection::East,
-    ]
-}
-
-fn can_spread_to(world: &crate::world::World, position: BlockPos) -> bool {
-    world.is_loaded(&position)
-        && world.get_block_state(&position).is_air()
-        && world.block_registry.can_place_at(
-            None,
-            Some(world),
-            world,
-            None,
-            &Block::SHORT_DRY_GRASS,
-            Block::SHORT_DRY_GRASS.default_state,
-            &position,
-            None,
-            None,
-        )
 }
 
 impl PlantBlockBase for DryVegetationBlock {

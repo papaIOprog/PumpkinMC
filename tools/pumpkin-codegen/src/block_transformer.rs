@@ -235,7 +235,12 @@ pub fn build() -> TokenStream {
             .expect("Failed to parse blocks.json");
     let valid_blocks: HashSet<String> = blocks_file.into_keys().collect();
 
-    let dir = Path::new("../../assets/datapack/data/minecraft/block_transformer");
+    let mut dir = Path::new("../../assets/datapack/data/minecraft/block_transformer");
+    // 1.21.1 hardcodes these maps in the item classes; assets/vanilla
+    // holds the extracted values.
+    if !dir.is_dir() {
+        dir = Path::new("../../assets/vanilla/data/minecraft/block_transformer");
+    }
     let mut files: Vec<(String, Vec<TransformerEntryJson>)> = Vec::new();
 
     if dir.is_dir() {

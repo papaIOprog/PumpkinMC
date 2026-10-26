@@ -88,7 +88,7 @@ pub fn nearby_same_type(mob: &dyn Mob) -> Vec<std::sync::Arc<dyn crate::entity::
     let entity = &mob_entity.living_entity.entity;
     let within = mob_entity
         .living_entity
-        .get_attribute_value(&Attributes::FOLLOW_RANGE);
+        .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
 
     let world = entity.world.load();
     let pos = entity.pos.load();

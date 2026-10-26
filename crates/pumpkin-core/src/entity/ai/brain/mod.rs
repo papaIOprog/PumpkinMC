@@ -42,7 +42,7 @@ impl BrainTick<'_> {
                 .mob
                 .get_mob_entity()
                 .living_entity
-                .get_attribute_value(&Attributes::FOLLOW_RANGE),
+                .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE),
         }
     }
 }

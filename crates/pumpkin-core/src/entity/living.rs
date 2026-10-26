@@ -269,7 +269,7 @@ impl LivingEntity {
                 let mut m = FxHashMap::default();
 
                 for (attr, base) in entity.entity_type.attributes {
-                    if attr.id == Attributes::MAX_HEALTH.id {
+                    if attr.id == Attributes::GENERIC_MAX_HEALTH.id {
                         max_health = *base as f32;
                     }
                     m.insert(attr.id, AttributeInstance::new(*base));
@@ -468,9 +468,9 @@ impl LivingEntity {
             .into_iter()
             .flat_map(|c| c.attribute_modifiers.iter())
         {
-            let target = if modifier.r#type == &Attributes::ATTACK_SPEED {
+            let target = if modifier.r#type == &Attributes::GENERIC_ATTACK_SPEED {
                 &mut speed_modifiers
-            } else if modifier.r#type == &Attributes::ATTACK_DAMAGE {
+            } else if modifier.r#type == &Attributes::GENERIC_ATTACK_DAMAGE {
                 &mut damage_modifiers
             } else {
                 continue;
@@ -493,8 +493,8 @@ impl LivingEntity {
                 .write()
                 .unwrap_or_else(std::sync::PoisonError::into_inner);
             for (attribute, modifiers) in [
-                (Attributes::ATTACK_SPEED, speed_modifiers),
-                (Attributes::ATTACK_DAMAGE, damage_modifiers),
+                (Attributes::GENERIC_ATTACK_SPEED, speed_modifiers),
+                (Attributes::GENERIC_ATTACK_DAMAGE, damage_modifiers),
             ] {
                 let instance = attributes
                     .entry(attribute.id)
@@ -795,18 +795,18 @@ impl LivingEntity {
 
     /// Returns the current maximum health for this entity
     pub fn get_max_health(&self) -> f32 {
-        self.get_attribute_value(&Attributes::MAX_HEALTH) as f32
+        self.get_attribute_value(&Attributes::GENERIC_MAX_HEALTH) as f32
     }
 
     /// Sets the maximum health for this entity
     pub fn set_max_health(&self, max_health: f32) {
         // Update base attribute
-        self.set_attribute_base(&Attributes::MAX_HEALTH, max_health as f64);
+        self.set_attribute_base(&Attributes::GENERIC_MAX_HEALTH, max_health as f64);
 
         // Broadcast the attribute change
         crate::entity::attributes::send_attribute_updates_for_living(
             self,
-            vec![Attributes::MAX_HEALTH],
+            vec![Attributes::GENERIC_MAX_HEALTH],
         );
 
         // Clamp current health to new max if needed and send metadata update
@@ -833,7 +833,7 @@ impl LivingEntity {
         // the updated absorption value via the attribute packet.
         crate::entity::attributes::send_attribute_updates_for_living(
             self,
-            vec![Attributes::MAX_ABSORPTION],
+            vec![Attributes::GENERIC_MAX_ABSORPTION],
         );
 
         // Send absorption metadata for players (visual yellow hearts)
@@ -1026,7 +1026,7 @@ impl LivingEntity {
         // Apply absorption effect (+4 absorption per level)
         if effect.effect_type == &StatusEffect::ABSORPTION {
             let added = 4.0 * (effect.amplifier as f32 + 1.0);
-            let max_abs = self.get_attribute_value(&Attributes::MAX_ABSORPTION) as f32;
+            let max_abs = self.get_attribute_value(&Attributes::GENERIC_MAX_ABSORPTION) as f32;
             let new_abs = (self.absorption.load() + added).min(max_abs);
             self.set_absorption(new_abs);
         }
@@ -1283,7 +1283,8 @@ impl LivingEntity {
                 let distance = entity_pos.squared_distance_to_vec(&block_center);
 
                 // Fetch safe fall distance from attribute
-                let safe_distance = self.get_attribute_value(&Attributes::SAFE_FALL_DISTANCE);
+                let safe_distance =
+                    self.get_attribute_value(&Attributes::GENERIC_SAFE_FALL_DISTANCE);
                 return distance.sqrt() <= safe_distance * safe_distance;
             }
         }
@@ -1508,7 +1509,7 @@ impl LivingEntity {
     fn travel_in_air(&self, caller: &dyn EntityBase) {
         // applyMovementInput
 
-        let effective_speed = self.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+        let effective_speed = self.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
 
         let (speed, friction) = if self.entity.on_ground.load(Relaxed) {
             // getVelocityAffectingPos
@@ -1587,7 +1588,7 @@ impl LivingEntity {
 
         let falling = self.entity.velocity.load().y <= 0.0;
         let gravity = self.get_effective_gravity(caller);
-        let effective_speed = self.get_attribute_value(&Attributes::MOVEMENT_SPEED);
+        let effective_speed = self.get_attribute_value(&Attributes::GENERIC_MOVEMENT_SPEED);
 
         if water {
             let mut friction = if self.entity.sprinting.load(Relaxed) {
@@ -1600,7 +1601,7 @@ impl LivingEntity {
 
             // Apply water movement efficiency attribute
             let mut water_movement_efficiency =
-                self.get_attribute_value(&Attributes::WATER_MOVEMENT_EFFICIENCY);
+                self.get_attribute_value(&Attributes::GENERIC_WATER_MOVEMENT_EFFICIENCY);
 
             if water_movement_efficiency > 0.0 {
                 if !self.entity.on_ground.load(SeqCst) {
@@ -1825,7 +1826,7 @@ impl LivingEntity {
     }
 
     fn get_jump_velocity(&self, mut strength: f64) -> f64 {
-        strength *= self.get_attribute_value(&Attributes::JUMP_STRENGTH);
+        strength *= self.get_attribute_value(&Attributes::GENERIC_JUMP_STRENGTH);
         strength *= f64::from(self.entity.get_jump_velocity_multiplier());
         if let Some(effect) = self.get_effect(&StatusEffect::JUMP_BOOST) {
             strength += 0.1 * f64::from(effect.amplifier + 1);
@@ -1919,7 +1920,8 @@ impl LivingEntity {
             );
         }
 
-        let safe_fall_distance = self.get_attribute_value(&Attributes::SAFE_FALL_DISTANCE) as f32;
+        let safe_fall_distance =
+            self.get_attribute_value(&Attributes::GENERIC_SAFE_FALL_DISTANCE) as f32;
         let unsafe_fall_distance = fall_distance + 1.0E-6 - safe_fall_distance;
 
         let damage = (unsafe_fall_distance * damage_per_distance).floor();
@@ -2725,7 +2727,7 @@ impl LivingEntity {
 
         // Clamp any persisted absorption to the entity's configured max
         let raw_abs = nbt.get_float("AbsorptionAmount").unwrap_or(0.0);
-        let max_abs = self.get_attribute_value(&Attributes::MAX_ABSORPTION) as f32;
+        let max_abs = self.get_attribute_value(&Attributes::GENERIC_MAX_ABSORPTION) as f32;
         let clamped_abs = raw_abs.max(0.0).min(max_abs);
         self.absorption.store(clamped_abs);
 
@@ -2806,9 +2808,9 @@ impl LivingEntity {
                     && let Some(modifiers) = stack.get_data_component::<AttributeModifiersImpl>()
                 {
                     for modifier in modifiers.attribute_modifiers.iter() {
-                        if modifier.r#type == &Attributes::ARMOR {
+                        if modifier.r#type == &Attributes::GENERIC_ARMOR {
                             armor += modifier.amount as f32;
-                        } else if modifier.r#type == &Attributes::ARMOR_TOUGHNESS {
+                        } else if modifier.r#type == &Attributes::GENERIC_ARMOR_TOUGHNESS {
                             toughness += modifier.amount as f32;
                         }
                     }
@@ -3192,7 +3194,8 @@ impl LivingEntity {
                 let target_pos = self.entity.pos.load();
                 let dx = source_pos.x - target_pos.x;
                 let dz = source_pos.z - target_pos.z;
-                let resistance = self.get_attribute_value(&Attributes::KNOCKBACK_RESISTANCE);
+                let resistance =
+                    self.get_attribute_value(&Attributes::GENERIC_KNOCKBACK_RESISTANCE);
                 self.entity
                     .apply_knockback(knockback_after_resistance(0.4, resistance), dx, dz);
             }
@@ -3337,7 +3340,7 @@ impl EntityBase for LivingEntity {
     }
 
     fn get_gravity(&self) -> f64 {
-        self.get_attribute_value(&Attributes::GRAVITY)
+        self.get_attribute_value(&Attributes::GENERIC_GRAVITY)
     }
 
     /// Advances the living entity by one tick: base entity tick, movement and
@@ -3625,7 +3628,7 @@ pub const SPEED_MODIFIER_SPRINTING_AMOUNT: f64 = 0.300_000_011_920_928_96;
 impl LivingEntity {
     pub fn set_sprinting(&self, is_sprinting: bool) {
         self.entity.set_sprinting(is_sprinting);
-        self.update_attribute(&Attributes::MOVEMENT_SPEED, |speed| {
+        self.update_attribute(&Attributes::GENERIC_MOVEMENT_SPEED, |speed| {
             speed.remove_modifier(SPEED_MODIFIER_SPRINTING_ID);
             if is_sprinting {
                 speed.add_or_replace_modifier(Modifier {
@@ -3637,13 +3640,13 @@ impl LivingEntity {
         });
         crate::entity::attributes::send_attribute_updates_for_living(
             self,
-            vec![Attributes::MOVEMENT_SPEED],
+            vec![Attributes::GENERIC_MOVEMENT_SPEED],
         );
     }
 
     #[must_use]
     pub fn get_block_speed_factor(&self) -> f32 {
-        let efficiency = self.get_attribute_value(&Attributes::MOVEMENT_EFFICIENCY) as f32;
+        let efficiency = self.get_attribute_value(&Attributes::GENERIC_MOVEMENT_EFFICIENCY) as f32;
         let super_factor = self.entity.get_block_speed_factor();
         super_factor + efficiency * (1.0 - super_factor)
     }
@@ -4002,7 +4005,6 @@ mod tests {
         let cases = [
             (&EntityType::SKELETON, Sound::EntitySkeletonHurt),
             (&EntityType::BOGGED, Sound::EntityBoggedHurt),
-            (&EntityType::PARCHED, Sound::EntityParchedHurt),
             (
                 &EntityType::WITHER_SKELETON,
                 Sound::EntityWitherSkeletonHurt,
@@ -4047,6 +4049,7 @@ mod tests {
             )
             .unwrap();
 
-        assert_eq!(bytes, [10, 18, 1, 28, 0xff, 0xcd, 0x5c, 0xab]);
+        // Effect particles are the colored entity_effect particle since 1.20.5.
+        assert_eq!(bytes, [10, 18, 1, 20, 0xff, 0xcd, 0x5c, 0xab]);
     }
 }

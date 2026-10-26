@@ -53,22 +53,23 @@ use pumpkin_inventory::merchant::merchant_screen_handler::MerchantScreenHandler;
 use pumpkin_inventory::player::player_inventory::PlayerInventory;
 use pumpkin_inventory::screen_handler::{InventoryPlayer, ScreenHandler};
 use pumpkin_protocol::bedrock::client::CMovePlayer;
+use pumpkin_protocol::codec::item_stack_seralizer::ItemStackSerializer;
 use pumpkin_protocol::codec::var_int::VarInt;
 use pumpkin_protocol::codec::var_ulong::VarULong;
 use pumpkin_protocol::java::client::play::{
     CBlockUpdate, CCommandSuggestions, CHeadRot, CPingResponse, CPlayerInfoUpdate, CPlayerPosition,
-    CSetCamera, CSetSelectedSlot, CTeleportEntity, CUpdateEntityPos, CUpdateEntityPosRot,
-    CUpdateEntityRot, InitChat, PlayerAction, PlayerInfoFlags,
+    CSetCamera, CSetContainerSlot, CSetSelectedSlot, CTeleportEntity, CUpdateEntityPos,
+    CUpdateEntityPosRot, CUpdateEntityRot, InitChat, PlayerAction, PlayerInfoFlags,
 };
 use pumpkin_protocol::java::server::play::{
     Action, ActionType, CommandBlockMode, FLAG_ON_GROUND, SChatCommand, SChatMessage, SChunkBatch,
     SClientCommand, SClientInformationPlay, SCommandSuggestion, SConfirmTeleport,
     SCookieResponse as SPCookieResponse, SEditBook, SInteract, SJigsawGenerate, SKeepAlive,
-    SMoveVehicle, SPaddleBoat, SPlaceRecipe, SPlayPingRequest, SPlayerAbilities, SPlayerAction,
-    SPlayerCommand, SPlayerPosition, SPlayerPositionRotation, SPlayerRotation, SPlayerSession,
-    SRecipeBookChangeSettings, SRecipeBookSeenRecipe, SSeenAdvancement, SSelectTrade,
-    SSetCommandBlock, SSetCreativeSlot, SSetHeldItem, SSetJigsawBlock, SSetPlayerGround, SSwingArm,
-    STeleportToEntity, SUpdateSign, SUseItem, SUseItemOn, Status,
+    SMoveVehicle, SPaddleBoat, SPickItem, SPlaceRecipe, SPlayPingRequest, SPlayerAbilities,
+    SPlayerAction, SPlayerCommand, SPlayerPosition, SPlayerPositionRotation, SPlayerRotation,
+    SPlayerSession, SRecipeBookChangeSettings, SRecipeBookSeenRecipe, SSeenAdvancement,
+    SSelectTrade, SSetCommandBlock, SSetCreativeSlot, SSetHeldItem, SSetJigsawBlock,
+    SSetPlayerGround, SSwingArm, STeleportToEntity, SUpdateSign, SUseItem, SUseItemOn, Status,
 };
 use pumpkin_util::math::vector3::Vector3;
 use pumpkin_util::math::{polynomial_rolling_hash, position::BlockPos, wrap_degrees};
@@ -258,6 +259,7 @@ pub mod keep_alive;
 pub mod lock_difficulty;
 pub mod move_vehicle;
 pub mod paddle_boat;
+pub mod pick_item;
 pub mod ping_request;
 pub mod place_recipe;
 pub mod player_abilities;

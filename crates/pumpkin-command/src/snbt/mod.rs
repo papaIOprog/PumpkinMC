@@ -16,35 +16,29 @@ use pumpkin_data::translation;
 use pumpkin_nbt::tag::NbtTag;
 use pumpkin_util::text::TextComponent;
 
-pub const NUMBER_PARSE_FAILURE: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_NUMBER_PARSE_FAILURE,
-    translation::java::SNBT_PARSER_NUMBER_PARSE_FAILURE,
-);
+pub const NUMBER_PARSE_FAILURE: CommandErrorType<1> =
+    CommandErrorType::new("Failed to parse number:", "Failed to parse number:");
 
 pub const UNDERSCORE_NOT_ALLOWED: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_UNDESCORE_NOT_ALLOWED,
-    translation::java::SNBT_PARSER_UNDESCORE_NOT_ALLOWED,
+    "Underscore characters are not allowed at the start or end of a number",
+    "Underscore characters are not allowed at the start or end of a number",
 );
 
 pub const EXPECTED_HEX_ESCAPE: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_HEX_ESCAPE,
-    translation::java::SNBT_PARSER_EXPECTED_HEX_ESCAPE,
+    "Expected a character literal of length",
+    "Expected a character literal of length",
 );
 
 pub const EXPECTED_NON_NEGATIVE_NUMBER: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_NON_NEGATIVE_NUMBER,
-    translation::java::SNBT_PARSER_EXPECTED_NON_NEGATIVE_NUMBER,
+    "Expected a non-negative number",
+    "Expected a non-negative number",
 );
 
-pub const INVALID_ARRAY_ELEMENT_TYPE: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_INVALID_ARRAY_ELEMENT_TYPE,
-    translation::java::SNBT_PARSER_INVALID_ARRAY_ELEMENT_TYPE,
-);
+pub const INVALID_ARRAY_ELEMENT_TYPE: CommandErrorType<0> =
+    CommandErrorType::new("Invalid array element type", "Invalid array element type");
 
-pub const EXPECTED_INTEGER_TYPE: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_INTEGER_TYPE,
-    translation::java::SNBT_PARSER_EXPECTED_INTEGER_TYPE,
-);
+pub const EXPECTED_INTEGER_TYPE: CommandErrorType<0> =
+    CommandErrorType::new("Expected an integer number", "Expected an integer number");
 
 /// A structure that parses SNBT.
 ///

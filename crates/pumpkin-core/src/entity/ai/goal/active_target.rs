@@ -93,7 +93,7 @@ impl ActiveTargetGoal {
         let mut target_predicate = TargetPredicate::create_attackable();
         target_predicate.base_max_distance = mob
             .living_entity
-            .get_attribute_value(&Attributes::FOLLOW_RANGE);
+            .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
 
         if let Some(predicate) = predicate {
             target_predicate.set_predicate(predicate);
@@ -134,7 +134,7 @@ impl ActiveTargetGoal {
         let mut target_predicate = TargetPredicate::create_attackable();
         target_predicate.base_max_distance = mob
             .living_entity
-            .get_attribute_value(&Attributes::FOLLOW_RANGE);
+            .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
 
         Box::new(Self {
             track_target_goal,
@@ -161,7 +161,7 @@ impl ActiveTargetGoal {
         let mut target_predicate = TargetPredicate::create_attackable();
         target_predicate.base_max_distance = mob
             .living_entity
-            .get_attribute_value(&Attributes::FOLLOW_RANGE);
+            .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
         target_predicate.set_predicate(predicate);
 
         Box::new(Self {
@@ -183,7 +183,7 @@ impl ActiveTargetGoal {
         let mob_entity = mob.get_mob_entity();
         let follow_range = mob_entity
             .living_entity
-            .get_attribute_value(&Attributes::FOLLOW_RANGE);
+            .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
 
         // Vanilla updates the target conditions with the current follow distance on every search
         self.target_predicate.base_max_distance = follow_range;

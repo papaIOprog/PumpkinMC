@@ -37,7 +37,7 @@ use crate::command::commands::data::{
 };
 use crate::command::context::command_context::CommandContext;
 use crate::command::errors::command_syntax_error::CommandSyntaxError;
-use crate::command::errors::error_types::CommandErrorType;
+use crate::command::errors::error_types::{CommandErrorType, LiteralCommandErrorType};
 use crate::command::node::attached::{CommandNodeId, NodeId};
 use crate::command::node::dispatcher::CommandDispatcher;
 use crate::command::node::tree::Tree;
@@ -871,6 +871,9 @@ fn execute_unless_data_storage_modifier(
     }
 }
 
+static ERROR_STOPWATCH_NOT_FOUND: LiteralCommandErrorType =
+    LiteralCommandErrorType::new("Stopwatch does not exist");
+
 fn check_stopwatch_matches(context: &CommandContext) -> Result<bool, CommandSyntaxError> {
     let id = context.get_argument::<Identifier>("id")?;
     let range = FloatRangeArgumentType::get(context, "range")?;
@@ -881,8 +884,7 @@ fn check_stopwatch_matches(context: &CommandContext) -> Result<bool, CommandSynt
         .unwrap_or_else(std::sync::PoisonError::into_inner);
     let id_str = id.to_string();
     let Some(stopwatch) = stopwatches.get(&id_str) else {
-        return Err(crate::command::commands::stopwatch::ERROR_DOES_NOT_EXIST
-            .create_without_context(TextComponent::text(id_str)));
+        return Err(ERROR_STOPWATCH_NOT_FOUND.create_without_context());
     };
     let now = Stopwatches::current_time();
     let elapsed = stopwatch.elapsed_seconds(now);

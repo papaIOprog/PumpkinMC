@@ -31,7 +31,7 @@ impl TeleportTowardsPlayerGoal {
         target_predicate.base_max_distance = enderman
             .mob_entity
             .living_entity
-            .get_attribute_value(&Attributes::FOLLOW_RANGE);
+            .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
         Self {
             enderman,
             track_target_goal,
@@ -56,7 +56,7 @@ impl TeleportTowardsPlayerGoal {
             .enderman
             .mob_entity
             .living_entity
-            .get_attribute_value(&Attributes::FOLLOW_RANGE);
+            .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
 
         // A nearer player that is not anger-inducing must not hide a farther one that is.
         let enderman: &dyn EntityBase = self.enderman.as_ref();
@@ -114,7 +114,7 @@ impl Goal for TeleportTowardsPlayerGoal {
                 .squared_distance_to_vec(&target.get_entity().pos.load());
             let follow_range = mob_entity
                 .living_entity
-                .get_attribute_value(&Attributes::FOLLOW_RANGE);
+                .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
             if dist_sq > follow_range * follow_range {
                 return false;
             }

@@ -146,7 +146,7 @@ impl Goal for TrackTargetGoal {
         // Get follow range attribute value and check if target is within range
         let follow_range = mob_entity
             .living_entity
-            .get_attribute_value(&Attributes::FOLLOW_RANGE);
+            .get_attribute_value(&Attributes::GENERIC_FOLLOW_RANGE);
 
         if dist_sq > follow_range * follow_range {
             return false;

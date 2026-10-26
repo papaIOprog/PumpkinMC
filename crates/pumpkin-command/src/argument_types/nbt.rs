@@ -9,7 +9,6 @@ use crate::{
     suggestion::suggestions::{Suggestions, SuggestionsBuilder},
 };
 
-use pumpkin_data::translation::java::ARGUMENT_NBT_EXPECTED_COMPOUND;
 use pumpkin_nbt::compound::NbtCompound;
 
 /// Parses any type of NBT tag from SNBT.
@@ -49,10 +48,8 @@ impl NbtTagArgumentType {
     }
 }
 
-pub const EXPECTED_COMPOUND_ERROR_TYPE: CommandErrorType<0> = CommandErrorType::new(
-    ARGUMENT_NBT_EXPECTED_COMPOUND,
-    ARGUMENT_NBT_EXPECTED_COMPOUND,
-);
+pub const EXPECTED_COMPOUND_ERROR_TYPE: CommandErrorType<0> =
+    CommandErrorType::new("Expected compound tag", "Expected compound tag");
 
 /// Parses **only** compound NBT tags from SNBT.
 pub struct NbtCompoundArgumentType;

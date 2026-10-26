@@ -16,7 +16,6 @@ pub enum RegistryKey {
     PaintingVariant,
     PointOfInterestType,
     Potion,
-    VillagerTrade,
     WorldgenBiome,
     WorldgenFlatLevelGeneratorPreset,
     WorldgenStructure,
@@ -37,7 +36,6 @@ impl RegistryKey {
         Self::PaintingVariant,
         Self::PointOfInterestType,
         Self::Potion,
-        Self::VillagerTrade,
         Self::WorldgenBiome,
         Self::WorldgenFlatLevelGeneratorPreset,
         Self::WorldgenStructure,
@@ -62,7 +60,6 @@ impl RegistryKey {
     #[must_use]
     pub const fn is_network_synced(&self) -> bool {
         match self {
-            Self::VillagerTrade => false,
             Self::WorldgenFlatLevelGeneratorPreset => false,
             Self::WorldgenStructure => false,
             Self::WorldgenWorldPreset => false,
@@ -89,7 +86,6 @@ impl RegistryKey {
             "painting_variant" => Some(Self::PaintingVariant),
             "point_of_interest_type" => Some(Self::PointOfInterestType),
             "potion" => Some(Self::Potion),
-            "villager_trade" => Some(Self::VillagerTrade),
             "worldgen/biome" => Some(Self::WorldgenBiome),
             "worldgen/flat_level_generator_preset" => Some(Self::WorldgenFlatLevelGeneratorPreset),
             "worldgen/structure" => Some(Self::WorldgenStructure),
@@ -113,7 +109,6 @@ impl RegistryKey {
             Self::PaintingVariant => "painting_variant",
             Self::PointOfInterestType => "point_of_interest_type",
             Self::Potion => "potion",
-            Self::VillagerTrade => "villager_trade",
             Self::WorldgenBiome => "worldgen/biome",
             Self::WorldgenFlatLevelGeneratorPreset => "worldgen/flat_level_generator_preset",
             Self::WorldgenStructure => "worldgen/structure",
@@ -180,8 +175,8 @@ static BANNERPATTERN_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf_map! 
 #[allow(non_snake_case)]
 pub mod Block {
     use super::Tag;
-    pub const C_BARRELS: Tag = (&["barrel"], &[929u16]);
-    pub const C_BARRELS_WOODEN: Tag = (&["barrel"], &[929u16]);
+    pub const C_BARRELS: Tag = (&["barrel"], &[774u16]);
+    pub const C_BARRELS_WOODEN: Tag = (&["barrel"], &[774u16]);
     pub const C_BARS: Tag = (
         &[
             "iron_bars",
@@ -194,9 +189,7 @@ pub mod Block {
             "waxed_weathered_copper_bars",
             "waxed_oxidized_copper_bars",
         ],
-        &[
-            391u16, 392u16, 393u16, 394u16, 395u16, 396u16, 397u16, 398u16, 399u16,
-        ],
+        &[308u16],
     );
     pub const C_BARS_COPPER: Tag = (
         &[
@@ -209,20 +202,18 @@ pub mod Block {
             "waxed_weathered_copper_bars",
             "waxed_oxidized_copper_bars",
         ],
-        &[
-            392u16, 393u16, 394u16, 395u16, 396u16, 397u16, 398u16, 399u16,
-        ],
+        &[],
     );
-    pub const C_BARS_IRON: Tag = (&["iron_bars"], &[391u16]);
-    pub const C_BOOKSHELVES: Tag = (&["bookshelf"], &[221u16]);
-    pub const C_BUDDING_BLOCKS: Tag = (&["budding_amethyst"], &[1069u16]);
+    pub const C_BARS_IRON: Tag = (&["iron_bars"], &[308u16]);
+    pub const C_BOOKSHELVES: Tag = (&["bookshelf"], &[167u16]);
+    pub const C_BUDDING_BLOCKS: Tag = (&["budding_amethyst"], &[904u16]);
     pub const C_BUDS: Tag = (
         &[
             "small_amethyst_bud",
             "medium_amethyst_bud",
             "large_amethyst_bud",
         ],
-        &[1073u16, 1072u16, 1071u16],
+        &[908u16, 907u16, 906u16],
     );
     pub const C_CHAINS: Tag = (
         &[
@@ -236,18 +227,16 @@ pub mod Block {
             "waxed_weathered_copper_chain",
             "waxed_oxidized_copper_chain",
         ],
-        &[
-            400u16, 401u16, 402u16, 403u16, 404u16, 405u16, 406u16, 407u16, 408u16,
-        ],
+        &[],
     );
     pub const C_CHESTS: Tag = (
         &["chest", "trapped_chest", "ender_chest"],
-        &[245u16, 523u16, 451u16],
+        &[177u16, 411u16, 344u16],
     );
-    pub const C_CHESTS_ENDER: Tag = (&["ender_chest"], &[451u16]);
-    pub const C_CHESTS_TRAPPED: Tag = (&["trapped_chest"], &[523u16]);
-    pub const C_CHESTS_WOODEN: Tag = (&["chest", "trapped_chest"], &[245u16, 523u16]);
-    pub const C_CLUSTERS: Tag = (&["amethyst_cluster"], &[1070u16]);
+    pub const C_CHESTS_ENDER: Tag = (&["ender_chest"], &[344u16]);
+    pub const C_CHESTS_TRAPPED: Tag = (&["trapped_chest"], &[411u16]);
+    pub const C_CHESTS_WOODEN: Tag = (&["chest", "trapped_chest"], &[177u16, 411u16]);
+    pub const C_CLUSTERS: Tag = (&["amethyst_cluster"], &[905u16]);
     pub const C_COBBLESTONES: Tag = (
         &[
             "cobblestone",
@@ -255,11 +244,11 @@ pub mod Block {
             "infested_cobblestone",
             "cobbled_deepslate",
         ],
-        &[12u16, 236u16, 383u16, 1242u16],
+        &[12u16, 169u16, 300u16, 1024u16],
     );
-    pub const C_COBBLESTONES_DEEPSLATE: Tag = (&["cobbled_deepslate"], &[1242u16]);
-    pub const C_COBBLESTONES_INFESTED: Tag = (&["infested_cobblestone"], &[383u16]);
-    pub const C_COBBLESTONES_MOSSY: Tag = (&["mossy_cobblestone"], &[236u16]);
+    pub const C_COBBLESTONES_DEEPSLATE: Tag = (&["cobbled_deepslate"], &[1024u16]);
+    pub const C_COBBLESTONES_INFESTED: Tag = (&["infested_cobblestone"], &[300u16]);
+    pub const C_COBBLESTONES_MOSSY: Tag = (&["mossy_cobblestone"], &[169u16]);
     pub const C_COBBLESTONES_NORMAL: Tag = (&["cobblestone"], &[12u16]);
     pub const C_CONCRETES: Tag = (
         &[
@@ -281,8 +270,8 @@ pub mod Block {
             "black_concrete",
         ],
         &[
-            768u16, 769u16, 770u16, 771u16, 772u16, 773u16, 774u16, 775u16, 776u16, 777u16, 778u16,
-            779u16, 780u16, 781u16, 782u16, 783u16,
+            646u16, 647u16, 648u16, 649u16, 650u16, 651u16, 652u16, 653u16, 654u16, 655u16, 656u16,
+            657u16, 658u16, 659u16, 660u16, 661u16,
         ],
     );
     pub const C_COPPER_CHESTS: Tag = (
@@ -296,9 +285,7 @@ pub mod Block {
             "waxed_weathered_copper_chest",
             "waxed_oxidized_copper_chest",
         ],
-        &[
-            1198u16, 1199u16, 1200u16, 1201u16, 1202u16, 1203u16, 1204u16, 1205u16,
-        ],
+        &[],
     );
     pub const C_DYEABLE: Tag = (
         &[
@@ -373,13 +360,13 @@ pub mod Block {
             "black_shulker_box",
         ],
         &[
-            1034u16, 110u16, 409u16, 735u16, 608u16, 133u16, 134u16, 130u16, 131u16, 128u16,
-            126u16, 132u16, 122u16, 127u16, 124u16, 121u16, 120u16, 125u16, 129u16, 119u16, 123u16,
-            151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16, 159u16, 160u16, 161u16,
-            162u16, 163u16, 164u16, 165u16, 166u16, 592u16, 593u16, 594u16, 595u16, 596u16, 597u16,
-            598u16, 599u16, 600u16, 601u16, 602u16, 603u16, 604u16, 605u16, 606u16, 607u16, 736u16,
-            737u16, 738u16, 739u16, 740u16, 741u16, 742u16, 743u16, 744u16, 745u16, 746u16, 747u16,
-            748u16, 749u16, 750u16, 751u16,
+            869u16, 94u16, 310u16, 613u16, 494u16, 117u16, 118u16, 114u16, 115u16, 112u16, 110u16,
+            116u16, 106u16, 111u16, 108u16, 105u16, 104u16, 109u16, 113u16, 103u16, 107u16, 130u16,
+            131u16, 132u16, 133u16, 134u16, 135u16, 136u16, 137u16, 138u16, 139u16, 140u16, 141u16,
+            142u16, 143u16, 144u16, 145u16, 478u16, 479u16, 480u16, 481u16, 482u16, 483u16, 484u16,
+            485u16, 486u16, 487u16, 488u16, 489u16, 490u16, 491u16, 492u16, 493u16, 614u16, 615u16,
+            616u16, 617u16, 618u16, 619u16, 620u16, 621u16, 622u16, 623u16, 624u16, 625u16, 626u16,
+            627u16, 628u16, 629u16,
         ],
     );
     pub const C_DYEABLE_DYNAMIC: Tag = (&[], &[]);
@@ -456,13 +443,13 @@ pub mod Block {
             "black_shulker_box",
         ],
         &[
-            1034u16, 110u16, 409u16, 735u16, 608u16, 133u16, 134u16, 130u16, 131u16, 128u16,
-            126u16, 132u16, 122u16, 127u16, 124u16, 121u16, 120u16, 125u16, 129u16, 119u16, 123u16,
-            151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16, 159u16, 160u16, 161u16,
-            162u16, 163u16, 164u16, 165u16, 166u16, 592u16, 593u16, 594u16, 595u16, 596u16, 597u16,
-            598u16, 599u16, 600u16, 601u16, 602u16, 603u16, 604u16, 605u16, 606u16, 607u16, 736u16,
-            737u16, 738u16, 739u16, 740u16, 741u16, 742u16, 743u16, 744u16, 745u16, 746u16, 747u16,
-            748u16, 749u16, 750u16, 751u16,
+            869u16, 94u16, 310u16, 613u16, 494u16, 117u16, 118u16, 114u16, 115u16, 112u16, 110u16,
+            116u16, 106u16, 111u16, 108u16, 105u16, 104u16, 109u16, 113u16, 103u16, 107u16, 130u16,
+            131u16, 132u16, 133u16, 134u16, 135u16, 136u16, 137u16, 138u16, 139u16, 140u16, 141u16,
+            142u16, 143u16, 144u16, 145u16, 478u16, 479u16, 480u16, 481u16, 482u16, 483u16, 484u16,
+            485u16, 486u16, 487u16, 488u16, 489u16, 490u16, 491u16, 492u16, 493u16, 614u16, 615u16,
+            616u16, 617u16, 618u16, 619u16, 620u16, 621u16, 622u16, 623u16, 624u16, 625u16, 626u16,
+            627u16, 628u16, 629u16,
         ],
     );
     pub const C_DYEABLE_SIMPLE_REDYEABLE: Tag = (
@@ -533,17 +520,17 @@ pub mod Block {
             "black_shulker_box",
         ],
         &[
-            133u16, 134u16, 130u16, 131u16, 128u16, 126u16, 132u16, 122u16, 127u16, 124u16, 121u16,
-            120u16, 125u16, 129u16, 119u16, 123u16, 151u16, 152u16, 153u16, 154u16, 155u16, 156u16,
-            157u16, 158u16, 159u16, 160u16, 161u16, 162u16, 163u16, 164u16, 165u16, 166u16, 592u16,
-            593u16, 594u16, 595u16, 596u16, 597u16, 598u16, 599u16, 600u16, 601u16, 602u16, 603u16,
-            604u16, 605u16, 606u16, 607u16, 736u16, 737u16, 738u16, 739u16, 740u16, 741u16, 742u16,
-            743u16, 744u16, 745u16, 746u16, 747u16, 748u16, 749u16, 750u16, 751u16,
+            117u16, 118u16, 114u16, 115u16, 112u16, 110u16, 116u16, 106u16, 111u16, 108u16, 105u16,
+            104u16, 109u16, 113u16, 103u16, 107u16, 130u16, 131u16, 132u16, 133u16, 134u16, 135u16,
+            136u16, 137u16, 138u16, 139u16, 140u16, 141u16, 142u16, 143u16, 144u16, 145u16, 478u16,
+            479u16, 480u16, 481u16, 482u16, 483u16, 484u16, 485u16, 486u16, 487u16, 488u16, 489u16,
+            490u16, 491u16, 492u16, 493u16, 614u16, 615u16, 616u16, 617u16, 618u16, 619u16, 620u16,
+            621u16, 622u16, 623u16, 624u16, 625u16, 626u16, 627u16, 628u16, 629u16,
         ],
     );
     pub const C_DYEABLE_SIMPLE_UNDYED: Tag = (
         &["candle", "glass", "glass_pane", "shulker_box", "terracotta"],
-        &[1034u16, 110u16, 409u16, 735u16, 608u16],
+        &[869u16, 94u16, 310u16, 613u16, 494u16],
     );
     pub const C_DYED: Tag = (
         &[
@@ -821,33 +808,25 @@ pub mod Block {
             "black_wall_banner",
         ],
         &[
-            617u16, 119u16, 1035u16, 592u16, 768u16, 800u16, 784u16, 816u16, 752u16, 736u16,
-            349u16, 553u16, 537u16, 151u16, 183u16, 167u16, 633u16, 618u16, 120u16, 1036u16,
-            593u16, 769u16, 801u16, 785u16, 817u16, 753u16, 737u16, 350u16, 554u16, 538u16, 152u16,
-            184u16, 168u16, 634u16, 619u16, 121u16, 1037u16, 594u16, 770u16, 802u16, 786u16,
-            818u16, 754u16, 738u16, 351u16, 555u16, 539u16, 153u16, 185u16, 169u16, 635u16, 620u16,
-            122u16, 1038u16, 595u16, 771u16, 803u16, 787u16, 819u16, 755u16, 739u16, 352u16,
-            556u16, 540u16, 154u16, 186u16, 170u16, 636u16, 621u16, 123u16, 1039u16, 596u16,
-            772u16, 804u16, 788u16, 820u16, 756u16, 740u16, 353u16, 557u16, 541u16, 155u16, 187u16,
-            171u16, 637u16, 622u16, 124u16, 1040u16, 597u16, 773u16, 805u16, 789u16, 821u16,
-            757u16, 741u16, 354u16, 558u16, 542u16, 156u16, 188u16, 172u16, 638u16, 623u16, 125u16,
-            1041u16, 598u16, 774u16, 806u16, 790u16, 822u16, 758u16, 742u16, 355u16, 559u16,
-            543u16, 157u16, 189u16, 173u16, 639u16, 624u16, 126u16, 1042u16, 599u16, 775u16,
-            807u16, 791u16, 823u16, 759u16, 743u16, 356u16, 560u16, 544u16, 158u16, 190u16, 174u16,
-            640u16, 625u16, 127u16, 1043u16, 600u16, 776u16, 808u16, 792u16, 824u16, 760u16,
-            744u16, 357u16, 561u16, 545u16, 159u16, 191u16, 175u16, 641u16, 626u16, 128u16,
-            1044u16, 601u16, 777u16, 809u16, 793u16, 825u16, 761u16, 745u16, 358u16, 562u16,
-            546u16, 160u16, 192u16, 176u16, 642u16, 627u16, 129u16, 1045u16, 602u16, 778u16,
-            810u16, 794u16, 826u16, 762u16, 746u16, 359u16, 563u16, 547u16, 161u16, 193u16, 177u16,
-            643u16, 628u16, 130u16, 1046u16, 603u16, 779u16, 811u16, 795u16, 827u16, 763u16,
-            747u16, 360u16, 564u16, 548u16, 162u16, 194u16, 178u16, 644u16, 629u16, 131u16,
-            1047u16, 604u16, 780u16, 812u16, 796u16, 828u16, 764u16, 748u16, 361u16, 565u16,
-            549u16, 163u16, 195u16, 179u16, 645u16, 630u16, 132u16, 1048u16, 605u16, 781u16,
-            813u16, 797u16, 829u16, 765u16, 749u16, 362u16, 566u16, 550u16, 164u16, 196u16, 180u16,
-            646u16, 631u16, 133u16, 1049u16, 606u16, 782u16, 814u16, 798u16, 830u16, 766u16,
-            750u16, 363u16, 567u16, 551u16, 165u16, 197u16, 181u16, 647u16, 632u16, 134u16,
-            1050u16, 607u16, 783u16, 815u16, 799u16, 831u16, 767u16, 751u16, 364u16, 568u16,
-            552u16, 166u16, 198u16, 182u16, 648u16,
+            503u16, 103u16, 870u16, 478u16, 646u16, 662u16, 630u16, 614u16, 268u16, 441u16, 425u16,
+            130u16, 519u16, 504u16, 104u16, 871u16, 479u16, 647u16, 663u16, 631u16, 615u16, 269u16,
+            442u16, 426u16, 131u16, 520u16, 505u16, 105u16, 872u16, 480u16, 648u16, 664u16, 632u16,
+            616u16, 270u16, 443u16, 427u16, 132u16, 521u16, 506u16, 106u16, 873u16, 481u16, 649u16,
+            665u16, 633u16, 617u16, 271u16, 444u16, 428u16, 133u16, 522u16, 507u16, 107u16, 874u16,
+            482u16, 650u16, 666u16, 634u16, 618u16, 272u16, 445u16, 429u16, 134u16, 523u16, 508u16,
+            108u16, 875u16, 483u16, 651u16, 667u16, 635u16, 619u16, 273u16, 446u16, 430u16, 135u16,
+            524u16, 509u16, 109u16, 876u16, 484u16, 652u16, 668u16, 636u16, 620u16, 274u16, 447u16,
+            431u16, 136u16, 525u16, 510u16, 110u16, 877u16, 485u16, 653u16, 669u16, 637u16, 621u16,
+            275u16, 448u16, 432u16, 137u16, 526u16, 511u16, 111u16, 878u16, 486u16, 654u16, 670u16,
+            638u16, 622u16, 276u16, 449u16, 433u16, 138u16, 527u16, 512u16, 112u16, 879u16, 487u16,
+            655u16, 671u16, 639u16, 623u16, 277u16, 450u16, 434u16, 139u16, 528u16, 513u16, 113u16,
+            880u16, 488u16, 656u16, 672u16, 640u16, 624u16, 278u16, 451u16, 435u16, 140u16, 529u16,
+            514u16, 114u16, 881u16, 489u16, 657u16, 673u16, 641u16, 625u16, 279u16, 452u16, 436u16,
+            141u16, 530u16, 515u16, 115u16, 882u16, 490u16, 658u16, 674u16, 642u16, 626u16, 280u16,
+            453u16, 437u16, 142u16, 531u16, 516u16, 116u16, 883u16, 491u16, 659u16, 675u16, 643u16,
+            627u16, 281u16, 454u16, 438u16, 143u16, 532u16, 517u16, 117u16, 884u16, 492u16, 660u16,
+            676u16, 644u16, 628u16, 282u16, 455u16, 439u16, 144u16, 533u16, 518u16, 118u16, 885u16,
+            493u16, 661u16, 677u16, 645u16, 629u16, 283u16, 456u16, 440u16, 145u16, 534u16,
         ],
     );
     pub const C_DYED_BLACK: Tag = (
@@ -871,8 +850,8 @@ pub mod Block {
             "black_wall_banner",
         ],
         &[
-            632u16, 134u16, 1050u16, 607u16, 783u16, 815u16, 799u16, 831u16, 767u16, 751u16,
-            364u16, 568u16, 552u16, 166u16, 198u16, 182u16, 648u16,
+            518u16, 118u16, 885u16, 493u16, 661u16, 677u16, 645u16, 629u16, 283u16, 456u16, 440u16,
+            145u16, 534u16,
         ],
     );
     pub const C_DYED_BLUE: Tag = (
@@ -896,8 +875,8 @@ pub mod Block {
             "blue_wall_banner",
         ],
         &[
-            628u16, 130u16, 1046u16, 603u16, 779u16, 811u16, 795u16, 827u16, 763u16, 747u16,
-            360u16, 564u16, 548u16, 162u16, 194u16, 178u16, 644u16,
+            514u16, 114u16, 881u16, 489u16, 657u16, 673u16, 641u16, 625u16, 279u16, 452u16, 436u16,
+            141u16, 530u16,
         ],
     );
     pub const C_DYED_BROWN: Tag = (
@@ -921,8 +900,8 @@ pub mod Block {
             "brown_wall_banner",
         ],
         &[
-            629u16, 131u16, 1047u16, 604u16, 780u16, 812u16, 796u16, 828u16, 764u16, 748u16,
-            361u16, 565u16, 549u16, 163u16, 195u16, 179u16, 645u16,
+            515u16, 115u16, 882u16, 490u16, 658u16, 674u16, 642u16, 626u16, 280u16, 453u16, 437u16,
+            142u16, 531u16,
         ],
     );
     pub const C_DYED_CYAN: Tag = (
@@ -946,8 +925,8 @@ pub mod Block {
             "cyan_wall_banner",
         ],
         &[
-            626u16, 128u16, 1044u16, 601u16, 777u16, 809u16, 793u16, 825u16, 761u16, 745u16,
-            358u16, 562u16, 546u16, 160u16, 192u16, 176u16, 642u16,
+            512u16, 112u16, 879u16, 487u16, 655u16, 671u16, 639u16, 623u16, 277u16, 450u16, 434u16,
+            139u16, 528u16,
         ],
     );
     pub const C_DYED_GRAY: Tag = (
@@ -971,8 +950,8 @@ pub mod Block {
             "gray_wall_banner",
         ],
         &[
-            624u16, 126u16, 1042u16, 599u16, 775u16, 807u16, 791u16, 823u16, 759u16, 743u16,
-            356u16, 560u16, 544u16, 158u16, 190u16, 174u16, 640u16,
+            510u16, 110u16, 877u16, 485u16, 653u16, 669u16, 637u16, 621u16, 275u16, 448u16, 432u16,
+            137u16, 526u16,
         ],
     );
     pub const C_DYED_GREEN: Tag = (
@@ -996,8 +975,8 @@ pub mod Block {
             "green_wall_banner",
         ],
         &[
-            630u16, 132u16, 1048u16, 605u16, 781u16, 813u16, 797u16, 829u16, 765u16, 749u16,
-            362u16, 566u16, 550u16, 164u16, 196u16, 180u16, 646u16,
+            516u16, 116u16, 883u16, 491u16, 659u16, 675u16, 643u16, 627u16, 281u16, 454u16, 438u16,
+            143u16, 532u16,
         ],
     );
     pub const C_DYED_LIGHT_BLUE: Tag = (
@@ -1021,8 +1000,8 @@ pub mod Block {
             "light_blue_wall_banner",
         ],
         &[
-            620u16, 122u16, 1038u16, 595u16, 771u16, 803u16, 787u16, 819u16, 755u16, 739u16,
-            352u16, 556u16, 540u16, 154u16, 186u16, 170u16, 636u16,
+            506u16, 106u16, 873u16, 481u16, 649u16, 665u16, 633u16, 617u16, 271u16, 444u16, 428u16,
+            133u16, 522u16,
         ],
     );
     pub const C_DYED_LIGHT_GRAY: Tag = (
@@ -1046,8 +1025,8 @@ pub mod Block {
             "light_gray_wall_banner",
         ],
         &[
-            625u16, 127u16, 1043u16, 600u16, 776u16, 808u16, 792u16, 824u16, 760u16, 744u16,
-            357u16, 561u16, 545u16, 159u16, 191u16, 175u16, 641u16,
+            511u16, 111u16, 878u16, 486u16, 654u16, 670u16, 638u16, 622u16, 276u16, 449u16, 433u16,
+            138u16, 527u16,
         ],
     );
     pub const C_DYED_LIME: Tag = (
@@ -1071,8 +1050,8 @@ pub mod Block {
             "lime_wall_banner",
         ],
         &[
-            622u16, 124u16, 1040u16, 597u16, 773u16, 805u16, 789u16, 821u16, 757u16, 741u16,
-            354u16, 558u16, 542u16, 156u16, 188u16, 172u16, 638u16,
+            508u16, 108u16, 875u16, 483u16, 651u16, 667u16, 635u16, 619u16, 273u16, 446u16, 430u16,
+            135u16, 524u16,
         ],
     );
     pub const C_DYED_MAGENTA: Tag = (
@@ -1096,8 +1075,8 @@ pub mod Block {
             "magenta_wall_banner",
         ],
         &[
-            619u16, 121u16, 1037u16, 594u16, 770u16, 802u16, 786u16, 818u16, 754u16, 738u16,
-            351u16, 555u16, 539u16, 153u16, 185u16, 169u16, 635u16,
+            505u16, 105u16, 872u16, 480u16, 648u16, 664u16, 632u16, 616u16, 270u16, 443u16, 427u16,
+            132u16, 521u16,
         ],
     );
     pub const C_DYED_ORANGE: Tag = (
@@ -1121,8 +1100,8 @@ pub mod Block {
             "orange_wall_banner",
         ],
         &[
-            618u16, 120u16, 1036u16, 593u16, 769u16, 801u16, 785u16, 817u16, 753u16, 737u16,
-            350u16, 554u16, 538u16, 152u16, 184u16, 168u16, 634u16,
+            504u16, 104u16, 871u16, 479u16, 647u16, 663u16, 631u16, 615u16, 269u16, 442u16, 426u16,
+            131u16, 520u16,
         ],
     );
     pub const C_DYED_PINK: Tag = (
@@ -1146,8 +1125,8 @@ pub mod Block {
             "pink_wall_banner",
         ],
         &[
-            623u16, 125u16, 1041u16, 598u16, 774u16, 806u16, 790u16, 822u16, 758u16, 742u16,
-            355u16, 559u16, 543u16, 157u16, 189u16, 173u16, 639u16,
+            509u16, 109u16, 876u16, 484u16, 652u16, 668u16, 636u16, 620u16, 274u16, 447u16, 431u16,
+            136u16, 525u16,
         ],
     );
     pub const C_DYED_PURPLE: Tag = (
@@ -1171,8 +1150,8 @@ pub mod Block {
             "purple_wall_banner",
         ],
         &[
-            627u16, 129u16, 1045u16, 602u16, 778u16, 810u16, 794u16, 826u16, 762u16, 746u16,
-            359u16, 563u16, 547u16, 161u16, 193u16, 177u16, 643u16,
+            513u16, 113u16, 880u16, 488u16, 656u16, 672u16, 640u16, 624u16, 278u16, 451u16, 435u16,
+            140u16, 529u16,
         ],
     );
     pub const C_DYED_RED: Tag = (
@@ -1196,8 +1175,8 @@ pub mod Block {
             "red_wall_banner",
         ],
         &[
-            631u16, 133u16, 1049u16, 606u16, 782u16, 814u16, 798u16, 830u16, 766u16, 750u16,
-            363u16, 567u16, 551u16, 165u16, 197u16, 181u16, 647u16,
+            517u16, 117u16, 884u16, 492u16, 660u16, 676u16, 644u16, 628u16, 282u16, 455u16, 439u16,
+            144u16, 533u16,
         ],
     );
     pub const C_DYED_WHITE: Tag = (
@@ -1221,8 +1200,8 @@ pub mod Block {
             "white_wall_banner",
         ],
         &[
-            617u16, 119u16, 1035u16, 592u16, 768u16, 800u16, 784u16, 816u16, 752u16, 736u16,
-            349u16, 553u16, 537u16, 151u16, 183u16, 167u16, 633u16,
+            503u16, 103u16, 870u16, 478u16, 646u16, 662u16, 630u16, 614u16, 268u16, 441u16, 425u16,
+            130u16, 519u16,
         ],
     );
     pub const C_DYED_YELLOW: Tag = (
@@ -1246,11 +1225,11 @@ pub mod Block {
             "yellow_wall_banner",
         ],
         &[
-            621u16, 123u16, 1039u16, 596u16, 772u16, 804u16, 788u16, 820u16, 756u16, 740u16,
-            353u16, 557u16, 541u16, 155u16, 187u16, 171u16, 637u16,
+            507u16, 107u16, 874u16, 482u16, 650u16, 666u16, 634u16, 618u16, 272u16, 445u16, 429u16,
+            134u16, 523u16,
         ],
     );
-    pub const C_END_STONES: Tag = (&["end_stone"], &[443u16]);
+    pub const C_END_STONES: Tag = (&["end_stone"], &[337u16]);
     pub const C_FENCE_GATES: Tag = (
         &[
             "oak_fence_gate",
@@ -1267,8 +1246,7 @@ pub mod Block {
             "pale_oak_fence_gate",
         ],
         &[
-            419u16, 682u16, 683u16, 684u16, 685u16, 687u16, 983u16, 984u16, 689u16, 691u16, 686u16,
-            688u16,
+            319u16, 567u16, 568u16, 569u16, 570u16, 572u16, 820u16, 821u16, 573u16, 574u16, 571u16,
         ],
     );
     pub const C_FENCE_GATES_WOODEN: Tag = (
@@ -1287,8 +1265,7 @@ pub mod Block {
             "pale_oak_fence_gate",
         ],
         &[
-            419u16, 682u16, 683u16, 684u16, 685u16, 687u16, 983u16, 984u16, 689u16, 691u16, 686u16,
-            688u16,
+            319u16, 567u16, 568u16, 569u16, 570u16, 572u16, 820u16, 821u16, 573u16, 574u16, 571u16,
         ],
     );
     pub const C_FENCES: Tag = (
@@ -1308,11 +1285,11 @@ pub mod Block {
             "nether_brick_fence",
         ],
         &[
-            333u16, 692u16, 693u16, 694u16, 695u16, 697u16, 979u16, 980u16, 699u16, 701u16, 696u16,
-            698u16, 432u16,
+            254u16, 575u16, 576u16, 577u16, 578u16, 580u16, 816u16, 817u16, 581u16, 582u16, 579u16,
+            326u16,
         ],
     );
-    pub const C_FENCES_NETHER_BRICK: Tag = (&["nether_brick_fence"], &[432u16]);
+    pub const C_FENCES_NETHER_BRICK: Tag = (&["nether_brick_fence"], &[326u16]);
     pub const C_FENCES_WOODEN: Tag = (
         &[
             "oak_fence",
@@ -1329,8 +1306,7 @@ pub mod Block {
             "pale_oak_fence",
         ],
         &[
-            333u16, 692u16, 693u16, 694u16, 695u16, 697u16, 979u16, 980u16, 699u16, 701u16, 696u16,
-            698u16,
+            254u16, 575u16, 576u16, 577u16, 578u16, 580u16, 816u16, 817u16, 581u16, 582u16, 579u16,
         ],
     );
     pub const C_FLOWERS: Tag = (
@@ -1367,9 +1343,9 @@ pub mod Block {
             "pitcher_plant",
         ],
         &[
-            99u16, 107u16, 1229u16, 34u16, 1231u16, 1232u16, 714u16, 1227u16, 329u16, 200u16,
-            203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16, 214u16,
-            213u16, 202u16, 1281u16, 1282u16, 611u16, 612u16, 614u16, 613u16, 722u16,
+            87u16, 91u16, 1013u16, 30u16, 1015u16, 593u16, 1011u16, 147u16, 149u16, 150u16, 151u16,
+            152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16, 160u16, 159u16, 148u16, 497u16,
+            498u16, 500u16, 499u16, 600u16,
         ],
     );
     pub const C_FLOWERS_SMALL: Tag = (
@@ -1392,13 +1368,13 @@ pub mod Block {
             "closed_eyeblossom",
         ],
         &[
-            200u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16,
-            214u16, 213u16, 202u16, 1281u16, 1282u16,
+            147u16, 149u16, 150u16, 151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16,
+            160u16, 159u16, 148u16,
         ],
     );
     pub const C_FLOWERS_TALL: Tag = (
         &["sunflower", "lilac", "peony", "rose_bush", "pitcher_plant"],
-        &[611u16, 612u16, 614u16, 613u16, 722u16],
+        &[497u16, 498u16, 500u16, 499u16, 600u16],
     );
     pub const C_FROGLIGHTS: Tag = (
         &[
@@ -1406,7 +1382,7 @@ pub mod Block {
             "pearlescent_froglight",
             "verdant_froglight",
         ],
-        &[1268u16, 1270u16, 1269u16],
+        &[1050u16, 1052u16, 1051u16],
     );
     pub const C_GLASS_BLOCKS: Tag = (
         &[
@@ -1430,8 +1406,8 @@ pub mod Block {
             "tinted_glass",
         ],
         &[
-            110u16, 349u16, 350u16, 351u16, 352u16, 353u16, 354u16, 355u16, 356u16, 357u16, 358u16,
-            359u16, 360u16, 361u16, 362u16, 363u16, 364u16, 1116u16,
+            94u16, 268u16, 269u16, 270u16, 271u16, 272u16, 273u16, 274u16, 275u16, 276u16, 277u16,
+            278u16, 279u16, 280u16, 281u16, 282u16, 283u16, 924u16,
         ],
     );
     pub const C_GLASS_BLOCKS_CHEAP: Tag = (
@@ -1455,12 +1431,12 @@ pub mod Block {
             "black_stained_glass",
         ],
         &[
-            110u16, 349u16, 350u16, 351u16, 352u16, 353u16, 354u16, 355u16, 356u16, 357u16, 358u16,
-            359u16, 360u16, 361u16, 362u16, 363u16, 364u16,
+            94u16, 268u16, 269u16, 270u16, 271u16, 272u16, 273u16, 274u16, 275u16, 276u16, 277u16,
+            278u16, 279u16, 280u16, 281u16, 282u16, 283u16,
         ],
     );
-    pub const C_GLASS_BLOCKS_COLORLESS: Tag = (&["glass"], &[110u16]);
-    pub const C_GLASS_BLOCKS_TINTED: Tag = (&["tinted_glass"], &[1116u16]);
+    pub const C_GLASS_BLOCKS_COLORLESS: Tag = (&["glass"], &[94u16]);
+    pub const C_GLASS_BLOCKS_TINTED: Tag = (&["tinted_glass"], &[924u16]);
     pub const C_GLASS_PANES: Tag = (
         &[
             "white_stained_glass_pane",
@@ -1482,11 +1458,11 @@ pub mod Block {
             "glass_pane",
         ],
         &[
-            553u16, 554u16, 555u16, 556u16, 557u16, 558u16, 559u16, 560u16, 561u16, 562u16, 563u16,
-            564u16, 565u16, 566u16, 567u16, 568u16, 409u16,
+            441u16, 442u16, 443u16, 444u16, 445u16, 446u16, 447u16, 448u16, 449u16, 450u16, 451u16,
+            452u16, 453u16, 454u16, 455u16, 456u16, 310u16,
         ],
     );
-    pub const C_GLASS_PANES_COLORLESS: Tag = (&["glass_pane"], &[409u16]);
+    pub const C_GLASS_PANES_COLORLESS: Tag = (&["glass_pane"], &[310u16]);
     pub const C_GLAZED_TERRACOTTAS: Tag = (
         &[
             "white_glazed_terracotta",
@@ -1507,13 +1483,13 @@ pub mod Block {
             "black_glazed_terracotta",
         ],
         &[
-            752u16, 753u16, 754u16, 755u16, 756u16, 757u16, 758u16, 759u16, 760u16, 761u16, 762u16,
-            763u16, 764u16, 765u16, 766u16, 767u16,
+            630u16, 631u16, 632u16, 633u16, 634u16, 635u16, 636u16, 637u16, 638u16, 639u16, 640u16,
+            641u16, 642u16, 643u16, 644u16, 645u16,
         ],
     );
-    pub const C_GRAVELS: Tag = (&["gravel"], &[42u16]);
+    pub const C_GRAVELS: Tag = (&["gravel"], &[37u16]);
     pub const C_HIDDEN_FROM_RECIPE_VIEWERS: Tag = (&[], &[]);
-    pub const C_LANTERNS: Tag = (&["lantern", "soul_lantern"], &[939u16, 940u16]);
+    pub const C_LANTERNS: Tag = (&["lantern", "soul_lantern"], &[784u16, 785u16]);
     pub const C_NATURAL_LOGS: Tag = (
         &[
             "acacia_log",
@@ -1531,11 +1507,10 @@ pub mod Block {
             "warped_stem",
         ],
         &[
-            55u16, 63u16, 53u16, 56u16, 57u16, 54u16, 59u16, 51u16, 58u16, 52u16, 60u16, 961u16,
-            952u16,
+            50u16, 56u16, 48u16, 51u16, 52u16, 49u16, 53u16, 46u16, 47u16, 798u16, 789u16,
         ],
     );
-    pub const C_NATURAL_LOGS_NETHER: Tag = (&["crimson_stem", "warped_stem"], &[961u16, 952u16]);
+    pub const C_NATURAL_LOGS_NETHER: Tag = (&["crimson_stem", "warped_stem"], &[798u16, 789u16]);
     pub const C_NATURAL_LOGS_OVERWORLD: Tag = (
         &[
             "acacia_log",
@@ -1551,7 +1526,7 @@ pub mod Block {
             "poplar_log",
         ],
         &[
-            55u16, 63u16, 53u16, 56u16, 57u16, 54u16, 59u16, 51u16, 58u16, 52u16, 60u16,
+            50u16, 56u16, 48u16, 51u16, 52u16, 49u16, 53u16, 46u16, 47u16,
         ],
     );
     pub const C_NATURAL_WOODS: Tag = (
@@ -1570,15 +1545,15 @@ pub mod Block {
             "warped_hyphae",
         ],
         &[
-            79u16, 77u16, 80u16, 81u16, 78u16, 82u16, 75u16, 20u16, 76u16, 83u16, 963u16, 954u16,
+            70u16, 68u16, 71u16, 72u16, 69u16, 73u16, 66u16, 67u16, 800u16, 791u16,
         ],
     );
-    pub const C_NETHERRACKS: Tag = (&["netherrack"], &[334u16]);
-    pub const C_OBSIDIANS: Tag = (&["obsidian", "crying_obsidian"], &[237u16, 1007u16]);
-    pub const C_OBSIDIANS_CRYING: Tag = (&["crying_obsidian"], &[1007u16]);
-    pub const C_OBSIDIANS_NORMAL: Tag = (&["obsidian"], &[237u16]);
-    pub const C_ORE_BEARING_GROUND_DEEPSLATE: Tag = (&["deepslate"], &[1241u16]);
-    pub const C_ORE_BEARING_GROUND_NETHERRACK: Tag = (&["netherrack"], &[334u16]);
+    pub const C_NETHERRACKS: Tag = (&["netherrack"], &[255u16]);
+    pub const C_OBSIDIANS: Tag = (&["obsidian", "crying_obsidian"], &[170u16, 842u16]);
+    pub const C_OBSIDIANS_CRYING: Tag = (&["crying_obsidian"], &[842u16]);
+    pub const C_OBSIDIANS_NORMAL: Tag = (&["obsidian"], &[170u16]);
+    pub const C_ORE_BEARING_GROUND_DEEPSLATE: Tag = (&["deepslate"], &[1023u16]);
+    pub const C_ORE_BEARING_GROUND_NETHERRACK: Tag = (&["netherrack"], &[255u16]);
     pub const C_ORE_BEARING_GROUND_STONE: Tag = (&["stone"], &[1u16]);
     pub const C_ORE_RATES_DENSE: Tag = (
         &[
@@ -1589,7 +1564,7 @@ pub mod Block {
             "lapis_ore",
             "redstone_ore",
         ],
-        &[1132u16, 1133u16, 112u16, 321u16, 111u16, 320u16],
+        &[936u16, 937u16, 96u16, 243u16, 95u16, 242u16],
     );
     pub const C_ORE_RATES_SINGULAR: Tag = (
         &[
@@ -1607,11 +1582,11 @@ pub mod Block {
             "nether_quartz_ore",
         ],
         &[
-            1006u16, 48u16, 49u16, 248u16, 450u16, 45u16, 47u16, 247u16, 449u16, 44u16, 46u16,
-            529u16,
+            841u16, 43u16, 44u16, 180u16, 343u16, 40u16, 42u16, 179u16, 342u16, 39u16, 41u16,
+            417u16,
         ],
     );
-    pub const C_ORE_RATES_SPARSE: Tag = (&["nether_gold_ore"], &[50u16]);
+    pub const C_ORE_RATES_SPARSE: Tag = (&["nether_gold_ore"], &[45u16]);
     pub const C_ORES: Tag = (
         &[
             "coal_ore",
@@ -1635,25 +1610,25 @@ pub mod Block {
             "nether_quartz_ore",
         ],
         &[
-            48u16, 49u16, 1132u16, 1133u16, 247u16, 248u16, 449u16, 450u16, 44u16, 50u16, 45u16,
-            46u16, 47u16, 111u16, 112u16, 1006u16, 320u16, 321u16, 529u16,
+            43u16, 44u16, 936u16, 937u16, 179u16, 180u16, 342u16, 343u16, 39u16, 45u16, 40u16,
+            41u16, 42u16, 95u16, 96u16, 841u16, 242u16, 243u16, 417u16,
         ],
     );
-    pub const C_ORES_COAL: Tag = (&["coal_ore", "deepslate_coal_ore"], &[48u16, 49u16]);
-    pub const C_ORES_COPPER: Tag = (&["copper_ore", "deepslate_copper_ore"], &[1132u16, 1133u16]);
-    pub const C_ORES_DIAMOND: Tag = (&["diamond_ore", "deepslate_diamond_ore"], &[247u16, 248u16]);
-    pub const C_ORES_EMERALD: Tag = (&["emerald_ore", "deepslate_emerald_ore"], &[449u16, 450u16]);
+    pub const C_ORES_COAL: Tag = (&["coal_ore", "deepslate_coal_ore"], &[43u16, 44u16]);
+    pub const C_ORES_COPPER: Tag = (&["copper_ore", "deepslate_copper_ore"], &[936u16, 937u16]);
+    pub const C_ORES_DIAMOND: Tag = (&["diamond_ore", "deepslate_diamond_ore"], &[179u16, 180u16]);
+    pub const C_ORES_EMERALD: Tag = (&["emerald_ore", "deepslate_emerald_ore"], &[342u16, 343u16]);
     pub const C_ORES_GOLD: Tag = (
         &["gold_ore", "nether_gold_ore", "deepslate_gold_ore"],
-        &[44u16, 50u16, 45u16],
+        &[39u16, 45u16, 40u16],
     );
-    pub const C_ORES_IRON: Tag = (&["iron_ore", "deepslate_iron_ore"], &[46u16, 47u16]);
-    pub const C_ORES_LAPIS: Tag = (&["lapis_ore", "deepslate_lapis_ore"], &[111u16, 112u16]);
-    pub const C_ORES_NETHERITE_SCRAP: Tag = (&["ancient_debris"], &[1006u16]);
-    pub const C_ORES_QUARTZ: Tag = (&["nether_quartz_ore"], &[529u16]);
+    pub const C_ORES_IRON: Tag = (&["iron_ore", "deepslate_iron_ore"], &[41u16, 42u16]);
+    pub const C_ORES_LAPIS: Tag = (&["lapis_ore", "deepslate_lapis_ore"], &[95u16, 96u16]);
+    pub const C_ORES_NETHERITE_SCRAP: Tag = (&["ancient_debris"], &[841u16]);
+    pub const C_ORES_QUARTZ: Tag = (&["nether_quartz_ore"], &[417u16]);
     pub const C_ORES_REDSTONE: Tag = (
         &["redstone_ore", "deepslate_redstone_ore"],
-        &[320u16, 321u16],
+        &[242u16, 243u16],
     );
     pub const C_ORES_IN_GROUND_DEEPSLATE: Tag = (
         &[
@@ -1666,10 +1641,10 @@ pub mod Block {
             "deepslate_lapis_ore",
             "deepslate_redstone_ore",
         ],
-        &[49u16, 1133u16, 248u16, 450u16, 45u16, 47u16, 112u16, 321u16],
+        &[44u16, 937u16, 180u16, 343u16, 40u16, 42u16, 96u16, 243u16],
     );
     pub const C_ORES_IN_GROUND_NETHERRACK: Tag =
-        (&["nether_gold_ore", "nether_quartz_ore"], &[50u16, 529u16]);
+        (&["nether_gold_ore", "nether_quartz_ore"], &[45u16, 417u16]);
     pub const C_ORES_IN_GROUND_STONE: Tag = (
         &[
             "coal_ore",
@@ -1681,22 +1656,22 @@ pub mod Block {
             "lapis_ore",
             "redstone_ore",
         ],
-        &[48u16, 1132u16, 247u16, 449u16, 44u16, 46u16, 111u16, 320u16],
+        &[43u16, 936u16, 179u16, 342u16, 39u16, 41u16, 95u16, 242u16],
     );
-    pub const C_PLAYER_WORKSTATIONS_CRAFTING_TABLES: Tag = (&["crafting_table"], &[250u16]);
-    pub const C_PLAYER_WORKSTATIONS_FURNACES: Tag = (&["furnace"], &[253u16]);
+    pub const C_PLAYER_WORKSTATIONS_CRAFTING_TABLES: Tag = (&["crafting_table"], &[182u16]);
+    pub const C_PLAYER_WORKSTATIONS_FURNACES: Tag = (&["furnace"], &[185u16]);
     pub const C_PUMPKINS: Tag = (
         &["pumpkin", "carved_pumpkin", "jack_o_lantern"],
-        &[410u16, 345u16, 346u16],
+        &[311u16, 264u16, 265u16],
     );
-    pub const C_PUMPKINS_CARVED: Tag = (&["carved_pumpkin"], &[345u16]);
-    pub const C_PUMPKINS_JACK_O_LANTERNS: Tag = (&["jack_o_lantern"], &[346u16]);
-    pub const C_PUMPKINS_NORMAL: Tag = (&["pumpkin"], &[410u16]);
+    pub const C_PUMPKINS_CARVED: Tag = (&["carved_pumpkin"], &[264u16]);
+    pub const C_PUMPKINS_JACK_O_LANTERNS: Tag = (&["jack_o_lantern"], &[265u16]);
+    pub const C_PUMPKINS_NORMAL: Tag = (&["pumpkin"], &[311u16]);
     pub const C_RELOCATION_NOT_SUPPORTED: Tag = (&[], &[]);
     pub const C_ROPES: Tag = (&[], &[]);
-    pub const C_SANDS: Tag = (&["sand", "red_sand"], &[39u16, 41u16]);
-    pub const C_SANDS_COLORLESS: Tag = (&["sand"], &[39u16]);
-    pub const C_SANDS_RED: Tag = (&["red_sand"], &[41u16]);
+    pub const C_SANDS: Tag = (&["sand", "red_sand"], &[34u16, 36u16]);
+    pub const C_SANDS_COLORLESS: Tag = (&["sand"], &[34u16]);
+    pub const C_SANDS_RED: Tag = (&["red_sand"], &[36u16]);
     pub const C_SANDSTONE_BLOCKS: Tag = (
         &[
             "sandstone",
@@ -1709,7 +1684,7 @@ pub mod Block {
             "chiseled_red_sandstone",
         ],
         &[
-            115u16, 117u16, 679u16, 116u16, 649u16, 651u16, 681u16, 650u16,
+            99u16, 101u16, 564u16, 100u16, 535u16, 537u16, 566u16, 536u16,
         ],
     );
     pub const C_SANDSTONE_RED_BLOCKS: Tag = (
@@ -1719,7 +1694,7 @@ pub mod Block {
             "smooth_red_sandstone",
             "chiseled_red_sandstone",
         ],
-        &[649u16, 651u16, 681u16, 650u16],
+        &[535u16, 537u16, 566u16, 536u16],
     );
     pub const C_SANDSTONE_RED_SLABS: Tag = (
         &[
@@ -1727,11 +1702,11 @@ pub mod Block {
             "cut_red_sandstone_slab",
             "smooth_red_sandstone_slab",
         ],
-        &[675u16, 676u16, 902u16],
+        &[560u16, 561u16, 747u16],
     );
     pub const C_SANDSTONE_RED_STAIRS: Tag = (
         &["red_sandstone_stairs", "smooth_red_sandstone_stairs"],
-        &[652u16, 888u16],
+        &[538u16, 733u16],
     );
     pub const C_SANDSTONE_SLABS: Tag = (
         &[
@@ -1742,7 +1717,7 @@ pub mod Block {
             "cut_red_sandstone_slab",
             "smooth_red_sandstone_slab",
         ],
-        &[666u16, 667u16, 907u16, 675u16, 676u16, 902u16],
+        &[551u16, 552u16, 752u16, 560u16, 561u16, 747u16],
     );
     pub const C_SANDSTONE_STAIRS: Tag = (
         &[
@@ -1751,7 +1726,7 @@ pub mod Block {
             "red_sandstone_stairs",
             "smooth_red_sandstone_stairs",
         ],
-        &[448u16, 894u16, 652u16, 888u16],
+        &[341u16, 739u16, 538u16, 733u16],
     );
     pub const C_SANDSTONE_UNCOLORED_BLOCKS: Tag = (
         &[
@@ -1760,7 +1735,7 @@ pub mod Block {
             "smooth_sandstone",
             "chiseled_sandstone",
         ],
-        &[115u16, 117u16, 679u16, 116u16],
+        &[99u16, 101u16, 564u16, 100u16],
     );
     pub const C_SANDSTONE_UNCOLORED_SLABS: Tag = (
         &[
@@ -1768,11 +1743,11 @@ pub mod Block {
             "cut_sandstone_slab",
             "smooth_sandstone_slab",
         ],
-        &[666u16, 667u16, 907u16],
+        &[551u16, 552u16, 752u16],
     );
     pub const C_SANDSTONE_UNCOLORED_STAIRS: Tag = (
         &["sandstone_stairs", "smooth_sandstone_stairs"],
-        &[448u16, 894u16],
+        &[341u16, 739u16],
     );
     pub const C_SKULLS: Tag = (
         &[
@@ -1792,8 +1767,8 @@ pub mod Block {
             "dragon_wall_head",
         ],
         &[
-            506u16, 507u16, 508u16, 509u16, 512u16, 513u16, 510u16, 511u16, 514u16, 515u16, 518u16,
-            519u16, 516u16, 517u16,
+            394u16, 395u16, 396u16, 397u16, 400u16, 401u16, 398u16, 399u16, 402u16, 403u16, 406u16,
+            407u16, 404u16, 405u16,
         ],
     );
     pub const C_STONES: Tag = (
@@ -1805,7 +1780,7 @@ pub mod Block {
             "tuff",
             "deepslate",
         ],
-        &[1u16, 6u16, 4u16, 2u16, 1074u16, 1241u16],
+        &[1u16, 6u16, 4u16, 2u16, 909u16, 1023u16],
     );
     pub const C_STORAGE_BLOCKS: Tag = (
         &[
@@ -1828,27 +1803,27 @@ pub mod Block {
             "hay_block",
         ],
         &[
-            732u16, 609u16, 1124u16, 249u16, 834u16, 454u16, 217u16, 218u16, 113u16, 1005u16,
-            1264u16, 1265u16, 1263u16, 528u16, 425u16, 577u16, 591u16,
+            610u16, 495u16, 932u16, 181u16, 680u16, 347u16, 163u16, 164u16, 97u16, 840u16, 1046u16,
+            1047u16, 1045u16, 416u16, 463u16, 477u16,
         ],
     );
-    pub const C_STORAGE_BLOCKS_BONE_MEAL: Tag = (&["bone_block"], &[732u16]);
-    pub const C_STORAGE_BLOCKS_COAL: Tag = (&["coal_block"], &[609u16]);
-    pub const C_STORAGE_BLOCKS_COPPER: Tag = (&["copper_block"], &[1124u16]);
-    pub const C_STORAGE_BLOCKS_DIAMOND: Tag = (&["diamond_block"], &[249u16]);
-    pub const C_STORAGE_BLOCKS_DRIED_KELP: Tag = (&["dried_kelp_block"], &[834u16]);
-    pub const C_STORAGE_BLOCKS_EMERALD: Tag = (&["emerald_block"], &[454u16]);
-    pub const C_STORAGE_BLOCKS_GOLD: Tag = (&["gold_block"], &[217u16]);
-    pub const C_STORAGE_BLOCKS_IRON: Tag = (&["iron_block"], &[218u16]);
-    pub const C_STORAGE_BLOCKS_LAPIS: Tag = (&["lapis_block"], &[113u16]);
-    pub const C_STORAGE_BLOCKS_NETHERITE: Tag = (&["netherite_block"], &[1005u16]);
-    pub const C_STORAGE_BLOCKS_RAW_COPPER: Tag = (&["raw_copper_block"], &[1264u16]);
-    pub const C_STORAGE_BLOCKS_RAW_GOLD: Tag = (&["raw_gold_block"], &[1265u16]);
-    pub const C_STORAGE_BLOCKS_RAW_IRON: Tag = (&["raw_iron_block"], &[1263u16]);
-    pub const C_STORAGE_BLOCKS_REDSTONE: Tag = (&["redstone_block"], &[528u16]);
-    pub const C_STORAGE_BLOCKS_RESIN: Tag = (&["resin_block"], &[425u16]);
-    pub const C_STORAGE_BLOCKS_SLIME: Tag = (&["slime_block"], &[577u16]);
-    pub const C_STORAGE_BLOCKS_WHEAT: Tag = (&["hay_block"], &[591u16]);
+    pub const C_STORAGE_BLOCKS_BONE_MEAL: Tag = (&["bone_block"], &[610u16]);
+    pub const C_STORAGE_BLOCKS_COAL: Tag = (&["coal_block"], &[495u16]);
+    pub const C_STORAGE_BLOCKS_COPPER: Tag = (&["copper_block"], &[932u16]);
+    pub const C_STORAGE_BLOCKS_DIAMOND: Tag = (&["diamond_block"], &[181u16]);
+    pub const C_STORAGE_BLOCKS_DRIED_KELP: Tag = (&["dried_kelp_block"], &[680u16]);
+    pub const C_STORAGE_BLOCKS_EMERALD: Tag = (&["emerald_block"], &[347u16]);
+    pub const C_STORAGE_BLOCKS_GOLD: Tag = (&["gold_block"], &[163u16]);
+    pub const C_STORAGE_BLOCKS_IRON: Tag = (&["iron_block"], &[164u16]);
+    pub const C_STORAGE_BLOCKS_LAPIS: Tag = (&["lapis_block"], &[97u16]);
+    pub const C_STORAGE_BLOCKS_NETHERITE: Tag = (&["netherite_block"], &[840u16]);
+    pub const C_STORAGE_BLOCKS_RAW_COPPER: Tag = (&["raw_copper_block"], &[1046u16]);
+    pub const C_STORAGE_BLOCKS_RAW_GOLD: Tag = (&["raw_gold_block"], &[1047u16]);
+    pub const C_STORAGE_BLOCKS_RAW_IRON: Tag = (&["raw_iron_block"], &[1045u16]);
+    pub const C_STORAGE_BLOCKS_REDSTONE: Tag = (&["redstone_block"], &[416u16]);
+    pub const C_STORAGE_BLOCKS_RESIN: Tag = (&["resin_block"], &[]);
+    pub const C_STORAGE_BLOCKS_SLIME: Tag = (&["slime_block"], &[463u16]);
+    pub const C_STORAGE_BLOCKS_WHEAT: Tag = (&["hay_block"], &[477u16]);
     pub const C_STRIPPED_LOGS: Tag = (
         &[
             "stripped_acacia_log",
@@ -1866,8 +1841,7 @@ pub mod Block {
             "stripped_warped_stem",
         ],
         &[
-            67u16, 74u16, 65u16, 68u16, 69u16, 66u16, 72u16, 71u16, 70u16, 64u16, 73u16, 962u16,
-            953u16,
+            60u16, 65u16, 58u16, 61u16, 62u16, 59u16, 64u16, 63u16, 57u16, 799u16, 790u16,
         ],
     );
     pub const C_STRIPPED_WOODS: Tag = (
@@ -1886,7 +1860,7 @@ pub mod Block {
             "stripped_warped_hyphae",
         ],
         &[
-            88u16, 86u16, 89u16, 90u16, 87u16, 92u16, 84u16, 91u16, 85u16, 93u16, 964u16, 955u16,
+            78u16, 76u16, 79u16, 80u16, 77u16, 81u16, 74u16, 75u16, 801u16, 792u16,
         ],
     );
     pub const C_VILLAGER_JOB_SITES: Tag = (
@@ -1909,8 +1883,8 @@ pub mod Block {
             "powder_snow_cauldron",
         ],
         &[
-            929u16, 931u16, 436u16, 932u16, 437u16, 999u16, 933u16, 934u16, 935u16, 928u16, 936u16,
-            930u16, 937u16, 439u16, 438u16, 440u16,
+            774u16, 776u16, 330u16, 777u16, 331u16, 834u16, 778u16, 779u16, 780u16, 773u16, 781u16,
+            775u16, 782u16, 333u16, 332u16, 334u16,
         ],
     );
     pub const C_WOODEN_SHELVES: Tag = (
@@ -1929,10 +1903,7 @@ pub mod Block {
             "warped_shelf",
             "poplar_shelf",
         ],
-        &[
-            223u16, 224u16, 225u16, 226u16, 227u16, 228u16, 229u16, 230u16, 231u16, 232u16, 234u16,
-            235u16, 233u16,
-        ],
+        &[],
     );
     pub const MINECRAFT_ACACIA_LOGS: Tag = (
         &[
@@ -1941,9 +1912,9 @@ pub mod Block {
             "stripped_acacia_log",
             "stripped_acacia_wood",
         ],
-        &[55u16, 79u16, 67u16, 88u16],
+        &[50u16, 70u16, 60u16, 78u16],
     );
-    pub const MINECRAFT_AIR: Tag = (&["air", "void_air", "cave_air"], &[0u16, 884u16, 885u16]);
+    pub const MINECRAFT_AIR: Tag = (&["air", "void_air", "cave_air"], &[0u16, 729u16, 730u16]);
     pub const MINECRAFT_ALL_HANGING_SIGNS: Tag = (
         &[
             "oak_hanging_sign",
@@ -1970,8 +1941,8 @@ pub mod Block {
             "bamboo_wall_hanging_sign",
         ],
         &[
-            280u16, 281u16, 282u16, 283u16, 284u16, 285u16, 286u16, 288u16, 289u16, 290u16, 292u16,
-            293u16, 294u16, 295u16, 296u16, 297u16, 298u16, 299u16, 303u16, 304u16, 301u16, 305u16,
+            208u16, 209u16, 210u16, 211u16, 212u16, 213u16, 214u16, 215u16, 216u16, 217u16, 218u16,
+            219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16, 227u16, 228u16, 226u16, 229u16,
         ],
     );
     pub const MINECRAFT_ALL_SIGNS: Tag = (
@@ -2022,10 +1993,10 @@ pub mod Block {
             "bamboo_wall_hanging_sign",
         ],
         &[
-            254u16, 255u16, 256u16, 257u16, 259u16, 260u16, 991u16, 992u16, 262u16, 264u16, 258u16,
-            269u16, 270u16, 271u16, 272u16, 274u16, 275u16, 993u16, 994u16, 277u16, 279u16, 273u16,
-            280u16, 281u16, 282u16, 283u16, 284u16, 285u16, 286u16, 288u16, 289u16, 290u16, 292u16,
-            293u16, 294u16, 295u16, 296u16, 297u16, 298u16, 299u16, 303u16, 304u16, 301u16, 305u16,
+            186u16, 187u16, 188u16, 189u16, 191u16, 192u16, 828u16, 829u16, 193u16, 194u16, 190u16,
+            199u16, 200u16, 201u16, 202u16, 204u16, 205u16, 830u16, 831u16, 206u16, 207u16, 203u16,
+            208u16, 209u16, 210u16, 211u16, 212u16, 213u16, 214u16, 215u16, 216u16, 217u16, 218u16,
+            219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16, 227u16, 228u16, 226u16, 229u16,
         ],
     );
     pub const MINECRAFT_ANCIENT_CITY_REPLACEABLE: Tag = (
@@ -2044,14 +2015,14 @@ pub mod Block {
             "gray_wool",
         ],
         &[
-            1241u16, 1254u16, 1250u16, 1256u16, 1252u16, 1255u16, 1253u16, 1257u16, 1242u16,
-            1259u16, 1260u16, 158u16,
+            1023u16, 1036u16, 1032u16, 1038u16, 1034u16, 1037u16, 1035u16, 1039u16, 1024u16,
+            1041u16, 1042u16, 137u16,
         ],
     );
     pub const MINECRAFT_ANIMALS_SPAWNABLE_ON: Tag = (&["grass_block"], &[8u16]);
     pub const MINECRAFT_ANVIL: Tag = (
         &["anvil", "chipped_anvil", "damaged_anvil"],
-        &[520u16, 521u16, 522u16],
+        &[408u16, 409u16, 410u16],
     );
     pub const MINECRAFT_ARMADILLO_SPAWNABLE_ON: Tag = (
         &[
@@ -2067,10 +2038,10 @@ pub mod Block {
             "coarse_dirt",
         ],
         &[
-            8u16, 608u16, 537u16, 541u16, 538u16, 551u16, 549u16, 545u16, 41u16, 10u16,
+            8u16, 494u16, 425u16, 429u16, 426u16, 439u16, 437u16, 433u16, 36u16, 10u16,
         ],
     );
-    pub const MINECRAFT_AXOLOTLS_SPAWNABLE_ON: Tag = (&["clay"], &[330u16]);
+    pub const MINECRAFT_AXOLOTLS_SPAWNABLE_ON: Tag = (&["clay"], &[251u16]);
     pub const MINECRAFT_AZALEA_GROWS_ON: Tag = (
         &[
             "dirt",
@@ -2106,9 +2077,9 @@ pub mod Block {
             "powder_snow",
         ],
         &[
-            9u16, 8u16, 11u16, 10u16, 423u16, 1239u16, 1234u16, 1240u16, 62u16, 39u16, 41u16,
-            40u16, 608u16, 537u16, 538u16, 539u16, 540u16, 541u16, 542u16, 543u16, 544u16, 545u16,
-            546u16, 547u16, 548u16, 549u16, 550u16, 551u16, 552u16, 327u16, 1117u16,
+            9u16, 8u16, 11u16, 10u16, 323u16, 1021u16, 1016u16, 1022u16, 55u16, 34u16, 36u16,
+            35u16, 494u16, 425u16, 426u16, 427u16, 428u16, 429u16, 430u16, 431u16, 432u16, 433u16,
+            434u16, 435u16, 436u16, 437u16, 438u16, 439u16, 440u16, 249u16, 925u16,
         ],
     );
     pub const MINECRAFT_AZALEA_ROOT_REPLACEABLE: Tag = (
@@ -2153,10 +2124,10 @@ pub mod Block {
             "powder_snow",
         ],
         &[
-            1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16, 9u16, 8u16, 11u16, 10u16, 423u16, 1239u16,
-            1234u16, 1240u16, 62u16, 608u16, 537u16, 538u16, 539u16, 540u16, 541u16, 542u16,
-            543u16, 544u16, 545u16, 546u16, 547u16, 548u16, 549u16, 550u16, 551u16, 552u16, 41u16,
-            330u16, 42u16, 39u16, 327u16, 1117u16,
+            1u16, 2u16, 4u16, 6u16, 909u16, 1023u16, 9u16, 8u16, 11u16, 10u16, 323u16, 1021u16,
+            1016u16, 1022u16, 55u16, 494u16, 425u16, 426u16, 427u16, 428u16, 429u16, 430u16,
+            431u16, 432u16, 433u16, 434u16, 435u16, 436u16, 437u16, 438u16, 439u16, 440u16, 36u16,
+            251u16, 37u16, 34u16, 249u16, 925u16,
         ],
     );
     pub const MINECRAFT_BADLANDS_TERRACOTTA: Tag = (
@@ -2169,10 +2140,10 @@ pub mod Block {
             "brown_terracotta",
             "light_gray_terracotta",
         ],
-        &[608u16, 537u16, 541u16, 538u16, 551u16, 549u16, 545u16],
+        &[494u16, 425u16, 429u16, 426u16, 439u16, 437u16, 433u16],
     );
     pub const MINECRAFT_BAMBOO_BLOCKS: Tag =
-        (&["bamboo_block", "stripped_bamboo_block"], &[63u16, 74u16]);
+        (&["bamboo_block", "stripped_bamboo_block"], &[56u16, 65u16]);
     pub const MINECRAFT_BAMBOO_PLANTABLE_ON: Tag = (
         &[
             "sand",
@@ -2193,8 +2164,8 @@ pub mod Block {
             "suspicious_gravel",
         ],
         &[
-            39u16, 41u16, 40u16, 9u16, 8u16, 11u16, 10u16, 423u16, 1239u16, 1234u16, 1240u16,
-            62u16, 882u16, 881u16, 42u16, 43u16,
+            34u16, 36u16, 35u16, 9u16, 8u16, 11u16, 10u16, 323u16, 1021u16, 1016u16, 1022u16,
+            55u16, 727u16, 726u16, 37u16, 38u16,
         ],
     );
     pub const MINECRAFT_BANNERS: Tag = (
@@ -2233,14 +2204,14 @@ pub mod Block {
             "black_wall_banner",
         ],
         &[
-            617u16, 618u16, 619u16, 620u16, 621u16, 622u16, 623u16, 624u16, 625u16, 626u16, 627u16,
-            628u16, 629u16, 630u16, 631u16, 632u16, 633u16, 634u16, 635u16, 636u16, 637u16, 638u16,
-            639u16, 640u16, 641u16, 642u16, 643u16, 644u16, 645u16, 646u16, 647u16, 648u16,
+            503u16, 504u16, 505u16, 506u16, 507u16, 508u16, 509u16, 510u16, 511u16, 512u16, 513u16,
+            514u16, 515u16, 516u16, 517u16, 518u16, 519u16, 520u16, 521u16, 522u16, 523u16, 524u16,
+            525u16, 526u16, 527u16, 528u16, 529u16, 530u16, 531u16, 532u16, 533u16, 534u16,
         ],
     );
     pub const MINECRAFT_BASE_STONE_NETHER: Tag = (
         &["netherrack", "basalt", "blackstone"],
-        &[334u16, 337u16, 1014u16],
+        &[255u16, 258u16, 849u16],
     );
     pub const MINECRAFT_BASE_STONE_OVERWORLD: Tag = (
         &[
@@ -2251,7 +2222,7 @@ pub mod Block {
             "tuff",
             "deepslate",
         ],
-        &[1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16],
+        &[1u16, 2u16, 4u16, 6u16, 909u16, 1023u16],
     );
     pub const MINECRAFT_BEACON_BASE_BLOCKS: Tag = (
         &[
@@ -2261,7 +2232,7 @@ pub mod Block {
             "gold_block",
             "iron_block",
         ],
-        &[1005u16, 454u16, 249u16, 217u16, 218u16],
+        &[840u16, 347u16, 181u16, 163u16, 164u16],
     );
     pub const MINECRAFT_BEDS: Tag = (
         &[
@@ -2283,8 +2254,8 @@ pub mod Block {
             "yellow_bed",
         ],
         &[
-            133u16, 134u16, 130u16, 131u16, 128u16, 126u16, 132u16, 122u16, 127u16, 124u16, 121u16,
-            120u16, 125u16, 129u16, 119u16, 123u16,
+            117u16, 118u16, 114u16, 115u16, 112u16, 110u16, 116u16, 106u16, 111u16, 108u16, 105u16,
+            104u16, 109u16, 113u16, 103u16, 107u16,
         ],
     );
     pub const MINECRAFT_BEE_GROWABLES: Tag = (
@@ -2302,11 +2273,11 @@ pub mod Block {
             "cave_vines_plant",
         ],
         &[
-            723u16, 493u16, 494u16, 251u16, 415u16, 414u16, 720u16, 721u16, 951u16, 1225u16,
-            1226u16,
+            601u16, 383u16, 384u16, 183u16, 316u16, 315u16, 598u16, 599u16, 788u16, 1009u16,
+            1010u16,
         ],
     );
-    pub const MINECRAFT_BEEHIVES: Tag = (&["bee_nest", "beehive"], &[1001u16, 1002u16]);
+    pub const MINECRAFT_BEEHIVES: Tag = (&["bee_nest", "beehive"], &[836u16, 837u16]);
     pub const MINECRAFT_BIG_DRIPLEAF_PLACEABLE: Tag = (
         &[
             "clay",
@@ -2322,7 +2293,7 @@ pub mod Block {
             "farmland",
         ],
         &[
-            330u16, 1234u16, 9u16, 8u16, 11u16, 10u16, 423u16, 1239u16, 1240u16, 62u16, 252u16,
+            251u16, 1016u16, 9u16, 8u16, 11u16, 10u16, 323u16, 1021u16, 1022u16, 55u16, 184u16,
         ],
     );
     pub const MINECRAFT_BIRCH_LOGS: Tag = (
@@ -2332,10 +2303,10 @@ pub mod Block {
             "stripped_birch_log",
             "stripped_birch_wood",
         ],
-        &[53u16, 77u16, 65u16, 86u16],
+        &[48u16, 68u16, 58u16, 76u16],
     );
     pub const MINECRAFT_BLOCKS_WIND_CHARGE_EXPLOSIONS: Tag =
-        (&["barrier", "bedrock"], &[578u16, 36u16]);
+        (&["barrier", "bedrock"], &[464u16, 31u16]);
     pub const MINECRAFT_BUTTONS: Tag = (
         &[
             "oak_button",
@@ -2353,8 +2324,8 @@ pub mod Block {
             "polished_blackstone_button",
         ],
         &[
-            495u16, 496u16, 497u16, 498u16, 499u16, 501u16, 987u16, 988u16, 503u16, 505u16, 500u16,
-            324u16, 1029u16,
+            385u16, 386u16, 387u16, 388u16, 389u16, 391u16, 824u16, 825u16, 392u16, 393u16, 390u16,
+            246u16, 864u16,
         ],
     );
     pub const MINECRAFT_CAMEL_SAND_STEP_SOUND_BLOCKS: Tag = (
@@ -2380,11 +2351,11 @@ pub mod Block {
             "black_concrete_powder",
         ],
         &[
-            39u16, 41u16, 40u16, 816u16, 817u16, 818u16, 819u16, 820u16, 821u16, 822u16, 823u16,
-            824u16, 825u16, 826u16, 827u16, 828u16, 829u16, 830u16, 831u16,
+            34u16, 36u16, 35u16, 662u16, 663u16, 664u16, 665u16, 666u16, 667u16, 668u16, 669u16,
+            670u16, 671u16, 672u16, 673u16, 674u16, 675u16, 676u16, 677u16,
         ],
     );
-    pub const MINECRAFT_CAMPFIRES: Tag = (&["campfire", "soul_campfire"], &[949u16, 950u16]);
+    pub const MINECRAFT_CAMPFIRES: Tag = (&["campfire", "soul_campfire"], &[786u16, 787u16]);
     pub const MINECRAFT_CANDLE_CAKES: Tag = (
         &[
             "candle_cake",
@@ -2406,8 +2377,8 @@ pub mod Block {
             "black_candle_cake",
         ],
         &[
-            1051u16, 1052u16, 1053u16, 1054u16, 1055u16, 1056u16, 1057u16, 1058u16, 1059u16,
-            1060u16, 1061u16, 1062u16, 1063u16, 1064u16, 1065u16, 1066u16, 1067u16,
+            886u16, 887u16, 888u16, 889u16, 890u16, 891u16, 892u16, 893u16, 894u16, 895u16, 896u16,
+            897u16, 898u16, 899u16, 900u16, 901u16, 902u16,
         ],
     );
     pub const MINECRAFT_CANDLES: Tag = (
@@ -2431,8 +2402,8 @@ pub mod Block {
             "black_candle",
         ],
         &[
-            1034u16, 1035u16, 1036u16, 1037u16, 1038u16, 1039u16, 1040u16, 1041u16, 1042u16,
-            1043u16, 1044u16, 1045u16, 1046u16, 1047u16, 1048u16, 1049u16, 1050u16,
+            869u16, 870u16, 871u16, 872u16, 873u16, 874u16, 875u16, 876u16, 877u16, 878u16, 879u16,
+            880u16, 881u16, 882u16, 883u16, 884u16, 885u16,
         ],
     );
     pub const MINECRAFT_CAULDRONS: Tag = (
@@ -2442,10 +2413,10 @@ pub mod Block {
             "lava_cauldron",
             "powder_snow_cauldron",
         ],
-        &[437u16, 438u16, 439u16, 440u16],
+        &[331u16, 332u16, 333u16, 334u16],
     );
     pub const MINECRAFT_CAVE_VINES: Tag =
-        (&["cave_vines_plant", "cave_vines"], &[1226u16, 1225u16]);
+        (&["cave_vines_plant", "cave_vines"], &[1010u16, 1009u16]);
     pub const MINECRAFT_CEILING_HANGING_SIGNS: Tag = (
         &[
             "oak_hanging_sign",
@@ -2461,7 +2432,7 @@ pub mod Block {
             "bamboo_hanging_sign",
         ],
         &[
-            280u16, 281u16, 282u16, 283u16, 284u16, 285u16, 286u16, 288u16, 289u16, 290u16, 292u16,
+            208u16, 209u16, 210u16, 211u16, 212u16, 213u16, 214u16, 215u16, 216u16, 217u16, 218u16,
         ],
     );
     pub const MINECRAFT_CHERRY_LOGS: Tag = (
@@ -2471,7 +2442,7 @@ pub mod Block {
             "stripped_cherry_log",
             "stripped_cherry_wood",
         ],
-        &[56u16, 80u16, 68u16, 89u16],
+        &[51u16, 71u16, 61u16, 79u16],
     );
     pub const MINECRAFT_CLIMBABLE: Tag = (
         &[
@@ -2486,10 +2457,10 @@ pub mod Block {
             "cave_vines_plant",
         ],
         &[
-            266u16, 416u16, 927u16, 968u16, 969u16, 970u16, 971u16, 1225u16, 1226u16,
+            196u16, 317u16, 772u16, 805u16, 806u16, 807u16, 808u16, 1009u16, 1010u16,
         ],
     );
-    pub const MINECRAFT_COAL_ORES: Tag = (&["coal_ore", "deepslate_coal_ore"], &[48u16, 49u16]);
+    pub const MINECRAFT_COAL_ORES: Tag = (&["coal_ore", "deepslate_coal_ore"], &[43u16, 44u16]);
     pub const MINECRAFT_COMBINATION_STEP_SOUND_BLOCKS: Tag = (
         &[
             "white_carpet",
@@ -2515,8 +2486,8 @@ pub mod Block {
             "crimson_roots",
         ],
         &[
-            592u16, 593u16, 594u16, 595u16, 596u16, 597u16, 598u16, 599u16, 600u16, 601u16, 602u16,
-            603u16, 604u16, 605u16, 606u16, 607u16, 1230u16, 325u16, 960u16, 959u16, 972u16,
+            478u16, 479u16, 480u16, 481u16, 482u16, 483u16, 484u16, 485u16, 486u16, 487u16, 488u16,
+            489u16, 490u16, 491u16, 492u16, 493u16, 1014u16, 247u16, 797u16, 796u16, 809u16,
         ],
     );
     pub const MINECRAFT_COMPLETES_FIND_TREE_TUTORIAL: Tag = (
@@ -2575,11 +2546,11 @@ pub mod Block {
             "warped_wart_block",
         ],
         &[
-            57u16, 81u16, 69u16, 90u16, 51u16, 75u16, 71u16, 84u16, 55u16, 79u16, 67u16, 88u16,
-            53u16, 77u16, 65u16, 86u16, 54u16, 78u16, 66u16, 87u16, 52u16, 76u16, 64u16, 85u16,
-            59u16, 82u16, 72u16, 92u16, 56u16, 80u16, 68u16, 89u16, 961u16, 962u16, 963u16, 964u16,
-            952u16, 953u16, 954u16, 955u16, 97u16, 94u16, 95u16, 100u16, 98u16, 96u16, 106u16,
-            107u16, 102u16, 99u16, 730u16, 958u16,
+            52u16, 72u16, 62u16, 80u16, 46u16, 66u16, 63u16, 74u16, 50u16, 70u16, 60u16, 78u16,
+            48u16, 68u16, 58u16, 76u16, 49u16, 69u16, 59u16, 77u16, 47u16, 67u16, 57u16, 75u16,
+            53u16, 73u16, 64u16, 81u16, 51u16, 71u16, 61u16, 79u16, 798u16, 799u16, 800u16, 801u16,
+            789u16, 790u16, 791u16, 792u16, 85u16, 82u16, 83u16, 88u16, 86u16, 84u16, 90u16, 91u16,
+            89u16, 87u16, 608u16, 795u16,
         ],
     );
     pub const MINECRAFT_CONCRETE_POWDER: Tag = (
@@ -2602,16 +2573,16 @@ pub mod Block {
             "black_concrete_powder",
         ],
         &[
-            816u16, 817u16, 818u16, 819u16, 820u16, 821u16, 822u16, 823u16, 824u16, 825u16, 826u16,
-            827u16, 828u16, 829u16, 830u16, 831u16,
+            662u16, 663u16, 664u16, 665u16, 666u16, 667u16, 668u16, 669u16, 670u16, 671u16, 672u16,
+            673u16, 674u16, 675u16, 676u16, 677u16,
         ],
     );
     pub const MINECRAFT_CONVERTABLE_TO_MUD: Tag = (
         &["dirt", "coarse_dirt", "rooted_dirt"],
-        &[9u16, 10u16, 1239u16],
+        &[9u16, 10u16, 1021u16],
     );
     pub const MINECRAFT_COPPER_ORES: Tag =
-        (&["copper_ore", "deepslate_copper_ore"], &[1132u16, 1133u16]);
+        (&["copper_ore", "deepslate_copper_ore"], &[936u16, 937u16]);
     pub const MINECRAFT_CORAL_BLOCKS: Tag = (
         &[
             "tube_coral_block",
@@ -2620,7 +2591,7 @@ pub mod Block {
             "fire_coral_block",
             "horn_coral_block",
         ],
-        &[843u16, 844u16, 845u16, 846u16, 847u16],
+        &[688u16, 689u16, 690u16, 691u16, 692u16],
     );
     pub const MINECRAFT_CORAL_PLANTS: Tag = (
         &[
@@ -2630,7 +2601,7 @@ pub mod Block {
             "fire_coral",
             "horn_coral",
         ],
-        &[853u16, 854u16, 855u16, 856u16, 857u16],
+        &[698u16, 699u16, 700u16, 701u16, 702u16],
     );
     pub const MINECRAFT_CORALS: Tag = (
         &[
@@ -2646,7 +2617,7 @@ pub mod Block {
             "horn_coral_fan",
         ],
         &[
-            853u16, 854u16, 855u16, 856u16, 857u16, 863u16, 864u16, 865u16, 866u16, 867u16,
+            698u16, 699u16, 700u16, 701u16, 702u16, 708u16, 709u16, 710u16, 711u16, 712u16,
         ],
     );
     pub const MINECRAFT_CRIMSON_STEMS: Tag = (
@@ -2656,7 +2627,7 @@ pub mod Block {
             "crimson_hyphae",
             "stripped_crimson_hyphae",
         ],
-        &[961u16, 962u16, 963u16, 964u16],
+        &[798u16, 799u16, 800u16, 801u16],
     );
     pub const MINECRAFT_CROPS: Tag = (
         &[
@@ -2670,11 +2641,11 @@ pub mod Block {
             "pitcher_crop",
         ],
         &[
-            723u16, 493u16, 494u16, 251u16, 415u16, 414u16, 720u16, 721u16,
+            601u16, 383u16, 384u16, 183u16, 316u16, 315u16, 598u16, 599u16,
         ],
     );
     pub const MINECRAFT_CRYSTAL_SOUND_BLOCKS: Tag =
-        (&["amethyst_block", "budding_amethyst"], &[1068u16, 1069u16]);
+        (&["amethyst_block", "budding_amethyst"], &[903u16, 904u16]);
     pub const MINECRAFT_DAMPENS_VIBRATIONS: Tag = (
         &[
             "white_wool",
@@ -2711,9 +2682,9 @@ pub mod Block {
             "black_carpet",
         ],
         &[
-            151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16, 159u16, 160u16, 161u16,
-            162u16, 163u16, 164u16, 165u16, 166u16, 592u16, 593u16, 594u16, 595u16, 596u16, 597u16,
-            598u16, 599u16, 600u16, 601u16, 602u16, 603u16, 604u16, 605u16, 606u16, 607u16,
+            130u16, 131u16, 132u16, 133u16, 134u16, 135u16, 136u16, 137u16, 138u16, 139u16, 140u16,
+            141u16, 142u16, 143u16, 144u16, 145u16, 478u16, 479u16, 480u16, 481u16, 482u16, 483u16,
+            484u16, 485u16, 486u16, 487u16, 488u16, 489u16, 490u16, 491u16, 492u16, 493u16,
         ],
     );
     pub const MINECRAFT_DARK_OAK_LOGS: Tag = (
@@ -2723,7 +2694,7 @@ pub mod Block {
             "stripped_dark_oak_log",
             "stripped_dark_oak_wood",
         ],
-        &[57u16, 81u16, 69u16, 90u16],
+        &[52u16, 72u16, 62u16, 80u16],
     );
     pub const MINECRAFT_DEAD_BUSH_MAY_PLACE_ON: Tag = (
         &[
@@ -2758,15 +2729,15 @@ pub mod Block {
             "muddy_mangrove_roots",
         ],
         &[
-            39u16, 41u16, 40u16, 608u16, 537u16, 538u16, 539u16, 540u16, 541u16, 542u16, 543u16,
-            544u16, 545u16, 546u16, 547u16, 548u16, 549u16, 550u16, 551u16, 552u16, 9u16, 8u16,
-            11u16, 10u16, 423u16, 1239u16, 1234u16, 1240u16, 62u16,
+            34u16, 36u16, 35u16, 494u16, 425u16, 426u16, 427u16, 428u16, 429u16, 430u16, 431u16,
+            432u16, 433u16, 434u16, 435u16, 436u16, 437u16, 438u16, 439u16, 440u16, 9u16, 8u16,
+            11u16, 10u16, 323u16, 1021u16, 1016u16, 1022u16, 55u16,
         ],
     );
     pub const MINECRAFT_DEEPSLATE_ORE_REPLACEABLES: Tag =
-        (&["deepslate", "tuff"], &[1241u16, 1074u16]);
+        (&["deepslate", "tuff"], &[1023u16, 909u16]);
     pub const MINECRAFT_DIAMOND_ORES: Tag =
-        (&["diamond_ore", "deepslate_diamond_ore"], &[247u16, 248u16]);
+        (&["diamond_ore", "deepslate_diamond_ore"], &[179u16, 180u16]);
     pub const MINECRAFT_DIRT: Tag = (
         &[
             "dirt",
@@ -2780,11 +2751,10 @@ pub mod Block {
             "muddy_mangrove_roots",
         ],
         &[
-            9u16, 8u16, 11u16, 10u16, 423u16, 1239u16, 1234u16, 1240u16, 62u16,
+            9u16, 8u16, 11u16, 10u16, 323u16, 1021u16, 1016u16, 1022u16, 55u16,
         ],
     );
-    pub const MINECRAFT_DOES_NOT_BLOCK_HOPPERS: Tag =
-        (&["bee_nest", "beehive"], &[1001u16, 1002u16]);
+    pub const MINECRAFT_DOES_NOT_BLOCK_HOPPERS: Tag = (&["bee_nest", "beehive"], &[836u16, 837u16]);
     pub const MINECRAFT_DOORS: Tag = (
         &[
             "oak_door",
@@ -2809,8 +2779,8 @@ pub mod Block {
             "iron_door",
         ],
         &[
-            265u16, 702u16, 703u16, 704u16, 705u16, 707u16, 989u16, 990u16, 709u16, 711u16, 706u16,
-            1166u16, 1167u16, 1168u16, 1169u16, 1170u16, 1171u16, 1172u16, 1173u16, 308u16,
+            195u16, 583u16, 584u16, 585u16, 586u16, 588u16, 826u16, 827u16, 589u16, 590u16, 587u16,
+            974u16, 975u16, 977u16, 976u16, 978u16, 979u16, 981u16, 980u16, 232u16,
         ],
     );
     pub const MINECRAFT_DRAGON_IMMUNE: Tag = (
@@ -2834,12 +2804,12 @@ pub mod Block {
             "reinforced_deepslate",
         ],
         &[
-            578u16, 36u16, 441u16, 442u16, 725u16, 458u16, 726u16, 727u16, 995u16, 996u16, 199u16,
-            237u16, 1007u16, 443u16, 391u16, 1008u16, 1272u16,
+            464u16, 31u16, 335u16, 336u16, 603u16, 351u16, 604u16, 605u16, 832u16, 833u16, 146u16,
+            170u16, 842u16, 337u16, 308u16, 843u16, 1054u16,
         ],
     );
     pub const MINECRAFT_DRAGON_TRANSPARENT: Tag =
-        (&["light", "fire", "soul_fire"], &[579u16, 240u16, 241u16]);
+        (&["light", "fire", "soul_fire"], &[465u16, 173u16, 174u16]);
     pub const MINECRAFT_DRIPSTONE_REPLACEABLE_BLOCKS: Tag = (
         &[
             "stone",
@@ -2849,11 +2819,11 @@ pub mod Block {
             "tuff",
             "deepslate",
         ],
-        &[1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16],
+        &[1u16, 2u16, 4u16, 6u16, 909u16, 1023u16],
     );
     pub const MINECRAFT_EMERALD_ORES: Tag =
-        (&["emerald_ore", "deepslate_emerald_ore"], &[449u16, 450u16]);
-    pub const MINECRAFT_ENCHANTMENT_POWER_PROVIDER: Tag = (&["bookshelf"], &[221u16]);
+        (&["emerald_ore", "deepslate_emerald_ore"], &[342u16, 343u16]);
+    pub const MINECRAFT_ENCHANTMENT_POWER_PROVIDER: Tag = (&["bookshelf"], &[167u16]);
     pub const MINECRAFT_ENCHANTMENT_POWER_TRANSMITTER: Tag = (
         &[
             "air",
@@ -2882,9 +2852,9 @@ pub mod Block {
             "hanging_roots",
         ],
         &[
-            0u16, 37u16, 38u16, 140u16, 141u16, 142u16, 147u16, 148u16, 240u16, 241u16, 325u16,
-            416u16, 417u16, 579u16, 615u16, 616u16, 733u16, 884u16, 885u16, 886u16, 959u16, 960u16,
-            972u16, 1238u16,
+            0u16, 32u16, 33u16, 123u16, 124u16, 125u16, 126u16, 127u16, 173u16, 174u16, 247u16,
+            317u16, 318u16, 465u16, 501u16, 502u16, 611u16, 729u16, 730u16, 731u16, 796u16, 797u16,
+            809u16, 1020u16,
         ],
     );
     pub const MINECRAFT_ENDERMAN_HOLDABLE: Tag = (
@@ -2931,10 +2901,10 @@ pub mod Block {
             "warped_roots",
         ],
         &[
-            200u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16,
-            214u16, 213u16, 202u16, 9u16, 8u16, 11u16, 10u16, 423u16, 1239u16, 1234u16, 1240u16,
-            62u16, 39u16, 41u16, 42u16, 215u16, 216u16, 220u16, 328u16, 330u16, 410u16, 345u16,
-            411u16, 966u16, 965u16, 972u16, 957u16, 956u16, 959u16,
+            147u16, 149u16, 150u16, 151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16,
+            160u16, 159u16, 148u16, 9u16, 8u16, 11u16, 10u16, 323u16, 1021u16, 1016u16, 1022u16,
+            55u16, 34u16, 36u16, 37u16, 161u16, 162u16, 166u16, 250u16, 251u16, 311u16, 264u16,
+            312u16, 803u16, 802u16, 809u16, 794u16, 793u16, 796u16,
         ],
     );
     pub const MINECRAFT_FALL_DAMAGE_RESETTING: Tag = (
@@ -2952,8 +2922,8 @@ pub mod Block {
             "cobweb",
         ],
         &[
-            266u16, 416u16, 927u16, 968u16, 969u16, 970u16, 971u16, 1225u16, 1226u16, 951u16,
-            139u16,
+            196u16, 317u16, 772u16, 805u16, 806u16, 807u16, 808u16, 1009u16, 1010u16, 788u16,
+            122u16,
         ],
     );
     pub const MINECRAFT_FEATURES_CANNOT_REPLACE: Tag = (
@@ -2966,7 +2936,7 @@ pub mod Block {
             "trial_spawner",
             "vault",
         ],
-        &[36u16, 242u16, 245u16, 442u16, 1272u16, 1275u16, 1276u16],
+        &[31u16, 175u16, 177u16, 336u16, 1054u16, 1057u16, 1058u16],
     );
     pub const MINECRAFT_FENCE_GATES: Tag = (
         &[
@@ -2983,7 +2953,7 @@ pub mod Block {
             "cherry_fence_gate",
         ],
         &[
-            685u16, 683u16, 687u16, 684u16, 419u16, 682u16, 983u16, 984u16, 689u16, 691u16, 686u16,
+            570u16, 568u16, 572u16, 569u16, 319u16, 567u16, 820u16, 821u16, 573u16, 574u16, 571u16,
         ],
     );
     pub const MINECRAFT_FENCES: Tag = (
@@ -3002,11 +2972,11 @@ pub mod Block {
             "nether_brick_fence",
         ],
         &[
-            333u16, 695u16, 697u16, 692u16, 693u16, 694u16, 979u16, 980u16, 699u16, 701u16, 696u16,
-            432u16,
+            254u16, 578u16, 580u16, 575u16, 576u16, 577u16, 816u16, 817u16, 581u16, 582u16, 579u16,
+            326u16,
         ],
     );
-    pub const MINECRAFT_FIRE: Tag = (&["fire", "soul_fire"], &[240u16, 241u16]);
+    pub const MINECRAFT_FIRE: Tag = (&["fire", "soul_fire"], &[173u16, 174u16]);
     pub const MINECRAFT_FLOWER_POTS: Tag = (
         &[
             "flower_pot",
@@ -3046,10 +3016,10 @@ pub mod Block {
             "potted_torchflower",
         ],
         &[
-            462u16, 477u16, 478u16, 479u16, 480u16, 481u16, 482u16, 483u16, 484u16, 485u16, 475u16,
-            464u16, 465u16, 466u16, 467u16, 468u16, 470u16, 489u16, 490u16, 491u16, 474u16, 492u16,
-            486u16, 487u16, 488u16, 883u16, 1009u16, 1010u16, 1011u16, 1012u16, 1266u16, 1267u16,
-            473u16, 469u16, 463u16,
+            355u16, 367u16, 368u16, 369u16, 370u16, 371u16, 372u16, 373u16, 374u16, 375u16, 366u16,
+            357u16, 358u16, 359u16, 360u16, 361u16, 363u16, 379u16, 380u16, 381u16, 365u16, 382u16,
+            376u16, 377u16, 378u16, 728u16, 844u16, 845u16, 846u16, 847u16, 1048u16, 1049u16,
+            364u16, 362u16, 356u16,
         ],
     );
     pub const MINECRAFT_FLOWERS: Tag = (
@@ -3082,17 +3052,17 @@ pub mod Block {
             "spore_blossom",
         ],
         &[
-            200u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16,
-            214u16, 213u16, 202u16, 611u16, 612u16, 614u16, 613u16, 722u16, 107u16, 1229u16, 34u16,
-            99u16, 1231u16, 714u16, 1227u16,
+            147u16, 149u16, 150u16, 151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16,
+            160u16, 159u16, 148u16, 497u16, 498u16, 500u16, 499u16, 600u16, 91u16, 1013u16, 30u16,
+            87u16, 1015u16, 593u16, 1011u16,
         ],
     );
     pub const MINECRAFT_FOXES_SPAWNABLE_ON: Tag = (
         &["grass_block", "snow", "snow_block", "podzol", "coarse_dirt"],
-        &[8u16, 325u16, 327u16, 11u16, 10u16],
+        &[8u16, 247u16, 249u16, 11u16, 10u16],
     );
     pub const MINECRAFT_FROG_PREFER_JUMP_TO: Tag =
-        (&["lily_pad", "big_dripleaf"], &[424u16, 1235u16]);
+        (&["lily_pad", "big_dripleaf"], &[324u16, 1017u16]);
     pub const MINECRAFT_FROGS_SPAWNABLE_ON: Tag = (
         &[
             "grass_block",
@@ -3100,11 +3070,11 @@ pub mod Block {
             "mangrove_roots",
             "muddy_mangrove_roots",
         ],
-        &[8u16, 1240u16, 61u16, 62u16],
+        &[8u16, 1022u16, 54u16, 55u16],
     );
     pub const MINECRAFT_GEODE_INVALID_BLOCKS: Tag = (
         &["bedrock", "water", "lava", "ice", "packed_ice", "blue_ice"],
-        &[36u16, 37u16, 38u16, 326u16, 610u16, 879u16],
+        &[31u16, 32u16, 33u16, 248u16, 496u16, 724u16],
     );
     pub const MINECRAFT_GOATS_SPAWNABLE_ON: Tag = (
         &[
@@ -3115,11 +3085,11 @@ pub mod Block {
             "packed_ice",
             "gravel",
         ],
-        &[8u16, 1u16, 325u16, 327u16, 610u16, 42u16],
+        &[8u16, 1u16, 247u16, 249u16, 496u16, 37u16],
     );
     pub const MINECRAFT_GOLD_ORES: Tag = (
         &["gold_ore", "nether_gold_ore", "deepslate_gold_ore"],
-        &[44u16, 50u16, 45u16],
+        &[39u16, 45u16, 40u16],
     );
     pub const MINECRAFT_GUARDED_BY_PIGLINS: Tag = (
         &[
@@ -3152,9 +3122,9 @@ pub mod Block {
             "deepslate_gold_ore",
         ],
         &[
-            217u16, 929u16, 245u16, 451u16, 1025u16, 523u16, 1265u16, 735u16, 751u16, 747u16,
-            748u16, 745u16, 743u16, 749u16, 739u16, 744u16, 741u16, 738u16, 737u16, 742u16, 746u16,
-            750u16, 736u16, 740u16, 44u16, 50u16, 45u16,
+            163u16, 774u16, 177u16, 344u16, 860u16, 411u16, 1047u16, 613u16, 629u16, 625u16,
+            626u16, 623u16, 621u16, 627u16, 617u16, 622u16, 619u16, 616u16, 615u16, 620u16, 624u16,
+            628u16, 614u16, 618u16, 39u16, 45u16, 40u16,
         ],
     );
     pub const MINECRAFT_HOGLIN_REPELLENTS: Tag = (
@@ -3164,11 +3134,11 @@ pub mod Block {
             "nether_portal",
             "respawn_anchor",
         ],
-        &[957u16, 1010u16, 344u16, 1008u16],
+        &[794u16, 845u16, 263u16, 843u16],
     );
     pub const MINECRAFT_ICE: Tag = (
         &["ice", "packed_ice", "blue_ice", "frosted_ice"],
-        &[326u16, 610u16, 879u16, 728u16],
+        &[248u16, 496u16, 724u16, 606u16],
     );
     pub const MINECRAFT_IMPERMEABLE: Tag = (
         &[
@@ -3192,8 +3162,8 @@ pub mod Block {
             "tinted_glass",
         ],
         &[
-            110u16, 349u16, 350u16, 351u16, 352u16, 353u16, 354u16, 355u16, 356u16, 357u16, 358u16,
-            359u16, 360u16, 361u16, 362u16, 363u16, 364u16, 1116u16,
+            94u16, 268u16, 269u16, 270u16, 271u16, 272u16, 273u16, 274u16, 275u16, 276u16, 277u16,
+            278u16, 279u16, 280u16, 281u16, 282u16, 283u16, 924u16,
         ],
     );
     pub const MINECRAFT_INCORRECT_FOR_DIAMOND_TOOL: Tag = (&[], &[]);
@@ -3302,17 +3272,16 @@ pub mod Block {
             "waxed_oxidized_copper_door",
         ],
         &[
-            237u16, 1007u16, 1005u16, 1008u16, 1006u16, 249u16, 247u16, 248u16, 449u16, 450u16,
-            454u16, 217u16, 1265u16, 44u16, 45u16, 320u16, 321u16, 218u16, 1263u16, 46u16, 47u16,
-            113u16, 111u16, 112u16, 1124u16, 1264u16, 1132u16, 1133u16, 1158u16, 1150u16, 1134u16,
-            1126u16, 1160u16, 1152u16, 1136u16, 1127u16, 1161u16, 1153u16, 1137u16, 1125u16,
-            1159u16, 1151u16, 1135u16, 1128u16, 1162u16, 1154u16, 1138u16, 1130u16, 1164u16,
-            1156u16, 1140u16, 1129u16, 1163u16, 1155u16, 1139u16, 1131u16, 1165u16, 1157u16,
-            1141u16, 1214u16, 1274u16, 1142u16, 1143u16, 1144u16, 1145u16, 1146u16, 1147u16,
-            1148u16, 1149u16, 1182u16, 1183u16, 1184u16, 1185u16, 1186u16, 1187u16, 1188u16,
-            1189u16, 1190u16, 1191u16, 1192u16, 1193u16, 1194u16, 1195u16, 1196u16, 1197u16,
-            1174u16, 1175u16, 1176u16, 1177u16, 1178u16, 1179u16, 1180u16, 1181u16, 1166u16,
-            1167u16, 1168u16, 1169u16, 1170u16, 1171u16, 1172u16, 1173u16,
+            170u16, 842u16, 840u16, 843u16, 841u16, 181u16, 179u16, 180u16, 342u16, 343u16, 347u16,
+            163u16, 1047u16, 39u16, 40u16, 242u16, 243u16, 164u16, 1045u16, 41u16, 42u16, 97u16,
+            95u16, 96u16, 932u16, 1046u16, 936u16, 937u16, 957u16, 953u16, 941u16, 934u16, 955u16,
+            951u16, 939u16, 935u16, 954u16, 950u16, 938u16, 933u16, 956u16, 952u16, 940u16, 958u16,
+            973u16, 969u16, 965u16, 959u16, 971u16, 967u16, 963u16, 960u16, 972u16, 968u16, 964u16,
+            961u16, 970u16, 966u16, 962u16, 1006u16, 1056u16, 945u16, 944u16, 943u16, 942u16,
+            949u16, 948u16, 947u16, 946u16, 990u16, 991u16, 992u16, 993u16, 994u16, 995u16, 996u16,
+            997u16, 998u16, 999u16, 1000u16, 1001u16, 1002u16, 1003u16, 1004u16, 1005u16, 982u16,
+            983u16, 985u16, 984u16, 986u16, 987u16, 989u16, 988u16, 974u16, 975u16, 977u16, 976u16,
+            978u16, 979u16, 981u16, 980u16,
         ],
     );
     pub const MINECRAFT_INCORRECT_FOR_IRON_TOOL: Tag = (
@@ -3323,7 +3292,7 @@ pub mod Block {
             "respawn_anchor",
             "ancient_debris",
         ],
-        &[237u16, 1007u16, 1005u16, 1008u16, 1006u16],
+        &[170u16, 842u16, 840u16, 843u16, 841u16],
     );
     pub const MINECRAFT_INCORRECT_FOR_NETHERITE_TOOL: Tag = (&[], &[]);
     pub const MINECRAFT_INCORRECT_FOR_STONE_TOOL: Tag = (
@@ -3347,8 +3316,8 @@ pub mod Block {
             "deepslate_redstone_ore",
         ],
         &[
-            237u16, 1007u16, 1005u16, 1008u16, 1006u16, 249u16, 247u16, 248u16, 449u16, 450u16,
-            454u16, 217u16, 1265u16, 44u16, 45u16, 320u16, 321u16,
+            170u16, 842u16, 840u16, 843u16, 841u16, 181u16, 179u16, 180u16, 342u16, 343u16, 347u16,
+            163u16, 1047u16, 39u16, 40u16, 242u16, 243u16,
         ],
     );
     pub const MINECRAFT_INCORRECT_FOR_WOODEN_TOOL: Tag = (
@@ -3456,27 +3425,26 @@ pub mod Block {
             "waxed_oxidized_copper_door",
         ],
         &[
-            237u16, 1007u16, 1005u16, 1008u16, 1006u16, 249u16, 247u16, 248u16, 449u16, 450u16,
-            454u16, 217u16, 1265u16, 44u16, 45u16, 320u16, 321u16, 218u16, 1263u16, 46u16, 47u16,
-            113u16, 111u16, 112u16, 1124u16, 1264u16, 1132u16, 1133u16, 1158u16, 1150u16, 1134u16,
-            1126u16, 1160u16, 1152u16, 1136u16, 1127u16, 1161u16, 1153u16, 1137u16, 1125u16,
-            1159u16, 1151u16, 1135u16, 1128u16, 1162u16, 1154u16, 1138u16, 1130u16, 1164u16,
-            1156u16, 1140u16, 1129u16, 1163u16, 1155u16, 1139u16, 1131u16, 1165u16, 1157u16,
-            1141u16, 1214u16, 1274u16, 1142u16, 1143u16, 1144u16, 1145u16, 1146u16, 1147u16,
-            1148u16, 1149u16, 1182u16, 1183u16, 1184u16, 1185u16, 1186u16, 1187u16, 1188u16,
-            1189u16, 1190u16, 1191u16, 1192u16, 1193u16, 1194u16, 1195u16, 1196u16, 1197u16,
-            1174u16, 1175u16, 1176u16, 1177u16, 1178u16, 1179u16, 1180u16, 1181u16, 1166u16,
-            1167u16, 1168u16, 1169u16, 1170u16, 1171u16, 1172u16, 1173u16,
+            170u16, 842u16, 840u16, 843u16, 841u16, 181u16, 179u16, 180u16, 342u16, 343u16, 347u16,
+            163u16, 1047u16, 39u16, 40u16, 242u16, 243u16, 164u16, 1045u16, 41u16, 42u16, 97u16,
+            95u16, 96u16, 932u16, 1046u16, 936u16, 937u16, 957u16, 953u16, 941u16, 934u16, 955u16,
+            951u16, 939u16, 935u16, 954u16, 950u16, 938u16, 933u16, 956u16, 952u16, 940u16, 958u16,
+            973u16, 969u16, 965u16, 959u16, 971u16, 967u16, 963u16, 960u16, 972u16, 968u16, 964u16,
+            961u16, 970u16, 966u16, 962u16, 1006u16, 1056u16, 945u16, 944u16, 943u16, 942u16,
+            949u16, 948u16, 947u16, 946u16, 990u16, 991u16, 992u16, 993u16, 994u16, 995u16, 996u16,
+            997u16, 998u16, 999u16, 1000u16, 1001u16, 1002u16, 1003u16, 1004u16, 1005u16, 982u16,
+            983u16, 985u16, 984u16, 986u16, 987u16, 989u16, 988u16, 974u16, 975u16, 977u16, 976u16,
+            978u16, 979u16, 981u16, 980u16,
         ],
     );
     pub const MINECRAFT_INFINIBURN_END: Tag = (
         &["netherrack", "magma_block", "bedrock"],
-        &[334u16, 729u16, 36u16],
+        &[255u16, 607u16, 31u16],
     );
     pub const MINECRAFT_INFINIBURN_NETHER: Tag =
-        (&["netherrack", "magma_block"], &[334u16, 729u16]);
+        (&["netherrack", "magma_block"], &[255u16, 607u16]);
     pub const MINECRAFT_INFINIBURN_OVERWORLD: Tag =
-        (&["netherrack", "magma_block"], &[334u16, 729u16]);
+        (&["netherrack", "magma_block"], &[255u16, 607u16]);
     pub const MINECRAFT_INSIDE_STEP_SOUND_BLOCKS: Tag = (
         &[
             "powder_snow",
@@ -3486,11 +3454,11 @@ pub mod Block {
             "small_amethyst_bud",
             "pink_petals",
         ],
-        &[1117u16, 1121u16, 417u16, 424u16, 1073u16, 1231u16],
+        &[925u16, 929u16, 318u16, 324u16, 908u16, 1015u16],
     );
     pub const MINECRAFT_INVALID_SPAWN_INSIDE: Tag =
-        (&["end_portal", "end_gateway"], &[441u16, 725u16]);
-    pub const MINECRAFT_IRON_ORES: Tag = (&["iron_ore", "deepslate_iron_ore"], &[46u16, 47u16]);
+        (&["end_portal", "end_gateway"], &[335u16, 603u16]);
+    pub const MINECRAFT_IRON_ORES: Tag = (&["iron_ore", "deepslate_iron_ore"], &[41u16, 42u16]);
     pub const MINECRAFT_JUNGLE_LOGS: Tag = (
         &[
             "jungle_log",
@@ -3498,10 +3466,9 @@ pub mod Block {
             "stripped_jungle_log",
             "stripped_jungle_wood",
         ],
-        &[54u16, 78u16, 66u16, 87u16],
+        &[49u16, 69u16, 59u16, 77u16],
     );
-    pub const MINECRAFT_LAPIS_ORES: Tag =
-        (&["lapis_ore", "deepslate_lapis_ore"], &[111u16, 112u16]);
+    pub const MINECRAFT_LAPIS_ORES: Tag = (&["lapis_ore", "deepslate_lapis_ore"], &[95u16, 96u16]);
     pub const MINECRAFT_LAVA_POOL_STONE_CANNOT_REPLACE: Tag = (
         &[
             "bedrock",
@@ -3563,11 +3530,11 @@ pub mod Block {
             "stripped_warped_hyphae",
         ],
         &[
-            36u16, 242u16, 245u16, 442u16, 1272u16, 1275u16, 1276u16, 97u16, 94u16, 95u16, 100u16,
-            98u16, 96u16, 106u16, 107u16, 102u16, 99u16, 57u16, 81u16, 69u16, 90u16, 51u16, 75u16,
-            71u16, 84u16, 55u16, 79u16, 67u16, 88u16, 53u16, 77u16, 65u16, 86u16, 54u16, 78u16,
-            66u16, 87u16, 52u16, 76u16, 64u16, 85u16, 59u16, 82u16, 72u16, 92u16, 56u16, 80u16,
-            68u16, 89u16, 961u16, 962u16, 963u16, 964u16, 952u16, 953u16, 954u16, 955u16,
+            31u16, 175u16, 177u16, 336u16, 1054u16, 1057u16, 1058u16, 85u16, 82u16, 83u16, 88u16,
+            86u16, 84u16, 90u16, 91u16, 89u16, 87u16, 52u16, 72u16, 62u16, 80u16, 46u16, 66u16,
+            63u16, 74u16, 50u16, 70u16, 60u16, 78u16, 48u16, 68u16, 58u16, 76u16, 49u16, 69u16,
+            59u16, 77u16, 47u16, 67u16, 57u16, 75u16, 53u16, 73u16, 64u16, 81u16, 51u16, 71u16,
+            61u16, 79u16, 798u16, 799u16, 800u16, 801u16, 789u16, 790u16, 791u16, 792u16,
         ],
     );
     pub const MINECRAFT_LEAVES: Tag = (
@@ -3584,7 +3551,7 @@ pub mod Block {
             "cherry_leaves",
         ],
         &[
-            97u16, 94u16, 95u16, 100u16, 98u16, 96u16, 106u16, 107u16, 102u16, 99u16,
+            85u16, 82u16, 83u16, 88u16, 86u16, 84u16, 90u16, 91u16, 89u16, 87u16,
         ],
     );
     pub const MINECRAFT_LOGS: Tag = (
@@ -3631,10 +3598,10 @@ pub mod Block {
             "stripped_warped_hyphae",
         ],
         &[
-            57u16, 81u16, 69u16, 90u16, 51u16, 75u16, 71u16, 84u16, 55u16, 79u16, 67u16, 88u16,
-            53u16, 77u16, 65u16, 86u16, 54u16, 78u16, 66u16, 87u16, 52u16, 76u16, 64u16, 85u16,
-            59u16, 82u16, 72u16, 92u16, 56u16, 80u16, 68u16, 89u16, 961u16, 962u16, 963u16, 964u16,
-            952u16, 953u16, 954u16, 955u16,
+            52u16, 72u16, 62u16, 80u16, 46u16, 66u16, 63u16, 74u16, 50u16, 70u16, 60u16, 78u16,
+            48u16, 68u16, 58u16, 76u16, 49u16, 69u16, 59u16, 77u16, 47u16, 67u16, 57u16, 75u16,
+            53u16, 73u16, 64u16, 81u16, 51u16, 71u16, 61u16, 79u16, 798u16, 799u16, 800u16, 801u16,
+            789u16, 790u16, 791u16, 792u16,
         ],
     );
     pub const MINECRAFT_LOGS_THAT_BURN: Tag = (
@@ -3673,9 +3640,9 @@ pub mod Block {
             "stripped_cherry_wood",
         ],
         &[
-            57u16, 81u16, 69u16, 90u16, 51u16, 75u16, 71u16, 84u16, 55u16, 79u16, 67u16, 88u16,
-            53u16, 77u16, 65u16, 86u16, 54u16, 78u16, 66u16, 87u16, 52u16, 76u16, 64u16, 85u16,
-            59u16, 82u16, 72u16, 92u16, 56u16, 80u16, 68u16, 89u16,
+            52u16, 72u16, 62u16, 80u16, 46u16, 66u16, 63u16, 74u16, 50u16, 70u16, 60u16, 78u16,
+            48u16, 68u16, 58u16, 76u16, 49u16, 69u16, 59u16, 77u16, 47u16, 67u16, 57u16, 75u16,
+            53u16, 73u16, 64u16, 81u16, 51u16, 71u16, 61u16, 79u16,
         ],
     );
     pub const MINECRAFT_LUSH_GROUND_REPLACEABLE: Tag = (
@@ -3702,8 +3669,8 @@ pub mod Block {
             "sand",
         ],
         &[
-            1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16, 1226u16, 1225u16, 9u16, 8u16, 11u16, 10u16,
-            423u16, 1239u16, 1234u16, 1240u16, 62u16, 330u16, 42u16, 39u16,
+            1u16, 2u16, 4u16, 6u16, 909u16, 1023u16, 1010u16, 1009u16, 9u16, 8u16, 11u16, 10u16,
+            323u16, 1021u16, 1016u16, 1022u16, 55u16, 251u16, 37u16, 34u16,
         ],
     );
     pub const MINECRAFT_MAINTAINS_FARMLAND: Tag = (
@@ -3721,7 +3688,7 @@ pub mod Block {
             "wheat",
         ],
         &[
-            414u16, 412u16, 415u16, 413u16, 723u16, 493u16, 494u16, 720u16, 202u16, 721u16, 251u16,
+            315u16, 313u16, 316u16, 314u16, 601u16, 383u16, 384u16, 598u16, 148u16, 599u16, 183u16,
         ],
     );
     pub const MINECRAFT_MANGROVE_LOGS: Tag = (
@@ -3731,7 +3698,7 @@ pub mod Block {
             "stripped_mangrove_log",
             "stripped_mangrove_wood",
         ],
-        &[59u16, 82u16, 72u16, 92u16],
+        &[53u16, 73u16, 64u16, 81u16],
     );
     pub const MINECRAFT_MANGROVE_LOGS_CAN_GROW_THROUGH: Tag = (
         &[
@@ -3744,7 +3711,7 @@ pub mod Block {
             "moss_carpet",
             "vine",
         ],
-        &[1240u16, 62u16, 61u16, 102u16, 59u16, 34u16, 1230u16, 416u16],
+        &[1022u16, 55u16, 54u16, 89u16, 53u16, 30u16, 1014u16, 317u16],
     );
     pub const MINECRAFT_MANGROVE_ROOTS_CAN_GROW_THROUGH: Tag = (
         &[
@@ -3756,7 +3723,7 @@ pub mod Block {
             "mangrove_propagule",
             "snow",
         ],
-        &[1240u16, 62u16, 61u16, 1230u16, 416u16, 34u16, 325u16],
+        &[1022u16, 55u16, 54u16, 1014u16, 317u16, 30u16, 247u16],
     );
     pub const MINECRAFT_MINEABLE_AXE: Tag = (
         &[
@@ -4059,34 +4026,34 @@ pub mod Block {
             "chiseled_bookshelf",
         ],
         &[
-            118u16, 413u16, 412u16, 1228u16, 882u16, 929u16, 1001u16, 1002u16, 723u16, 1236u16,
-            1235u16, 221u16, 388u16, 215u16, 949u16, 493u16, 932u16, 345u16, 1226u16, 1225u16,
-            245u16, 714u16, 713u16, 446u16, 999u16, 250u16, 966u16, 527u16, 142u16, 141u16, 933u16,
-            417u16, 140u16, 1238u16, 346u16, 332u16, 266u16, 616u16, 935u16, 424u16, 928u16,
-            415u16, 411u16, 390u16, 434u16, 494u16, 414u16, 410u16, 389u16, 216u16, 927u16,
-            1237u16, 936u16, 950u16, 1227u16, 331u16, 951u16, 615u16, 523u16, 971u16, 970u16,
-            416u16, 957u16, 969u16, 968u16, 251u16, 617u16, 618u16, 619u16, 620u16, 621u16, 622u16,
-            623u16, 624u16, 625u16, 626u16, 627u16, 628u16, 629u16, 630u16, 631u16, 632u16, 633u16,
-            634u16, 635u16, 636u16, 637u16, 638u16, 639u16, 640u16, 641u16, 642u16, 643u16, 644u16,
-            645u16, 646u16, 647u16, 648u16, 685u16, 683u16, 687u16, 684u16, 419u16, 682u16, 983u16,
-            984u16, 689u16, 691u16, 686u16, 57u16, 81u16, 69u16, 90u16, 51u16, 75u16, 71u16, 84u16,
-            55u16, 79u16, 67u16, 88u16, 53u16, 77u16, 65u16, 86u16, 54u16, 78u16, 66u16, 87u16,
-            52u16, 76u16, 64u16, 85u16, 59u16, 82u16, 72u16, 92u16, 56u16, 80u16, 68u16, 89u16,
-            961u16, 962u16, 963u16, 964u16, 952u16, 953u16, 954u16, 955u16, 13u16, 14u16, 15u16,
-            16u16, 17u16, 19u16, 973u16, 974u16, 22u16, 24u16, 18u16, 26u16, 27u16, 28u16, 29u16,
-            30u16, 32u16, 1229u16, 34u16, 31u16, 254u16, 255u16, 256u16, 257u16, 259u16, 260u16,
-            991u16, 992u16, 262u16, 264u16, 258u16, 269u16, 270u16, 271u16, 272u16, 274u16, 275u16,
-            993u16, 994u16, 277u16, 279u16, 273u16, 495u16, 496u16, 497u16, 498u16, 499u16, 501u16,
-            987u16, 988u16, 503u16, 505u16, 500u16, 265u16, 702u16, 703u16, 704u16, 705u16, 707u16,
-            989u16, 990u16, 709u16, 711u16, 706u16, 333u16, 695u16, 697u16, 692u16, 693u16, 694u16,
-            979u16, 980u16, 699u16, 701u16, 696u16, 309u16, 310u16, 311u16, 312u16, 313u16, 315u16,
-            977u16, 978u16, 317u16, 319u16, 314u16, 653u16, 654u16, 655u16, 656u16, 657u16, 659u16,
-            975u16, 976u16, 661u16, 663u16, 658u16, 244u16, 455u16, 456u16, 457u16, 569u16, 571u16,
-            985u16, 986u16, 573u16, 575u16, 570u16, 369u16, 367u16, 371u16, 368u16, 365u16, 366u16,
-            981u16, 982u16, 373u16, 375u16, 370u16, 61u16, 280u16, 281u16, 282u16, 283u16, 284u16,
-            285u16, 286u16, 288u16, 289u16, 290u16, 292u16, 293u16, 294u16, 295u16, 296u16, 297u16,
-            298u16, 299u16, 303u16, 304u16, 301u16, 305u16, 25u16, 664u16, 576u16, 63u16, 74u16,
-            222u16,
+            102u16, 314u16, 313u16, 1012u16, 727u16, 774u16, 836u16, 837u16, 601u16, 1018u16,
+            1017u16, 167u16, 305u16, 161u16, 786u16, 383u16, 777u16, 264u16, 1010u16, 1009u16,
+            177u16, 593u16, 592u16, 340u16, 834u16, 182u16, 803u16, 415u16, 125u16, 124u16, 778u16,
+            318u16, 123u16, 1020u16, 265u16, 253u16, 196u16, 502u16, 780u16, 324u16, 773u16,
+            316u16, 312u16, 307u16, 328u16, 384u16, 315u16, 311u16, 306u16, 162u16, 772u16,
+            1019u16, 781u16, 787u16, 1011u16, 252u16, 788u16, 501u16, 411u16, 808u16, 807u16,
+            317u16, 794u16, 806u16, 805u16, 183u16, 503u16, 504u16, 505u16, 506u16, 507u16, 508u16,
+            509u16, 510u16, 511u16, 512u16, 513u16, 514u16, 515u16, 516u16, 517u16, 518u16, 519u16,
+            520u16, 521u16, 522u16, 523u16, 524u16, 525u16, 526u16, 527u16, 528u16, 529u16, 530u16,
+            531u16, 532u16, 533u16, 534u16, 570u16, 568u16, 572u16, 569u16, 319u16, 567u16, 820u16,
+            821u16, 573u16, 574u16, 571u16, 52u16, 72u16, 62u16, 80u16, 46u16, 66u16, 63u16, 74u16,
+            50u16, 70u16, 60u16, 78u16, 48u16, 68u16, 58u16, 76u16, 49u16, 69u16, 59u16, 77u16,
+            47u16, 67u16, 57u16, 75u16, 53u16, 73u16, 64u16, 81u16, 51u16, 71u16, 61u16, 79u16,
+            798u16, 799u16, 800u16, 801u16, 789u16, 790u16, 791u16, 792u16, 13u16, 14u16, 15u16,
+            16u16, 17u16, 19u16, 810u16, 811u16, 20u16, 21u16, 18u16, 23u16, 24u16, 25u16, 26u16,
+            27u16, 29u16, 1013u16, 30u16, 28u16, 186u16, 187u16, 188u16, 189u16, 191u16, 192u16,
+            828u16, 829u16, 193u16, 194u16, 190u16, 199u16, 200u16, 201u16, 202u16, 204u16, 205u16,
+            830u16, 831u16, 206u16, 207u16, 203u16, 385u16, 386u16, 387u16, 388u16, 389u16, 391u16,
+            824u16, 825u16, 392u16, 393u16, 390u16, 195u16, 583u16, 584u16, 585u16, 586u16, 588u16,
+            826u16, 827u16, 589u16, 590u16, 587u16, 254u16, 578u16, 580u16, 575u16, 576u16, 577u16,
+            816u16, 817u16, 581u16, 582u16, 579u16, 233u16, 234u16, 235u16, 236u16, 237u16, 239u16,
+            814u16, 815u16, 240u16, 241u16, 238u16, 539u16, 540u16, 541u16, 542u16, 543u16, 545u16,
+            812u16, 813u16, 546u16, 547u16, 544u16, 176u16, 348u16, 349u16, 350u16, 457u16, 459u16,
+            822u16, 823u16, 460u16, 461u16, 458u16, 288u16, 286u16, 290u16, 287u16, 284u16, 285u16,
+            818u16, 819u16, 291u16, 292u16, 289u16, 54u16, 208u16, 209u16, 210u16, 211u16, 212u16,
+            213u16, 214u16, 215u16, 216u16, 217u16, 218u16, 219u16, 220u16, 221u16, 222u16, 223u16,
+            224u16, 225u16, 227u16, 228u16, 226u16, 229u16, 22u16, 548u16, 462u16, 56u16, 65u16,
+            168u16,
         ],
     );
     pub const MINECRAFT_MINEABLE_HOE: Tag = (
@@ -4120,9 +4087,9 @@ pub mod Block {
             "cherry_leaves",
         ],
         &[
-            730u16, 958u16, 591u16, 834u16, 1000u16, 967u16, 108u16, 109u16, 97u16, 94u16, 95u16,
-            100u16, 98u16, 96u16, 106u16, 107u16, 102u16, 1118u16, 1119u16, 1234u16, 1230u16,
-            1120u16, 1122u16, 1121u16, 1123u16, 1231u16, 99u16,
+            608u16, 795u16, 477u16, 680u16, 835u16, 804u16, 92u16, 93u16, 85u16, 82u16, 83u16,
+            88u16, 86u16, 84u16, 90u16, 91u16, 89u16, 926u16, 927u16, 1016u16, 1014u16, 928u16,
+            930u16, 929u16, 931u16, 1015u16, 87u16,
         ],
     );
     pub const MINECRAFT_MINEABLE_PICKAXE: Tag = (
@@ -4559,48 +4526,47 @@ pub mod Block {
             "heavy_core",
         ],
         &[
-            1u16, 2u16, 3u16, 4u16, 5u16, 6u16, 7u16, 12u16, 44u16, 45u16, 46u16, 47u16, 48u16,
-            49u16, 50u16, 111u16, 112u16, 113u16, 114u16, 115u16, 116u16, 117u16, 217u16, 218u16,
-            219u16, 236u16, 237u16, 242u16, 247u16, 248u16, 249u16, 253u16, 268u16, 307u16, 308u16,
-            320u16, 321u16, 334u16, 337u16, 338u16, 376u16, 377u16, 378u16, 379u16, 391u16, 420u16,
-            421u16, 431u16, 432u16, 433u16, 435u16, 436u16, 443u16, 448u16, 449u16, 450u16, 451u16,
-            454u16, 524u16, 525u16, 528u16, 529u16, 530u16, 531u16, 532u16, 533u16, 534u16, 536u16,
-            537u16, 538u16, 539u16, 540u16, 541u16, 542u16, 543u16, 544u16, 545u16, 546u16, 547u16,
-            548u16, 549u16, 550u16, 551u16, 552u16, 580u16, 581u16, 582u16, 583u16, 584u16, 585u16,
-            586u16, 587u16, 588u16, 589u16, 608u16, 609u16, 649u16, 650u16, 651u16, 652u16, 665u16,
-            678u16, 666u16, 667u16, 668u16, 669u16, 670u16, 671u16, 673u16, 674u16, 675u16, 676u16,
-            716u16, 677u16, 679u16, 680u16, 681u16, 715u16, 717u16, 718u16, 719u16, 729u16, 731u16,
-            732u16, 734u16, 752u16, 753u16, 754u16, 755u16, 756u16, 757u16, 758u16, 759u16, 760u16,
-            761u16, 762u16, 763u16, 764u16, 765u16, 766u16, 767u16, 768u16, 769u16, 770u16, 771u16,
-            772u16, 773u16, 774u16, 775u16, 776u16, 777u16, 778u16, 779u16, 780u16, 781u16, 782u16,
-            783u16, 838u16, 839u16, 840u16, 841u16, 842u16, 843u16, 844u16, 845u16, 846u16, 847u16,
-            848u16, 849u16, 850u16, 851u16, 852u16, 858u16, 859u16, 860u16, 861u16, 862u16, 868u16,
-            869u16, 870u16, 871u16, 872u16, 887u16, 888u16, 889u16, 890u16, 891u16, 892u16, 893u16,
-            894u16, 895u16, 896u16, 897u16, 898u16, 899u16, 900u16, 901u16, 902u16, 903u16, 904u16,
-            905u16, 906u16, 907u16, 908u16, 909u16, 910u16, 911u16, 912u16, 913u16, 930u16, 931u16,
-            934u16, 937u16, 938u16, 939u16, 940u16, 956u16, 965u16, 1005u16, 1006u16, 1007u16,
-            1008u16, 1013u16, 1014u16, 1015u16, 1017u16, 1018u16, 1019u16, 1020u16, 1021u16,
-            1022u16, 1023u16, 1025u16, 1026u16, 1027u16, 1028u16, 1031u16, 1032u16, 1033u16,
-            1074u16, 1115u16, 1127u16, 1126u16, 1125u16, 1124u16, 1132u16, 1133u16, 1137u16,
-            1136u16, 1135u16, 1134u16, 1153u16, 1152u16, 1151u16, 1150u16, 1161u16, 1160u16,
-            1159u16, 1158u16, 1128u16, 1130u16, 1129u16, 1131u16, 1141u16, 1140u16, 1139u16,
-            1138u16, 1157u16, 1156u16, 1155u16, 1154u16, 1165u16, 1164u16, 1163u16, 1162u16,
-            1214u16, 1223u16, 1222u16, 1241u16, 1242u16, 1243u16, 1244u16, 1246u16, 1247u16,
-            1248u16, 1250u16, 1251u16, 1252u16, 1254u16, 1255u16, 1256u16, 1258u16, 1259u16,
-            1260u16, 1262u16, 1263u16, 1264u16, 1265u16, 326u16, 610u16, 879u16, 149u16, 138u16,
-            150u16, 1070u16, 1073u16, 1072u16, 1071u16, 1068u16, 1069u16, 383u16, 387u16, 386u16,
-            1261u16, 382u16, 385u16, 384u16, 324u16, 1029u16, 460u16, 461u16, 914u16, 915u16,
-            916u16, 917u16, 918u16, 919u16, 921u16, 922u16, 923u16, 924u16, 925u16, 926u16,
-            1016u16, 1024u16, 1030u16, 1245u16, 1249u16, 1253u16, 1257u16, 920u16, 1077u16,
-            1081u16, 1086u16, 735u16, 751u16, 747u16, 748u16, 745u16, 743u16, 749u16, 739u16,
-            744u16, 741u16, 738u16, 737u16, 742u16, 746u16, 750u16, 736u16, 740u16, 520u16, 521u16,
-            522u16, 437u16, 438u16, 439u16, 440u16, 267u16, 136u16, 137u16, 535u16, 880u16, 381u16,
-            422u16, 672u16, 380u16, 1274u16, 1075u16, 1076u16, 1082u16, 1078u16, 1079u16, 1080u16,
-            1083u16, 1084u16, 1085u16, 1087u16, 1142u16, 1143u16, 1144u16, 1145u16, 1146u16,
-            1147u16, 1148u16, 1149u16, 1182u16, 1183u16, 1184u16, 1185u16, 1186u16, 1187u16,
-            1188u16, 1189u16, 1190u16, 1191u16, 1192u16, 1193u16, 1194u16, 1195u16, 1196u16,
-            1197u16, 1166u16, 1167u16, 1168u16, 1169u16, 1170u16, 1171u16, 1172u16, 1173u16,
-            1174u16, 1175u16, 1176u16, 1177u16, 1178u16, 1179u16, 1180u16, 1181u16, 1277u16,
+            1u16, 2u16, 3u16, 4u16, 5u16, 6u16, 7u16, 12u16, 39u16, 40u16, 41u16, 42u16, 43u16,
+            44u16, 45u16, 95u16, 96u16, 97u16, 98u16, 99u16, 100u16, 101u16, 163u16, 164u16,
+            165u16, 169u16, 170u16, 175u16, 179u16, 180u16, 181u16, 185u16, 198u16, 231u16, 232u16,
+            242u16, 243u16, 255u16, 258u16, 259u16, 293u16, 294u16, 295u16, 296u16, 308u16, 309u16,
+            320u16, 321u16, 325u16, 326u16, 327u16, 329u16, 330u16, 337u16, 341u16, 342u16, 343u16,
+            344u16, 347u16, 412u16, 413u16, 416u16, 417u16, 418u16, 419u16, 420u16, 421u16, 422u16,
+            424u16, 425u16, 426u16, 427u16, 428u16, 429u16, 430u16, 431u16, 432u16, 433u16, 434u16,
+            435u16, 436u16, 437u16, 438u16, 439u16, 440u16, 466u16, 467u16, 468u16, 469u16, 470u16,
+            471u16, 472u16, 473u16, 474u16, 475u16, 494u16, 495u16, 535u16, 536u16, 537u16, 538u16,
+            549u16, 550u16, 551u16, 552u16, 553u16, 554u16, 555u16, 556u16, 558u16, 559u16, 560u16,
+            561u16, 562u16, 563u16, 564u16, 565u16, 566u16, 594u16, 595u16, 596u16, 597u16, 607u16,
+            609u16, 610u16, 612u16, 630u16, 631u16, 632u16, 633u16, 634u16, 635u16, 636u16, 637u16,
+            638u16, 639u16, 640u16, 641u16, 642u16, 643u16, 644u16, 645u16, 646u16, 647u16, 648u16,
+            649u16, 650u16, 651u16, 652u16, 653u16, 654u16, 655u16, 656u16, 657u16, 658u16, 659u16,
+            660u16, 661u16, 683u16, 684u16, 685u16, 686u16, 687u16, 688u16, 689u16, 690u16, 691u16,
+            692u16, 693u16, 694u16, 695u16, 696u16, 697u16, 703u16, 704u16, 705u16, 706u16, 707u16,
+            713u16, 714u16, 715u16, 716u16, 717u16, 732u16, 733u16, 734u16, 735u16, 736u16, 737u16,
+            738u16, 739u16, 740u16, 741u16, 742u16, 743u16, 744u16, 745u16, 746u16, 747u16, 748u16,
+            749u16, 750u16, 751u16, 752u16, 753u16, 754u16, 755u16, 756u16, 757u16, 758u16, 775u16,
+            776u16, 779u16, 782u16, 783u16, 784u16, 785u16, 793u16, 802u16, 840u16, 841u16, 842u16,
+            843u16, 848u16, 849u16, 850u16, 852u16, 853u16, 854u16, 855u16, 856u16, 857u16, 858u16,
+            860u16, 861u16, 862u16, 863u16, 866u16, 867u16, 868u16, 909u16, 923u16, 935u16, 934u16,
+            933u16, 932u16, 936u16, 937u16, 938u16, 939u16, 940u16, 941u16, 950u16, 951u16, 952u16,
+            953u16, 954u16, 955u16, 956u16, 957u16, 958u16, 959u16, 960u16, 961u16, 962u16, 963u16,
+            964u16, 965u16, 966u16, 967u16, 968u16, 969u16, 970u16, 971u16, 972u16, 973u16,
+            1006u16, 1007u16, 1008u16, 1023u16, 1024u16, 1025u16, 1026u16, 1028u16, 1029u16,
+            1030u16, 1032u16, 1033u16, 1034u16, 1036u16, 1037u16, 1038u16, 1040u16, 1041u16,
+            1042u16, 1044u16, 1045u16, 1046u16, 1047u16, 248u16, 496u16, 724u16, 128u16, 121u16,
+            129u16, 905u16, 908u16, 907u16, 906u16, 903u16, 904u16, 300u16, 304u16, 303u16,
+            1043u16, 299u16, 302u16, 301u16, 246u16, 864u16, 353u16, 354u16, 759u16, 760u16,
+            761u16, 762u16, 763u16, 764u16, 766u16, 767u16, 768u16, 769u16, 770u16, 771u16, 851u16,
+            859u16, 865u16, 1027u16, 1031u16, 1035u16, 1039u16, 765u16, 912u16, 916u16, 921u16,
+            613u16, 629u16, 625u16, 626u16, 623u16, 621u16, 627u16, 617u16, 622u16, 619u16, 616u16,
+            615u16, 620u16, 624u16, 628u16, 614u16, 618u16, 408u16, 409u16, 410u16, 331u16, 332u16,
+            333u16, 334u16, 197u16, 119u16, 120u16, 423u16, 725u16, 298u16, 322u16, 557u16, 297u16,
+            1056u16, 910u16, 911u16, 917u16, 913u16, 914u16, 915u16, 918u16, 919u16, 920u16,
+            922u16, 945u16, 944u16, 943u16, 942u16, 949u16, 948u16, 947u16, 946u16, 990u16, 991u16,
+            992u16, 993u16, 994u16, 995u16, 996u16, 997u16, 998u16, 999u16, 1000u16, 1001u16,
+            1002u16, 1003u16, 1004u16, 1005u16, 974u16, 975u16, 977u16, 976u16, 978u16, 979u16,
+            981u16, 980u16, 982u16, 983u16, 985u16, 984u16, 986u16, 987u16, 989u16, 988u16,
+            1059u16,
         ],
     );
     pub const MINECRAFT_MINEABLE_SHOVEL: Tag = (
@@ -4643,10 +4609,10 @@ pub mod Block {
             "black_concrete_powder",
         ],
         &[
-            330u16, 9u16, 10u16, 11u16, 252u16, 8u16, 42u16, 423u16, 39u16, 41u16, 327u16, 325u16,
-            335u16, 724u16, 336u16, 1239u16, 62u16, 1240u16, 40u16, 43u16, 816u16, 817u16, 818u16,
-            819u16, 820u16, 821u16, 822u16, 823u16, 824u16, 825u16, 826u16, 827u16, 828u16, 829u16,
-            830u16, 831u16,
+            251u16, 9u16, 10u16, 11u16, 184u16, 8u16, 37u16, 323u16, 34u16, 36u16, 249u16, 247u16,
+            256u16, 602u16, 257u16, 1021u16, 55u16, 1022u16, 35u16, 38u16, 662u16, 663u16, 664u16,
+            665u16, 666u16, 667u16, 668u16, 669u16, 670u16, 671u16, 672u16, 673u16, 674u16, 675u16,
+            676u16, 677u16,
         ],
     );
     pub const MINECRAFT_MOB_INTERACTABLE_DOORS: Tag = (
@@ -4672,11 +4638,11 @@ pub mod Block {
             "waxed_oxidized_copper_door",
         ],
         &[
-            265u16, 702u16, 703u16, 704u16, 705u16, 707u16, 989u16, 990u16, 709u16, 711u16, 706u16,
-            1166u16, 1167u16, 1168u16, 1169u16, 1170u16, 1171u16, 1172u16, 1173u16,
+            195u16, 583u16, 584u16, 585u16, 586u16, 588u16, 826u16, 827u16, 589u16, 590u16, 587u16,
+            974u16, 975u16, 977u16, 976u16, 978u16, 979u16, 981u16, 980u16,
         ],
     );
-    pub const MINECRAFT_MOOSHROOMS_SPAWNABLE_ON: Tag = (&["mycelium"], &[423u16]);
+    pub const MINECRAFT_MOOSHROOMS_SPAWNABLE_ON: Tag = (&["mycelium"], &[323u16]);
     pub const MINECRAFT_MOSS_REPLACEABLE: Tag = (
         &[
             "stone",
@@ -4698,13 +4664,13 @@ pub mod Block {
             "muddy_mangrove_roots",
         ],
         &[
-            1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16, 1226u16, 1225u16, 9u16, 8u16, 11u16, 10u16,
-            423u16, 1239u16, 1234u16, 1240u16, 62u16,
+            1u16, 2u16, 4u16, 6u16, 909u16, 1023u16, 1010u16, 1009u16, 9u16, 8u16, 11u16, 10u16,
+            323u16, 1021u16, 1016u16, 1022u16, 55u16,
         ],
     );
     pub const MINECRAFT_MUSHROOM_GROW_BLOCK: Tag = (
         &["mycelium", "podzol", "crimson_nylium", "warped_nylium"],
-        &[423u16, 11u16, 965u16, 956u16],
+        &[323u16, 11u16, 802u16, 793u16],
     );
     pub const MINECRAFT_NEEDS_DIAMOND_TOOL: Tag = (
         &[
@@ -4714,7 +4680,7 @@ pub mod Block {
             "respawn_anchor",
             "ancient_debris",
         ],
-        &[237u16, 1007u16, 1005u16, 1008u16, 1006u16],
+        &[170u16, 842u16, 840u16, 843u16, 841u16],
     );
     pub const MINECRAFT_NEEDS_IRON_TOOL: Tag = (
         &[
@@ -4732,8 +4698,8 @@ pub mod Block {
             "deepslate_redstone_ore",
         ],
         &[
-            249u16, 247u16, 248u16, 449u16, 450u16, 454u16, 217u16, 1265u16, 44u16, 45u16, 320u16,
-            321u16,
+            181u16, 179u16, 180u16, 342u16, 343u16, 347u16, 163u16, 1047u16, 39u16, 40u16, 242u16,
+            243u16,
         ],
     );
     pub const MINECRAFT_NEEDS_STONE_TOOL: Tag = (
@@ -4824,16 +4790,14 @@ pub mod Block {
             "waxed_oxidized_copper_door",
         ],
         &[
-            218u16, 1263u16, 46u16, 47u16, 113u16, 111u16, 112u16, 1124u16, 1264u16, 1132u16,
-            1133u16, 1158u16, 1150u16, 1134u16, 1126u16, 1160u16, 1152u16, 1136u16, 1127u16,
-            1161u16, 1153u16, 1137u16, 1125u16, 1159u16, 1151u16, 1135u16, 1128u16, 1162u16,
-            1154u16, 1138u16, 1130u16, 1164u16, 1156u16, 1140u16, 1129u16, 1163u16, 1155u16,
-            1139u16, 1131u16, 1165u16, 1157u16, 1141u16, 1214u16, 1274u16, 1142u16, 1143u16,
-            1144u16, 1145u16, 1146u16, 1147u16, 1148u16, 1149u16, 1182u16, 1183u16, 1184u16,
-            1185u16, 1186u16, 1187u16, 1188u16, 1189u16, 1190u16, 1191u16, 1192u16, 1193u16,
-            1194u16, 1195u16, 1196u16, 1197u16, 1174u16, 1175u16, 1176u16, 1177u16, 1178u16,
-            1179u16, 1180u16, 1181u16, 1166u16, 1167u16, 1168u16, 1169u16, 1170u16, 1171u16,
-            1172u16, 1173u16,
+            164u16, 1045u16, 41u16, 42u16, 97u16, 95u16, 96u16, 932u16, 1046u16, 936u16, 937u16,
+            957u16, 953u16, 941u16, 934u16, 955u16, 951u16, 939u16, 935u16, 954u16, 950u16, 938u16,
+            933u16, 956u16, 952u16, 940u16, 958u16, 973u16, 969u16, 965u16, 959u16, 971u16, 967u16,
+            963u16, 960u16, 972u16, 968u16, 964u16, 961u16, 970u16, 966u16, 962u16, 1006u16,
+            1056u16, 945u16, 944u16, 943u16, 942u16, 949u16, 948u16, 947u16, 946u16, 990u16,
+            991u16, 992u16, 993u16, 994u16, 995u16, 996u16, 997u16, 998u16, 999u16, 1000u16,
+            1001u16, 1002u16, 1003u16, 1004u16, 1005u16, 982u16, 983u16, 985u16, 984u16, 986u16,
+            987u16, 989u16, 988u16, 974u16, 975u16, 977u16, 976u16, 978u16, 979u16, 981u16, 980u16,
         ],
     );
     pub const MINECRAFT_NETHER_CARVER_REPLACEABLES: Tag = (
@@ -4864,12 +4828,12 @@ pub mod Block {
             "soul_soil",
         ],
         &[
-            1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16, 334u16, 337u16, 1014u16, 9u16, 8u16, 11u16,
-            10u16, 423u16, 1239u16, 1234u16, 1240u16, 62u16, 965u16, 956u16, 730u16, 958u16,
-            335u16, 336u16,
+            1u16, 2u16, 4u16, 6u16, 909u16, 1023u16, 255u16, 258u16, 849u16, 9u16, 8u16, 11u16,
+            10u16, 323u16, 1021u16, 1016u16, 1022u16, 55u16, 802u16, 793u16, 608u16, 795u16,
+            256u16, 257u16,
         ],
     );
-    pub const MINECRAFT_NYLIUM: Tag = (&["crimson_nylium", "warped_nylium"], &[965u16, 956u16]);
+    pub const MINECRAFT_NYLIUM: Tag = (&["crimson_nylium", "warped_nylium"], &[802u16, 793u16]);
     pub const MINECRAFT_OAK_LOGS: Tag = (
         &[
             "oak_log",
@@ -4877,7 +4841,7 @@ pub mod Block {
             "stripped_oak_log",
             "stripped_oak_wood",
         ],
-        &[51u16, 75u16, 71u16, 84u16],
+        &[46u16, 66u16, 63u16, 74u16],
     );
     pub const MINECRAFT_OCCLUDES_VIBRATION_SIGNALS: Tag = (
         &[
@@ -4899,8 +4863,8 @@ pub mod Block {
             "black_wool",
         ],
         &[
-            151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16, 159u16, 160u16, 161u16,
-            162u16, 163u16, 164u16, 165u16, 166u16,
+            130u16, 131u16, 132u16, 133u16, 134u16, 135u16, 136u16, 137u16, 138u16, 139u16, 140u16,
+            141u16, 142u16, 143u16, 144u16, 145u16,
         ],
     );
     pub const MINECRAFT_OVERWORLD_CARVER_REPLACEABLES: Tag = (
@@ -4956,11 +4920,11 @@ pub mod Block {
             "raw_copper_block",
         ],
         &[
-            1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16, 9u16, 8u16, 11u16, 10u16, 423u16, 1239u16,
-            1234u16, 1240u16, 62u16, 39u16, 41u16, 40u16, 608u16, 537u16, 538u16, 539u16, 540u16,
-            541u16, 542u16, 543u16, 544u16, 545u16, 546u16, 547u16, 548u16, 549u16, 550u16, 551u16,
-            552u16, 46u16, 47u16, 1132u16, 1133u16, 37u16, 42u16, 43u16, 115u16, 649u16, 1115u16,
-            325u16, 610u16, 1263u16, 1264u16,
+            1u16, 2u16, 4u16, 6u16, 909u16, 1023u16, 9u16, 8u16, 11u16, 10u16, 323u16, 1021u16,
+            1016u16, 1022u16, 55u16, 34u16, 36u16, 35u16, 494u16, 425u16, 426u16, 427u16, 428u16,
+            429u16, 430u16, 431u16, 432u16, 433u16, 434u16, 435u16, 436u16, 437u16, 438u16, 439u16,
+            440u16, 41u16, 42u16, 936u16, 937u16, 32u16, 37u16, 38u16, 99u16, 535u16, 923u16,
+            247u16, 496u16, 1045u16, 1046u16,
         ],
     );
     pub const MINECRAFT_OVERWORLD_NATURAL_LOGS: Tag = (
@@ -4974,7 +4938,7 @@ pub mod Block {
             "mangrove_log",
             "cherry_log",
         ],
-        &[55u16, 53u16, 51u16, 54u16, 52u16, 57u16, 59u16, 56u16],
+        &[50u16, 48u16, 46u16, 49u16, 47u16, 52u16, 53u16, 51u16],
     );
     pub const MINECRAFT_PARROTS_SPAWNABLE_ON: Tag = (
         &[
@@ -5032,11 +4996,11 @@ pub mod Block {
             "stripped_warped_hyphae",
         ],
         &[
-            8u16, 0u16, 97u16, 94u16, 95u16, 100u16, 98u16, 96u16, 106u16, 107u16, 102u16, 99u16,
-            57u16, 81u16, 69u16, 90u16, 51u16, 75u16, 71u16, 84u16, 55u16, 79u16, 67u16, 88u16,
-            53u16, 77u16, 65u16, 86u16, 54u16, 78u16, 66u16, 87u16, 52u16, 76u16, 64u16, 85u16,
-            59u16, 82u16, 72u16, 92u16, 56u16, 80u16, 68u16, 89u16, 961u16, 962u16, 963u16, 964u16,
-            952u16, 953u16, 954u16, 955u16,
+            8u16, 0u16, 85u16, 82u16, 83u16, 88u16, 86u16, 84u16, 90u16, 91u16, 89u16, 87u16,
+            52u16, 72u16, 62u16, 80u16, 46u16, 66u16, 63u16, 74u16, 50u16, 70u16, 60u16, 78u16,
+            48u16, 68u16, 58u16, 76u16, 49u16, 69u16, 59u16, 77u16, 47u16, 67u16, 57u16, 75u16,
+            53u16, 73u16, 64u16, 81u16, 51u16, 71u16, 61u16, 79u16, 798u16, 799u16, 800u16, 801u16,
+            789u16, 790u16, 791u16, 792u16,
         ],
     );
     pub const MINECRAFT_PIGLIN_REPELLENTS: Tag = (
@@ -5047,7 +5011,7 @@ pub mod Block {
             "soul_wall_torch",
             "soul_campfire",
         ],
-        &[241u16, 339u16, 940u16, 340u16, 950u16],
+        &[174u16, 260u16, 785u16, 261u16, 787u16],
     );
     pub const MINECRAFT_PLANKS: Tag = (
         &[
@@ -5064,13 +5028,13 @@ pub mod Block {
             "cherry_planks",
         ],
         &[
-            13u16, 14u16, 15u16, 16u16, 17u16, 19u16, 973u16, 974u16, 22u16, 24u16, 18u16,
+            13u16, 14u16, 15u16, 16u16, 17u16, 19u16, 810u16, 811u16, 20u16, 21u16, 18u16,
         ],
     );
-    pub const MINECRAFT_POLAR_BEARS_SPAWNABLE_ON_ALTERNATE: Tag = (&["ice"], &[326u16]);
+    pub const MINECRAFT_POLAR_BEARS_SPAWNABLE_ON_ALTERNATE: Tag = (&["ice"], &[248u16]);
     pub const MINECRAFT_PORTALS: Tag = (
         &["nether_portal", "end_portal", "end_gateway"],
-        &[344u16, 441u16, 725u16],
+        &[263u16, 335u16, 603u16],
     );
     pub const MINECRAFT_PRESSURE_PLATES: Tag = (
         &[
@@ -5091,25 +5055,25 @@ pub mod Block {
             "polished_blackstone_pressure_plate",
         ],
         &[
-            524u16, 525u16, 309u16, 310u16, 311u16, 312u16, 313u16, 315u16, 977u16, 978u16, 317u16,
-            319u16, 314u16, 307u16, 1028u16,
+            412u16, 413u16, 233u16, 234u16, 235u16, 236u16, 237u16, 239u16, 814u16, 815u16, 240u16,
+            241u16, 238u16, 231u16, 863u16,
         ],
     );
     pub const MINECRAFT_PREVENT_MOB_SPAWNING_INSIDE: Tag = (
         &["rail", "powered_rail", "detector_rail", "activator_rail"],
-        &[267u16, 136u16, 137u16, 535u16],
+        &[197u16, 119u16, 120u16, 423u16],
     );
     pub const MINECRAFT_RABBITS_SPAWNABLE_ON: Tag = (
         &["grass_block", "snow", "snow_block", "sand"],
-        &[8u16, 325u16, 327u16, 39u16],
+        &[8u16, 247u16, 249u16, 34u16],
     );
     pub const MINECRAFT_RAILS: Tag = (
         &["rail", "powered_rail", "detector_rail", "activator_rail"],
-        &[267u16, 136u16, 137u16, 535u16],
+        &[197u16, 119u16, 120u16, 423u16],
     );
     pub const MINECRAFT_REDSTONE_ORES: Tag = (
         &["redstone_ore", "deepslate_redstone_ore"],
-        &[320u16, 321u16],
+        &[242u16, 243u16],
     );
     pub const MINECRAFT_REPLACEABLE: Tag = (
         &[
@@ -5139,9 +5103,9 @@ pub mod Block {
             "hanging_roots",
         ],
         &[
-            0u16, 37u16, 38u16, 140u16, 141u16, 142u16, 147u16, 148u16, 240u16, 241u16, 325u16,
-            416u16, 417u16, 579u16, 615u16, 616u16, 733u16, 884u16, 885u16, 886u16, 959u16, 960u16,
-            972u16, 1238u16,
+            0u16, 32u16, 33u16, 123u16, 124u16, 125u16, 126u16, 127u16, 173u16, 174u16, 247u16,
+            317u16, 318u16, 465u16, 501u16, 502u16, 611u16, 729u16, 730u16, 731u16, 796u16, 797u16,
+            809u16, 1020u16,
         ],
     );
     pub const MINECRAFT_REPLACEABLE_BY_TREES: Tag = (
@@ -5177,14 +5141,14 @@ pub mod Block {
             "crimson_roots",
         ],
         &[
-            97u16, 94u16, 95u16, 100u16, 98u16, 96u16, 106u16, 107u16, 102u16, 99u16, 140u16,
-            141u16, 142u16, 416u16, 417u16, 611u16, 612u16, 613u16, 614u16, 615u16, 616u16,
-            1238u16, 722u16, 37u16, 147u16, 148u16, 959u16, 960u16, 972u16,
+            85u16, 82u16, 83u16, 88u16, 86u16, 84u16, 90u16, 91u16, 89u16, 87u16, 123u16, 124u16,
+            125u16, 317u16, 318u16, 497u16, 498u16, 499u16, 500u16, 501u16, 502u16, 1020u16,
+            600u16, 32u16, 126u16, 127u16, 796u16, 797u16, 809u16,
         ],
     );
     pub const MINECRAFT_SAND: Tag = (
         &["sand", "red_sand", "suspicious_sand"],
-        &[39u16, 41u16, 40u16],
+        &[34u16, 36u16, 35u16],
     );
     pub const MINECRAFT_SAPLINGS: Tag = (
         &[
@@ -5200,7 +5164,7 @@ pub mod Block {
             "cherry_sapling",
         ],
         &[
-            26u16, 27u16, 28u16, 29u16, 30u16, 32u16, 1228u16, 1229u16, 34u16, 31u16,
+            23u16, 24u16, 25u16, 26u16, 27u16, 29u16, 1012u16, 1013u16, 30u16, 28u16,
         ],
     );
     pub const MINECRAFT_SCULK_REPLACEABLE: Tag = (
@@ -5256,11 +5220,11 @@ pub mod Block {
             "sandstone",
         ],
         &[
-            1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16, 9u16, 8u16, 11u16, 10u16, 423u16, 1239u16,
-            1234u16, 1240u16, 62u16, 608u16, 537u16, 538u16, 539u16, 540u16, 541u16, 542u16,
-            543u16, 544u16, 545u16, 546u16, 547u16, 548u16, 549u16, 550u16, 551u16, 552u16, 965u16,
-            956u16, 334u16, 337u16, 1014u16, 39u16, 41u16, 42u16, 335u16, 336u16, 1115u16, 1262u16,
-            330u16, 1222u16, 443u16, 649u16, 115u16,
+            1u16, 2u16, 4u16, 6u16, 909u16, 1023u16, 9u16, 8u16, 11u16, 10u16, 323u16, 1021u16,
+            1016u16, 1022u16, 55u16, 494u16, 425u16, 426u16, 427u16, 428u16, 429u16, 430u16,
+            431u16, 432u16, 433u16, 434u16, 435u16, 436u16, 437u16, 438u16, 439u16, 440u16, 802u16,
+            793u16, 255u16, 258u16, 849u16, 34u16, 36u16, 37u16, 256u16, 257u16, 923u16, 1044u16,
+            251u16, 1008u16, 337u16, 535u16, 99u16,
         ],
     );
     pub const MINECRAFT_SCULK_REPLACEABLE_WORLD_GEN: Tag = (
@@ -5322,12 +5286,12 @@ pub mod Block {
             "polished_deepslate",
         ],
         &[
-            1u16, 2u16, 4u16, 6u16, 1074u16, 1241u16, 9u16, 8u16, 11u16, 10u16, 423u16, 1239u16,
-            1234u16, 1240u16, 62u16, 608u16, 537u16, 538u16, 539u16, 540u16, 541u16, 542u16,
-            543u16, 544u16, 545u16, 546u16, 547u16, 548u16, 549u16, 550u16, 551u16, 552u16, 965u16,
-            956u16, 334u16, 337u16, 1014u16, 39u16, 41u16, 42u16, 335u16, 336u16, 1115u16, 1262u16,
-            330u16, 1222u16, 443u16, 649u16, 115u16, 1254u16, 1250u16, 1242u16, 1259u16, 1260u16,
-            1246u16,
+            1u16, 2u16, 4u16, 6u16, 909u16, 1023u16, 9u16, 8u16, 11u16, 10u16, 323u16, 1021u16,
+            1016u16, 1022u16, 55u16, 494u16, 425u16, 426u16, 427u16, 428u16, 429u16, 430u16,
+            431u16, 432u16, 433u16, 434u16, 435u16, 436u16, 437u16, 438u16, 439u16, 440u16, 802u16,
+            793u16, 255u16, 258u16, 849u16, 34u16, 36u16, 37u16, 256u16, 257u16, 923u16, 1044u16,
+            251u16, 1008u16, 337u16, 535u16, 99u16, 1036u16, 1032u16, 1024u16, 1041u16, 1042u16,
+            1028u16,
         ],
     );
     pub const MINECRAFT_SHULKER_BOXES: Tag = (
@@ -5351,8 +5315,8 @@ pub mod Block {
             "yellow_shulker_box",
         ],
         &[
-            735u16, 751u16, 747u16, 748u16, 745u16, 743u16, 749u16, 739u16, 744u16, 741u16, 738u16,
-            737u16, 742u16, 746u16, 750u16, 736u16, 740u16,
+            613u16, 629u16, 625u16, 626u16, 623u16, 621u16, 627u16, 617u16, 622u16, 619u16, 616u16,
+            615u16, 620u16, 624u16, 628u16, 614u16, 618u16,
         ],
     );
     pub const MINECRAFT_SIGNS: Tag = (
@@ -5381,8 +5345,8 @@ pub mod Block {
             "cherry_wall_sign",
         ],
         &[
-            254u16, 255u16, 256u16, 257u16, 259u16, 260u16, 991u16, 992u16, 262u16, 264u16, 258u16,
-            269u16, 270u16, 271u16, 272u16, 274u16, 275u16, 993u16, 994u16, 277u16, 279u16, 273u16,
+            186u16, 187u16, 188u16, 189u16, 191u16, 192u16, 828u16, 829u16, 193u16, 194u16, 190u16,
+            199u16, 200u16, 201u16, 202u16, 204u16, 205u16, 830u16, 831u16, 206u16, 207u16, 203u16,
         ],
     );
     pub const MINECRAFT_SLABS: Tag = (
@@ -5449,16 +5413,16 @@ pub mod Block {
             "tuff_brick_slab",
         ],
         &[
-            653u16, 654u16, 655u16, 656u16, 657u16, 659u16, 975u16, 976u16, 661u16, 663u16, 658u16,
-            664u16, 665u16, 678u16, 671u16, 666u16, 716u16, 674u16, 675u16, 670u16, 669u16, 673u16,
-            668u16, 587u16, 588u16, 589u16, 901u16, 902u16, 903u16, 904u16, 905u16, 906u16, 907u16,
-            908u16, 909u16, 910u16, 911u16, 912u16, 913u16, 667u16, 676u16, 1017u16, 1022u16,
-            1027u16, 1244u16, 1248u16, 1252u16, 1256u16, 1164u16, 1163u16, 1162u16, 1161u16,
-            1160u16, 1159u16, 1158u16, 1165u16, 672u16, 1075u16, 1079u16, 1084u16,
+            539u16, 540u16, 541u16, 542u16, 543u16, 545u16, 812u16, 813u16, 546u16, 547u16, 544u16,
+            548u16, 549u16, 550u16, 556u16, 551u16, 562u16, 559u16, 560u16, 555u16, 554u16, 558u16,
+            553u16, 473u16, 474u16, 475u16, 746u16, 747u16, 748u16, 749u16, 750u16, 751u16, 752u16,
+            753u16, 754u16, 755u16, 756u16, 757u16, 758u16, 552u16, 561u16, 852u16, 857u16, 862u16,
+            1026u16, 1030u16, 1034u16, 1038u16, 971u16, 972u16, 973u16, 954u16, 955u16, 956u16,
+            957u16, 970u16, 557u16, 910u16, 914u16, 919u16,
         ],
     );
     pub const MINECRAFT_SMALL_DRIPLEAF_PLACEABLE: Tag =
-        (&["clay", "moss_block"], &[330u16, 1234u16]);
+        (&["clay", "moss_block"], &[251u16, 1016u16]);
     pub const MINECRAFT_SMALL_FLOWERS: Tag = (
         &[
             "dandelion",
@@ -5477,11 +5441,11 @@ pub mod Block {
             "torchflower",
         ],
         &[
-            200u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16,
-            214u16, 213u16, 202u16,
+            147u16, 149u16, 150u16, 151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16,
+            160u16, 159u16, 148u16,
         ],
     );
-    pub const MINECRAFT_SMELTS_TO_GLASS: Tag = (&["sand", "red_sand"], &[39u16, 41u16]);
+    pub const MINECRAFT_SMELTS_TO_GLASS: Tag = (&["sand", "red_sand"], &[34u16, 36u16]);
     pub const MINECRAFT_SNAPS_GOAT_HORN: Tag = (
         &[
             "acacia_log",
@@ -5500,8 +5464,8 @@ pub mod Block {
             "emerald_ore",
         ],
         &[
-            55u16, 53u16, 51u16, 54u16, 52u16, 57u16, 59u16, 56u16, 1u16, 610u16, 46u16, 48u16,
-            1132u16, 449u16,
+            50u16, 48u16, 46u16, 49u16, 47u16, 52u16, 53u16, 51u16, 1u16, 496u16, 41u16, 43u16,
+            936u16, 342u16,
         ],
     );
     pub const MINECRAFT_SNIFFER_DIGGABLE_BLOCK: Tag = (
@@ -5515,22 +5479,22 @@ pub mod Block {
             "mud",
             "muddy_mangrove_roots",
         ],
-        &[9u16, 8u16, 11u16, 10u16, 1239u16, 1234u16, 1240u16, 62u16],
+        &[9u16, 8u16, 11u16, 10u16, 1021u16, 1016u16, 1022u16, 55u16],
     );
-    pub const MINECRAFT_SNIFFER_EGG_HATCH_BOOST: Tag = (&["moss_block"], &[1234u16]);
+    pub const MINECRAFT_SNIFFER_EGG_HATCH_BOOST: Tag = (&["moss_block"], &[1016u16]);
     pub const MINECRAFT_SNOW: Tag = (
         &["snow", "snow_block", "powder_snow"],
-        &[325u16, 327u16, 1117u16],
+        &[247u16, 249u16, 925u16],
     );
     pub const MINECRAFT_SNOW_LAYER_CAN_SURVIVE_ON: Tag = (
         &["honey_block", "soul_sand", "mud"],
-        &[1003u16, 335u16, 1240u16],
+        &[838u16, 256u16, 1022u16],
     );
     pub const MINECRAFT_SNOW_LAYER_CANNOT_SURVIVE_ON: Tag =
-        (&["ice", "packed_ice", "barrier"], &[326u16, 610u16, 578u16]);
+        (&["ice", "packed_ice", "barrier"], &[248u16, 496u16, 464u16]);
     pub const MINECRAFT_SOUL_FIRE_BASE_BLOCKS: Tag =
-        (&["soul_sand", "soul_soil"], &[335u16, 336u16]);
-    pub const MINECRAFT_SOUL_SPEED_BLOCKS: Tag = (&["soul_sand", "soul_soil"], &[335u16, 336u16]);
+        (&["soul_sand", "soul_soil"], &[256u16, 257u16]);
+    pub const MINECRAFT_SOUL_SPEED_BLOCKS: Tag = (&["soul_sand", "soul_soil"], &[256u16, 257u16]);
     pub const MINECRAFT_SPRUCE_LOGS: Tag = (
         &[
             "spruce_log",
@@ -5538,7 +5502,7 @@ pub mod Block {
             "stripped_spruce_log",
             "stripped_spruce_wood",
         ],
-        &[52u16, 76u16, 64u16, 85u16],
+        &[47u16, 67u16, 57u16, 75u16],
     );
     pub const MINECRAFT_STAIRS: Tag = (
         &[
@@ -5600,12 +5564,12 @@ pub mod Block {
             "tuff_brick_stairs",
         ],
         &[
-            244u16, 455u16, 456u16, 457u16, 569u16, 571u16, 985u16, 986u16, 573u16, 575u16, 570u16,
-            576u16, 268u16, 448u16, 433u16, 421u16, 420u16, 718u16, 534u16, 652u16, 585u16, 584u16,
-            586u16, 887u16, 888u16, 889u16, 890u16, 891u16, 892u16, 893u16, 894u16, 895u16, 896u16,
-            897u16, 898u16, 899u16, 900u16, 1015u16, 1023u16, 1026u16, 1243u16, 1247u16, 1251u16,
-            1255u16, 1153u16, 1152u16, 1151u16, 1150u16, 1156u16, 1155u16, 1154u16, 1157u16,
-            422u16, 1076u16, 1080u16, 1085u16,
+            176u16, 348u16, 349u16, 350u16, 457u16, 459u16, 822u16, 823u16, 460u16, 461u16, 458u16,
+            462u16, 198u16, 341u16, 327u16, 321u16, 320u16, 596u16, 422u16, 538u16, 471u16, 470u16,
+            472u16, 732u16, 733u16, 734u16, 735u16, 736u16, 737u16, 738u16, 739u16, 740u16, 741u16,
+            742u16, 743u16, 744u16, 745u16, 850u16, 858u16, 861u16, 1025u16, 1029u16, 1033u16,
+            1037u16, 950u16, 951u16, 952u16, 953u16, 967u16, 968u16, 969u16, 966u16, 322u16,
+            911u16, 915u16, 920u16,
         ],
     );
     pub const MINECRAFT_STANDING_SIGNS: Tag = (
@@ -5623,7 +5587,7 @@ pub mod Block {
             "cherry_sign",
         ],
         &[
-            254u16, 255u16, 256u16, 257u16, 259u16, 260u16, 991u16, 992u16, 262u16, 264u16, 258u16,
+            186u16, 187u16, 188u16, 189u16, 191u16, 192u16, 828u16, 829u16, 193u16, 194u16, 190u16,
         ],
     );
     pub const MINECRAFT_STONE_BRICKS: Tag = (
@@ -5633,11 +5597,11 @@ pub mod Block {
             "cracked_stone_bricks",
             "chiseled_stone_bricks",
         ],
-        &[376u16, 377u16, 378u16, 379u16],
+        &[293u16, 294u16, 295u16, 296u16],
     );
     pub const MINECRAFT_STONE_BUTTONS: Tag = (
         &["stone_button", "polished_blackstone_button"],
-        &[324u16, 1029u16],
+        &[246u16, 864u16],
     );
     pub const MINECRAFT_STONE_ORE_REPLACEABLES: Tag = (
         &["stone", "granite", "diorite", "andesite"],
@@ -5645,9 +5609,9 @@ pub mod Block {
     );
     pub const MINECRAFT_STONE_PRESSURE_PLATES: Tag = (
         &["stone_pressure_plate", "polished_blackstone_pressure_plate"],
-        &[307u16, 1028u16],
+        &[231u16, 863u16],
     );
-    pub const MINECRAFT_STRIDER_WARM_BLOCKS: Tag = (&["lava"], &[38u16]);
+    pub const MINECRAFT_STRIDER_WARM_BLOCKS: Tag = (&["lava"], &[33u16]);
     pub const MINECRAFT_SWORD_EFFICIENT: Tag = (
         &[
             "jungle_leaves",
@@ -5739,19 +5703,19 @@ pub mod Block {
             "chorus_flower",
         ],
         &[
-            97u16, 94u16, 95u16, 100u16, 98u16, 96u16, 106u16, 107u16, 102u16, 99u16, 26u16, 27u16,
-            28u16, 29u16, 30u16, 32u16, 1228u16, 1229u16, 34u16, 31u16, 200u16, 203u16, 204u16,
-            205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16, 214u16, 213u16, 202u16,
-            723u16, 493u16, 494u16, 251u16, 415u16, 414u16, 720u16, 721u16, 140u16, 141u16, 142u16,
-            416u16, 417u16, 611u16, 612u16, 613u16, 614u16, 615u16, 616u16, 1238u16, 722u16,
-            215u16, 216u16, 331u16, 410u16, 345u16, 346u16, 411u16, 412u16, 413u16, 424u16, 446u16,
-            951u16, 1225u16, 1226u16, 1227u16, 1230u16, 1231u16, 1235u16, 1236u16, 1237u16, 434u16,
-            957u16, 959u16, 960u16, 966u16, 968u16, 969u16, 970u16, 971u16, 972u16, 713u16, 714u16,
+            85u16, 82u16, 83u16, 88u16, 86u16, 84u16, 90u16, 91u16, 89u16, 87u16, 23u16, 24u16,
+            25u16, 26u16, 27u16, 29u16, 1012u16, 1013u16, 30u16, 28u16, 147u16, 149u16, 150u16,
+            151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16, 160u16, 159u16, 148u16,
+            601u16, 383u16, 384u16, 183u16, 316u16, 315u16, 598u16, 599u16, 123u16, 124u16, 125u16,
+            317u16, 318u16, 497u16, 498u16, 499u16, 500u16, 501u16, 502u16, 1020u16, 600u16,
+            161u16, 162u16, 252u16, 311u16, 264u16, 265u16, 312u16, 313u16, 314u16, 324u16, 340u16,
+            788u16, 1009u16, 1010u16, 1011u16, 1014u16, 1015u16, 1017u16, 1018u16, 1019u16, 328u16,
+            794u16, 796u16, 797u16, 803u16, 805u16, 806u16, 807u16, 808u16, 809u16, 592u16, 593u16,
         ],
     );
     pub const MINECRAFT_TALL_FLOWERS: Tag = (
         &["sunflower", "lilac", "peony", "rose_bush", "pitcher_plant"],
-        &[611u16, 612u16, 614u16, 613u16, 722u16],
+        &[497u16, 498u16, 500u16, 499u16, 600u16],
     );
     pub const MINECRAFT_TERRACOTTA: Tag = (
         &[
@@ -5774,11 +5738,11 @@ pub mod Block {
             "black_terracotta",
         ],
         &[
-            608u16, 537u16, 538u16, 539u16, 540u16, 541u16, 542u16, 543u16, 544u16, 545u16, 546u16,
-            547u16, 548u16, 549u16, 550u16, 551u16, 552u16,
+            494u16, 425u16, 426u16, 427u16, 428u16, 429u16, 430u16, 431u16, 432u16, 433u16, 434u16,
+            435u16, 436u16, 437u16, 438u16, 439u16, 440u16,
         ],
     );
-    pub const MINECRAFT_TRAIL_RUINS_REPLACEABLE: Tag = (&["gravel"], &[42u16]);
+    pub const MINECRAFT_TRAIL_RUINS_REPLACEABLE: Tag = (&["gravel"], &[37u16]);
     pub const MINECRAFT_TRAPDOORS: Tag = (
         &[
             "acacia_trapdoor",
@@ -5803,8 +5767,8 @@ pub mod Block {
             "waxed_oxidized_copper_trapdoor",
         ],
         &[
-            369u16, 367u16, 371u16, 368u16, 365u16, 366u16, 981u16, 982u16, 373u16, 375u16, 370u16,
-            580u16, 1174u16, 1175u16, 1176u16, 1177u16, 1178u16, 1179u16, 1180u16, 1181u16,
+            288u16, 286u16, 290u16, 287u16, 284u16, 285u16, 818u16, 819u16, 291u16, 292u16, 289u16,
+            466u16, 982u16, 983u16, 985u16, 984u16, 986u16, 987u16, 989u16, 988u16,
         ],
     );
     pub const MINECRAFT_UNDERWATER_BONEMEALS: Tag = (
@@ -5827,8 +5791,8 @@ pub mod Block {
             "horn_coral_wall_fan",
         ],
         &[
-            147u16, 853u16, 854u16, 855u16, 856u16, 857u16, 863u16, 864u16, 865u16, 866u16, 867u16,
-            873u16, 874u16, 875u16, 876u16, 877u16,
+            126u16, 698u16, 699u16, 700u16, 701u16, 702u16, 708u16, 709u16, 710u16, 711u16, 712u16,
+            718u16, 719u16, 720u16, 721u16, 722u16,
         ],
     );
     pub const MINECRAFT_UNSTABLE_BOTTOM_CENTER: Tag = (
@@ -5846,11 +5810,11 @@ pub mod Block {
             "cherry_fence_gate",
         ],
         &[
-            685u16, 683u16, 687u16, 684u16, 419u16, 682u16, 983u16, 984u16, 689u16, 691u16, 686u16,
+            570u16, 568u16, 572u16, 569u16, 319u16, 567u16, 820u16, 821u16, 573u16, 574u16, 571u16,
         ],
     );
     pub const MINECRAFT_VALID_SPAWN: Tag = (&["grass_block", "podzol"], &[8u16, 11u16]);
-    pub const MINECRAFT_VIBRATION_RESONATORS: Tag = (&["amethyst_block"], &[1068u16]);
+    pub const MINECRAFT_VIBRATION_RESONATORS: Tag = (&["amethyst_block"], &[903u16]);
     pub const MINECRAFT_WALL_CORALS: Tag = (
         &[
             "tube_coral_wall_fan",
@@ -5859,7 +5823,7 @@ pub mod Block {
             "fire_coral_wall_fan",
             "horn_coral_wall_fan",
         ],
-        &[873u16, 874u16, 875u16, 876u16, 877u16],
+        &[718u16, 719u16, 720u16, 721u16, 722u16],
     );
     pub const MINECRAFT_WALL_HANGING_SIGNS: Tag = (
         &[
@@ -5876,7 +5840,7 @@ pub mod Block {
             "bamboo_wall_hanging_sign",
         ],
         &[
-            293u16, 294u16, 295u16, 296u16, 297u16, 298u16, 299u16, 303u16, 304u16, 301u16, 305u16,
+            219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16, 227u16, 228u16, 226u16, 229u16,
         ],
     );
     pub const MINECRAFT_WALL_POST_OVERRIDE: Tag = (
@@ -5956,13 +5920,13 @@ pub mod Block {
             "polished_blackstone_pressure_plate",
         ],
         &[
-            238u16, 339u16, 322u16, 453u16, 254u16, 255u16, 256u16, 257u16, 259u16, 260u16, 991u16,
-            992u16, 262u16, 264u16, 258u16, 269u16, 270u16, 271u16, 272u16, 274u16, 275u16, 993u16,
-            994u16, 277u16, 279u16, 273u16, 617u16, 618u16, 619u16, 620u16, 621u16, 622u16, 623u16,
-            624u16, 625u16, 626u16, 627u16, 628u16, 629u16, 630u16, 631u16, 632u16, 633u16, 634u16,
-            635u16, 636u16, 637u16, 638u16, 639u16, 640u16, 641u16, 642u16, 643u16, 644u16, 645u16,
-            646u16, 647u16, 648u16, 524u16, 525u16, 309u16, 310u16, 311u16, 312u16, 313u16, 315u16,
-            977u16, 978u16, 317u16, 319u16, 314u16, 307u16, 1028u16,
+            171u16, 260u16, 244u16, 346u16, 186u16, 187u16, 188u16, 189u16, 191u16, 192u16, 828u16,
+            829u16, 193u16, 194u16, 190u16, 199u16, 200u16, 201u16, 202u16, 204u16, 205u16, 830u16,
+            831u16, 206u16, 207u16, 203u16, 503u16, 504u16, 505u16, 506u16, 507u16, 508u16, 509u16,
+            510u16, 511u16, 512u16, 513u16, 514u16, 515u16, 516u16, 517u16, 518u16, 519u16, 520u16,
+            521u16, 522u16, 523u16, 524u16, 525u16, 526u16, 527u16, 528u16, 529u16, 530u16, 531u16,
+            532u16, 533u16, 534u16, 412u16, 413u16, 233u16, 234u16, 235u16, 236u16, 237u16, 239u16,
+            814u16, 815u16, 240u16, 241u16, 238u16, 231u16, 863u16,
         ],
     );
     pub const MINECRAFT_WALL_SIGNS: Tag = (
@@ -5980,7 +5944,7 @@ pub mod Block {
             "cherry_wall_sign",
         ],
         &[
-            269u16, 270u16, 271u16, 272u16, 274u16, 275u16, 993u16, 994u16, 277u16, 279u16, 273u16,
+            199u16, 200u16, 201u16, 202u16, 204u16, 205u16, 830u16, 831u16, 206u16, 207u16, 203u16,
         ],
     );
     pub const MINECRAFT_WALLS: Tag = (
@@ -6012,9 +5976,9 @@ pub mod Block {
             "tuff_brick_wall",
         ],
         &[
-            460u16, 461u16, 914u16, 915u16, 916u16, 917u16, 918u16, 919u16, 921u16, 922u16, 923u16,
-            924u16, 925u16, 926u16, 1016u16, 1024u16, 1030u16, 1245u16, 1249u16, 1253u16, 1257u16,
-            920u16, 1077u16, 1081u16, 1086u16,
+            353u16, 354u16, 759u16, 760u16, 761u16, 762u16, 763u16, 764u16, 766u16, 767u16, 768u16,
+            769u16, 770u16, 771u16, 851u16, 859u16, 865u16, 1027u16, 1031u16, 1035u16, 1039u16,
+            765u16, 912u16, 916u16, 921u16,
         ],
     );
     pub const MINECRAFT_WARPED_STEMS: Tag = (
@@ -6024,11 +5988,11 @@ pub mod Block {
             "warped_hyphae",
             "stripped_warped_hyphae",
         ],
-        &[952u16, 953u16, 954u16, 955u16],
+        &[789u16, 790u16, 791u16, 792u16],
     );
     pub const MINECRAFT_WART_BLOCKS: Tag = (
         &["nether_wart_block", "warped_wart_block"],
-        &[730u16, 958u16],
+        &[608u16, 795u16],
     );
     pub const MINECRAFT_WITHER_IMMUNE: Tag = (
         &[
@@ -6047,15 +6011,15 @@ pub mod Block {
             "reinforced_deepslate",
         ],
         &[
-            578u16, 36u16, 441u16, 442u16, 725u16, 458u16, 726u16, 727u16, 995u16, 996u16, 199u16,
-            579u16, 1272u16,
+            464u16, 31u16, 335u16, 336u16, 603u16, 351u16, 604u16, 605u16, 832u16, 833u16, 146u16,
+            465u16, 1054u16,
         ],
     );
     pub const MINECRAFT_WITHER_SUMMON_BASE_BLOCKS: Tag =
-        (&["soul_sand", "soul_soil"], &[335u16, 336u16]);
+        (&["soul_sand", "soul_soil"], &[256u16, 257u16]);
     pub const MINECRAFT_WOLVES_SPAWNABLE_ON: Tag = (
         &["grass_block", "snow", "snow_block", "coarse_dirt", "podzol"],
-        &[8u16, 325u16, 327u16, 10u16, 11u16],
+        &[8u16, 247u16, 249u16, 10u16, 11u16],
     );
     pub const MINECRAFT_WOODEN_BUTTONS: Tag = (
         &[
@@ -6072,7 +6036,7 @@ pub mod Block {
             "cherry_button",
         ],
         &[
-            495u16, 496u16, 497u16, 498u16, 499u16, 501u16, 987u16, 988u16, 503u16, 505u16, 500u16,
+            385u16, 386u16, 387u16, 388u16, 389u16, 391u16, 824u16, 825u16, 392u16, 393u16, 390u16,
         ],
     );
     pub const MINECRAFT_WOODEN_DOORS: Tag = (
@@ -6090,7 +6054,7 @@ pub mod Block {
             "cherry_door",
         ],
         &[
-            265u16, 702u16, 703u16, 704u16, 705u16, 707u16, 989u16, 990u16, 709u16, 711u16, 706u16,
+            195u16, 583u16, 584u16, 585u16, 586u16, 588u16, 826u16, 827u16, 589u16, 590u16, 587u16,
         ],
     );
     pub const MINECRAFT_WOODEN_FENCES: Tag = (
@@ -6108,7 +6072,7 @@ pub mod Block {
             "cherry_fence",
         ],
         &[
-            333u16, 695u16, 697u16, 692u16, 693u16, 694u16, 979u16, 980u16, 699u16, 701u16, 696u16,
+            254u16, 578u16, 580u16, 575u16, 576u16, 577u16, 816u16, 817u16, 581u16, 582u16, 579u16,
         ],
     );
     pub const MINECRAFT_WOODEN_PRESSURE_PLATES: Tag = (
@@ -6126,7 +6090,7 @@ pub mod Block {
             "cherry_pressure_plate",
         ],
         &[
-            309u16, 310u16, 311u16, 312u16, 313u16, 315u16, 977u16, 978u16, 317u16, 319u16, 314u16,
+            233u16, 234u16, 235u16, 236u16, 237u16, 239u16, 814u16, 815u16, 240u16, 241u16, 238u16,
         ],
     );
     pub const MINECRAFT_WOODEN_SLABS: Tag = (
@@ -6144,7 +6108,7 @@ pub mod Block {
             "cherry_slab",
         ],
         &[
-            653u16, 654u16, 655u16, 656u16, 657u16, 659u16, 975u16, 976u16, 661u16, 663u16, 658u16,
+            539u16, 540u16, 541u16, 542u16, 543u16, 545u16, 812u16, 813u16, 546u16, 547u16, 544u16,
         ],
     );
     pub const MINECRAFT_WOODEN_STAIRS: Tag = (
@@ -6162,7 +6126,7 @@ pub mod Block {
             "cherry_stairs",
         ],
         &[
-            244u16, 455u16, 456u16, 457u16, 569u16, 571u16, 985u16, 986u16, 573u16, 575u16, 570u16,
+            176u16, 348u16, 349u16, 350u16, 457u16, 459u16, 822u16, 823u16, 460u16, 461u16, 458u16,
         ],
     );
     pub const MINECRAFT_WOODEN_TRAPDOORS: Tag = (
@@ -6180,7 +6144,7 @@ pub mod Block {
             "cherry_trapdoor",
         ],
         &[
-            369u16, 367u16, 371u16, 368u16, 365u16, 366u16, 981u16, 982u16, 373u16, 375u16, 370u16,
+            288u16, 286u16, 290u16, 287u16, 284u16, 285u16, 818u16, 819u16, 291u16, 292u16, 289u16,
         ],
     );
     pub const MINECRAFT_WOOL: Tag = (
@@ -6203,8 +6167,8 @@ pub mod Block {
             "black_wool",
         ],
         &[
-            151u16, 152u16, 153u16, 154u16, 155u16, 156u16, 157u16, 158u16, 159u16, 160u16, 161u16,
-            162u16, 163u16, 164u16, 165u16, 166u16,
+            130u16, 131u16, 132u16, 133u16, 134u16, 135u16, 136u16, 137u16, 138u16, 139u16, 140u16,
+            141u16, 142u16, 143u16, 144u16, 145u16,
         ],
     );
     pub const MINECRAFT_WOOL_CARPETS: Tag = (
@@ -6227,8 +6191,8 @@ pub mod Block {
             "black_carpet",
         ],
         &[
-            592u16, 593u16, 594u16, 595u16, 596u16, 597u16, 598u16, 599u16, 600u16, 601u16, 602u16,
-            603u16, 604u16, 605u16, 606u16, 607u16,
+            478u16, 479u16, 480u16, 481u16, 482u16, 483u16, 484u16, 485u16, 486u16, 487u16, 488u16,
+            489u16, 490u16, 491u16, 492u16, 493u16,
         ],
     );
 }
@@ -6957,13 +6921,11 @@ pub mod EntityType {
             "mangrove_chest_boat",
             "bamboo_chest_raft",
         ],
-        &[
-            91u16, 129u16, 13u16, 76u16, 1u16, 24u16, 96u16, 35u16, 83u16, 8u16,
-        ],
+        &[],
     );
-    pub const C_BOSSES: Tag = (&["ender_dragon", "wither"], &[44u16, 149u16]);
+    pub const C_BOSSES: Tag = (&["ender_dragon", "wither"], &[31u16, 119u16]);
     pub const C_CAPTURING_NOT_SUPPORTED: Tag = (&[], &[]);
-    pub const C_ITEM_FRAMES: Tag = (&["item_frame", "glow_item_frame"], &[74u16, 61u16]);
+    pub const C_ITEM_FRAMES: Tag = (&["item_frame", "glow_item_frame"], &[60u16, 47u16]);
     pub const C_MINECARTS: Tag = (
         &[
             "minecart",
@@ -6974,7 +6936,7 @@ pub mod EntityType {
             "hopper_minecart",
             "spawner_minecart",
         ],
-        &[86u16, 137u16, 25u16, 57u16, 29u16, 66u16, 125u16],
+        &[69u16, 107u16, 18u16, 44u16, 21u16, 52u16, 98u16],
     );
     pub const C_TELEPORTING_NOT_SUPPORTED: Tag = (&[], &[]);
     pub const MINECRAFT_AQUATIC: Tag = (
@@ -6993,17 +6955,17 @@ pub mod EntityType {
             "tadpole",
         ],
         &[
-            141u16, 7u16, 64u16, 41u16, 27u16, 110u16, 113u16, 140u16, 36u16, 130u16, 62u16, 134u16,
+            111u16, 5u16, 50u16, 29u16, 20u16, 83u16, 86u16, 110u16, 24u16, 101u16, 48u16, 104u16,
         ],
     );
-    pub const MINECRAFT_ARROWS: Tag = (&["arrow", "spectral_arrow"], &[6u16, 126u16]);
+    pub const MINECRAFT_ARROWS: Tag = (&["arrow", "spectral_arrow"], &[4u16, 99u16]);
     pub const MINECRAFT_ARTHROPOD: Tag = (
         &["bee", "endermite", "silverfish", "spider", "cave_spider"],
-        &[11u16, 43u16, 117u16, 127u16, 22u16],
+        &[7u16, 34u16, 90u16, 100u16, 16u16],
     );
     pub const MINECRAFT_AXOLOTL_ALWAYS_HOSTILES: Tag = (
         &["drowned", "guardian", "elder_guardian"],
-        &[39u16, 64u16, 41u16],
+        &[27u16, 50u16, 29u16],
     );
     pub const MINECRAFT_AXOLOTL_HUNT_TARGETS: Tag = (
         &[
@@ -7015,9 +6977,9 @@ pub mod EntityType {
             "glow_squid",
             "tadpole",
         ],
-        &[140u16, 110u16, 113u16, 27u16, 130u16, 62u16, 134u16],
+        &[110u16, 83u16, 86u16, 20u16, 101u16, 48u16, 104u16],
     );
-    pub const MINECRAFT_BEEHIVE_INHABITORS: Tag = (&["bee"], &[11u16]);
+    pub const MINECRAFT_BEEHIVE_INHABITORS: Tag = (&["bee"], &[7u16]);
     pub const MINECRAFT_CAN_BREATHE_UNDER_WATER: Tag = (
         &[
             "skeleton",
@@ -7049,13 +7011,13 @@ pub mod EntityType {
             "armor_stand",
         ],
         &[
-            118u16, 131u16, 150u16, 119u16, 16u16, 155u16, 154u16, 157u16, 158u16, 153u16, 39u16,
-            68u16, 149u16, 100u16, 7u16, 56u16, 64u16, 41u16, 141u16, 62u16, 27u16, 110u16, 113u16,
-            130u16, 140u16, 134u16, 5u16,
+            91u16, 102u16, 120u16, 92u16, 11u16, 125u16, 124u16, 126u16, 127u16, 123u16, 27u16,
+            54u16, 119u16, 76u16, 5u16, 43u16, 50u16, 29u16, 111u16, 48u16, 20u16, 83u16, 86u16,
+            101u16, 110u16, 104u16, 3u16,
         ],
     );
-    pub const MINECRAFT_CAN_TURN_IN_BOATS: Tag = (&["breeze"], &[17u16]);
-    pub const MINECRAFT_DEFLECTS_PROJECTILES: Tag = (&["breeze"], &[17u16]);
+    pub const MINECRAFT_CAN_TURN_IN_BOATS: Tag = (&["breeze"], &[12u16]);
+    pub const MINECRAFT_DEFLECTS_PROJECTILES: Tag = (&["breeze"], &[12u16]);
     pub const MINECRAFT_DISMOUNTS_UNDERWATER: Tag = (
         &[
             "camel",
@@ -7072,8 +7034,7 @@ pub mod EntityType {
             "zombie_horse",
         ],
         &[
-            19u16, 26u16, 37u16, 67u16, 79u16, 88u16, 101u16, 112u16, 127u16, 132u16, 138u16,
-            155u16,
+            14u16, 19u16, 25u16, 53u16, 65u16, 71u16, 77u16, 85u16, 100u16, 103u16, 108u16, 125u16,
         ],
     );
     pub const MINECRAFT_FALL_DAMAGE_IMMUNE: Tag = (
@@ -7096,17 +7057,17 @@ pub mod EntityType {
             "breeze",
         ],
         &[
-            71u16, 124u16, 115u16, 2u16, 10u16, 11u16, 14u16, 21u16, 26u16, 58u16, 100u16, 81u16,
-            92u16, 99u16, 149u16, 17u16,
+            57u16, 96u16, 88u16, 0u16, 6u16, 7u16, 8u16, 15u16, 19u16, 45u16, 76u16, 67u16, 72u16,
+            75u16, 119u16, 12u16,
         ],
     );
     pub const MINECRAFT_FREEZE_HURTS_EXTRA_TYPES: Tag =
-        (&["strider", "blaze", "magma_cube"], &[132u16, 14u16, 81u16]);
+        (&["strider", "blaze", "magma_cube"], &[103u16, 8u16, 67u16]);
     pub const MINECRAFT_FREEZE_IMMUNE_ENTITY_TYPES: Tag = (
         &["stray", "polar_bear", "snow_golem", "wither"],
-        &[131u16, 105u16, 124u16, 149u16],
+        &[102u16, 81u16, 96u16, 119u16],
     );
-    pub const MINECRAFT_FROG_FOOD: Tag = (&["slime", "magma_cube"], &[120u16, 81u16]);
+    pub const MINECRAFT_FROG_FOOD: Tag = (&["slime", "magma_cube"], &[93u16, 67u16]);
     pub const MINECRAFT_IGNORES_POISON_AND_REGEN: Tag = (
         &[
             "skeleton",
@@ -7125,20 +7086,20 @@ pub mod EntityType {
             "phantom",
         ],
         &[
-            118u16, 131u16, 150u16, 119u16, 16u16, 155u16, 154u16, 157u16, 158u16, 153u16, 39u16,
-            68u16, 149u16, 100u16,
+            91u16, 102u16, 120u16, 92u16, 11u16, 125u16, 124u16, 126u16, 127u16, 123u16, 27u16,
+            54u16, 119u16, 76u16,
         ],
     );
     pub const MINECRAFT_ILLAGER: Tag = (
         &["evoker", "illusioner", "pillager", "vindicator"],
-        &[47u16, 69u16, 104u16, 144u16],
+        &[35u16, 55u16, 80u16, 114u16],
     );
     pub const MINECRAFT_ILLAGER_FRIENDS: Tag = (
         &["evoker", "illusioner", "pillager", "vindicator"],
-        &[47u16, 69u16, 104u16, 144u16],
+        &[35u16, 55u16, 80u16, 114u16],
     );
-    pub const MINECRAFT_IMMUNE_TO_INFESTED: Tag = (&["silverfish"], &[117u16]);
-    pub const MINECRAFT_IMMUNE_TO_OOZING: Tag = (&["slime"], &[120u16]);
+    pub const MINECRAFT_IMMUNE_TO_INFESTED: Tag = (&["silverfish"], &[90u16]);
+    pub const MINECRAFT_IMMUNE_TO_OOZING: Tag = (&["slime"], &[93u16]);
     pub const MINECRAFT_IMPACT_PROJECTILES: Tag = (
         &[
             "arrow",
@@ -7155,7 +7116,7 @@ pub mod EntityType {
             "breeze_wind_charge",
         ],
         &[
-            6u16, 126u16, 54u16, 123u16, 53u16, 121u16, 40u16, 139u16, 38u16, 151u16, 147u16, 18u16,
+            4u16, 99u16, 41u16, 97u16, 62u16, 94u16, 28u16, 109u16, 26u16, 121u16, 117u16, 13u16,
         ],
     );
     pub const MINECRAFT_INVERTED_HEALING_AND_HARM: Tag = (
@@ -7176,8 +7137,8 @@ pub mod EntityType {
             "phantom",
         ],
         &[
-            118u16, 131u16, 150u16, 119u16, 16u16, 155u16, 154u16, 157u16, 158u16, 153u16, 39u16,
-            68u16, 149u16, 100u16,
+            91u16, 102u16, 120u16, 92u16, 11u16, 125u16, 124u16, 126u16, 127u16, 123u16, 27u16,
+            54u16, 119u16, 76u16,
         ],
     );
     pub const MINECRAFT_NO_ANGER_FROM_WIND_CHARGE: Tag = (
@@ -7193,10 +7154,10 @@ pub mod EntityType {
             "slime",
         ],
         &[
-            17u16, 118u16, 16u16, 131u16, 154u16, 68u16, 127u16, 22u16, 120u16,
+            12u16, 91u16, 11u16, 102u16, 124u16, 54u16, 100u16, 16u16, 93u16,
         ],
     );
-    pub const MINECRAFT_NON_CONTROLLING_RIDER: Tag = (&["slime", "magma_cube"], &[120u16, 81u16]);
+    pub const MINECRAFT_NON_CONTROLLING_RIDER: Tag = (&["slime", "magma_cube"], &[93u16, 67u16]);
     pub const MINECRAFT_NOT_SCARY_FOR_PUFFERFISH: Tag = (
         &[
             "turtle",
@@ -7212,12 +7173,12 @@ pub mod EntityType {
             "tadpole",
         ],
         &[
-            141u16, 64u16, 41u16, 27u16, 110u16, 113u16, 140u16, 36u16, 130u16, 62u16, 134u16,
+            111u16, 50u16, 29u16, 20u16, 83u16, 86u16, 110u16, 24u16, 101u16, 48u16, 104u16,
         ],
     );
     pub const MINECRAFT_POWDER_SNOW_WALKABLE_MOBS: Tag = (
         &["rabbit", "endermite", "silverfish", "fox"],
-        &[111u16, 43u16, 117u16, 55u16],
+        &[84u16, 34u16, 90u16, 42u16],
     );
     pub const MINECRAFT_RAIDERS: Tag = (
         &[
@@ -7228,15 +7189,15 @@ pub mod EntityType {
             "illusioner",
             "witch",
         ],
-        &[47u16, 104u16, 112u16, 144u16, 69u16, 148u16],
+        &[35u16, 80u16, 85u16, 114u16, 55u16, 118u16],
     );
     pub const MINECRAFT_REDIRECTABLE_PROJECTILE: Tag = (
         &["fireball", "wind_charge", "breeze_wind_charge"],
-        &[53u16, 147u16, 18u16],
+        &[62u16, 117u16, 13u16],
     );
     pub const MINECRAFT_SENSITIVE_TO_BANE_OF_ARTHROPODS: Tag = (
         &["bee", "endermite", "silverfish", "spider", "cave_spider"],
-        &[11u16, 43u16, 117u16, 127u16, 22u16],
+        &[7u16, 34u16, 90u16, 100u16, 16u16],
     );
     pub const MINECRAFT_SENSITIVE_TO_IMPALING: Tag = (
         &[
@@ -7254,7 +7215,7 @@ pub mod EntityType {
             "tadpole",
         ],
         &[
-            141u16, 7u16, 64u16, 41u16, 27u16, 110u16, 113u16, 140u16, 36u16, 130u16, 62u16, 134u16,
+            111u16, 5u16, 50u16, 29u16, 20u16, 83u16, 86u16, 110u16, 24u16, 101u16, 48u16, 104u16,
         ],
     );
     pub const MINECRAFT_SENSITIVE_TO_SMITE: Tag = (
@@ -7275,8 +7236,8 @@ pub mod EntityType {
             "phantom",
         ],
         &[
-            118u16, 131u16, 150u16, 119u16, 16u16, 155u16, 154u16, 157u16, 158u16, 153u16, 39u16,
-            68u16, 149u16, 100u16,
+            91u16, 102u16, 120u16, 92u16, 11u16, 125u16, 124u16, 126u16, 127u16, 123u16, 27u16,
+            54u16, 119u16, 76u16,
         ],
     );
     pub const MINECRAFT_SKELETONS: Tag = (
@@ -7287,7 +7248,7 @@ pub mod EntityType {
             "skeleton_horse",
             "bogged",
         ],
-        &[118u16, 131u16, 150u16, 119u16, 16u16],
+        &[91u16, 102u16, 120u16, 92u16, 11u16],
     );
     pub const MINECRAFT_UNDEAD: Tag = (
         &[
@@ -7307,8 +7268,8 @@ pub mod EntityType {
             "phantom",
         ],
         &[
-            118u16, 131u16, 150u16, 119u16, 16u16, 155u16, 154u16, 157u16, 158u16, 153u16, 39u16,
-            68u16, 149u16, 100u16,
+            91u16, 102u16, 120u16, 92u16, 11u16, 125u16, 124u16, 126u16, 127u16, 123u16, 27u16,
+            54u16, 119u16, 76u16,
         ],
     );
     pub const MINECRAFT_WITHER_FRIENDS: Tag = (
@@ -7329,8 +7290,8 @@ pub mod EntityType {
             "phantom",
         ],
         &[
-            118u16, 131u16, 150u16, 119u16, 16u16, 155u16, 154u16, 157u16, 158u16, 153u16, 39u16,
-            68u16, 149u16, 100u16,
+            91u16, 102u16, 120u16, 92u16, 11u16, 125u16, 124u16, 126u16, 127u16, 123u16, 27u16,
+            54u16, 119u16, 76u16,
         ],
     );
     pub const MINECRAFT_ZOMBIES: Tag = (
@@ -7343,7 +7304,7 @@ pub mod EntityType {
             "drowned",
             "husk",
         ],
-        &[155u16, 154u16, 157u16, 158u16, 153u16, 39u16, 68u16],
+        &[125u16, 124u16, 126u16, 127u16, 123u16, 27u16, 54u16],
     );
 }
 static ENTITYTYPE_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf_map! { "c:boats" => & EntityType :: C_BOATS , "c:bosses" => & EntityType :: C_BOSSES , "c:capturing_not_supported" => & EntityType :: C_CAPTURING_NOT_SUPPORTED , "c:item_frames" => & EntityType :: C_ITEM_FRAMES , "c:minecarts" => & EntityType :: C_MINECARTS , "c:teleporting_not_supported" => & EntityType :: C_TELEPORTING_NOT_SUPPORTED , "minecraft:aquatic" => & EntityType :: MINECRAFT_AQUATIC , "minecraft:arrows" => & EntityType :: MINECRAFT_ARROWS , "minecraft:arthropod" => & EntityType :: MINECRAFT_ARTHROPOD , "minecraft:axolotl_always_hostiles" => & EntityType :: MINECRAFT_AXOLOTL_ALWAYS_HOSTILES , "minecraft:axolotl_hunt_targets" => & EntityType :: MINECRAFT_AXOLOTL_HUNT_TARGETS , "minecraft:beehive_inhabitors" => & EntityType :: MINECRAFT_BEEHIVE_INHABITORS , "minecraft:can_breathe_under_water" => & EntityType :: MINECRAFT_CAN_BREATHE_UNDER_WATER , "minecraft:can_turn_in_boats" => & EntityType :: MINECRAFT_CAN_TURN_IN_BOATS , "minecraft:deflects_projectiles" => & EntityType :: MINECRAFT_DEFLECTS_PROJECTILES , "minecraft:dismounts_underwater" => & EntityType :: MINECRAFT_DISMOUNTS_UNDERWATER , "minecraft:fall_damage_immune" => & EntityType :: MINECRAFT_FALL_DAMAGE_IMMUNE , "minecraft:freeze_hurts_extra_types" => & EntityType :: MINECRAFT_FREEZE_HURTS_EXTRA_TYPES , "minecraft:freeze_immune_entity_types" => & EntityType :: MINECRAFT_FREEZE_IMMUNE_ENTITY_TYPES , "minecraft:frog_food" => & EntityType :: MINECRAFT_FROG_FOOD , "minecraft:ignores_poison_and_regen" => & EntityType :: MINECRAFT_IGNORES_POISON_AND_REGEN , "minecraft:illager" => & EntityType :: MINECRAFT_ILLAGER , "minecraft:illager_friends" => & EntityType :: MINECRAFT_ILLAGER_FRIENDS , "minecraft:immune_to_infested" => & EntityType :: MINECRAFT_IMMUNE_TO_INFESTED , "minecraft:immune_to_oozing" => & EntityType :: MINECRAFT_IMMUNE_TO_OOZING , "minecraft:impact_projectiles" => & EntityType :: MINECRAFT_IMPACT_PROJECTILES , "minecraft:inverted_healing_and_harm" => & EntityType :: MINECRAFT_INVERTED_HEALING_AND_HARM , "minecraft:no_anger_from_wind_charge" => & EntityType :: MINECRAFT_NO_ANGER_FROM_WIND_CHARGE , "minecraft:non_controlling_rider" => & EntityType :: MINECRAFT_NON_CONTROLLING_RIDER , "minecraft:not_scary_for_pufferfish" => & EntityType :: MINECRAFT_NOT_SCARY_FOR_PUFFERFISH , "minecraft:powder_snow_walkable_mobs" => & EntityType :: MINECRAFT_POWDER_SNOW_WALKABLE_MOBS , "minecraft:raiders" => & EntityType :: MINECRAFT_RAIDERS , "minecraft:redirectable_projectile" => & EntityType :: MINECRAFT_REDIRECTABLE_PROJECTILE , "minecraft:sensitive_to_bane_of_arthropods" => & EntityType :: MINECRAFT_SENSITIVE_TO_BANE_OF_ARTHROPODS , "minecraft:sensitive_to_impaling" => & EntityType :: MINECRAFT_SENSITIVE_TO_IMPALING , "minecraft:sensitive_to_smite" => & EntityType :: MINECRAFT_SENSITIVE_TO_SMITE , "minecraft:skeletons" => & EntityType :: MINECRAFT_SKELETONS , "minecraft:undead" => & EntityType :: MINECRAFT_UNDEAD , "minecraft:wither_friends" => & EntityType :: MINECRAFT_WITHER_FRIENDS , "minecraft:zombies" => & EntityType :: MINECRAFT_ZOMBIES };
@@ -7369,7 +7330,7 @@ static FLUID_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf_map! { "c:bee
 #[allow(non_snake_case)]
 pub mod GameEvent {
     use super::Tag;
-    pub const MINECRAFT_ALLAY_CAN_LISTEN: Tag = (&["note_block_play"], &[34u16]);
+    pub const MINECRAFT_ALLAY_CAN_LISTEN: Tag = (&["note_block_play"], &[33u16]);
     pub const MINECRAFT_IGNORE_VIBRATIONS_SNEAKING: Tag = (
         &[
             "hit_ground",
@@ -7379,9 +7340,9 @@ pub mod GameEvent {
             "item_interact_start",
             "item_interact_finish",
         ],
-        &[27u16, 37u16, 42u16, 43u16, 30u16, 29u16],
+        &[26u16, 36u16, 41u16, 42u16, 29u16, 28u16],
     );
-    pub const MINECRAFT_SHRIEKER_CAN_LISTEN: Tag = (&["sculk_sensor_tendrils_clicking"], &[38u16]);
+    pub const MINECRAFT_SHRIEKER_CAN_LISTEN: Tag = (&["sculk_sensor_tendrils_clicking"], &[37u16]);
     pub const MINECRAFT_VIBRATIONS: Tag = (
         &[
             "block_attach",
@@ -7441,11 +7402,11 @@ pub mod GameEvent {
             "flap",
         ],
         &[
-            1u16, 2u16, 3u16, 5u16, 6u16, 7u16, 8u16, 0u16, 4u16, 10u16, 11u16, 12u16, 13u16,
-            14u16, 15u16, 16u16, 17u16, 18u16, 19u16, 20u16, 21u16, 22u16, 23u16, 25u16, 26u16,
-            27u16, 28u16, 29u16, 33u16, 34u16, 35u16, 36u16, 37u16, 39u16, 41u16, 42u16, 43u16,
+            1u16, 2u16, 3u16, 5u16, 6u16, 7u16, 8u16, 0u16, 4u16, 9u16, 10u16, 11u16, 12u16, 13u16,
+            14u16, 15u16, 16u16, 17u16, 18u16, 19u16, 20u16, 21u16, 22u16, 24u16, 25u16, 26u16,
+            27u16, 28u16, 32u16, 33u16, 34u16, 35u16, 36u16, 38u16, 40u16, 41u16, 42u16, 43u16,
             44u16, 45u16, 46u16, 47u16, 48u16, 49u16, 50u16, 51u16, 52u16, 53u16, 54u16, 55u16,
-            56u16, 57u16, 58u16, 59u16, 60u16, 24u16,
+            56u16, 57u16, 58u16, 59u16, 23u16,
         ],
     );
     pub const MINECRAFT_WARDEN_CAN_LISTEN: Tag = (
@@ -7508,11 +7469,11 @@ pub mod GameEvent {
             "sculk_sensor_tendrils_clicking",
         ],
         &[
-            1u16, 2u16, 3u16, 5u16, 6u16, 7u16, 8u16, 0u16, 4u16, 10u16, 11u16, 12u16, 13u16,
-            14u16, 15u16, 16u16, 17u16, 18u16, 19u16, 20u16, 21u16, 22u16, 23u16, 25u16, 26u16,
-            27u16, 28u16, 29u16, 33u16, 34u16, 35u16, 36u16, 37u16, 39u16, 41u16, 42u16, 43u16,
+            1u16, 2u16, 3u16, 5u16, 6u16, 7u16, 8u16, 0u16, 4u16, 9u16, 10u16, 11u16, 12u16, 13u16,
+            14u16, 15u16, 16u16, 17u16, 18u16, 19u16, 20u16, 21u16, 22u16, 24u16, 25u16, 26u16,
+            27u16, 28u16, 32u16, 33u16, 34u16, 35u16, 36u16, 38u16, 40u16, 41u16, 42u16, 43u16,
             44u16, 45u16, 46u16, 47u16, 48u16, 49u16, 50u16, 51u16, 52u16, 53u16, 54u16, 55u16,
-            56u16, 57u16, 58u16, 59u16, 60u16, 40u16, 38u16,
+            56u16, 57u16, 58u16, 59u16, 39u16, 37u16,
         ],
     );
 }
@@ -7625,13 +7586,13 @@ pub mod Item {
             "rotten_flesh",
         ],
         &[
-            1272u16, 1138u16, 298u16, 302u16, 303u16, 304u16, 305u16, 306u16, 307u16, 308u16,
-            309u16, 310u16, 311u16, 312u16, 313u16, 314u16, 599u16, 600u16, 602u16, 601u16, 315u16,
-            228u16, 243u16, 85u16, 220u16, 329u16, 398u16, 316u16, 413u16, 1190u16, 1191u16,
-            1065u16, 1259u16, 1258u16, 1439u16, 1436u16, 1437u16, 1066u16, 1525u16, 1526u16,
-            1147u16, 320u16, 1217u16, 579u16, 1007u16, 1383u16, 1100u16, 1101u16, 340u16, 1378u16,
-            1379u16, 1438u16, 1097u16, 1098u16, 321u16, 248u16, 1260u16, 1262u16, 1261u16, 1263u16,
-            1416u16, 1401u16, 1415u16, 1400u16, 1264u16,
+            1000u16, 918u16, 218u16, 219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16,
+            226u16, 227u16, 228u16, 229u16, 230u16, 231u16, 465u16, 466u16, 468u16, 467u16, 232u16,
+            185u16, 198u16, 55u16, 181u16, 246u16, 294u16, 233u16, 308u16, 935u16, 936u16, 853u16,
+            987u16, 986u16, 1155u16, 1152u16, 1153u16, 854u16, 1216u16, 1217u16, 926u16, 236u16,
+            962u16, 445u16, 800u16, 1102u16, 884u16, 885u16, 251u16, 1097u16, 1098u16, 1154u16,
+            881u16, 882u16, 237u16, 200u16, 988u16, 990u16, 989u16, 991u16, 1132u16, 1119u16,
+            1131u16, 1118u16, 992u16,
         ],
     );
     pub const C_ARMORS: Tag = (
@@ -7675,11 +7636,9 @@ pub mod Item {
             "wolf_armor",
         ],
         &[
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16, 1069u16, 1077u16,
-            1089u16, 1081u16, 1085u16, 1093u16, 1070u16, 1078u16, 1090u16, 1082u16, 1086u16,
-            1094u16, 1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16, 1411u16, 1406u16,
-            1407u16, 1408u16, 1409u16, 1410u16, 1489u16, 1485u16, 1486u16, 1487u16, 1488u16,
-            1004u16,
+            856u16, 860u16, 872u16, 864u16, 868u16, 876u16, 794u16, 857u16, 861u16, 873u16, 865u16,
+            869u16, 877u16, 858u16, 862u16, 874u16, 866u16, 870u16, 878u16, 859u16, 863u16, 875u16,
+            867u16, 871u16, 879u16, 1127u16, 1124u16, 1125u16, 1126u16, 797u16,
         ],
     );
     pub const C_ARMORS_HORSE: Tag = (
@@ -7691,7 +7650,7 @@ pub mod Item {
             "diamond_horse_armor",
             "netherite_horse_armor",
         ],
-        &[1411u16, 1406u16, 1407u16, 1408u16, 1409u16, 1410u16],
+        &[1127u16, 1124u16, 1125u16, 1126u16],
     );
     pub const C_ARMORS_HUMANOID: Tag = (
         &[
@@ -7722,9 +7681,9 @@ pub mod Item {
             "netherite_boots",
         ],
         &[
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16, 1069u16, 1077u16,
-            1089u16, 1081u16, 1085u16, 1093u16, 1070u16, 1078u16, 1090u16, 1082u16, 1086u16,
-            1094u16, 1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16,
+            856u16, 860u16, 872u16, 864u16, 868u16, 876u16, 794u16, 857u16, 861u16, 873u16, 865u16,
+            869u16, 877u16, 858u16, 862u16, 874u16, 866u16, 870u16, 878u16, 859u16, 863u16, 875u16,
+            867u16, 871u16, 879u16,
         ],
     );
     pub const C_ARMORS_NAUTILUS: Tag = (
@@ -7735,11 +7694,11 @@ pub mod Item {
             "diamond_nautilus_armor",
             "netherite_nautilus_armor",
         ],
-        &[1489u16, 1485u16, 1486u16, 1487u16, 1488u16],
+        &[],
     );
-    pub const C_ARMORS_WOLF: Tag = (&["wolf_armor"], &[1004u16]);
-    pub const C_BARRELS: Tag = (&["barrel"], &[1506u16]);
-    pub const C_BARRELS_WOODEN: Tag = (&["barrel"], &[1506u16]);
+    pub const C_ARMORS_WOLF: Tag = (&["wolf_armor"], &[797u16]);
+    pub const C_BARRELS: Tag = (&["barrel"], &[1205u16]);
+    pub const C_BARRELS_WOODEN: Tag = (&["barrel"], &[1205u16]);
     pub const C_BARS: Tag = (
         &[
             "iron_bars",
@@ -7752,9 +7711,7 @@ pub mod Item {
             "waxed_weathered_copper_bars",
             "waxed_oxidized_copper_bars",
         ],
-        &[
-            464u16, 465u16, 466u16, 467u16, 468u16, 469u16, 470u16, 471u16, 472u16,
-        ],
+        &[355u16],
     );
     pub const C_BARS_COPPER: Tag = (
         &[
@@ -7767,20 +7724,18 @@ pub mod Item {
             "waxed_weathered_copper_bars",
             "waxed_oxidized_copper_bars",
         ],
-        &[
-            465u16, 466u16, 467u16, 468u16, 469u16, 470u16, 471u16, 472u16,
-        ],
+        &[],
     );
-    pub const C_BARS_IRON: Tag = (&["iron_bars"], &[464u16]);
-    pub const C_BONES: Tag = (&["bone"], &[1216u16]);
-    pub const C_BOOKSHELVES: Tag = (&["bookshelf"], &[390u16]);
+    pub const C_BARS_IRON: Tag = (&["iron_bars"], &[355u16]);
+    pub const C_BONES: Tag = (&["bone"], &[961u16]);
+    pub const C_BOOKSHELVES: Tag = (&["bookshelf"], &[286u16]);
     pub const C_BRICKS: Tag = (
         &["brick", "nether_brick", "resin_brick"],
-        &[1142u16, 1396u16, 1397u16],
+        &[921u16, 1115u16],
     );
-    pub const C_BRICKS_NETHER: Tag = (&["nether_brick"], &[1396u16]);
-    pub const C_BRICKS_NORMAL: Tag = (&["brick"], &[1142u16]);
-    pub const C_BRICKS_RESIN: Tag = (&["resin_brick"], &[1397u16]);
+    pub const C_BRICKS_NETHER: Tag = (&["nether_brick"], &[1115u16]);
+    pub const C_BRICKS_NORMAL: Tag = (&["brick"], &[921u16]);
+    pub const C_BRICKS_RESIN: Tag = (&["resin_brick"], &[]);
     pub const C_BUCKETS: Tag = (
         &[
             "bucket",
@@ -7797,12 +7752,11 @@ pub mod Item {
             "sulfur_cube_bucket",
         ],
         &[
-            1128u16, 1129u16, 1130u16, 1134u16, 1131u16, 1139u16, 1137u16, 1135u16, 1141u16,
-            1138u16, 1136u16, 1140u16,
+            908u16, 909u16, 910u16, 914u16, 911u16, 919u16, 917u16, 915u16, 920u16, 918u16, 916u16,
         ],
     );
-    pub const C_BUCKETS_EMPTY: Tag = (&["bucket"], &[1128u16]);
-    pub const C_BUCKETS_ENTITY_DRY: Tag = (&["sulfur_cube_bucket"], &[1140u16]);
+    pub const C_BUCKETS_EMPTY: Tag = (&["bucket"], &[908u16]);
+    pub const C_BUCKETS_ENTITY_DRY: Tag = (&["sulfur_cube_bucket"], &[]);
     pub const C_BUCKETS_ENTITY_WATER: Tag = (
         &[
             "axolotl_bucket",
@@ -7812,20 +7766,20 @@ pub mod Item {
             "tropical_fish_bucket",
             "salmon_bucket",
         ],
-        &[1139u16, 1137u16, 1135u16, 1141u16, 1138u16, 1136u16],
+        &[919u16, 917u16, 915u16, 920u16, 918u16, 916u16],
     );
-    pub const C_BUCKETS_LAVA: Tag = (&["lava_bucket"], &[1130u16]);
-    pub const C_BUCKETS_MILK: Tag = (&["milk_bucket"], &[1134u16]);
-    pub const C_BUCKETS_POWDER_SNOW: Tag = (&["powder_snow_bucket"], &[1131u16]);
-    pub const C_BUCKETS_WATER: Tag = (&["water_bucket"], &[1129u16]);
-    pub const C_BUDDING_BLOCKS: Tag = (&["budding_amethyst"], &[118u16]);
+    pub const C_BUCKETS_LAVA: Tag = (&["lava_bucket"], &[910u16]);
+    pub const C_BUCKETS_MILK: Tag = (&["milk_bucket"], &[914u16]);
+    pub const C_BUCKETS_POWDER_SNOW: Tag = (&["powder_snow_bucket"], &[911u16]);
+    pub const C_BUCKETS_WATER: Tag = (&["water_bucket"], &[909u16]);
+    pub const C_BUDDING_BLOCKS: Tag = (&["budding_amethyst"], &[87u16]);
     pub const C_BUDS: Tag = (
         &[
             "small_amethyst_bud",
             "medium_amethyst_bud",
             "large_amethyst_bud",
         ],
-        &[1567u16, 1568u16, 1569u16],
+        &[1258u16, 1259u16, 1260u16],
     );
     pub const C_CHAINS: Tag = (
         &[
@@ -7839,20 +7793,18 @@ pub mod Item {
             "waxed_weathered_copper_chain",
             "waxed_oxidized_copper_chain",
         ],
-        &[
-            473u16, 474u16, 475u16, 476u16, 477u16, 478u16, 479u16, 480u16, 481u16,
-        ],
+        &[],
     );
     pub const C_CHESTS: Tag = (
         &["chest", "trapped_chest", "ender_chest"],
-        &[404u16, 852u16, 513u16],
+        &[299u16, 678u16, 381u16],
     );
-    pub const C_CHESTS_ENDER: Tag = (&["ender_chest"], &[513u16]);
-    pub const C_CHESTS_TRAPPED: Tag = (&["trapped_chest"], &[852u16]);
-    pub const C_CHESTS_WOODEN: Tag = (&["chest", "trapped_chest"], &[404u16, 852u16]);
-    pub const C_CLUMPS: Tag = (&["resin_clump"], &[486u16]);
-    pub const C_CLUMPS_RESIN: Tag = (&["resin_clump"], &[486u16]);
-    pub const C_CLUSTERS: Tag = (&["amethyst_cluster"], &[1570u16]);
+    pub const C_CHESTS_ENDER: Tag = (&["ender_chest"], &[381u16]);
+    pub const C_CHESTS_TRAPPED: Tag = (&["trapped_chest"], &[678u16]);
+    pub const C_CHESTS_WOODEN: Tag = (&["chest", "trapped_chest"], &[299u16, 678u16]);
+    pub const C_CLUMPS: Tag = (&["resin_clump"], &[]);
+    pub const C_CLUMPS_RESIN: Tag = (&["resin_clump"], &[]);
+    pub const C_CLUSTERS: Tag = (&["amethyst_cluster"], &[1261u16]);
     pub const C_COBBLESTONES: Tag = (
         &[
             "cobblestone",
@@ -7860,12 +7812,12 @@ pub mod Item {
             "infested_cobblestone",
             "cobbled_deepslate",
         ],
-        &[62u16, 393u16, 443u16, 9u16],
+        &[35u16, 289u16, 334u16, 9u16],
     );
     pub const C_COBBLESTONES_DEEPSLATE: Tag = (&["cobbled_deepslate"], &[9u16]);
-    pub const C_COBBLESTONES_INFESTED: Tag = (&["infested_cobblestone"], &[443u16]);
-    pub const C_COBBLESTONES_MOSSY: Tag = (&["mossy_cobblestone"], &[393u16]);
-    pub const C_COBBLESTONES_NORMAL: Tag = (&["cobblestone"], &[62u16]);
+    pub const C_COBBLESTONES_INFESTED: Tag = (&["infested_cobblestone"], &[334u16]);
+    pub const C_COBBLESTONES_MOSSY: Tag = (&["mossy_cobblestone"], &[289u16]);
+    pub const C_COBBLESTONES_NORMAL: Tag = (&["cobblestone"], &[35u16]);
     pub const C_CONCRETE_POWDERS: Tag = (
         &[
             "white_concrete_powder",
@@ -7886,8 +7838,8 @@ pub mod Item {
             "black_concrete_powder",
         ],
         &[
-            737u16, 738u16, 739u16, 740u16, 741u16, 742u16, 743u16, 744u16, 745u16, 746u16, 747u16,
-            748u16, 749u16, 750u16, 751u16, 752u16,
+            571u16, 572u16, 573u16, 574u16, 575u16, 576u16, 577u16, 578u16, 579u16, 580u16, 581u16,
+            582u16, 583u16, 584u16, 585u16, 586u16,
         ],
     );
     pub const C_CONCRETES: Tag = (
@@ -7910,8 +7862,8 @@ pub mod Item {
             "black_concrete",
         ],
         &[
-            689u16, 690u16, 691u16, 692u16, 693u16, 694u16, 695u16, 696u16, 697u16, 698u16, 699u16,
-            700u16, 701u16, 702u16, 703u16, 704u16,
+            555u16, 556u16, 557u16, 558u16, 559u16, 560u16, 561u16, 562u16, 563u16, 564u16, 565u16,
+            566u16, 567u16, 568u16, 569u16, 570u16,
         ],
     );
     pub const C_CROPS: Tag = (
@@ -7928,38 +7880,38 @@ pub mod Item {
             "wheat",
         ],
         &[
-            1438u16, 413u16, 1378u16, 1198u16, 483u16, 1269u16, 1379u16, 430u16, 327u16, 1066u16,
+            1154u16, 308u16, 1097u16, 943u16, 358u16, 997u16, 1098u16, 322u16, 243u16, 854u16,
         ],
     );
-    pub const C_CROPS_BEETROOT: Tag = (&["beetroot"], &[1438u16]);
-    pub const C_CROPS_CACTUS: Tag = (&["cactus"], &[413u16]);
-    pub const C_CROPS_CARROT: Tag = (&["carrot"], &[1378u16]);
-    pub const C_CROPS_COCOA_BEAN: Tag = (&["cocoa_beans"], &[1198u16]);
-    pub const C_CROPS_MELON: Tag = (&["melon"], &[483u16]);
-    pub const C_CROPS_NETHER_WART: Tag = (&["nether_wart"], &[1269u16]);
-    pub const C_CROPS_POTATO: Tag = (&["potato"], &[1379u16]);
-    pub const C_CROPS_PUMPKIN: Tag = (&["pumpkin"], &[430u16]);
-    pub const C_CROPS_SUGAR_CANE: Tag = (&["sugar_cane"], &[327u16]);
-    pub const C_CROPS_WHEAT: Tag = (&["wheat"], &[1066u16]);
+    pub const C_CROPS_BEETROOT: Tag = (&["beetroot"], &[1154u16]);
+    pub const C_CROPS_CACTUS: Tag = (&["cactus"], &[308u16]);
+    pub const C_CROPS_CARROT: Tag = (&["carrot"], &[1097u16]);
+    pub const C_CROPS_COCOA_BEAN: Tag = (&["cocoa_beans"], &[943u16]);
+    pub const C_CROPS_MELON: Tag = (&["melon"], &[358u16]);
+    pub const C_CROPS_NETHER_WART: Tag = (&["nether_wart"], &[997u16]);
+    pub const C_CROPS_POTATO: Tag = (&["potato"], &[1098u16]);
+    pub const C_CROPS_PUMPKIN: Tag = (&["pumpkin"], &[322u16]);
+    pub const C_CROPS_SUGAR_CANE: Tag = (&["sugar_cane"], &[243u16]);
+    pub const C_CROPS_WHEAT: Tag = (&["wheat"], &[854u16]);
     pub const C_DRINK_CONTAINING_BOTTLE: Tag = (
         &["potion", "honey_bottle", "ominous_bottle"],
-        &[1271u16, 1533u16, 1657u16],
+        &[998u16, 1224u16, 1331u16],
     );
-    pub const C_DRINK_CONTAINING_BUCKET: Tag = (&["milk_bucket"], &[1134u16]);
+    pub const C_DRINK_CONTAINING_BUCKET: Tag = (&["milk_bucket"], &[914u16]);
     pub const C_DRINKS: Tag = (
         &["potion", "milk_bucket", "honey_bottle", "ominous_bottle"],
-        &[1271u16, 1134u16, 1533u16, 1657u16],
+        &[998u16, 914u16, 1224u16, 1331u16],
     );
-    pub const C_DRINKS_HONEY: Tag = (&["honey_bottle"], &[1533u16]);
+    pub const C_DRINKS_HONEY: Tag = (&["honey_bottle"], &[1224u16]);
     pub const C_DRINKS_JUICE: Tag = (&[], &[]);
-    pub const C_DRINKS_MAGIC: Tag = (&["potion", "ominous_bottle"], &[1271u16, 1657u16]);
-    pub const C_DRINKS_MILK: Tag = (&["milk_bucket"], &[1134u16]);
-    pub const C_DRINKS_OMINOUS: Tag = (&["ominous_bottle"], &[1657u16]);
+    pub const C_DRINKS_MAGIC: Tag = (&["potion", "ominous_bottle"], &[998u16, 1331u16]);
+    pub const C_DRINKS_MILK: Tag = (&["milk_bucket"], &[914u16]);
+    pub const C_DRINKS_OMINOUS: Tag = (&["ominous_bottle"], &[1331u16]);
     pub const C_DRINKS_WATER: Tag = (&[], &[]);
-    pub const C_DRINKS_WATERY: Tag = (&["potion"], &[1271u16]);
-    pub const C_DUSTS: Tag = (&["glowstone_dust", "redstone"], &[1189u16, 824u16]);
-    pub const C_DUSTS_GLOWSTONE: Tag = (&["glowstone_dust"], &[1189u16]);
-    pub const C_DUSTS_REDSTONE: Tag = (&["redstone"], &[824u16]);
+    pub const C_DRINKS_WATERY: Tag = (&["potion"], &[998u16]);
+    pub const C_DUSTS: Tag = (&["glowstone_dust", "redstone"], &[934u16, 657u16]);
+    pub const C_DUSTS_GLOWSTONE: Tag = (&["glowstone_dust"], &[934u16]);
+    pub const C_DUSTS_REDSTONE: Tag = (&["redstone"], &[657u16]);
     pub const C_DYEABLE: Tag = (
         &[
             "bundle",
@@ -8057,16 +8009,14 @@ pub mod Item {
             "firework_star",
         ],
         &[
-            1153u16, 1550u16, 231u16, 482u16, 656u16, 596u16, 1233u16, 1234u16, 1230u16, 1231u16,
-            1228u16, 1226u16, 1232u16, 1222u16, 1227u16, 1224u16, 1221u16, 1220u16, 1225u16,
-            1229u16, 1219u16, 1223u16, 1154u16, 1155u16, 1156u16, 1157u16, 1158u16, 1159u16,
-            1160u16, 1161u16, 1162u16, 1163u16, 1164u16, 1165u16, 1166u16, 1167u16, 1168u16,
-            1169u16, 250u16, 251u16, 252u16, 253u16, 254u16, 255u16, 256u16, 257u16, 258u16,
-            259u16, 260u16, 261u16, 262u16, 263u16, 264u16, 265u16, 580u16, 581u16, 582u16, 583u16,
-            584u16, 585u16, 586u16, 587u16, 588u16, 589u16, 590u16, 591u16, 592u16, 593u16, 594u16,
-            595u16, 657u16, 658u16, 659u16, 660u16, 661u16, 662u16, 663u16, 664u16, 665u16, 666u16,
-            667u16, 668u16, 669u16, 670u16, 671u16, 672u16, 1068u16, 1069u16, 1070u16, 1071u16,
-            1411u16, 1004u16, 1394u16,
+            930u16, 1241u16, 188u16, 357u16, 522u16, 462u16, 978u16, 979u16, 975u16, 976u16,
+            973u16, 971u16, 977u16, 967u16, 972u16, 969u16, 966u16, 965u16, 970u16, 974u16, 964u16,
+            968u16, 202u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16,
+            212u16, 213u16, 214u16, 215u16, 216u16, 217u16, 446u16, 447u16, 448u16, 449u16, 450u16,
+            451u16, 452u16, 453u16, 454u16, 455u16, 456u16, 457u16, 458u16, 459u16, 460u16, 461u16,
+            523u16, 524u16, 525u16, 526u16, 527u16, 528u16, 529u16, 530u16, 531u16, 532u16, 533u16,
+            534u16, 535u16, 536u16, 537u16, 538u16, 856u16, 857u16, 858u16, 859u16, 1127u16,
+            797u16, 1113u16,
         ],
     );
     pub const C_DYEABLE_DYNAMIC: Tag = (
@@ -8079,9 +8029,7 @@ pub mod Item {
             "wolf_armor",
             "firework_star",
         ],
-        &[
-            1068u16, 1069u16, 1070u16, 1071u16, 1411u16, 1004u16, 1394u16,
-        ],
+        &[856u16, 857u16, 858u16, 859u16, 1127u16, 797u16, 1113u16],
     );
     pub const C_DYEABLE_SIMPLE: Tag = (
         &[
@@ -8173,15 +8121,13 @@ pub mod Item {
             "black_shulker_box",
         ],
         &[
-            1153u16, 1550u16, 231u16, 482u16, 656u16, 596u16, 1233u16, 1234u16, 1230u16, 1231u16,
-            1228u16, 1226u16, 1232u16, 1222u16, 1227u16, 1224u16, 1221u16, 1220u16, 1225u16,
-            1229u16, 1219u16, 1223u16, 1154u16, 1155u16, 1156u16, 1157u16, 1158u16, 1159u16,
-            1160u16, 1161u16, 1162u16, 1163u16, 1164u16, 1165u16, 1166u16, 1167u16, 1168u16,
-            1169u16, 250u16, 251u16, 252u16, 253u16, 254u16, 255u16, 256u16, 257u16, 258u16,
-            259u16, 260u16, 261u16, 262u16, 263u16, 264u16, 265u16, 580u16, 581u16, 582u16, 583u16,
-            584u16, 585u16, 586u16, 587u16, 588u16, 589u16, 590u16, 591u16, 592u16, 593u16, 594u16,
-            595u16, 657u16, 658u16, 659u16, 660u16, 661u16, 662u16, 663u16, 664u16, 665u16, 666u16,
-            667u16, 668u16, 669u16, 670u16, 671u16, 672u16,
+            930u16, 1241u16, 188u16, 357u16, 522u16, 462u16, 978u16, 979u16, 975u16, 976u16,
+            973u16, 971u16, 977u16, 967u16, 972u16, 969u16, 966u16, 965u16, 970u16, 974u16, 964u16,
+            968u16, 202u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16,
+            212u16, 213u16, 214u16, 215u16, 216u16, 217u16, 446u16, 447u16, 448u16, 449u16, 450u16,
+            451u16, 452u16, 453u16, 454u16, 455u16, 456u16, 457u16, 458u16, 459u16, 460u16, 461u16,
+            523u16, 524u16, 525u16, 526u16, 527u16, 528u16, 529u16, 530u16, 531u16, 532u16, 533u16,
+            534u16, 535u16, 536u16, 537u16, 538u16,
         ],
     );
     pub const C_DYEABLE_SIMPLE_REDYEABLE: Tag = (
@@ -8268,14 +8214,12 @@ pub mod Item {
             "black_shulker_box",
         ],
         &[
-            1233u16, 1234u16, 1230u16, 1231u16, 1228u16, 1226u16, 1232u16, 1222u16, 1227u16,
-            1224u16, 1221u16, 1220u16, 1225u16, 1229u16, 1219u16, 1223u16, 1154u16, 1155u16,
-            1156u16, 1157u16, 1158u16, 1159u16, 1160u16, 1161u16, 1162u16, 1163u16, 1164u16,
-            1165u16, 1166u16, 1167u16, 1168u16, 1169u16, 250u16, 251u16, 252u16, 253u16, 254u16,
-            255u16, 256u16, 257u16, 258u16, 259u16, 260u16, 261u16, 262u16, 263u16, 264u16, 265u16,
-            580u16, 581u16, 582u16, 583u16, 584u16, 585u16, 586u16, 587u16, 588u16, 589u16, 590u16,
-            591u16, 592u16, 593u16, 594u16, 595u16, 657u16, 658u16, 659u16, 660u16, 661u16, 662u16,
-            663u16, 664u16, 665u16, 666u16, 667u16, 668u16, 669u16, 670u16, 671u16, 672u16,
+            978u16, 979u16, 975u16, 976u16, 973u16, 971u16, 977u16, 967u16, 972u16, 969u16, 966u16,
+            965u16, 970u16, 974u16, 964u16, 968u16, 202u16, 203u16, 204u16, 205u16, 206u16, 207u16,
+            208u16, 209u16, 210u16, 211u16, 212u16, 213u16, 214u16, 215u16, 216u16, 217u16, 446u16,
+            447u16, 448u16, 449u16, 450u16, 451u16, 452u16, 453u16, 454u16, 455u16, 456u16, 457u16,
+            458u16, 459u16, 460u16, 461u16, 523u16, 524u16, 525u16, 526u16, 527u16, 528u16, 529u16,
+            530u16, 531u16, 532u16, 533u16, 534u16, 535u16, 536u16, 537u16, 538u16,
         ],
     );
     pub const C_DYEABLE_SIMPLE_UNDYED: Tag = (
@@ -8287,7 +8231,7 @@ pub mod Item {
             "shulker_box",
             "terracotta",
         ],
-        &[1153u16, 1550u16, 231u16, 482u16, 656u16, 596u16],
+        &[930u16, 1241u16, 188u16, 357u16, 522u16, 462u16],
     );
     pub const C_DYED: Tag = (
         &[
@@ -8565,33 +8509,26 @@ pub mod Item {
             "black_harness",
         ],
         &[
-            1417u16, 1219u16, 1551u16, 580u16, 689u16, 737u16, 673u16, 657u16, 605u16, 621u16,
-            561u16, 250u16, 282u16, 266u16, 1154u16, 1170u16, 950u16, 1418u16, 1220u16, 1552u16,
-            581u16, 690u16, 738u16, 674u16, 658u16, 606u16, 622u16, 562u16, 251u16, 283u16, 267u16,
-            1155u16, 1171u16, 951u16, 1419u16, 1221u16, 1553u16, 582u16, 691u16, 739u16, 675u16,
-            659u16, 607u16, 623u16, 563u16, 252u16, 284u16, 268u16, 1156u16, 1172u16, 952u16,
-            1420u16, 1222u16, 1554u16, 583u16, 692u16, 740u16, 676u16, 660u16, 608u16, 624u16,
-            564u16, 253u16, 285u16, 269u16, 1157u16, 1173u16, 953u16, 1421u16, 1223u16, 1555u16,
-            584u16, 693u16, 741u16, 677u16, 661u16, 609u16, 625u16, 565u16, 254u16, 286u16, 270u16,
-            1158u16, 1174u16, 954u16, 1422u16, 1224u16, 1556u16, 585u16, 694u16, 742u16, 678u16,
-            662u16, 610u16, 626u16, 566u16, 255u16, 287u16, 271u16, 1159u16, 1175u16, 955u16,
-            1423u16, 1225u16, 1557u16, 586u16, 695u16, 743u16, 679u16, 663u16, 611u16, 627u16,
-            567u16, 256u16, 288u16, 272u16, 1160u16, 1176u16, 956u16, 1424u16, 1226u16, 1558u16,
-            587u16, 696u16, 744u16, 680u16, 664u16, 612u16, 628u16, 568u16, 257u16, 289u16, 273u16,
-            1161u16, 1177u16, 957u16, 1425u16, 1227u16, 1559u16, 588u16, 697u16, 745u16, 681u16,
-            665u16, 613u16, 629u16, 569u16, 258u16, 290u16, 274u16, 1162u16, 1178u16, 958u16,
-            1426u16, 1228u16, 1560u16, 589u16, 698u16, 746u16, 682u16, 666u16, 614u16, 630u16,
-            570u16, 259u16, 291u16, 275u16, 1163u16, 1179u16, 959u16, 1427u16, 1229u16, 1561u16,
-            590u16, 699u16, 747u16, 683u16, 667u16, 615u16, 631u16, 571u16, 260u16, 292u16, 276u16,
-            1164u16, 1180u16, 960u16, 1428u16, 1230u16, 1562u16, 591u16, 700u16, 748u16, 684u16,
-            668u16, 616u16, 632u16, 572u16, 261u16, 293u16, 277u16, 1165u16, 1181u16, 961u16,
-            1429u16, 1231u16, 1563u16, 592u16, 701u16, 749u16, 685u16, 669u16, 617u16, 633u16,
-            573u16, 262u16, 294u16, 278u16, 1166u16, 1182u16, 962u16, 1430u16, 1232u16, 1564u16,
-            593u16, 702u16, 750u16, 686u16, 670u16, 618u16, 634u16, 574u16, 263u16, 295u16, 279u16,
-            1167u16, 1183u16, 963u16, 1431u16, 1233u16, 1565u16, 594u16, 703u16, 751u16, 687u16,
-            671u16, 619u16, 635u16, 575u16, 264u16, 296u16, 280u16, 1168u16, 1184u16, 964u16,
-            1432u16, 1234u16, 1566u16, 595u16, 704u16, 752u16, 688u16, 672u16, 620u16, 636u16,
-            576u16, 265u16, 297u16, 281u16, 1169u16, 1185u16, 965u16,
+            1133u16, 964u16, 1242u16, 446u16, 555u16, 571u16, 539u16, 523u16, 471u16, 487u16,
+            427u16, 202u16, 1134u16, 965u16, 1243u16, 447u16, 556u16, 572u16, 540u16, 524u16,
+            472u16, 488u16, 428u16, 203u16, 1135u16, 966u16, 1244u16, 448u16, 557u16, 573u16,
+            541u16, 525u16, 473u16, 489u16, 429u16, 204u16, 1136u16, 967u16, 1245u16, 449u16,
+            558u16, 574u16, 542u16, 526u16, 474u16, 490u16, 430u16, 205u16, 1137u16, 968u16,
+            1246u16, 450u16, 559u16, 575u16, 543u16, 527u16, 475u16, 491u16, 431u16, 206u16,
+            1138u16, 969u16, 1247u16, 451u16, 560u16, 576u16, 544u16, 528u16, 476u16, 492u16,
+            432u16, 207u16, 1139u16, 970u16, 1248u16, 452u16, 561u16, 577u16, 545u16, 529u16,
+            477u16, 493u16, 433u16, 208u16, 1140u16, 971u16, 1249u16, 453u16, 562u16, 578u16,
+            546u16, 530u16, 478u16, 494u16, 434u16, 209u16, 1141u16, 972u16, 1250u16, 454u16,
+            563u16, 579u16, 547u16, 531u16, 479u16, 495u16, 435u16, 210u16, 1142u16, 973u16,
+            1251u16, 455u16, 564u16, 580u16, 548u16, 532u16, 480u16, 496u16, 436u16, 211u16,
+            1143u16, 974u16, 1252u16, 456u16, 565u16, 581u16, 549u16, 533u16, 481u16, 497u16,
+            437u16, 212u16, 1144u16, 975u16, 1253u16, 457u16, 566u16, 582u16, 550u16, 534u16,
+            482u16, 498u16, 438u16, 213u16, 1145u16, 976u16, 1254u16, 458u16, 567u16, 583u16,
+            551u16, 535u16, 483u16, 499u16, 439u16, 214u16, 1146u16, 977u16, 1255u16, 459u16,
+            568u16, 584u16, 552u16, 536u16, 484u16, 500u16, 440u16, 215u16, 1147u16, 978u16,
+            1256u16, 460u16, 569u16, 585u16, 553u16, 537u16, 485u16, 501u16, 441u16, 216u16,
+            1148u16, 979u16, 1257u16, 461u16, 570u16, 586u16, 554u16, 538u16, 486u16, 502u16,
+            442u16, 217u16,
         ],
     );
     pub const C_DYED_BLACK: Tag = (
@@ -8615,8 +8552,8 @@ pub mod Item {
             "black_harness",
         ],
         &[
-            1432u16, 1234u16, 1566u16, 595u16, 704u16, 752u16, 688u16, 672u16, 620u16, 636u16,
-            576u16, 265u16, 297u16, 281u16, 1169u16, 1185u16, 965u16,
+            1148u16, 979u16, 1257u16, 461u16, 570u16, 586u16, 554u16, 538u16, 486u16, 502u16,
+            442u16, 217u16,
         ],
     );
     pub const C_DYED_BLUE: Tag = (
@@ -8640,8 +8577,8 @@ pub mod Item {
             "blue_harness",
         ],
         &[
-            1428u16, 1230u16, 1562u16, 591u16, 700u16, 748u16, 684u16, 668u16, 616u16, 632u16,
-            572u16, 261u16, 293u16, 277u16, 1165u16, 1181u16, 961u16,
+            1144u16, 975u16, 1253u16, 457u16, 566u16, 582u16, 550u16, 534u16, 482u16, 498u16,
+            438u16, 213u16,
         ],
     );
     pub const C_DYED_BROWN: Tag = (
@@ -8665,8 +8602,8 @@ pub mod Item {
             "brown_harness",
         ],
         &[
-            1429u16, 1231u16, 1563u16, 592u16, 701u16, 749u16, 685u16, 669u16, 617u16, 633u16,
-            573u16, 262u16, 294u16, 278u16, 1166u16, 1182u16, 962u16,
+            1145u16, 976u16, 1254u16, 458u16, 567u16, 583u16, 551u16, 535u16, 483u16, 499u16,
+            439u16, 214u16,
         ],
     );
     pub const C_DYED_CYAN: Tag = (
@@ -8690,8 +8627,8 @@ pub mod Item {
             "cyan_harness",
         ],
         &[
-            1426u16, 1228u16, 1560u16, 589u16, 698u16, 746u16, 682u16, 666u16, 614u16, 630u16,
-            570u16, 259u16, 291u16, 275u16, 1163u16, 1179u16, 959u16,
+            1142u16, 973u16, 1251u16, 455u16, 564u16, 580u16, 548u16, 532u16, 480u16, 496u16,
+            436u16, 211u16,
         ],
     );
     pub const C_DYED_GRAY: Tag = (
@@ -8715,8 +8652,8 @@ pub mod Item {
             "gray_harness",
         ],
         &[
-            1424u16, 1226u16, 1558u16, 587u16, 696u16, 744u16, 680u16, 664u16, 612u16, 628u16,
-            568u16, 257u16, 289u16, 273u16, 1161u16, 1177u16, 957u16,
+            1140u16, 971u16, 1249u16, 453u16, 562u16, 578u16, 546u16, 530u16, 478u16, 494u16,
+            434u16, 209u16,
         ],
     );
     pub const C_DYED_GREEN: Tag = (
@@ -8740,8 +8677,8 @@ pub mod Item {
             "green_harness",
         ],
         &[
-            1430u16, 1232u16, 1564u16, 593u16, 702u16, 750u16, 686u16, 670u16, 618u16, 634u16,
-            574u16, 263u16, 295u16, 279u16, 1167u16, 1183u16, 963u16,
+            1146u16, 977u16, 1255u16, 459u16, 568u16, 584u16, 552u16, 536u16, 484u16, 500u16,
+            440u16, 215u16,
         ],
     );
     pub const C_DYED_LIGHT_BLUE: Tag = (
@@ -8765,8 +8702,8 @@ pub mod Item {
             "light_blue_harness",
         ],
         &[
-            1420u16, 1222u16, 1554u16, 583u16, 692u16, 740u16, 676u16, 660u16, 608u16, 624u16,
-            564u16, 253u16, 285u16, 269u16, 1157u16, 1173u16, 953u16,
+            1136u16, 967u16, 1245u16, 449u16, 558u16, 574u16, 542u16, 526u16, 474u16, 490u16,
+            430u16, 205u16,
         ],
     );
     pub const C_DYED_LIGHT_GRAY: Tag = (
@@ -8790,8 +8727,8 @@ pub mod Item {
             "light_gray_harness",
         ],
         &[
-            1425u16, 1227u16, 1559u16, 588u16, 697u16, 745u16, 681u16, 665u16, 613u16, 629u16,
-            569u16, 258u16, 290u16, 274u16, 1162u16, 1178u16, 958u16,
+            1141u16, 972u16, 1250u16, 454u16, 563u16, 579u16, 547u16, 531u16, 479u16, 495u16,
+            435u16, 210u16,
         ],
     );
     pub const C_DYED_LIME: Tag = (
@@ -8815,8 +8752,8 @@ pub mod Item {
             "lime_harness",
         ],
         &[
-            1422u16, 1224u16, 1556u16, 585u16, 694u16, 742u16, 678u16, 662u16, 610u16, 626u16,
-            566u16, 255u16, 287u16, 271u16, 1159u16, 1175u16, 955u16,
+            1138u16, 969u16, 1247u16, 451u16, 560u16, 576u16, 544u16, 528u16, 476u16, 492u16,
+            432u16, 207u16,
         ],
     );
     pub const C_DYED_MAGENTA: Tag = (
@@ -8840,8 +8777,8 @@ pub mod Item {
             "magenta_harness",
         ],
         &[
-            1419u16, 1221u16, 1553u16, 582u16, 691u16, 739u16, 675u16, 659u16, 607u16, 623u16,
-            563u16, 252u16, 284u16, 268u16, 1156u16, 1172u16, 952u16,
+            1135u16, 966u16, 1244u16, 448u16, 557u16, 573u16, 541u16, 525u16, 473u16, 489u16,
+            429u16, 204u16,
         ],
     );
     pub const C_DYED_ORANGE: Tag = (
@@ -8865,8 +8802,8 @@ pub mod Item {
             "orange_harness",
         ],
         &[
-            1418u16, 1220u16, 1552u16, 581u16, 690u16, 738u16, 674u16, 658u16, 606u16, 622u16,
-            562u16, 251u16, 283u16, 267u16, 1155u16, 1171u16, 951u16,
+            1134u16, 965u16, 1243u16, 447u16, 556u16, 572u16, 540u16, 524u16, 472u16, 488u16,
+            428u16, 203u16,
         ],
     );
     pub const C_DYED_PINK: Tag = (
@@ -8890,8 +8827,8 @@ pub mod Item {
             "pink_harness",
         ],
         &[
-            1423u16, 1225u16, 1557u16, 586u16, 695u16, 743u16, 679u16, 663u16, 611u16, 627u16,
-            567u16, 256u16, 288u16, 272u16, 1160u16, 1176u16, 956u16,
+            1139u16, 970u16, 1248u16, 452u16, 561u16, 577u16, 545u16, 529u16, 477u16, 493u16,
+            433u16, 208u16,
         ],
     );
     pub const C_DYED_PURPLE: Tag = (
@@ -8915,8 +8852,8 @@ pub mod Item {
             "purple_harness",
         ],
         &[
-            1427u16, 1229u16, 1561u16, 590u16, 699u16, 747u16, 683u16, 667u16, 615u16, 631u16,
-            571u16, 260u16, 292u16, 276u16, 1164u16, 1180u16, 960u16,
+            1143u16, 974u16, 1252u16, 456u16, 565u16, 581u16, 549u16, 533u16, 481u16, 497u16,
+            437u16, 212u16,
         ],
     );
     pub const C_DYED_RED: Tag = (
@@ -8940,8 +8877,8 @@ pub mod Item {
             "red_harness",
         ],
         &[
-            1431u16, 1233u16, 1565u16, 594u16, 703u16, 751u16, 687u16, 671u16, 619u16, 635u16,
-            575u16, 264u16, 296u16, 280u16, 1168u16, 1184u16, 964u16,
+            1147u16, 978u16, 1256u16, 460u16, 569u16, 585u16, 553u16, 537u16, 485u16, 501u16,
+            441u16, 216u16,
         ],
     );
     pub const C_DYED_WHITE: Tag = (
@@ -8965,8 +8902,8 @@ pub mod Item {
             "white_harness",
         ],
         &[
-            1417u16, 1219u16, 1551u16, 580u16, 689u16, 737u16, 673u16, 657u16, 605u16, 621u16,
-            561u16, 250u16, 282u16, 266u16, 1154u16, 1170u16, 950u16,
+            1133u16, 964u16, 1242u16, 446u16, 555u16, 571u16, 539u16, 523u16, 471u16, 487u16,
+            427u16, 202u16,
         ],
     );
     pub const C_DYED_YELLOW: Tag = (
@@ -8990,8 +8927,8 @@ pub mod Item {
             "yellow_harness",
         ],
         &[
-            1421u16, 1223u16, 1555u16, 584u16, 693u16, 741u16, 677u16, 661u16, 609u16, 625u16,
-            565u16, 254u16, 286u16, 270u16, 1158u16, 1174u16, 954u16,
+            1137u16, 968u16, 1246u16, 450u16, 559u16, 575u16, 543u16, 527u16, 475u16, 491u16,
+            431u16, 206u16,
         ],
     );
     pub const C_DYES: Tag = (
@@ -9014,30 +8951,27 @@ pub mod Item {
             "black_dye",
         ],
         &[
-            1199u16, 1200u16, 1201u16, 1202u16, 1203u16, 1204u16, 1205u16, 1206u16, 1207u16,
-            1208u16, 1209u16, 1210u16, 1211u16, 1212u16, 1213u16, 1214u16,
+            944u16, 945u16, 946u16, 947u16, 948u16, 949u16, 950u16, 951u16, 952u16, 953u16, 954u16,
+            955u16, 956u16, 957u16, 958u16, 959u16,
         ],
     );
-    pub const C_DYES_BLACK: Tag = (&["black_dye"], &[1214u16]);
-    pub const C_DYES_BLUE: Tag = (&["blue_dye"], &[1210u16]);
-    pub const C_DYES_BROWN: Tag = (&["brown_dye"], &[1211u16]);
-    pub const C_DYES_CYAN: Tag = (&["cyan_dye"], &[1208u16]);
-    pub const C_DYES_GRAY: Tag = (&["gray_dye"], &[1206u16]);
-    pub const C_DYES_GREEN: Tag = (&["green_dye"], &[1212u16]);
-    pub const C_DYES_LIGHT_BLUE: Tag = (&["light_blue_dye"], &[1202u16]);
-    pub const C_DYES_LIGHT_GRAY: Tag = (&["light_gray_dye"], &[1207u16]);
-    pub const C_DYES_LIME: Tag = (&["lime_dye"], &[1204u16]);
-    pub const C_DYES_MAGENTA: Tag = (&["magenta_dye"], &[1201u16]);
-    pub const C_DYES_ORANGE: Tag = (&["orange_dye"], &[1200u16]);
-    pub const C_DYES_PINK: Tag = (&["pink_dye"], &[1205u16]);
-    pub const C_DYES_PURPLE: Tag = (&["purple_dye"], &[1209u16]);
-    pub const C_DYES_RED: Tag = (&["red_dye"], &[1213u16]);
-    pub const C_DYES_WHITE: Tag = (&["white_dye"], &[1199u16]);
-    pub const C_DYES_YELLOW: Tag = (&["yellow_dye"], &[1203u16]);
-    pub const C_EGGS: Tag = (
-        &["egg", "brown_egg", "blue_egg"],
-        &[1148u16, 1150u16, 1149u16],
-    );
+    pub const C_DYES_BLACK: Tag = (&["black_dye"], &[959u16]);
+    pub const C_DYES_BLUE: Tag = (&["blue_dye"], &[955u16]);
+    pub const C_DYES_BROWN: Tag = (&["brown_dye"], &[956u16]);
+    pub const C_DYES_CYAN: Tag = (&["cyan_dye"], &[953u16]);
+    pub const C_DYES_GRAY: Tag = (&["gray_dye"], &[951u16]);
+    pub const C_DYES_GREEN: Tag = (&["green_dye"], &[957u16]);
+    pub const C_DYES_LIGHT_BLUE: Tag = (&["light_blue_dye"], &[947u16]);
+    pub const C_DYES_LIGHT_GRAY: Tag = (&["light_gray_dye"], &[952u16]);
+    pub const C_DYES_LIME: Tag = (&["lime_dye"], &[949u16]);
+    pub const C_DYES_MAGENTA: Tag = (&["magenta_dye"], &[946u16]);
+    pub const C_DYES_ORANGE: Tag = (&["orange_dye"], &[945u16]);
+    pub const C_DYES_PINK: Tag = (&["pink_dye"], &[950u16]);
+    pub const C_DYES_PURPLE: Tag = (&["purple_dye"], &[954u16]);
+    pub const C_DYES_RED: Tag = (&["red_dye"], &[958u16]);
+    pub const C_DYES_WHITE: Tag = (&["white_dye"], &[944u16]);
+    pub const C_DYES_YELLOW: Tag = (&["yellow_dye"], &[948u16]);
+    pub const C_EGGS: Tag = (&["egg", "brown_egg", "blue_egg"], &[927u16]);
     pub const C_ENCHANTABLES: Tag = (
         &[
             "leather_boots",
@@ -9118,20 +9052,19 @@ pub mod Item {
             "compass",
         ],
         &[
-            1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16, 1070u16, 1078u16, 1090u16,
-            1082u16, 1086u16, 1094u16, 1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16,
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16, 974u16, 1386u16,
-            1388u16, 1387u16, 1384u16, 1385u16, 1389u16, 1390u16, 431u16, 1050u16, 1035u16,
-            1040u16, 1055u16, 1025u16, 1045u16, 1053u16, 1038u16, 1043u16, 1058u16, 1028u16,
-            1048u16, 1374u16, 1052u16, 1037u16, 1042u16, 1057u16, 1027u16, 1047u16, 1051u16,
-            1036u16, 1041u16, 1056u16, 1026u16, 1046u16, 1054u16, 1039u16, 1044u16, 1059u16,
-            1029u16, 1049u16, 1255u16, 1186u16, 1483u16, 1008u16, 1491u16, 1446u16, 1005u16,
-            1578u16, 971u16, 972u16, 1151u16,
+            859u16, 863u16, 875u16, 867u16, 871u16, 879u16, 858u16, 862u16, 874u16, 866u16, 870u16,
+            878u16, 857u16, 861u16, 873u16, 865u16, 869u16, 877u16, 856u16, 860u16, 872u16, 864u16,
+            868u16, 876u16, 794u16, 773u16, 1105u16, 1107u16, 1106u16, 1103u16, 1104u16, 1108u16,
+            1109u16, 323u16, 838u16, 823u16, 828u16, 843u16, 818u16, 833u16, 841u16, 826u16,
+            831u16, 846u16, 821u16, 836u16, 1093u16, 840u16, 825u16, 830u16, 845u16, 820u16,
+            835u16, 839u16, 824u16, 829u16, 844u16, 819u16, 834u16, 842u16, 827u16, 832u16, 847u16,
+            822u16, 837u16, 983u16, 931u16, 1188u16, 801u16, 1192u16, 1162u16, 798u16, 1268u16,
+            771u16, 772u16, 928u16,
         ],
     );
-    pub const C_END_STONES: Tag = (&["end_stone"], &[509u16]);
-    pub const C_ENDER_PEARLS: Tag = (&["ender_pearl"], &[1265u16]);
-    pub const C_FEATHERS: Tag = (&["feather"], &[1063u16]);
+    pub const C_END_STONES: Tag = (&["end_stone"], &[377u16]);
+    pub const C_ENDER_PEARLS: Tag = (&["ender_pearl"], &[993u16]);
+    pub const C_FEATHERS: Tag = (&["feather"], &[851u16]);
     pub const C_FENCE_GATES: Tag = (
         &[
             "oak_fence_gate",
@@ -9148,8 +9081,7 @@ pub mod Item {
             "pale_oak_fence_gate",
         ],
         &[
-            932u16, 933u16, 934u16, 935u16, 936u16, 938u16, 943u16, 944u16, 940u16, 942u16, 937u16,
-            939u16,
+            750u16, 751u16, 752u16, 753u16, 754u16, 756u16, 759u16, 760u16, 757u16, 758u16, 755u16,
         ],
     );
     pub const C_FENCE_GATES_WOODEN: Tag = (
@@ -9168,8 +9100,7 @@ pub mod Item {
             "pale_oak_fence_gate",
         ],
         &[
-            932u16, 933u16, 934u16, 935u16, 936u16, 938u16, 943u16, 944u16, 940u16, 942u16, 937u16,
-            939u16,
+            750u16, 751u16, 752u16, 753u16, 754u16, 756u16, 759u16, 760u16, 757u16, 758u16, 755u16,
         ],
     );
     pub const C_FENCES: Tag = (
@@ -9189,11 +9120,11 @@ pub mod Item {
             "nether_brick_fence",
         ],
         &[
-            417u16, 418u16, 419u16, 420u16, 421u16, 423u16, 428u16, 429u16, 425u16, 427u16, 422u16,
-            424u16, 501u16,
+            311u16, 312u16, 313u16, 314u16, 315u16, 317u16, 320u16, 321u16, 318u16, 319u16, 316u16,
+            369u16,
         ],
     );
-    pub const C_FENCES_NETHER_BRICK: Tag = (&["nether_brick_fence"], &[501u16]);
+    pub const C_FENCES_NETHER_BRICK: Tag = (&["nether_brick_fence"], &[369u16]);
     pub const C_FENCES_WOODEN: Tag = (
         &[
             "oak_fence",
@@ -9210,11 +9141,10 @@ pub mod Item {
             "pale_oak_fence",
         ],
         &[
-            417u16, 418u16, 419u16, 420u16, 421u16, 423u16, 428u16, 429u16, 425u16, 427u16, 422u16,
-            424u16,
+            311u16, 312u16, 313u16, 314u16, 315u16, 317u16, 320u16, 321u16, 318u16, 319u16, 316u16,
         ],
     );
-    pub const C_FERTILIZERS: Tag = (&["bone_meal"], &[1215u16]);
+    pub const C_FERTILIZERS: Tag = (&["bone_meal"], &[960u16]);
     pub const C_FLOWERS: Tag = (
         &[
             "cherry_leaves",
@@ -9249,9 +9179,9 @@ pub mod Item {
             "pitcher_plant",
         ],
         &[
-            220u16, 228u16, 243u16, 85u16, 329u16, 330u16, 398u16, 316u16, 414u16, 298u16, 302u16,
-            303u16, 304u16, 305u16, 306u16, 307u16, 308u16, 309u16, 310u16, 311u16, 312u16, 313u16,
-            314u16, 300u16, 301u16, 599u16, 600u16, 602u16, 601u16, 315u16,
+            181u16, 185u16, 198u16, 55u16, 246u16, 294u16, 233u16, 218u16, 219u16, 220u16, 221u16,
+            222u16, 223u16, 224u16, 225u16, 226u16, 227u16, 228u16, 229u16, 230u16, 231u16, 465u16,
+            466u16, 468u16, 467u16, 232u16,
         ],
     );
     pub const C_FLOWERS_SMALL: Tag = (
@@ -9274,13 +9204,13 @@ pub mod Item {
             "closed_eyeblossom",
         ],
         &[
-            298u16, 302u16, 303u16, 304u16, 305u16, 306u16, 307u16, 308u16, 309u16, 310u16, 311u16,
-            312u16, 313u16, 314u16, 300u16, 301u16,
+            218u16, 219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16, 226u16, 227u16, 228u16,
+            229u16, 230u16, 231u16,
         ],
     );
     pub const C_FLOWERS_TALL: Tag = (
         &["sunflower", "lilac", "peony", "rose_bush", "pitcher_plant"],
-        &[599u16, 600u16, 602u16, 601u16, 315u16],
+        &[465u16, 466u16, 468u16, 467u16, 232u16],
     );
     pub const C_FOODS: Tag = (
         &[
@@ -9328,17 +9258,17 @@ pub mod Item {
             "rotten_flesh",
         ],
         &[
-            1380u16, 1392u16, 1533u16, 1657u16, 1257u16, 1007u16, 1100u16, 1101u16, 1434u16,
-            1256u16, 1378u16, 1383u16, 1379u16, 1438u16, 1525u16, 1526u16, 1067u16, 1236u16,
-            1260u16, 1097u16, 1262u16, 1400u16, 1415u16, 1190u16, 1191u16, 1192u16, 1193u16,
-            1261u16, 1098u16, 1263u16, 1401u16, 1416u16, 1194u16, 1195u16, 1440u16, 1061u16,
-            1402u16, 1492u16, 1218u16, 1381u16, 1272u16, 1264u16,
+            1099u16, 1111u16, 1224u16, 1331u16, 985u16, 800u16, 884u16, 885u16, 1150u16, 984u16,
+            1097u16, 1102u16, 1098u16, 1154u16, 1216u16, 1217u16, 855u16, 980u16, 988u16, 881u16,
+            990u16, 1118u16, 1131u16, 935u16, 936u16, 937u16, 938u16, 989u16, 882u16, 991u16,
+            1119u16, 1132u16, 939u16, 940u16, 1156u16, 849u16, 1120u16, 1193u16, 963u16, 1100u16,
+            1000u16, 992u16,
         ],
     );
-    pub const C_FOODS_BERRY: Tag = (&["sweet_berries", "glow_berries"], &[1525u16, 1526u16]);
-    pub const C_FOODS_BREAD: Tag = (&["bread"], &[1067u16]);
+    pub const C_FOODS_BERRY: Tag = (&["sweet_berries", "glow_berries"], &[1216u16, 1217u16]);
+    pub const C_FOODS_BREAD: Tag = (&["bread"], &[855u16]);
     pub const C_FOODS_CANDY: Tag = (&[], &[]);
-    pub const C_FOODS_COOKED_FISH: Tag = (&["cooked_cod", "cooked_salmon"], &[1194u16, 1195u16]);
+    pub const C_FOODS_COOKED_FISH: Tag = (&["cooked_cod", "cooked_salmon"], &[939u16, 940u16]);
     pub const C_FOODS_COOKED_MEAT: Tag = (
         &[
             "cooked_beef",
@@ -9347,11 +9277,11 @@ pub mod Item {
             "cooked_rabbit",
             "cooked_mutton",
         ],
-        &[1261u16, 1098u16, 1263u16, 1401u16, 1416u16],
+        &[989u16, 882u16, 991u16, 1119u16, 1132u16],
     );
-    pub const C_FOODS_COOKIE: Tag = (&["cookie"], &[1236u16]);
+    pub const C_FOODS_COOKIE: Tag = (&["cookie"], &[980u16]);
     pub const C_FOODS_DOUGH: Tag = (&[], &[]);
-    pub const C_FOODS_EDIBLE_WHEN_PLACED: Tag = (&["cake"], &[1218u16]);
+    pub const C_FOODS_EDIBLE_WHEN_PLACED: Tag = (&["cake"], &[963u16]);
     pub const C_FOODS_FOOD_POISONING: Tag = (
         &[
             "poisonous_potato",
@@ -9360,7 +9290,7 @@ pub mod Item {
             "chicken",
             "rotten_flesh",
         ],
-        &[1381u16, 1193u16, 1272u16, 1262u16, 1264u16],
+        &[1100u16, 938u16, 1000u16, 990u16, 992u16],
     );
     pub const C_FOODS_FRUIT: Tag = (
         &[
@@ -9370,20 +9300,20 @@ pub mod Item {
             "chorus_fruit",
             "melon_slice",
         ],
-        &[1007u16, 1100u16, 1101u16, 1434u16, 1256u16],
+        &[800u16, 884u16, 885u16, 1150u16, 984u16],
     );
     pub const C_FOODS_GOLDEN: Tag = (
         &["golden_apple", "enchanted_golden_apple", "golden_carrot"],
-        &[1100u16, 1101u16, 1383u16],
+        &[884u16, 885u16, 1102u16],
     );
-    pub const C_FOODS_PIE: Tag = (&["pumpkin_pie"], &[1392u16]);
+    pub const C_FOODS_PIE: Tag = (&["pumpkin_pie"], &[1111u16]);
     pub const C_FOODS_RAW_FISH: Tag = (
         &["cod", "salmon", "tropical_fish", "pufferfish"],
-        &[1190u16, 1191u16, 1192u16, 1193u16],
+        &[935u16, 936u16, 937u16, 938u16],
     );
     pub const C_FOODS_RAW_MEAT: Tag = (
         &["beef", "porkchop", "chicken", "rabbit", "mutton"],
-        &[1260u16, 1097u16, 1262u16, 1400u16, 1415u16],
+        &[988u16, 881u16, 990u16, 1118u16, 1131u16],
     );
     pub const C_FOODS_SOUP: Tag = (
         &[
@@ -9392,11 +9322,11 @@ pub mod Item {
             "rabbit_stew",
             "suspicious_stew",
         ],
-        &[1440u16, 1061u16, 1402u16, 1492u16],
+        &[1156u16, 849u16, 1120u16, 1193u16],
     );
     pub const C_FOODS_VEGETABLE: Tag = (
         &["carrot", "golden_carrot", "potato", "beetroot"],
-        &[1378u16, 1383u16, 1379u16, 1438u16],
+        &[1097u16, 1102u16, 1098u16, 1154u16],
     );
     pub const C_FROGLIGHTS: Tag = (
         &[
@@ -9404,7 +9334,7 @@ pub mod Item {
             "pearlescent_froglight",
             "verdant_froglight",
         ],
-        &[1573u16, 1575u16, 1574u16],
+        &[1263u16, 1265u16, 1264u16],
     );
     pub const C_GEMS: Tag = (
         &[
@@ -9415,14 +9345,14 @@ pub mod Item {
             "prismarine_crystals",
             "quartz",
         ],
-        &[1016u16, 1012u16, 1013u16, 1014u16, 1399u16, 1015u16],
+        &[809u16, 805u16, 806u16, 807u16, 1117u16, 808u16],
     );
-    pub const C_GEMS_AMETHYST: Tag = (&["amethyst_shard"], &[1016u16]);
-    pub const C_GEMS_DIAMOND: Tag = (&["diamond"], &[1012u16]);
-    pub const C_GEMS_EMERALD: Tag = (&["emerald"], &[1013u16]);
-    pub const C_GEMS_LAPIS: Tag = (&["lapis_lazuli"], &[1014u16]);
-    pub const C_GEMS_PRISMARINE: Tag = (&["prismarine_crystals"], &[1399u16]);
-    pub const C_GEMS_QUARTZ: Tag = (&["quartz"], &[1015u16]);
+    pub const C_GEMS_AMETHYST: Tag = (&["amethyst_shard"], &[809u16]);
+    pub const C_GEMS_DIAMOND: Tag = (&["diamond"], &[805u16]);
+    pub const C_GEMS_EMERALD: Tag = (&["emerald"], &[806u16]);
+    pub const C_GEMS_LAPIS: Tag = (&["lapis_lazuli"], &[807u16]);
+    pub const C_GEMS_PRISMARINE: Tag = (&["prismarine_crystals"], &[1117u16]);
+    pub const C_GEMS_QUARTZ: Tag = (&["quartz"], &[808u16]);
     pub const C_GLASS_BLOCKS: Tag = (
         &[
             "glass",
@@ -9445,8 +9375,8 @@ pub mod Item {
             "tinted_glass",
         ],
         &[
-            231u16, 605u16, 606u16, 607u16, 608u16, 609u16, 610u16, 611u16, 612u16, 613u16, 614u16,
-            615u16, 616u16, 617u16, 618u16, 619u16, 620u16, 232u16,
+            188u16, 471u16, 472u16, 473u16, 474u16, 475u16, 476u16, 477u16, 478u16, 479u16, 480u16,
+            481u16, 482u16, 483u16, 484u16, 485u16, 486u16, 189u16,
         ],
     );
     pub const C_GLASS_BLOCKS_CHEAP: Tag = (
@@ -9470,12 +9400,12 @@ pub mod Item {
             "black_stained_glass",
         ],
         &[
-            231u16, 605u16, 606u16, 607u16, 608u16, 609u16, 610u16, 611u16, 612u16, 613u16, 614u16,
-            615u16, 616u16, 617u16, 618u16, 619u16, 620u16,
+            188u16, 471u16, 472u16, 473u16, 474u16, 475u16, 476u16, 477u16, 478u16, 479u16, 480u16,
+            481u16, 482u16, 483u16, 484u16, 485u16, 486u16,
         ],
     );
-    pub const C_GLASS_BLOCKS_COLORLESS: Tag = (&["glass"], &[231u16]);
-    pub const C_GLASS_BLOCKS_TINTED: Tag = (&["tinted_glass"], &[232u16]);
+    pub const C_GLASS_BLOCKS_COLORLESS: Tag = (&["glass"], &[188u16]);
+    pub const C_GLASS_BLOCKS_TINTED: Tag = (&["tinted_glass"], &[189u16]);
     pub const C_GLASS_PANES: Tag = (
         &[
             "white_stained_glass_pane",
@@ -9497,11 +9427,11 @@ pub mod Item {
             "glass_pane",
         ],
         &[
-            621u16, 622u16, 623u16, 624u16, 625u16, 626u16, 627u16, 628u16, 629u16, 630u16, 631u16,
-            632u16, 633u16, 634u16, 635u16, 636u16, 482u16,
+            487u16, 488u16, 489u16, 490u16, 491u16, 492u16, 493u16, 494u16, 495u16, 496u16, 497u16,
+            498u16, 499u16, 500u16, 501u16, 502u16, 357u16,
         ],
     );
-    pub const C_GLASS_PANES_COLORLESS: Tag = (&["glass_pane"], &[482u16]);
+    pub const C_GLASS_PANES_COLORLESS: Tag = (&["glass_pane"], &[357u16]);
     pub const C_GLAZED_TERRACOTTAS: Tag = (
         &[
             "white_glazed_terracotta",
@@ -9522,12 +9452,12 @@ pub mod Item {
             "black_glazed_terracotta",
         ],
         &[
-            673u16, 674u16, 675u16, 676u16, 677u16, 678u16, 679u16, 680u16, 681u16, 682u16, 683u16,
-            684u16, 685u16, 686u16, 687u16, 688u16,
+            539u16, 540u16, 541u16, 542u16, 543u16, 544u16, 545u16, 546u16, 547u16, 548u16, 549u16,
+            550u16, 551u16, 552u16, 553u16, 554u16,
         ],
     );
-    pub const C_GRAVELS: Tag = (&["gravel"], &[92u16]);
-    pub const C_GUNPOWDERS: Tag = (&["gunpowder"], &[1064u16]);
+    pub const C_GRAVELS: Tag = (&["gravel"], &[61u16]);
+    pub const C_GUNPOWDERS: Tag = (&["gunpowder"], &[852u16]);
     pub const C_HIDDEN_FROM_RECIPE_VIEWERS: Tag = (&[], &[]);
     pub const C_INGOTS: Tag = (
         &[
@@ -9536,13 +9466,13 @@ pub mod Item {
             "gold_ingot",
             "netherite_ingot",
         ],
-        &[1020u16, 1018u16, 1022u16, 1023u16],
+        &[813u16, 811u16, 815u16, 816u16],
     );
-    pub const C_INGOTS_COPPER: Tag = (&["copper_ingot"], &[1020u16]);
-    pub const C_INGOTS_GOLD: Tag = (&["gold_ingot"], &[1022u16]);
-    pub const C_INGOTS_IRON: Tag = (&["iron_ingot"], &[1018u16]);
-    pub const C_INGOTS_NETHERITE: Tag = (&["netherite_ingot"], &[1023u16]);
-    pub const C_LEATHERS: Tag = (&["leather"], &[1133u16]);
+    pub const C_INGOTS_COPPER: Tag = (&["copper_ingot"], &[813u16]);
+    pub const C_INGOTS_GOLD: Tag = (&["gold_ingot"], &[815u16]);
+    pub const C_INGOTS_IRON: Tag = (&["iron_ingot"], &[811u16]);
+    pub const C_INGOTS_NETHERITE: Tag = (&["netherite_ingot"], &[816u16]);
+    pub const C_LEATHERS: Tag = (&["leather"], &[913u16]);
     pub const C_MUSHROOMS: Tag = (&[], &[]);
     pub const C_MUSIC_DISCS: Tag = (
         &[
@@ -9570,9 +9500,9 @@ pub mod Item {
             "music_disc_bounce",
         ],
         &[
-            1460u16, 1461u16, 1462u16, 1464u16, 1467u16, 1469u16, 1470u16, 1471u16, 1472u16,
-            1473u16, 1474u16, 1475u16, 1476u16, 1478u16, 1479u16, 1477u16, 1465u16, 1466u16,
-            1480u16, 1481u16, 1468u16, 1463u16,
+            1168u16, 1169u16, 1170u16, 1171u16, 1174u16, 1175u16, 1176u16, 1177u16, 1178u16,
+            1179u16, 1180u16, 1181u16, 1182u16, 1184u16, 1185u16, 1183u16, 1172u16, 1173u16,
+            1186u16,
         ],
     );
     pub const C_NATURAL_LOGS: Tag = (
@@ -9592,11 +9522,10 @@ pub mod Item {
             "warped_stem",
         ],
         &[
-            167u16, 177u16, 165u16, 168u16, 170u16, 166u16, 171u16, 163u16, 169u16, 164u16, 172u16,
-            175u16, 176u16,
+            136u16, 144u16, 134u16, 137u16, 138u16, 135u16, 139u16, 132u16, 133u16, 142u16, 143u16,
         ],
     );
-    pub const C_NATURAL_LOGS_NETHER: Tag = (&["crimson_stem", "warped_stem"], &[175u16, 176u16]);
+    pub const C_NATURAL_LOGS_NETHER: Tag = (&["crimson_stem", "warped_stem"], &[142u16, 143u16]);
     pub const C_NATURAL_LOGS_OVERWORLD: Tag = (
         &[
             "acacia_log",
@@ -9612,7 +9541,7 @@ pub mod Item {
             "poplar_log",
         ],
         &[
-            167u16, 177u16, 165u16, 168u16, 170u16, 166u16, 171u16, 163u16, 169u16, 164u16, 172u16,
+            136u16, 144u16, 134u16, 137u16, 138u16, 135u16, 139u16, 132u16, 133u16,
         ],
     );
     pub const C_NATURAL_WOODS: Tag = (
@@ -9631,24 +9560,23 @@ pub mod Item {
             "warped_hyphae",
         ],
         &[
-            207u16, 205u16, 208u16, 210u16, 206u16, 211u16, 203u16, 209u16, 204u16, 212u16, 213u16,
-            214u16,
+            170u16, 168u16, 171u16, 172u16, 169u16, 173u16, 166u16, 167u16, 174u16, 175u16,
         ],
     );
-    pub const C_NETHER_STARS: Tag = (&["nether_star"], &[1391u16]);
-    pub const C_NETHERRACKS: Tag = (&["netherrack"], &[433u16]);
+    pub const C_NETHER_STARS: Tag = (&["nether_star"], &[1110u16]);
+    pub const C_NETHERRACKS: Tag = (&["netherrack"], &[325u16]);
     pub const C_NUGGETS: Tag = (
         &["copper_nugget", "iron_nugget", "gold_nugget"],
-        &[1457u16, 1456u16, 1268u16],
+        &[1165u16, 996u16],
     );
-    pub const C_NUGGETS_COPPER: Tag = (&["copper_nugget"], &[1457u16]);
-    pub const C_NUGGETS_GOLD: Tag = (&["gold_nugget"], &[1268u16]);
-    pub const C_NUGGETS_IRON: Tag = (&["iron_nugget"], &[1456u16]);
-    pub const C_OBSIDIANS: Tag = (&["obsidian", "crying_obsidian"], &[394u16, 1536u16]);
-    pub const C_OBSIDIANS_CRYING: Tag = (&["crying_obsidian"], &[1536u16]);
-    pub const C_OBSIDIANS_NORMAL: Tag = (&["obsidian"], &[394u16]);
+    pub const C_NUGGETS_COPPER: Tag = (&["copper_nugget"], &[]);
+    pub const C_NUGGETS_GOLD: Tag = (&["gold_nugget"], &[996u16]);
+    pub const C_NUGGETS_IRON: Tag = (&["iron_nugget"], &[1165u16]);
+    pub const C_OBSIDIANS: Tag = (&["obsidian", "crying_obsidian"], &[290u16, 1227u16]);
+    pub const C_OBSIDIANS_CRYING: Tag = (&["crying_obsidian"], &[1227u16]);
+    pub const C_OBSIDIANS_NORMAL: Tag = (&["obsidian"], &[290u16]);
     pub const C_ORE_BEARING_GROUND_DEEPSLATE: Tag = (&["deepslate"], &[8u16]);
-    pub const C_ORE_BEARING_GROUND_NETHERRACK: Tag = (&["netherrack"], &[433u16]);
+    pub const C_ORE_BEARING_GROUND_NETHERRACK: Tag = (&["netherrack"], &[325u16]);
     pub const C_ORE_BEARING_GROUND_STONE: Tag = (&["stone"], &[1u16]);
     pub const C_ORE_RATES_DENSE: Tag = (
         &[
@@ -9659,7 +9587,7 @@ pub mod Item {
             "lapis_ore",
             "redstone_ore",
         ],
-        &[97u16, 98u16, 106u16, 102u16, 105u16, 101u16],
+        &[66u16, 67u16, 75u16, 71u16, 74u16, 70u16],
     );
     pub const C_ORE_RATES_SINGULAR: Tag = (
         &[
@@ -9677,11 +9605,10 @@ pub mod Item {
             "nether_quartz_ore",
         ],
         &[
-            111u16, 93u16, 94u16, 108u16, 104u16, 100u16, 96u16, 107u16, 103u16, 99u16, 95u16,
-            110u16,
+            80u16, 62u16, 63u16, 77u16, 73u16, 69u16, 65u16, 76u16, 72u16, 68u16, 64u16, 79u16,
         ],
     );
-    pub const C_ORE_RATES_SPARSE: Tag = (&["nether_gold_ore"], &[109u16]);
+    pub const C_ORE_RATES_SPARSE: Tag = (&["nether_gold_ore"], &[78u16]);
     pub const C_ORES: Tag = (
         &[
             "coal_ore",
@@ -9705,26 +9632,23 @@ pub mod Item {
             "nether_quartz_ore",
         ],
         &[
-            93u16, 94u16, 97u16, 98u16, 107u16, 108u16, 103u16, 104u16, 99u16, 109u16, 100u16,
-            95u16, 96u16, 105u16, 106u16, 111u16, 101u16, 102u16, 110u16,
+            62u16, 63u16, 66u16, 67u16, 76u16, 77u16, 72u16, 73u16, 68u16, 78u16, 69u16, 64u16,
+            65u16, 74u16, 75u16, 80u16, 70u16, 71u16, 79u16,
         ],
     );
-    pub const C_ORES_COAL: Tag = (&["coal_ore", "deepslate_coal_ore"], &[93u16, 94u16]);
-    pub const C_ORES_COPPER: Tag = (&["copper_ore", "deepslate_copper_ore"], &[97u16, 98u16]);
-    pub const C_ORES_DIAMOND: Tag = (&["diamond_ore", "deepslate_diamond_ore"], &[107u16, 108u16]);
-    pub const C_ORES_EMERALD: Tag = (&["emerald_ore", "deepslate_emerald_ore"], &[103u16, 104u16]);
+    pub const C_ORES_COAL: Tag = (&["coal_ore", "deepslate_coal_ore"], &[62u16, 63u16]);
+    pub const C_ORES_COPPER: Tag = (&["copper_ore", "deepslate_copper_ore"], &[66u16, 67u16]);
+    pub const C_ORES_DIAMOND: Tag = (&["diamond_ore", "deepslate_diamond_ore"], &[76u16, 77u16]);
+    pub const C_ORES_EMERALD: Tag = (&["emerald_ore", "deepslate_emerald_ore"], &[72u16, 73u16]);
     pub const C_ORES_GOLD: Tag = (
         &["gold_ore", "nether_gold_ore", "deepslate_gold_ore"],
-        &[99u16, 109u16, 100u16],
+        &[68u16, 78u16, 69u16],
     );
-    pub const C_ORES_IRON: Tag = (&["iron_ore", "deepslate_iron_ore"], &[95u16, 96u16]);
-    pub const C_ORES_LAPIS: Tag = (&["lapis_ore", "deepslate_lapis_ore"], &[105u16, 106u16]);
-    pub const C_ORES_NETHERITE_SCRAP: Tag = (&["ancient_debris"], &[111u16]);
-    pub const C_ORES_QUARTZ: Tag = (&["nether_quartz_ore"], &[110u16]);
-    pub const C_ORES_REDSTONE: Tag = (
-        &["redstone_ore", "deepslate_redstone_ore"],
-        &[101u16, 102u16],
-    );
+    pub const C_ORES_IRON: Tag = (&["iron_ore", "deepslate_iron_ore"], &[64u16, 65u16]);
+    pub const C_ORES_LAPIS: Tag = (&["lapis_ore", "deepslate_lapis_ore"], &[74u16, 75u16]);
+    pub const C_ORES_NETHERITE_SCRAP: Tag = (&["ancient_debris"], &[80u16]);
+    pub const C_ORES_QUARTZ: Tag = (&["nether_quartz_ore"], &[79u16]);
+    pub const C_ORES_REDSTONE: Tag = (&["redstone_ore", "deepslate_redstone_ore"], &[70u16, 71u16]);
     pub const C_ORES_IN_GROUND_DEEPSLATE: Tag = (
         &[
             "deepslate_coal_ore",
@@ -9736,10 +9660,10 @@ pub mod Item {
             "deepslate_lapis_ore",
             "deepslate_redstone_ore",
         ],
-        &[94u16, 98u16, 108u16, 104u16, 100u16, 96u16, 106u16, 102u16],
+        &[63u16, 67u16, 77u16, 73u16, 69u16, 65u16, 75u16, 71u16],
     );
     pub const C_ORES_IN_GROUND_NETHERRACK: Tag =
-        (&["nether_gold_ore", "nether_quartz_ore"], &[109u16, 110u16]);
+        (&["nether_gold_ore", "nether_quartz_ore"], &[78u16, 79u16]);
     pub const C_ORES_IN_GROUND_STONE: Tag = (
         &[
             "coal_ore",
@@ -9751,43 +9675,43 @@ pub mod Item {
             "lapis_ore",
             "redstone_ore",
         ],
-        &[93u16, 97u16, 107u16, 103u16, 99u16, 95u16, 105u16, 101u16],
+        &[62u16, 66u16, 76u16, 72u16, 68u16, 64u16, 74u16, 70u16],
     );
-    pub const C_PLAYER_WORKSTATIONS_CRAFTING_TABLES: Tag = (&["crafting_table"], &[405u16]);
-    pub const C_PLAYER_WORKSTATIONS_FURNACES: Tag = (&["furnace"], &[407u16]);
+    pub const C_PLAYER_WORKSTATIONS_CRAFTING_TABLES: Tag = (&["crafting_table"], &[300u16]);
+    pub const C_PLAYER_WORKSTATIONS_FURNACES: Tag = (&["furnace"], &[302u16]);
     pub const C_POTIONS: Tag = (
         &["potion", "splash_potion", "lingering_potion"],
-        &[1271u16, 1442u16, 1445u16],
+        &[998u16, 1158u16, 1161u16],
     );
     pub const C_POTIONS_BOTTLE: Tag = (
         &["potion", "splash_potion", "lingering_potion"],
-        &[1271u16, 1442u16, 1445u16],
+        &[998u16, 1158u16, 1161u16],
     );
     pub const C_PUMPKINS: Tag = (
         &["pumpkin", "carved_pumpkin", "jack_o_lantern"],
-        &[430u16, 431u16, 432u16],
+        &[322u16, 323u16, 324u16],
     );
-    pub const C_PUMPKINS_CARVED: Tag = (&["carved_pumpkin"], &[431u16]);
-    pub const C_PUMPKINS_JACK_O_LANTERNS: Tag = (&["jack_o_lantern"], &[432u16]);
-    pub const C_PUMPKINS_NORMAL: Tag = (&["pumpkin"], &[430u16]);
+    pub const C_PUMPKINS_CARVED: Tag = (&["carved_pumpkin"], &[323u16]);
+    pub const C_PUMPKINS_JACK_O_LANTERNS: Tag = (&["jack_o_lantern"], &[324u16]);
+    pub const C_PUMPKINS_NORMAL: Tag = (&["pumpkin"], &[322u16]);
     pub const C_RAW_MATERIALS: Tag = (
         &["raw_copper", "raw_gold", "raw_iron"],
-        &[1019u16, 1021u16, 1017u16],
+        &[812u16, 814u16, 810u16],
     );
-    pub const C_RAW_MATERIALS_COPPER: Tag = (&["raw_copper"], &[1019u16]);
-    pub const C_RAW_MATERIALS_GOLD: Tag = (&["raw_gold"], &[1021u16]);
-    pub const C_RAW_MATERIALS_IRON: Tag = (&["raw_iron"], &[1017u16]);
+    pub const C_RAW_MATERIALS_COPPER: Tag = (&["raw_copper"], &[812u16]);
+    pub const C_RAW_MATERIALS_GOLD: Tag = (&["raw_gold"], &[814u16]);
+    pub const C_RAW_MATERIALS_IRON: Tag = (&["raw_iron"], &[810u16]);
     pub const C_RODS: Tag = (
         &["stick", "blaze_rod", "breeze_rod"],
-        &[1060u16, 1266u16, 1373u16],
+        &[848u16, 994u16, 1332u16],
     );
-    pub const C_RODS_BLAZE: Tag = (&["blaze_rod"], &[1266u16]);
-    pub const C_RODS_BREEZE: Tag = (&["breeze_rod"], &[1373u16]);
-    pub const C_RODS_WOODEN: Tag = (&["stick"], &[1060u16]);
+    pub const C_RODS_BLAZE: Tag = (&["blaze_rod"], &[994u16]);
+    pub const C_RODS_BREEZE: Tag = (&["breeze_rod"], &[1332u16]);
+    pub const C_RODS_WOODEN: Tag = (&["stick"], &[848u16]);
     pub const C_ROPES: Tag = (&[], &[]);
-    pub const C_SANDS: Tag = (&["sand", "red_sand"], &[88u16, 91u16]);
-    pub const C_SANDS_COLORLESS: Tag = (&["sand"], &[88u16]);
-    pub const C_SANDS_RED: Tag = (&["red_sand"], &[91u16]);
+    pub const C_SANDS: Tag = (&["sand", "red_sand"], &[57u16, 60u16]);
+    pub const C_SANDS_COLORLESS: Tag = (&["sand"], &[57u16]);
+    pub const C_SANDS_RED: Tag = (&["red_sand"], &[60u16]);
     pub const C_SANDSTONE_BLOCKS: Tag = (
         &[
             "sandstone",
@@ -9800,7 +9724,7 @@ pub mod Item {
             "chiseled_red_sandstone",
         ],
         &[
-            234u16, 236u16, 374u16, 235u16, 644u16, 646u16, 373u16, 645u16,
+            191u16, 193u16, 283u16, 192u16, 510u16, 512u16, 282u16, 511u16,
         ],
     );
     pub const C_SANDSTONE_RED_BLOCKS: Tag = (
@@ -9810,7 +9734,7 @@ pub mod Item {
             "smooth_red_sandstone",
             "chiseled_red_sandstone",
         ],
-        &[644u16, 646u16, 373u16, 645u16],
+        &[510u16, 512u16, 282u16, 511u16],
     );
     pub const C_SANDSTONE_RED_SLABS: Tag = (
         &[
@@ -9818,11 +9742,11 @@ pub mod Item {
             "cut_red_sandstone_slab",
             "smooth_red_sandstone_slab",
         ],
-        &[366u16, 367u16, 807u16],
+        &[275u16, 276u16, 640u16],
     );
     pub const C_SANDSTONE_RED_STAIRS: Tag = (
         &["red_sandstone_stairs", "smooth_red_sandstone_stairs"],
-        &[647u16, 789u16],
+        &[513u16, 622u16],
     );
     pub const C_SANDSTONE_SLABS: Tag = (
         &[
@@ -9833,7 +9757,7 @@ pub mod Item {
             "cut_red_sandstone_slab",
             "smooth_red_sandstone_slab",
         ],
-        &[357u16, 358u16, 812u16, 366u16, 367u16, 807u16],
+        &[266u16, 267u16, 645u16, 275u16, 276u16, 640u16],
     );
     pub const C_SANDSTONE_STAIRS: Tag = (
         &[
@@ -9842,7 +9766,7 @@ pub mod Item {
             "red_sandstone_stairs",
             "smooth_red_sandstone_stairs",
         ],
-        &[512u16, 795u16, 647u16, 789u16],
+        &[380u16, 628u16, 513u16, 622u16],
     );
     pub const C_SANDSTONE_UNCOLORED_BLOCKS: Tag = (
         &[
@@ -9851,7 +9775,7 @@ pub mod Item {
             "smooth_sandstone",
             "chiseled_sandstone",
         ],
-        &[234u16, 236u16, 374u16, 235u16],
+        &[191u16, 193u16, 283u16, 192u16],
     );
     pub const C_SANDSTONE_UNCOLORED_SLABS: Tag = (
         &[
@@ -9859,11 +9783,11 @@ pub mod Item {
             "cut_sandstone_slab",
             "smooth_sandstone_slab",
         ],
-        &[357u16, 358u16, 812u16],
+        &[266u16, 267u16, 645u16],
     );
     pub const C_SANDSTONE_UNCOLORED_STAIRS: Tag = (
         &["sandstone_stairs", "smooth_sandstone_stairs"],
-        &[512u16, 795u16],
+        &[380u16, 628u16],
     );
     pub const C_SEEDS: Tag = (
         &[
@@ -9874,14 +9798,14 @@ pub mod Item {
             "pitcher_pod",
             "wheat_seeds",
         ],
-        &[1439u16, 1259u16, 1258u16, 1436u16, 1437u16, 1065u16],
+        &[1155u16, 987u16, 986u16, 1152u16, 1153u16, 853u16],
     );
-    pub const C_SEEDS_BEETROOT: Tag = (&["beetroot_seeds"], &[1439u16]);
-    pub const C_SEEDS_MELON: Tag = (&["melon_seeds"], &[1259u16]);
-    pub const C_SEEDS_PITCHER_PLANT: Tag = (&["pitcher_pod"], &[1437u16]);
-    pub const C_SEEDS_PUMPKIN: Tag = (&["pumpkin_seeds"], &[1258u16]);
-    pub const C_SEEDS_TORCHFLOWER: Tag = (&["torchflower_seeds"], &[1436u16]);
-    pub const C_SEEDS_WHEAT: Tag = (&["wheat_seeds"], &[1065u16]);
+    pub const C_SEEDS_BEETROOT: Tag = (&["beetroot_seeds"], &[1155u16]);
+    pub const C_SEEDS_MELON: Tag = (&["melon_seeds"], &[987u16]);
+    pub const C_SEEDS_PITCHER_PLANT: Tag = (&["pitcher_pod"], &[1153u16]);
+    pub const C_SEEDS_PUMPKIN: Tag = (&["pumpkin_seeds"], &[986u16]);
+    pub const C_SEEDS_TORCHFLOWER: Tag = (&["torchflower_seeds"], &[1152u16]);
+    pub const C_SEEDS_WHEAT: Tag = (&["wheat_seeds"], &[853u16]);
     pub const C_SHULKER_BOXES: Tag = (
         &[
             "shulker_box",
@@ -9903,11 +9827,11 @@ pub mod Item {
             "black_shulker_box",
         ],
         &[
-            656u16, 657u16, 658u16, 659u16, 660u16, 661u16, 662u16, 663u16, 664u16, 665u16, 666u16,
-            667u16, 668u16, 669u16, 670u16, 671u16, 672u16,
+            522u16, 523u16, 524u16, 525u16, 526u16, 527u16, 528u16, 529u16, 530u16, 531u16, 532u16,
+            533u16, 534u16, 535u16, 536u16, 537u16, 538u16,
         ],
     );
-    pub const C_SLIME_BALLS: Tag = (&["slime_ball"], &[1147u16]);
+    pub const C_SLIME_BALLS: Tag = (&["slime_ball"], &[926u16]);
     pub const C_STONES: Tag = (
         &[
             "stone",
@@ -9940,28 +9864,28 @@ pub mod Item {
             "hay_block",
         ],
         &[
-            654u16, 112u16, 120u16, 129u16, 1144u16, 514u16, 128u16, 119u16, 233u16, 130u16,
-            114u16, 115u16, 113u16, 826u16, 487u16, 831u16, 579u16,
+            520u16, 81u16, 89u16, 91u16, 923u16, 382u16, 90u16, 88u16, 190u16, 92u16, 83u16, 84u16,
+            82u16, 659u16, 664u16, 445u16,
         ],
     );
-    pub const C_STORAGE_BLOCKS_BONE_MEAL: Tag = (&["bone_block"], &[654u16]);
-    pub const C_STORAGE_BLOCKS_COAL: Tag = (&["coal_block"], &[112u16]);
-    pub const C_STORAGE_BLOCKS_COPPER: Tag = (&["copper_block"], &[120u16]);
-    pub const C_STORAGE_BLOCKS_DIAMOND: Tag = (&["diamond_block"], &[129u16]);
-    pub const C_STORAGE_BLOCKS_DRIED_KELP: Tag = (&["dried_kelp_block"], &[1144u16]);
-    pub const C_STORAGE_BLOCKS_EMERALD: Tag = (&["emerald_block"], &[514u16]);
-    pub const C_STORAGE_BLOCKS_GOLD: Tag = (&["gold_block"], &[128u16]);
-    pub const C_STORAGE_BLOCKS_IRON: Tag = (&["iron_block"], &[119u16]);
-    pub const C_STORAGE_BLOCKS_LAPIS: Tag = (&["lapis_block"], &[233u16]);
-    pub const C_STORAGE_BLOCKS_NETHERITE: Tag = (&["netherite_block"], &[130u16]);
-    pub const C_STORAGE_BLOCKS_RAW_COPPER: Tag = (&["raw_copper_block"], &[114u16]);
-    pub const C_STORAGE_BLOCKS_RAW_GOLD: Tag = (&["raw_gold_block"], &[115u16]);
-    pub const C_STORAGE_BLOCKS_RAW_IRON: Tag = (&["raw_iron_block"], &[113u16]);
-    pub const C_STORAGE_BLOCKS_REDSTONE: Tag = (&["redstone_block"], &[826u16]);
-    pub const C_STORAGE_BLOCKS_RESIN: Tag = (&["resin_block"], &[487u16]);
-    pub const C_STORAGE_BLOCKS_SLIME: Tag = (&["slime_block"], &[831u16]);
-    pub const C_STORAGE_BLOCKS_WHEAT: Tag = (&["hay_block"], &[579u16]);
-    pub const C_STRINGS: Tag = (&["string"], &[1062u16]);
+    pub const C_STORAGE_BLOCKS_BONE_MEAL: Tag = (&["bone_block"], &[520u16]);
+    pub const C_STORAGE_BLOCKS_COAL: Tag = (&["coal_block"], &[81u16]);
+    pub const C_STORAGE_BLOCKS_COPPER: Tag = (&["copper_block"], &[89u16]);
+    pub const C_STORAGE_BLOCKS_DIAMOND: Tag = (&["diamond_block"], &[91u16]);
+    pub const C_STORAGE_BLOCKS_DRIED_KELP: Tag = (&["dried_kelp_block"], &[923u16]);
+    pub const C_STORAGE_BLOCKS_EMERALD: Tag = (&["emerald_block"], &[382u16]);
+    pub const C_STORAGE_BLOCKS_GOLD: Tag = (&["gold_block"], &[90u16]);
+    pub const C_STORAGE_BLOCKS_IRON: Tag = (&["iron_block"], &[88u16]);
+    pub const C_STORAGE_BLOCKS_LAPIS: Tag = (&["lapis_block"], &[190u16]);
+    pub const C_STORAGE_BLOCKS_NETHERITE: Tag = (&["netherite_block"], &[92u16]);
+    pub const C_STORAGE_BLOCKS_RAW_COPPER: Tag = (&["raw_copper_block"], &[83u16]);
+    pub const C_STORAGE_BLOCKS_RAW_GOLD: Tag = (&["raw_gold_block"], &[84u16]);
+    pub const C_STORAGE_BLOCKS_RAW_IRON: Tag = (&["raw_iron_block"], &[82u16]);
+    pub const C_STORAGE_BLOCKS_REDSTONE: Tag = (&["redstone_block"], &[659u16]);
+    pub const C_STORAGE_BLOCKS_RESIN: Tag = (&["resin_block"], &[]);
+    pub const C_STORAGE_BLOCKS_SLIME: Tag = (&["slime_block"], &[664u16]);
+    pub const C_STORAGE_BLOCKS_WHEAT: Tag = (&["hay_block"], &[445u16]);
+    pub const C_STRINGS: Tag = (&["string"], &[850u16]);
     pub const C_STRIPPED_LOGS: Tag = (
         &[
             "stripped_acacia_log",
@@ -9979,8 +9903,7 @@ pub mod Item {
             "stripped_warped_stem",
         ],
         &[
-            182u16, 202u16, 180u16, 183u16, 184u16, 181u16, 186u16, 178u16, 185u16, 179u16, 187u16,
-            188u16, 189u16,
+            149u16, 165u16, 147u16, 150u16, 151u16, 148u16, 152u16, 145u16, 146u16, 153u16, 154u16,
         ],
     );
     pub const C_STRIPPED_WOODS: Tag = (
@@ -9999,8 +9922,7 @@ pub mod Item {
             "stripped_warped_hyphae",
         ],
         &[
-            194u16, 192u16, 195u16, 196u16, 193u16, 198u16, 190u16, 197u16, 191u16, 199u16, 200u16,
-            201u16,
+            159u16, 157u16, 160u16, 161u16, 158u16, 162u16, 155u16, 156u16, 163u16, 164u16,
         ],
     );
     pub const C_TOOLS: Tag = (
@@ -10056,20 +9978,18 @@ pub mod Item {
             "netherite_spear",
         ],
         &[
-            1053u16, 1038u16, 1043u16, 1058u16, 1028u16, 1048u16, 1054u16, 1039u16, 1044u16,
-            1059u16, 1029u16, 1049u16, 1052u16, 1037u16, 1042u16, 1057u16, 1027u16, 1047u16,
-            1051u16, 1036u16, 1041u16, 1056u16, 1026u16, 1046u16, 1050u16, 1035u16, 1040u16,
-            1055u16, 1025u16, 1045u16, 1008u16, 1578u16, 1491u16, 1186u16, 1005u16, 1255u16,
-            1446u16, 1483u16, 1374u16, 1032u16, 1030u16, 1033u16, 1447u16, 1448u16, 1449u16,
-            1450u16, 1451u16, 1452u16, 1453u16,
+            841u16, 826u16, 831u16, 846u16, 821u16, 836u16, 842u16, 827u16, 832u16, 847u16, 822u16,
+            837u16, 840u16, 825u16, 830u16, 845u16, 820u16, 835u16, 839u16, 824u16, 829u16, 844u16,
+            819u16, 834u16, 838u16, 823u16, 828u16, 843u16, 818u16, 833u16, 801u16, 1268u16,
+            1192u16, 931u16, 798u16, 983u16, 1162u16, 1188u16, 1093u16,
         ],
     );
-    pub const C_TOOLS_BOW: Tag = (&["bow"], &[1008u16]);
-    pub const C_TOOLS_BRUSH: Tag = (&["brush"], &[1578u16]);
-    pub const C_TOOLS_CROSSBOW: Tag = (&["crossbow"], &[1491u16]);
-    pub const C_TOOLS_FISHING_ROD: Tag = (&["fishing_rod"], &[1186u16]);
-    pub const C_TOOLS_IGNITER: Tag = (&["flint_and_steel"], &[1005u16]);
-    pub const C_TOOLS_MACE: Tag = (&["mace"], &[1374u16]);
+    pub const C_TOOLS_BOW: Tag = (&["bow"], &[801u16]);
+    pub const C_TOOLS_BRUSH: Tag = (&["brush"], &[1268u16]);
+    pub const C_TOOLS_CROSSBOW: Tag = (&["crossbow"], &[1192u16]);
+    pub const C_TOOLS_FISHING_ROD: Tag = (&["fishing_rod"], &[931u16]);
+    pub const C_TOOLS_IGNITER: Tag = (&["flint_and_steel"], &[798u16]);
+    pub const C_TOOLS_MACE: Tag = (&["mace"], &[1093u16]);
     pub const C_TOOLS_MELEE_WEAPON: Tag = (
         &[
             "mace",
@@ -10097,9 +10017,8 @@ pub mod Item {
             "netherite_spear",
         ],
         &[
-            1374u16, 1483u16, 1025u16, 1035u16, 1030u16, 1040u16, 1045u16, 1050u16, 1055u16,
-            1028u16, 1038u16, 1033u16, 1043u16, 1048u16, 1053u16, 1058u16, 1447u16, 1448u16,
-            1449u16, 1450u16, 1451u16, 1452u16, 1453u16,
+            1093u16, 1188u16, 818u16, 823u16, 828u16, 833u16, 838u16, 843u16, 821u16, 826u16,
+            831u16, 836u16, 841u16, 846u16,
         ],
     );
     pub const C_TOOLS_MINING_TOOL: Tag = (
@@ -10112,17 +10031,13 @@ pub mod Item {
             "diamond_pickaxe",
             "netherite_pickaxe",
         ],
-        &[
-            1027u16, 1037u16, 1032u16, 1042u16, 1047u16, 1052u16, 1057u16,
-        ],
+        &[820u16, 825u16, 830u16, 835u16, 840u16, 845u16],
     );
-    pub const C_TOOLS_RANGED_WEAPON: Tag = (
-        &["bow", "crossbow", "trident"],
-        &[1008u16, 1491u16, 1483u16],
-    );
-    pub const C_TOOLS_SHEAR: Tag = (&["shears"], &[1255u16]);
-    pub const C_TOOLS_SHIELD: Tag = (&["shield"], &[1446u16]);
-    pub const C_TOOLS_TRIDENT: Tag = (&["trident"], &[1483u16]);
+    pub const C_TOOLS_RANGED_WEAPON: Tag =
+        (&["bow", "crossbow", "trident"], &[801u16, 1192u16, 1188u16]);
+    pub const C_TOOLS_SHEAR: Tag = (&["shears"], &[983u16]);
+    pub const C_TOOLS_SHIELD: Tag = (&["shield"], &[1162u16]);
+    pub const C_TOOLS_TRIDENT: Tag = (&["trident"], &[1188u16]);
     pub const C_TOOLS_WRENCH: Tag = (&[], &[]);
     pub const C_VILLAGER_JOB_SITES: Tag = (
         &[
@@ -10141,8 +10056,8 @@ pub mod Item {
             "stonecutter",
         ],
         &[
-            1506u16, 1508u16, 1276u16, 1509u16, 1277u16, 1505u16, 1510u16, 1511u16, 837u16,
-            1493u16, 1512u16, 1507u16, 1513u16,
+            1205u16, 1207u16, 1004u16, 1208u16, 1005u16, 1204u16, 1209u16, 1210u16, 670u16,
+            1194u16, 1211u16, 1206u16, 1212u16,
         ],
     );
     pub const MINECRAFT_ACACIA_LOGS: Tag = (
@@ -10152,16 +10067,16 @@ pub mod Item {
             "stripped_acacia_log",
             "stripped_acacia_wood",
         ],
-        &[167u16, 207u16, 182u16, 194u16],
+        &[136u16, 170u16, 149u16, 159u16],
     );
     pub const MINECRAFT_ANVIL: Tag = (
         &["anvil", "chipped_anvil", "damaged_anvil"],
-        &[553u16, 554u16, 555u16],
+        &[419u16, 420u16, 421u16],
     );
-    pub const MINECRAFT_ARMADILLO_FOOD: Tag = (&["spider_eye"], &[1272u16]);
+    pub const MINECRAFT_ARMADILLO_FOOD: Tag = (&["spider_eye"], &[1000u16]);
     pub const MINECRAFT_ARROWS: Tag = (
         &["arrow", "tipped_arrow", "spectral_arrow"],
-        &[1009u16, 1444u16, 1443u16],
+        &[802u16, 1160u16, 1159u16],
     );
     pub const MINECRAFT_AXES: Tag = (
         &[
@@ -10172,12 +10087,12 @@ pub mod Item {
             "wooden_axe",
             "iron_axe",
         ],
-        &[1053u16, 1038u16, 1043u16, 1058u16, 1028u16, 1048u16],
+        &[841u16, 826u16, 831u16, 846u16, 821u16, 836u16],
     );
-    pub const MINECRAFT_AXOLOTL_FOOD: Tag = (&["tropical_fish_bucket"], &[1138u16]);
+    pub const MINECRAFT_AXOLOTL_FOOD: Tag = (&["tropical_fish_bucket"], &[918u16]);
     pub const MINECRAFT_BAMBOO_BLOCKS: Tag = (
         &["bamboo_block", "stripped_bamboo_block"],
-        &[177u16, 202u16],
+        &[144u16, 165u16],
     );
     pub const MINECRAFT_BANNERS: Tag = (
         &[
@@ -10199,8 +10114,8 @@ pub mod Item {
             "black_banner",
         ],
         &[
-            1417u16, 1418u16, 1419u16, 1420u16, 1421u16, 1422u16, 1423u16, 1424u16, 1425u16,
-            1426u16, 1427u16, 1428u16, 1429u16, 1430u16, 1431u16, 1432u16,
+            1133u16, 1134u16, 1135u16, 1136u16, 1137u16, 1138u16, 1139u16, 1140u16, 1141u16,
+            1142u16, 1143u16, 1144u16, 1145u16, 1146u16, 1147u16, 1148u16,
         ],
     );
     pub const MINECRAFT_BEACON_PAYMENT_ITEMS: Tag = (
@@ -10211,7 +10126,7 @@ pub mod Item {
             "gold_ingot",
             "iron_ingot",
         ],
-        &[1023u16, 1013u16, 1012u16, 1022u16, 1018u16],
+        &[816u16, 806u16, 805u16, 815u16, 811u16],
     );
     pub const MINECRAFT_BEDS: Tag = (
         &[
@@ -10233,8 +10148,8 @@ pub mod Item {
             "yellow_bed",
         ],
         &[
-            1233u16, 1234u16, 1230u16, 1231u16, 1228u16, 1226u16, 1232u16, 1222u16, 1227u16,
-            1224u16, 1221u16, 1220u16, 1225u16, 1229u16, 1219u16, 1223u16,
+            978u16, 979u16, 975u16, 976u16, 973u16, 971u16, 977u16, 967u16, 972u16, 969u16, 966u16,
+            965u16, 970u16, 974u16, 964u16, 968u16,
         ],
     );
     pub const MINECRAFT_BEE_FOOD: Tag = (
@@ -10267,9 +10182,9 @@ pub mod Item {
             "spore_blossom",
         ],
         &[
-            298u16, 302u16, 303u16, 304u16, 305u16, 306u16, 307u16, 308u16, 309u16, 310u16, 311u16,
-            312u16, 313u16, 314u16, 599u16, 600u16, 602u16, 601u16, 315u16, 228u16, 243u16, 85u16,
-            220u16, 329u16, 398u16, 316u16,
+            218u16, 219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16, 226u16, 227u16, 228u16,
+            229u16, 230u16, 231u16, 465u16, 466u16, 468u16, 467u16, 232u16, 185u16, 198u16, 55u16,
+            181u16, 246u16, 294u16, 233u16,
         ],
     );
     pub const MINECRAFT_BIRCH_LOGS: Tag = (
@@ -10279,7 +10194,7 @@ pub mod Item {
             "stripped_birch_log",
             "stripped_birch_wood",
         ],
-        &[165u16, 205u16, 180u16, 192u16],
+        &[134u16, 168u16, 147u16, 157u16],
     );
     pub const MINECRAFT_BOATS: Tag = (
         &[
@@ -10303,8 +10218,8 @@ pub mod Item {
             "cherry_chest_boat",
         ],
         &[
-            975u16, 977u16, 979u16, 981u16, 983u16, 987u16, 991u16, 995u16, 985u16, 976u16, 978u16,
-            980u16, 982u16, 984u16, 988u16, 992u16, 996u16, 986u16,
+            774u16, 776u16, 778u16, 780u16, 782u16, 786u16, 788u16, 790u16, 784u16, 775u16, 777u16,
+            779u16, 781u16, 783u16, 787u16, 789u16, 791u16, 785u16,
         ],
     );
     pub const MINECRAFT_BOOKSHELF_BOOKS: Tag = (
@@ -10315,7 +10230,7 @@ pub mod Item {
             "writable_book",
             "knowledge_book",
         ],
-        &[1146u16, 1372u16, 1395u16, 1371u16, 1458u16],
+        &[925u16, 1092u16, 1114u16, 1091u16, 1166u16],
     );
     pub const MINECRAFT_BREAKS_DECORATED_POTS: Tag = (
         &[
@@ -10353,10 +10268,9 @@ pub mod Item {
             "mace",
         ],
         &[
-            1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16, 1053u16, 1038u16, 1043u16,
-            1058u16, 1028u16, 1048u16, 1052u16, 1037u16, 1042u16, 1057u16, 1027u16, 1047u16,
-            1051u16, 1036u16, 1041u16, 1056u16, 1026u16, 1046u16, 1054u16, 1039u16, 1044u16,
-            1059u16, 1029u16, 1049u16, 1483u16, 1374u16,
+            838u16, 823u16, 828u16, 843u16, 818u16, 833u16, 841u16, 826u16, 831u16, 846u16, 821u16,
+            836u16, 840u16, 825u16, 830u16, 845u16, 820u16, 835u16, 839u16, 824u16, 829u16, 844u16,
+            819u16, 834u16, 842u16, 827u16, 832u16, 847u16, 822u16, 837u16, 1188u16, 1093u16,
         ],
     );
     pub const MINECRAFT_BUTTONS: Tag = (
@@ -10376,11 +10290,11 @@ pub mod Item {
             "polished_blackstone_button",
         ],
         &[
-            858u16, 859u16, 860u16, 861u16, 862u16, 864u16, 869u16, 870u16, 866u16, 868u16, 863u16,
-            856u16, 857u16,
+            684u16, 685u16, 686u16, 687u16, 688u16, 690u16, 693u16, 694u16, 691u16, 692u16, 689u16,
+            682u16, 683u16,
         ],
     );
-    pub const MINECRAFT_CAMEL_FOOD: Tag = (&["cactus"], &[413u16]);
+    pub const MINECRAFT_CAMEL_FOOD: Tag = (&["cactus"], &[308u16]);
     pub const MINECRAFT_CANDLES: Tag = (
         &[
             "candle",
@@ -10402,11 +10316,11 @@ pub mod Item {
             "black_candle",
         ],
         &[
-            1550u16, 1551u16, 1552u16, 1553u16, 1554u16, 1555u16, 1556u16, 1557u16, 1558u16,
-            1559u16, 1560u16, 1561u16, 1562u16, 1563u16, 1564u16, 1565u16, 1566u16,
+            1241u16, 1242u16, 1243u16, 1244u16, 1245u16, 1246u16, 1247u16, 1248u16, 1249u16,
+            1250u16, 1251u16, 1252u16, 1253u16, 1254u16, 1255u16, 1256u16, 1257u16,
         ],
     );
-    pub const MINECRAFT_CAT_FOOD: Tag = (&["cod", "salmon"], &[1190u16, 1191u16]);
+    pub const MINECRAFT_CAT_FOOD: Tag = (&["cod", "salmon"], &[935u16, 936u16]);
     pub const MINECRAFT_CHERRY_LOGS: Tag = (
         &[
             "cherry_log",
@@ -10414,7 +10328,7 @@ pub mod Item {
             "stripped_cherry_log",
             "stripped_cherry_wood",
         ],
-        &[168u16, 208u16, 183u16, 195u16],
+        &[137u16, 171u16, 150u16, 160u16],
     );
     pub const MINECRAFT_CHEST_ARMOR: Tag = (
         &[
@@ -10425,7 +10339,7 @@ pub mod Item {
             "diamond_chestplate",
             "netherite_chestplate",
         ],
-        &[1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16],
+        &[857u16, 861u16, 873u16, 865u16, 869u16, 877u16],
     );
     pub const MINECRAFT_CHEST_BOATS: Tag = (
         &[
@@ -10440,7 +10354,7 @@ pub mod Item {
             "cherry_chest_boat",
         ],
         &[
-            976u16, 978u16, 980u16, 982u16, 984u16, 988u16, 992u16, 996u16, 986u16,
+            775u16, 777u16, 779u16, 781u16, 783u16, 787u16, 789u16, 791u16, 785u16,
         ],
     );
     pub const MINECRAFT_CHICKEN_FOOD: Tag = (
@@ -10452,7 +10366,7 @@ pub mod Item {
             "torchflower_seeds",
             "pitcher_pod",
         ],
-        &[1065u16, 1259u16, 1258u16, 1439u16, 1436u16, 1437u16],
+        &[853u16, 987u16, 986u16, 1155u16, 1152u16, 1153u16],
     );
     pub const MINECRAFT_CLUSTER_MAX_HARVESTABLES: Tag = (
         &[
@@ -10463,11 +10377,11 @@ pub mod Item {
             "stone_pickaxe",
             "wooden_pickaxe",
         ],
-        &[1052u16, 1042u16, 1047u16, 1057u16, 1037u16, 1027u16],
+        &[840u16, 830u16, 835u16, 845u16, 825u16, 820u16],
     );
-    pub const MINECRAFT_COAL_ORES: Tag = (&["coal_ore", "deepslate_coal_ore"], &[93u16, 94u16]);
-    pub const MINECRAFT_COALS: Tag = (&["coal", "charcoal"], &[1010u16, 1011u16]);
-    pub const MINECRAFT_COMPASSES: Tag = (&["compass", "recovery_compass"], &[1151u16, 1152u16]);
+    pub const MINECRAFT_COAL_ORES: Tag = (&["coal_ore", "deepslate_coal_ore"], &[62u16, 63u16]);
+    pub const MINECRAFT_COALS: Tag = (&["coal", "charcoal"], &[803u16, 804u16]);
+    pub const MINECRAFT_COMPASSES: Tag = (&["compass", "recovery_compass"], &[928u16, 929u16]);
     pub const MINECRAFT_COMPLETES_FIND_TREE_TUTORIAL: Tag = (
         &[
             "dark_oak_log",
@@ -10524,17 +10438,16 @@ pub mod Item {
             "warped_wart_block",
         ],
         &[
-            170u16, 210u16, 184u16, 196u16, 163u16, 203u16, 178u16, 190u16, 167u16, 207u16, 182u16,
-            194u16, 165u16, 205u16, 180u16, 192u16, 166u16, 206u16, 181u16, 193u16, 164u16, 204u16,
-            179u16, 191u16, 171u16, 211u16, 186u16, 198u16, 168u16, 208u16, 183u16, 195u16, 175u16,
-            188u16, 213u16, 200u16, 176u16, 189u16, 214u16, 201u16, 218u16, 215u16, 216u16, 221u16,
-            219u16, 217u16, 227u16, 228u16, 223u16, 220u16, 651u16, 652u16,
+            138u16, 172u16, 151u16, 161u16, 132u16, 166u16, 145u16, 155u16, 136u16, 170u16, 149u16,
+            159u16, 134u16, 168u16, 147u16, 157u16, 135u16, 169u16, 148u16, 158u16, 133u16, 167u16,
+            146u16, 156u16, 139u16, 173u16, 152u16, 162u16, 137u16, 171u16, 150u16, 160u16, 142u16,
+            153u16, 174u16, 163u16, 143u16, 154u16, 175u16, 164u16, 179u16, 176u16, 177u16, 182u16,
+            180u16, 178u16, 184u16, 185u16, 183u16, 181u16, 517u16, 518u16,
         ],
     );
     pub const MINECRAFT_COPPER_ORES: Tag =
-        (&["copper_ore", "deepslate_copper_ore"], &[97u16, 98u16]);
-    pub const MINECRAFT_COPPER_TOOL_MATERIALS: Tag = (&["copper_ingot"], &[1020u16]);
-    pub const MINECRAFT_COW_FOOD: Tag = (&["wheat"], &[1066u16]);
+        (&["copper_ore", "deepslate_copper_ore"], &[66u16, 67u16]);
+    pub const MINECRAFT_COW_FOOD: Tag = (&["wheat"], &[854u16]);
     pub const MINECRAFT_CREEPER_DROP_MUSIC_DISCS: Tag = (
         &[
             "music_disc_13",
@@ -10551,12 +10464,12 @@ pub mod Item {
             "music_disc_wait",
         ],
         &[
-            1460u16, 1461u16, 1462u16, 1464u16, 1467u16, 1469u16, 1470u16, 1471u16, 1472u16,
-            1473u16, 1474u16, 1475u16,
+            1168u16, 1169u16, 1170u16, 1171u16, 1174u16, 1175u16, 1176u16, 1177u16, 1178u16,
+            1179u16, 1180u16, 1181u16,
         ],
     );
     pub const MINECRAFT_CREEPER_IGNITERS: Tag =
-        (&["flint_and_steel", "fire_charge"], &[1005u16, 1369u16]);
+        (&["flint_and_steel", "fire_charge"], &[798u16, 1089u16]);
     pub const MINECRAFT_CRIMSON_STEMS: Tag = (
         &[
             "crimson_stem",
@@ -10564,7 +10477,7 @@ pub mod Item {
             "crimson_hyphae",
             "stripped_crimson_hyphae",
         ],
-        &[175u16, 188u16, 213u16, 200u16],
+        &[142u16, 153u16, 174u16, 163u16],
     );
     pub const MINECRAFT_DAMPENS_VIBRATIONS: Tag = (
         &[
@@ -10602,9 +10515,9 @@ pub mod Item {
             "black_carpet",
         ],
         &[
-            250u16, 251u16, 252u16, 253u16, 254u16, 255u16, 256u16, 257u16, 258u16, 259u16, 260u16,
-            261u16, 262u16, 263u16, 264u16, 265u16, 580u16, 581u16, 582u16, 583u16, 584u16, 585u16,
-            586u16, 587u16, 588u16, 589u16, 590u16, 591u16, 592u16, 593u16, 594u16, 595u16,
+            202u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16,
+            213u16, 214u16, 215u16, 216u16, 217u16, 446u16, 447u16, 448u16, 449u16, 450u16, 451u16,
+            452u16, 453u16, 454u16, 455u16, 456u16, 457u16, 458u16, 459u16, 460u16, 461u16,
         ],
     );
     pub const MINECRAFT_DARK_OAK_LOGS: Tag = (
@@ -10614,7 +10527,7 @@ pub mod Item {
             "stripped_dark_oak_log",
             "stripped_dark_oak_wood",
         ],
-        &[170u16, 210u16, 184u16, 196u16],
+        &[138u16, 172u16, 151u16, 161u16],
     );
     pub const MINECRAFT_DECORATED_POT_INGREDIENTS: Tag = (
         &[
@@ -10644,9 +10557,9 @@ pub mod Item {
             "scrape_pottery_sherd",
         ],
         &[
-            1142u16, 1598u16, 1599u16, 1600u16, 1601u16, 1602u16, 1603u16, 1604u16, 1605u16,
-            1607u16, 1609u16, 1610u16, 1611u16, 1612u16, 1613u16, 1614u16, 1615u16, 1617u16,
-            1618u16, 1619u16, 1620u16, 1606u16, 1608u16, 1616u16,
+            921u16, 1288u16, 1289u16, 1290u16, 1291u16, 1292u16, 1293u16, 1294u16, 1295u16,
+            1297u16, 1299u16, 1300u16, 1301u16, 1302u16, 1303u16, 1304u16, 1305u16, 1307u16,
+            1308u16, 1309u16, 1310u16, 1296u16, 1298u16, 1306u16,
         ],
     );
     pub const MINECRAFT_DECORATED_POT_SHERDS: Tag = (
@@ -10676,14 +10589,13 @@ pub mod Item {
             "scrape_pottery_sherd",
         ],
         &[
-            1598u16, 1599u16, 1600u16, 1601u16, 1602u16, 1603u16, 1604u16, 1605u16, 1607u16,
-            1609u16, 1610u16, 1611u16, 1612u16, 1613u16, 1614u16, 1615u16, 1617u16, 1618u16,
-            1619u16, 1620u16, 1606u16, 1608u16, 1616u16,
+            1288u16, 1289u16, 1290u16, 1291u16, 1292u16, 1293u16, 1294u16, 1295u16, 1297u16,
+            1299u16, 1300u16, 1301u16, 1302u16, 1303u16, 1304u16, 1305u16, 1307u16, 1308u16,
+            1309u16, 1310u16, 1296u16, 1298u16, 1306u16,
         ],
     );
     pub const MINECRAFT_DIAMOND_ORES: Tag =
-        (&["diamond_ore", "deepslate_diamond_ore"], &[107u16, 108u16]);
-    pub const MINECRAFT_DIAMOND_TOOL_MATERIALS: Tag = (&["diamond"], &[1012u16]);
+        (&["diamond_ore", "deepslate_diamond_ore"], &[76u16, 77u16]);
     pub const MINECRAFT_DIRT: Tag = (
         &[
             "dirt",
@@ -10697,7 +10609,7 @@ pub mod Item {
             "muddy_mangrove_roots",
         ],
         &[
-            55u16, 54u16, 57u16, 56u16, 496u16, 58u16, 333u16, 59u16, 174u16,
+            28u16, 27u16, 30u16, 29u16, 364u16, 31u16, 247u16, 32u16, 141u16,
         ],
     );
     pub const MINECRAFT_DOORS: Tag = (
@@ -10724,8 +10636,8 @@ pub mod Item {
             "iron_door",
         ],
         &[
-            889u16, 890u16, 891u16, 892u16, 893u16, 895u16, 900u16, 901u16, 897u16, 899u16, 894u16,
-            902u16, 903u16, 904u16, 905u16, 906u16, 907u16, 908u16, 909u16, 888u16,
+            711u16, 712u16, 713u16, 714u16, 715u16, 717u16, 720u16, 721u16, 718u16, 719u16, 716u16,
+            722u16, 723u16, 724u16, 725u16, 726u16, 727u16, 728u16, 729u16, 710u16,
         ],
     );
     pub const MINECRAFT_DYEABLE: Tag = (
@@ -10737,10 +10649,10 @@ pub mod Item {
             "leather_horse_armor",
             "wolf_armor",
         ],
-        &[1068u16, 1069u16, 1070u16, 1071u16, 1411u16, 1004u16],
+        &[856u16, 857u16, 858u16, 859u16, 1127u16, 797u16],
     );
     pub const MINECRAFT_EMERALD_ORES: Tag =
-        (&["emerald_ore", "deepslate_emerald_ore"], &[103u16, 104u16]);
+        (&["emerald_ore", "deepslate_emerald_ore"], &[72u16, 73u16]);
     pub const MINECRAFT_ENCHANTABLE_ARMOR: Tag = (
         &[
             "leather_boots",
@@ -10770,12 +10682,12 @@ pub mod Item {
             "turtle_helmet",
         ],
         &[
-            1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16, 1070u16, 1078u16, 1090u16,
-            1082u16, 1086u16, 1094u16, 1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16,
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16,
+            859u16, 863u16, 875u16, 867u16, 871u16, 879u16, 858u16, 862u16, 874u16, 866u16, 870u16,
+            878u16, 857u16, 861u16, 873u16, 865u16, 869u16, 877u16, 856u16, 860u16, 872u16, 864u16,
+            868u16, 876u16, 794u16,
         ],
     );
-    pub const MINECRAFT_ENCHANTABLE_BOW: Tag = (&["bow"], &[1008u16]);
+    pub const MINECRAFT_ENCHANTABLE_BOW: Tag = (&["bow"], &[801u16]);
     pub const MINECRAFT_ENCHANTABLE_CHEST_ARMOR: Tag = (
         &[
             "leather_chestplate",
@@ -10785,9 +10697,9 @@ pub mod Item {
             "diamond_chestplate",
             "netherite_chestplate",
         ],
-        &[1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16],
+        &[857u16, 861u16, 873u16, 865u16, 869u16, 877u16],
     );
-    pub const MINECRAFT_ENCHANTABLE_CROSSBOW: Tag = (&["crossbow"], &[1491u16]);
+    pub const MINECRAFT_ENCHANTABLE_CROSSBOW: Tag = (&["crossbow"], &[1192u16]);
     pub const MINECRAFT_ENCHANTABLE_DURABILITY: Tag = (
         &[
             "leather_boots",
@@ -10859,14 +10771,13 @@ pub mod Item {
             "mace",
         ],
         &[
-            1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16, 1070u16, 1078u16, 1090u16,
-            1082u16, 1086u16, 1094u16, 1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16,
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16, 974u16, 1446u16,
-            1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16, 1053u16, 1038u16, 1043u16,
-            1058u16, 1028u16, 1048u16, 1052u16, 1037u16, 1042u16, 1057u16, 1027u16, 1047u16,
-            1051u16, 1036u16, 1041u16, 1056u16, 1026u16, 1046u16, 1054u16, 1039u16, 1044u16,
-            1059u16, 1029u16, 1049u16, 1008u16, 1491u16, 1483u16, 1005u16, 1255u16, 1578u16,
-            1186u16, 971u16, 972u16, 1374u16,
+            859u16, 863u16, 875u16, 867u16, 871u16, 879u16, 858u16, 862u16, 874u16, 866u16, 870u16,
+            878u16, 857u16, 861u16, 873u16, 865u16, 869u16, 877u16, 856u16, 860u16, 872u16, 864u16,
+            868u16, 876u16, 794u16, 773u16, 1162u16, 838u16, 823u16, 828u16, 843u16, 818u16,
+            833u16, 841u16, 826u16, 831u16, 846u16, 821u16, 836u16, 840u16, 825u16, 830u16, 845u16,
+            820u16, 835u16, 839u16, 824u16, 829u16, 844u16, 819u16, 834u16, 842u16, 827u16, 832u16,
+            847u16, 822u16, 837u16, 801u16, 1192u16, 1188u16, 798u16, 983u16, 1268u16, 931u16,
+            771u16, 772u16, 1093u16,
         ],
     );
     pub const MINECRAFT_ENCHANTABLE_EQUIPPABLE: Tag = (
@@ -10907,10 +10818,10 @@ pub mod Item {
             "carved_pumpkin",
         ],
         &[
-            1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16, 1070u16, 1078u16, 1090u16,
-            1082u16, 1086u16, 1094u16, 1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16,
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16, 974u16, 1386u16,
-            1388u16, 1387u16, 1384u16, 1385u16, 1389u16, 1390u16, 431u16,
+            859u16, 863u16, 875u16, 867u16, 871u16, 879u16, 858u16, 862u16, 874u16, 866u16, 870u16,
+            878u16, 857u16, 861u16, 873u16, 865u16, 869u16, 877u16, 856u16, 860u16, 872u16, 864u16,
+            868u16, 876u16, 794u16, 773u16, 1105u16, 1107u16, 1106u16, 1103u16, 1104u16, 1108u16,
+            1109u16, 323u16,
         ],
     );
     pub const MINECRAFT_ENCHANTABLE_FIRE_ASPECT: Tag = (
@@ -10923,11 +10834,9 @@ pub mod Item {
             "iron_sword",
             "mace",
         ],
-        &[
-            1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16, 1374u16,
-        ],
+        &[838u16, 823u16, 828u16, 843u16, 818u16, 833u16, 1093u16],
     );
-    pub const MINECRAFT_ENCHANTABLE_FISHING: Tag = (&["fishing_rod"], &[1186u16]);
+    pub const MINECRAFT_ENCHANTABLE_FISHING: Tag = (&["fishing_rod"], &[931u16]);
     pub const MINECRAFT_ENCHANTABLE_FOOT_ARMOR: Tag = (
         &[
             "leather_boots",
@@ -10937,7 +10846,7 @@ pub mod Item {
             "diamond_boots",
             "netherite_boots",
         ],
-        &[1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16],
+        &[859u16, 863u16, 875u16, 867u16, 871u16, 879u16],
     );
     pub const MINECRAFT_ENCHANTABLE_HEAD_ARMOR: Tag = (
         &[
@@ -10949,9 +10858,7 @@ pub mod Item {
             "netherite_helmet",
             "turtle_helmet",
         ],
-        &[
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16,
-        ],
+        &[856u16, 860u16, 872u16, 864u16, 868u16, 876u16, 794u16],
     );
     pub const MINECRAFT_ENCHANTABLE_LEG_ARMOR: Tag = (
         &[
@@ -10962,9 +10869,9 @@ pub mod Item {
             "diamond_leggings",
             "netherite_leggings",
         ],
-        &[1070u16, 1078u16, 1090u16, 1082u16, 1086u16, 1094u16],
+        &[858u16, 862u16, 874u16, 866u16, 870u16, 878u16],
     );
-    pub const MINECRAFT_ENCHANTABLE_MACE: Tag = (&["mace"], &[1374u16]);
+    pub const MINECRAFT_ENCHANTABLE_MACE: Tag = (&["mace"], &[1093u16]);
     pub const MINECRAFT_ENCHANTABLE_MINING: Tag = (
         &[
             "diamond_axe",
@@ -10994,9 +10901,9 @@ pub mod Item {
             "shears",
         ],
         &[
-            1053u16, 1038u16, 1043u16, 1058u16, 1028u16, 1048u16, 1052u16, 1037u16, 1042u16,
-            1057u16, 1027u16, 1047u16, 1051u16, 1036u16, 1041u16, 1056u16, 1026u16, 1046u16,
-            1054u16, 1039u16, 1044u16, 1059u16, 1029u16, 1049u16, 1255u16,
+            841u16, 826u16, 831u16, 846u16, 821u16, 836u16, 840u16, 825u16, 830u16, 845u16, 820u16,
+            835u16, 839u16, 824u16, 829u16, 844u16, 819u16, 834u16, 842u16, 827u16, 832u16, 847u16,
+            822u16, 837u16, 983u16,
         ],
     );
     pub const MINECRAFT_ENCHANTABLE_MINING_LOOT: Tag = (
@@ -11027,9 +10934,9 @@ pub mod Item {
             "iron_hoe",
         ],
         &[
-            1053u16, 1038u16, 1043u16, 1058u16, 1028u16, 1048u16, 1052u16, 1037u16, 1042u16,
-            1057u16, 1027u16, 1047u16, 1051u16, 1036u16, 1041u16, 1056u16, 1026u16, 1046u16,
-            1054u16, 1039u16, 1044u16, 1059u16, 1029u16, 1049u16,
+            841u16, 826u16, 831u16, 846u16, 821u16, 836u16, 840u16, 825u16, 830u16, 845u16, 820u16,
+            835u16, 839u16, 824u16, 829u16, 844u16, 819u16, 834u16, 842u16, 827u16, 832u16, 847u16,
+            822u16, 837u16,
         ],
     );
     pub const MINECRAFT_ENCHANTABLE_SHARP_WEAPON: Tag = (
@@ -11048,8 +10955,8 @@ pub mod Item {
             "iron_axe",
         ],
         &[
-            1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16, 1053u16, 1038u16, 1043u16,
-            1058u16, 1028u16, 1048u16,
+            838u16, 823u16, 828u16, 843u16, 818u16, 833u16, 841u16, 826u16, 831u16, 846u16, 821u16,
+            836u16,
         ],
     );
     pub const MINECRAFT_ENCHANTABLE_SWORD: Tag = (
@@ -11061,9 +10968,9 @@ pub mod Item {
             "wooden_sword",
             "iron_sword",
         ],
-        &[1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16],
+        &[838u16, 823u16, 828u16, 843u16, 818u16, 833u16],
     );
-    pub const MINECRAFT_ENCHANTABLE_TRIDENT: Tag = (&["trident"], &[1483u16]);
+    pub const MINECRAFT_ENCHANTABLE_TRIDENT: Tag = (&["trident"], &[1188u16]);
     pub const MINECRAFT_ENCHANTABLE_VANISHING: Tag = (
         &[
             "leather_boots",
@@ -11144,15 +11051,14 @@ pub mod Item {
             "piglin_head",
         ],
         &[
-            1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16, 1070u16, 1078u16, 1090u16,
-            1082u16, 1086u16, 1094u16, 1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16,
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16, 974u16, 1446u16,
-            1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16, 1053u16, 1038u16, 1043u16,
-            1058u16, 1028u16, 1048u16, 1052u16, 1037u16, 1042u16, 1057u16, 1027u16, 1047u16,
-            1051u16, 1036u16, 1041u16, 1056u16, 1026u16, 1046u16, 1054u16, 1039u16, 1044u16,
-            1059u16, 1029u16, 1049u16, 1008u16, 1491u16, 1483u16, 1005u16, 1255u16, 1578u16,
-            1186u16, 971u16, 972u16, 1374u16, 1151u16, 431u16, 1386u16, 1388u16, 1387u16, 1384u16,
-            1385u16, 1389u16, 1390u16,
+            859u16, 863u16, 875u16, 867u16, 871u16, 879u16, 858u16, 862u16, 874u16, 866u16, 870u16,
+            878u16, 857u16, 861u16, 873u16, 865u16, 869u16, 877u16, 856u16, 860u16, 872u16, 864u16,
+            868u16, 876u16, 794u16, 773u16, 1162u16, 838u16, 823u16, 828u16, 843u16, 818u16,
+            833u16, 841u16, 826u16, 831u16, 846u16, 821u16, 836u16, 840u16, 825u16, 830u16, 845u16,
+            820u16, 835u16, 839u16, 824u16, 829u16, 844u16, 819u16, 834u16, 842u16, 827u16, 832u16,
+            847u16, 822u16, 837u16, 801u16, 1192u16, 1188u16, 798u16, 983u16, 1268u16, 931u16,
+            771u16, 772u16, 1093u16, 928u16, 323u16, 1105u16, 1107u16, 1106u16, 1103u16, 1104u16,
+            1108u16, 1109u16,
         ],
     );
     pub const MINECRAFT_ENCHANTABLE_WEAPON: Tag = (
@@ -11172,8 +11078,8 @@ pub mod Item {
             "mace",
         ],
         &[
-            1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16, 1053u16, 1038u16, 1043u16,
-            1058u16, 1028u16, 1048u16, 1374u16,
+            838u16, 823u16, 828u16, 843u16, 818u16, 833u16, 841u16, 826u16, 831u16, 846u16, 821u16,
+            836u16, 1093u16,
         ],
     );
     pub const MINECRAFT_FENCE_GATES: Tag = (
@@ -11191,7 +11097,7 @@ pub mod Item {
             "cherry_fence_gate",
         ],
         &[
-            936u16, 934u16, 938u16, 935u16, 932u16, 933u16, 943u16, 944u16, 940u16, 942u16, 937u16,
+            754u16, 752u16, 756u16, 753u16, 750u16, 751u16, 759u16, 760u16, 757u16, 758u16, 755u16,
         ],
     );
     pub const MINECRAFT_FENCES: Tag = (
@@ -11210,8 +11116,8 @@ pub mod Item {
             "nether_brick_fence",
         ],
         &[
-            417u16, 421u16, 423u16, 418u16, 419u16, 420u16, 428u16, 429u16, 425u16, 427u16, 422u16,
-            501u16,
+            311u16, 315u16, 317u16, 312u16, 313u16, 314u16, 320u16, 321u16, 318u16, 319u16, 316u16,
+            369u16,
         ],
     );
     pub const MINECRAFT_FISHES: Tag = (
@@ -11223,7 +11129,7 @@ pub mod Item {
             "pufferfish",
             "tropical_fish",
         ],
-        &[1190u16, 1194u16, 1191u16, 1195u16, 1193u16, 1192u16],
+        &[935u16, 939u16, 936u16, 940u16, 938u16, 937u16],
     );
     pub const MINECRAFT_FLOWERS: Tag = (
         &[
@@ -11255,9 +11161,9 @@ pub mod Item {
             "spore_blossom",
         ],
         &[
-            298u16, 302u16, 303u16, 304u16, 305u16, 306u16, 307u16, 308u16, 309u16, 310u16, 311u16,
-            312u16, 313u16, 314u16, 599u16, 600u16, 602u16, 601u16, 315u16, 228u16, 243u16, 85u16,
-            220u16, 329u16, 398u16, 316u16,
+            218u16, 219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16, 226u16, 227u16, 228u16,
+            229u16, 230u16, 231u16, 465u16, 466u16, 468u16, 467u16, 232u16, 185u16, 198u16, 55u16,
+            181u16, 246u16, 294u16, 233u16,
         ],
     );
     pub const MINECRAFT_FOOT_ARMOR: Tag = (
@@ -11269,9 +11175,9 @@ pub mod Item {
             "diamond_boots",
             "netherite_boots",
         ],
-        &[1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16],
+        &[859u16, 863u16, 875u16, 867u16, 871u16, 879u16],
     );
-    pub const MINECRAFT_FOX_FOOD: Tag = (&["sweet_berries", "glow_berries"], &[1525u16, 1526u16]);
+    pub const MINECRAFT_FOX_FOOD: Tag = (&["sweet_berries", "glow_berries"], &[1216u16, 1217u16]);
     pub const MINECRAFT_FREEZE_IMMUNE_WEARABLES: Tag = (
         &[
             "leather_boots",
@@ -11280,15 +11186,14 @@ pub mod Item {
             "leather_helmet",
             "leather_horse_armor",
         ],
-        &[1071u16, 1070u16, 1069u16, 1068u16, 1411u16],
+        &[859u16, 858u16, 857u16, 856u16, 1127u16],
     );
-    pub const MINECRAFT_FROG_FOOD: Tag = (&["slime_ball"], &[1147u16]);
-    pub const MINECRAFT_GOAT_FOOD: Tag = (&["wheat"], &[1066u16]);
+    pub const MINECRAFT_FROG_FOOD: Tag = (&["slime_ball"], &[926u16]);
+    pub const MINECRAFT_GOAT_FOOD: Tag = (&["wheat"], &[854u16]);
     pub const MINECRAFT_GOLD_ORES: Tag = (
         &["gold_ore", "nether_gold_ore", "deepslate_gold_ore"],
-        &[99u16, 109u16, 100u16],
+        &[68u16, 78u16, 69u16],
     );
-    pub const MINECRAFT_GOLD_TOOL_MATERIALS: Tag = (&["gold_ingot"], &[1022u16]);
     pub const MINECRAFT_HANGING_SIGNS: Tag = (
         &[
             "oak_hanging_sign",
@@ -11304,8 +11209,7 @@ pub mod Item {
             "bamboo_hanging_sign",
         ],
         &[
-            1115u16, 1116u16, 1117u16, 1119u16, 1120u16, 1118u16, 1121u16, 1126u16, 1127u16,
-            1123u16, 1125u16,
+            897u16, 898u16, 899u16, 901u16, 902u16, 900u16, 903u16, 906u16, 907u16, 904u16, 905u16,
         ],
     );
     pub const MINECRAFT_HEAD_ARMOR: Tag = (
@@ -11318,9 +11222,7 @@ pub mod Item {
             "netherite_helmet",
             "turtle_helmet",
         ],
-        &[
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16,
-        ],
+        &[856u16, 860u16, 872u16, 864u16, 868u16, 876u16, 794u16],
     );
     pub const MINECRAFT_HOES: Tag = (
         &[
@@ -11331,9 +11233,9 @@ pub mod Item {
             "wooden_hoe",
             "iron_hoe",
         ],
-        &[1054u16, 1039u16, 1044u16, 1059u16, 1029u16, 1049u16],
+        &[842u16, 827u16, 832u16, 847u16, 822u16, 837u16],
     );
-    pub const MINECRAFT_HOGLIN_FOOD: Tag = (&["crimson_fungus"], &[320u16]);
+    pub const MINECRAFT_HOGLIN_FOOD: Tag = (&["crimson_fungus"], &[236u16]);
     pub const MINECRAFT_HORSE_FOOD: Tag = (
         &[
             "wheat",
@@ -11344,15 +11246,14 @@ pub mod Item {
             "golden_apple",
             "enchanted_golden_apple",
         ],
-        &[1066u16, 1217u16, 579u16, 1007u16, 1383u16, 1100u16, 1101u16],
+        &[854u16, 962u16, 445u16, 800u16, 1102u16, 884u16, 885u16],
     );
     pub const MINECRAFT_HORSE_TEMPT_ITEMS: Tag = (
         &["golden_carrot", "golden_apple", "enchanted_golden_apple"],
-        &[1383u16, 1100u16, 1101u16],
+        &[1102u16, 884u16, 885u16],
     );
-    pub const MINECRAFT_IGNORED_BY_PIGLIN_BABIES: Tag = (&["leather"], &[1133u16]);
-    pub const MINECRAFT_IRON_ORES: Tag = (&["iron_ore", "deepslate_iron_ore"], &[95u16, 96u16]);
-    pub const MINECRAFT_IRON_TOOL_MATERIALS: Tag = (&["iron_ingot"], &[1018u16]);
+    pub const MINECRAFT_IGNORED_BY_PIGLIN_BABIES: Tag = (&["leather"], &[913u16]);
+    pub const MINECRAFT_IRON_ORES: Tag = (&["iron_ore", "deepslate_iron_ore"], &[64u16, 65u16]);
     pub const MINECRAFT_JUNGLE_LOGS: Tag = (
         &[
             "jungle_log",
@@ -11360,10 +11261,9 @@ pub mod Item {
             "stripped_jungle_log",
             "stripped_jungle_wood",
         ],
-        &[166u16, 206u16, 181u16, 193u16],
+        &[135u16, 169u16, 148u16, 158u16],
     );
-    pub const MINECRAFT_LAPIS_ORES: Tag =
-        (&["lapis_ore", "deepslate_lapis_ore"], &[105u16, 106u16]);
+    pub const MINECRAFT_LAPIS_ORES: Tag = (&["lapis_ore", "deepslate_lapis_ore"], &[74u16, 75u16]);
     pub const MINECRAFT_LEAVES: Tag = (
         &[
             "jungle_leaves",
@@ -11378,11 +11278,11 @@ pub mod Item {
             "cherry_leaves",
         ],
         &[
-            218u16, 215u16, 216u16, 221u16, 219u16, 217u16, 227u16, 228u16, 223u16, 220u16,
+            179u16, 176u16, 177u16, 182u16, 180u16, 178u16, 184u16, 185u16, 183u16, 181u16,
         ],
     );
     pub const MINECRAFT_LECTERN_BOOKS: Tag =
-        (&["written_book", "writable_book"], &[1372u16, 1371u16]);
+        (&["written_book", "writable_book"], &[1092u16, 1091u16]);
     pub const MINECRAFT_LEG_ARMOR: Tag = (
         &[
             "leather_leggings",
@@ -11392,10 +11292,10 @@ pub mod Item {
             "diamond_leggings",
             "netherite_leggings",
         ],
-        &[1070u16, 1078u16, 1090u16, 1082u16, 1086u16, 1094u16],
+        &[858u16, 862u16, 874u16, 866u16, 870u16, 878u16],
     );
-    pub const MINECRAFT_LLAMA_FOOD: Tag = (&["wheat", "hay_block"], &[1066u16, 579u16]);
-    pub const MINECRAFT_LLAMA_TEMPT_ITEMS: Tag = (&["hay_block"], &[579u16]);
+    pub const MINECRAFT_LLAMA_FOOD: Tag = (&["wheat", "hay_block"], &[854u16, 445u16]);
+    pub const MINECRAFT_LLAMA_TEMPT_ITEMS: Tag = (&["hay_block"], &[445u16]);
     pub const MINECRAFT_LOGS: Tag = (
         &[
             "dark_oak_log",
@@ -11440,10 +11340,10 @@ pub mod Item {
             "stripped_warped_hyphae",
         ],
         &[
-            170u16, 210u16, 184u16, 196u16, 163u16, 203u16, 178u16, 190u16, 167u16, 207u16, 182u16,
-            194u16, 165u16, 205u16, 180u16, 192u16, 166u16, 206u16, 181u16, 193u16, 164u16, 204u16,
-            179u16, 191u16, 171u16, 211u16, 186u16, 198u16, 168u16, 208u16, 183u16, 195u16, 175u16,
-            188u16, 213u16, 200u16, 176u16, 189u16, 214u16, 201u16,
+            138u16, 172u16, 151u16, 161u16, 132u16, 166u16, 145u16, 155u16, 136u16, 170u16, 149u16,
+            159u16, 134u16, 168u16, 147u16, 157u16, 135u16, 169u16, 148u16, 158u16, 133u16, 167u16,
+            146u16, 156u16, 139u16, 173u16, 152u16, 162u16, 137u16, 171u16, 150u16, 160u16, 142u16,
+            153u16, 174u16, 163u16, 143u16, 154u16, 175u16, 164u16,
         ],
     );
     pub const MINECRAFT_LOGS_THAT_BURN: Tag = (
@@ -11482,9 +11382,9 @@ pub mod Item {
             "stripped_cherry_wood",
         ],
         &[
-            170u16, 210u16, 184u16, 196u16, 163u16, 203u16, 178u16, 190u16, 167u16, 207u16, 182u16,
-            194u16, 165u16, 205u16, 180u16, 192u16, 166u16, 206u16, 181u16, 193u16, 164u16, 204u16,
-            179u16, 191u16, 171u16, 211u16, 186u16, 198u16, 168u16, 208u16, 183u16, 195u16,
+            138u16, 172u16, 151u16, 161u16, 132u16, 166u16, 145u16, 155u16, 136u16, 170u16, 149u16,
+            159u16, 134u16, 168u16, 147u16, 157u16, 135u16, 169u16, 148u16, 158u16, 133u16, 167u16,
+            146u16, 156u16, 139u16, 173u16, 152u16, 162u16, 137u16, 171u16, 150u16, 160u16,
         ],
     );
     pub const MINECRAFT_MANGROVE_LOGS: Tag = (
@@ -11494,7 +11394,7 @@ pub mod Item {
             "stripped_mangrove_log",
             "stripped_mangrove_wood",
         ],
-        &[171u16, 211u16, 186u16, 198u16],
+        &[139u16, 173u16, 152u16, 162u16],
     );
     pub const MINECRAFT_MEAT: Tag = (
         &[
@@ -11511,11 +11411,10 @@ pub mod Item {
             "rotten_flesh",
         ],
         &[
-            1260u16, 1262u16, 1261u16, 1263u16, 1416u16, 1098u16, 1401u16, 1415u16, 1097u16,
-            1400u16, 1264u16,
+            988u16, 990u16, 989u16, 991u16, 1132u16, 882u16, 1119u16, 1131u16, 881u16, 1118u16,
+            992u16,
         ],
     );
-    pub const MINECRAFT_NETHERITE_TOOL_MATERIALS: Tag = (&["netherite_ingot"], &[1023u16]);
     pub const MINECRAFT_NON_FLAMMABLE_WOOD: Tag = (
         &[
             "warped_stem",
@@ -11550,9 +11449,9 @@ pub mod Item {
             "crimson_hanging_sign",
         ],
         &[
-            176u16, 189u16, 214u16, 201u16, 175u16, 188u16, 213u16, 200u16, 74u16, 75u16, 353u16,
-            354u16, 886u16, 887u16, 428u16, 429u16, 922u16, 923u16, 943u16, 944u16, 527u16, 528u16,
-            869u16, 870u16, 900u16, 901u16, 1113u16, 1114u16, 1127u16, 1126u16,
+            143u16, 154u16, 175u16, 164u16, 142u16, 153u16, 174u16, 163u16, 45u16, 46u16, 262u16,
+            263u16, 708u16, 709u16, 320u16, 321u16, 740u16, 741u16, 759u16, 760u16, 393u16, 394u16,
+            693u16, 694u16, 720u16, 721u16, 895u16, 896u16, 907u16, 906u16,
         ],
     );
     pub const MINECRAFT_NOTEBLOCK_TOP_INSTRUMENTS: Tag = (
@@ -11566,7 +11465,7 @@ pub mod Item {
             "player_head",
         ],
         &[
-            1387u16, 1384u16, 1388u16, 1389u16, 1385u16, 1390u16, 1386u16,
+            1106u16, 1103u16, 1107u16, 1108u16, 1104u16, 1109u16, 1105u16,
         ],
     );
     pub const MINECRAFT_OAK_LOGS: Tag = (
@@ -11576,10 +11475,10 @@ pub mod Item {
             "stripped_oak_log",
             "stripped_oak_wood",
         ],
-        &[163u16, 203u16, 178u16, 190u16],
+        &[132u16, 166u16, 145u16, 155u16],
     );
-    pub const MINECRAFT_OCELOT_FOOD: Tag = (&["cod", "salmon"], &[1190u16, 1191u16]);
-    pub const MINECRAFT_PANDA_FOOD: Tag = (&["bamboo"], &[340u16]);
+    pub const MINECRAFT_OCELOT_FOOD: Tag = (&["cod", "salmon"], &[935u16, 936u16]);
+    pub const MINECRAFT_PANDA_FOOD: Tag = (&["bamboo"], &[251u16]);
     pub const MINECRAFT_PARROT_FOOD: Tag = (
         &[
             "wheat_seeds",
@@ -11589,9 +11488,9 @@ pub mod Item {
             "torchflower_seeds",
             "pitcher_pod",
         ],
-        &[1065u16, 1259u16, 1258u16, 1439u16, 1436u16, 1437u16],
+        &[853u16, 987u16, 986u16, 1155u16, 1152u16, 1153u16],
     );
-    pub const MINECRAFT_PARROT_POISONOUS_FOOD: Tag = (&["cookie"], &[1236u16]);
+    pub const MINECRAFT_PARROT_POISONOUS_FOOD: Tag = (&["cookie"], &[980u16]);
     pub const MINECRAFT_PICKAXES: Tag = (
         &[
             "diamond_pickaxe",
@@ -11601,13 +11500,13 @@ pub mod Item {
             "wooden_pickaxe",
             "iron_pickaxe",
         ],
-        &[1052u16, 1037u16, 1042u16, 1057u16, 1027u16, 1047u16],
+        &[840u16, 825u16, 830u16, 845u16, 820u16, 835u16],
     );
     pub const MINECRAFT_PIG_FOOD: Tag = (
         &["carrot", "potato", "beetroot"],
-        &[1378u16, 1379u16, 1438u16],
+        &[1097u16, 1098u16, 1154u16],
     );
-    pub const MINECRAFT_PIGLIN_FOOD: Tag = (&["porkchop", "cooked_porkchop"], &[1097u16, 1098u16]);
+    pub const MINECRAFT_PIGLIN_FOOD: Tag = (&["porkchop", "cooked_porkchop"], &[881u16, 882u16]);
     pub const MINECRAFT_PIGLIN_LOVED: Tag = (
         &[
             "gold_ore",
@@ -11637,14 +11536,14 @@ pub mod Item {
             "raw_gold_block",
         ],
         &[
-            99u16, 109u16, 100u16, 128u16, 1540u16, 873u16, 1022u16, 1514u16, 1187u16, 1383u16,
-            1279u16, 1100u16, 1101u16, 1088u16, 1089u16, 1090u16, 1091u16, 1408u16, 1040u16,
-            1042u16, 1041u16, 1043u16, 1044u16, 1021u16, 115u16,
+            68u16, 78u16, 69u16, 90u16, 1231u16, 697u16, 815u16, 1213u16, 932u16, 1102u16, 1007u16,
+            884u16, 885u16, 872u16, 873u16, 874u16, 875u16, 1125u16, 828u16, 830u16, 829u16,
+            831u16, 832u16, 814u16, 84u16,
         ],
     );
     pub const MINECRAFT_PIGLIN_REPELLENTS: Tag = (
         &["soul_torch", "soul_lantern", "soul_campfire"],
-        &[439u16, 1516u16, 1528u16],
+        &[331u16, 1215u16, 1219u16],
     );
     pub const MINECRAFT_PLANKS: Tag = (
         &[
@@ -11661,24 +11560,22 @@ pub mod Item {
             "cherry_planks",
         ],
         &[
-            63u16, 64u16, 65u16, 66u16, 67u16, 69u16, 74u16, 75u16, 71u16, 73u16, 68u16,
+            36u16, 37u16, 38u16, 39u16, 40u16, 42u16, 45u16, 46u16, 43u16, 44u16, 41u16,
         ],
     );
     pub const MINECRAFT_RABBIT_FOOD: Tag = (
         &["carrot", "golden_carrot", "dandelion"],
-        &[1378u16, 1383u16, 298u16],
+        &[1097u16, 1102u16, 218u16],
     );
     pub const MINECRAFT_RAILS: Tag = (
         &["rail", "powered_rail", "detector_rail", "activator_rail"],
-        &[947u16, 945u16, 946u16, 948u16],
+        &[763u16, 761u16, 762u16, 764u16],
     );
-    pub const MINECRAFT_REDSTONE_ORES: Tag = (
-        &["redstone_ore", "deepslate_redstone_ore"],
-        &[101u16, 102u16],
-    );
+    pub const MINECRAFT_REDSTONE_ORES: Tag =
+        (&["redstone_ore", "deepslate_redstone_ore"], &[70u16, 71u16]);
     pub const MINECRAFT_SAND: Tag = (
         &["sand", "red_sand", "suspicious_sand"],
-        &[88u16, 91u16, 89u16],
+        &[57u16, 60u16, 58u16],
     );
     pub const MINECRAFT_SAPLINGS: Tag = (
         &[
@@ -11694,10 +11591,10 @@ pub mod Item {
             "cherry_sapling",
         ],
         &[
-            77u16, 78u16, 79u16, 80u16, 81u16, 83u16, 242u16, 243u16, 85u16, 82u16,
+            48u16, 49u16, 50u16, 51u16, 52u16, 54u16, 197u16, 198u16, 55u16, 53u16,
         ],
     );
-    pub const MINECRAFT_SHEEP_FOOD: Tag = (&["wheat"], &[1066u16]);
+    pub const MINECRAFT_SHEEP_FOOD: Tag = (&["wheat"], &[854u16]);
     pub const MINECRAFT_SHOVELS: Tag = (
         &[
             "diamond_shovel",
@@ -11707,7 +11604,7 @@ pub mod Item {
             "wooden_shovel",
             "iron_shovel",
         ],
-        &[1051u16, 1036u16, 1041u16, 1056u16, 1026u16, 1046u16],
+        &[839u16, 824u16, 829u16, 844u16, 819u16, 834u16],
     );
     pub const MINECRAFT_SIGNS: Tag = (
         &[
@@ -11724,8 +11621,7 @@ pub mod Item {
             "cherry_sign",
         ],
         &[
-            1102u16, 1103u16, 1104u16, 1106u16, 1105u16, 1108u16, 1113u16, 1114u16, 1110u16,
-            1112u16, 1107u16,
+            886u16, 887u16, 888u16, 890u16, 889u16, 892u16, 895u16, 896u16, 893u16, 894u16, 891u16,
         ],
     );
     pub const MINECRAFT_SKULLS: Tag = (
@@ -11739,7 +11635,7 @@ pub mod Item {
             "piglin_head",
         ],
         &[
-            1386u16, 1388u16, 1387u16, 1384u16, 1385u16, 1389u16, 1390u16,
+            1105u16, 1107u16, 1106u16, 1103u16, 1104u16, 1108u16, 1109u16,
         ],
     );
     pub const MINECRAFT_SLABS: Tag = (
@@ -11806,12 +11702,12 @@ pub mod Item {
             "tuff_brick_slab",
         ],
         &[
-            341u16, 342u16, 343u16, 344u16, 345u16, 347u16, 353u16, 354u16, 349u16, 351u16, 346u16,
-            352u16, 355u16, 356u16, 362u16, 357u16, 368u16, 365u16, 366u16, 361u16, 360u16, 364u16,
-            359u16, 369u16, 370u16, 371u16, 806u16, 807u16, 808u16, 809u16, 810u16, 811u16, 812u16,
-            813u16, 814u16, 815u16, 816u16, 817u16, 818u16, 358u16, 367u16, 1538u16, 1546u16,
-            1542u16, 819u16, 820u16, 822u16, 821u16, 161u16, 160u16, 159u16, 158u16, 157u16,
-            156u16, 155u16, 162u16, 363u16, 13u16, 18u16, 22u16,
+            252u16, 253u16, 254u16, 255u16, 256u16, 258u16, 262u16, 263u16, 259u16, 260u16, 257u16,
+            261u16, 264u16, 265u16, 271u16, 266u16, 277u16, 274u16, 275u16, 270u16, 269u16, 273u16,
+            268u16, 278u16, 279u16, 280u16, 639u16, 640u16, 641u16, 642u16, 643u16, 644u16, 645u16,
+            646u16, 647u16, 648u16, 649u16, 650u16, 651u16, 267u16, 276u16, 1229u16, 1237u16,
+            1233u16, 652u16, 653u16, 655u16, 654u16, 130u16, 129u16, 128u16, 111u16, 110u16,
+            109u16, 108u16, 131u16, 272u16, 13u16, 18u16, 22u16,
         ],
     );
     pub const MINECRAFT_SMALL_FLOWERS: Tag = (
@@ -11832,14 +11728,14 @@ pub mod Item {
             "torchflower",
         ],
         &[
-            298u16, 302u16, 303u16, 304u16, 305u16, 306u16, 307u16, 308u16, 309u16, 310u16, 311u16,
-            312u16, 313u16, 314u16,
+            218u16, 219u16, 220u16, 221u16, 222u16, 223u16, 224u16, 225u16, 226u16, 227u16, 228u16,
+            229u16, 230u16, 231u16,
         ],
     );
-    pub const MINECRAFT_SMELTS_TO_GLASS: Tag = (&["sand", "red_sand"], &[88u16, 91u16]);
-    pub const MINECRAFT_SNIFFER_FOOD: Tag = (&["torchflower_seeds"], &[1436u16]);
+    pub const MINECRAFT_SMELTS_TO_GLASS: Tag = (&["sand", "red_sand"], &[57u16, 60u16]);
+    pub const MINECRAFT_SNIFFER_FOOD: Tag = (&["torchflower_seeds"], &[1152u16]);
     pub const MINECRAFT_SOUL_FIRE_BASE_BLOCKS: Tag =
-        (&["soul_sand", "soul_soil"], &[434u16, 435u16]);
+        (&["soul_sand", "soul_soil"], &[326u16, 327u16]);
     pub const MINECRAFT_SPRUCE_LOGS: Tag = (
         &[
             "spruce_log",
@@ -11847,7 +11743,7 @@ pub mod Item {
             "stripped_spruce_log",
             "stripped_spruce_wood",
         ],
-        &[164u16, 204u16, 179u16, 191u16],
+        &[133u16, 167u16, 146u16, 156u16],
     );
     pub const MINECRAFT_STAIRS: Tag = (
         &[
@@ -11909,11 +11805,11 @@ pub mod Item {
             "tuff_brick_stairs",
         ],
         &[
-            515u16, 516u16, 517u16, 518u16, 519u16, 521u16, 527u16, 528u16, 523u16, 525u16, 520u16,
-            526u16, 409u16, 512u16, 502u16, 494u16, 493u16, 401u16, 560u16, 647u16, 641u16, 640u16,
-            642u16, 788u16, 789u16, 790u16, 791u16, 792u16, 793u16, 794u16, 795u16, 796u16, 797u16,
-            798u16, 799u16, 800u16, 801u16, 1539u16, 1547u16, 1543u16, 802u16, 803u16, 805u16,
-            804u16, 150u16, 149u16, 148u16, 147u16, 153u16, 152u16, 151u16, 154u16, 495u16, 14u16,
+            383u16, 384u16, 385u16, 386u16, 387u16, 389u16, 393u16, 394u16, 390u16, 391u16, 388u16,
+            392u16, 304u16, 380u16, 370u16, 362u16, 361u16, 297u16, 426u16, 513u16, 507u16, 506u16,
+            508u16, 621u16, 622u16, 623u16, 624u16, 625u16, 626u16, 627u16, 628u16, 629u16, 630u16,
+            631u16, 632u16, 633u16, 634u16, 1230u16, 1238u16, 1234u16, 635u16, 636u16, 638u16,
+            637u16, 107u16, 106u16, 105u16, 104u16, 126u16, 125u16, 124u16, 127u16, 363u16, 14u16,
             19u16, 23u16,
         ],
     );
@@ -11924,24 +11820,24 @@ pub mod Item {
             "cracked_stone_bricks",
             "chiseled_stone_bricks",
         ],
-        &[449u16, 450u16, 451u16, 452u16],
+        &[340u16, 341u16, 342u16, 343u16],
     );
     pub const MINECRAFT_STONE_BUTTONS: Tag = (
         &["stone_button", "polished_blackstone_button"],
-        &[856u16, 857u16],
+        &[682u16, 683u16],
     );
     pub const MINECRAFT_STONE_CRAFTING_MATERIALS: Tag = (
         &["cobblestone", "blackstone", "cobbled_deepslate"],
-        &[62u16, 1537u16, 9u16],
+        &[35u16, 1228u16, 9u16],
     );
     pub const MINECRAFT_STONE_TOOL_MATERIALS: Tag = (
         &["cobblestone", "blackstone", "cobbled_deepslate"],
-        &[62u16, 1537u16, 9u16],
+        &[35u16, 1228u16, 9u16],
     );
-    pub const MINECRAFT_STRIDER_FOOD: Tag = (&["warped_fungus"], &[321u16]);
+    pub const MINECRAFT_STRIDER_FOOD: Tag = (&["warped_fungus"], &[237u16]);
     pub const MINECRAFT_STRIDER_TEMPT_ITEMS: Tag = (
         &["warped_fungus", "warped_fungus_on_a_stick"],
-        &[321u16, 972u16],
+        &[237u16, 772u16],
     );
     pub const MINECRAFT_SWORDS: Tag = (
         &[
@@ -11952,11 +11848,11 @@ pub mod Item {
             "wooden_sword",
             "iron_sword",
         ],
-        &[1050u16, 1035u16, 1040u16, 1055u16, 1025u16, 1045u16],
+        &[838u16, 823u16, 828u16, 843u16, 818u16, 833u16],
     );
     pub const MINECRAFT_TALL_FLOWERS: Tag = (
         &["sunflower", "lilac", "peony", "rose_bush", "pitcher_plant"],
-        &[599u16, 600u16, 602u16, 601u16, 315u16],
+        &[465u16, 466u16, 468u16, 467u16, 232u16],
     );
     pub const MINECRAFT_TERRACOTTA: Tag = (
         &[
@@ -11979,8 +11875,8 @@ pub mod Item {
             "black_terracotta",
         ],
         &[
-            596u16, 561u16, 562u16, 563u16, 564u16, 565u16, 566u16, 567u16, 568u16, 569u16, 570u16,
-            571u16, 572u16, 573u16, 574u16, 575u16, 576u16,
+            462u16, 427u16, 428u16, 429u16, 430u16, 431u16, 432u16, 433u16, 434u16, 435u16, 436u16,
+            437u16, 438u16, 439u16, 440u16, 441u16, 442u16,
         ],
     );
     pub const MINECRAFT_TRAPDOORS: Tag = (
@@ -12007,8 +11903,8 @@ pub mod Item {
             "waxed_oxidized_copper_trapdoor",
         ],
         &[
-            915u16, 913u16, 917u16, 914u16, 911u16, 912u16, 922u16, 923u16, 919u16, 921u16, 916u16,
-            910u16, 924u16, 925u16, 926u16, 927u16, 928u16, 929u16, 930u16, 931u16,
+            735u16, 733u16, 737u16, 734u16, 731u16, 732u16, 740u16, 741u16, 738u16, 739u16, 736u16,
+            730u16, 742u16, 743u16, 744u16, 745u16, 746u16, 747u16, 748u16, 749u16,
         ],
     );
     pub const MINECRAFT_TRIM_MATERIALS: Tag = (
@@ -12025,7 +11921,7 @@ pub mod Item {
             "amethyst_shard",
         ],
         &[
-            1018u16, 1020u16, 1022u16, 1014u16, 1013u16, 1012u16, 1023u16, 824u16, 1015u16, 1016u16,
+            811u16, 813u16, 815u16, 807u16, 806u16, 805u16, 816u16, 657u16, 808u16, 809u16,
         ],
     );
     pub const MINECRAFT_TRIM_TEMPLATES: Tag = (
@@ -12050,8 +11946,8 @@ pub mod Item {
             "bolt_armor_trim_smithing_template",
         ],
         &[
-            1584u16, 1590u16, 1582u16, 1585u16, 1581u16, 1583u16, 1589u16, 1587u16, 1580u16,
-            1586u16, 1588u16, 1591u16, 1592u16, 1593u16, 1594u16, 1595u16, 1596u16, 1597u16,
+            1274u16, 1280u16, 1272u16, 1275u16, 1271u16, 1273u16, 1279u16, 1277u16, 1270u16,
+            1276u16, 1278u16, 1281u16, 1282u16, 1283u16, 1284u16, 1285u16, 1286u16, 1287u16,
         ],
     );
     pub const MINECRAFT_TRIMMABLE_ARMOR: Tag = (
@@ -12083,12 +11979,12 @@ pub mod Item {
             "turtle_helmet",
         ],
         &[
-            1071u16, 1079u16, 1091u16, 1083u16, 1087u16, 1095u16, 1070u16, 1078u16, 1090u16,
-            1082u16, 1086u16, 1094u16, 1069u16, 1077u16, 1089u16, 1081u16, 1085u16, 1093u16,
-            1068u16, 1076u16, 1088u16, 1080u16, 1084u16, 1092u16, 1001u16,
+            859u16, 863u16, 875u16, 867u16, 871u16, 879u16, 858u16, 862u16, 874u16, 866u16, 870u16,
+            878u16, 857u16, 861u16, 873u16, 865u16, 869u16, 877u16, 856u16, 860u16, 872u16, 864u16,
+            868u16, 876u16, 794u16,
         ],
     );
-    pub const MINECRAFT_TURTLE_FOOD: Tag = (&["seagrass"], &[248u16]);
+    pub const MINECRAFT_TURTLE_FOOD: Tag = (&["seagrass"], &[200u16]);
     pub const MINECRAFT_VILLAGER_PLANTABLE_SEEDS: Tag = (
         &[
             "wheat_seeds",
@@ -12098,7 +11994,7 @@ pub mod Item {
             "torchflower_seeds",
             "pitcher_pod",
         ],
-        &[1065u16, 1379u16, 1378u16, 1439u16, 1436u16, 1437u16],
+        &[853u16, 1098u16, 1097u16, 1155u16, 1152u16, 1153u16],
     );
     pub const MINECRAFT_WALLS: Tag = (
         &[
@@ -12129,8 +12025,8 @@ pub mod Item {
             "tuff_brick_wall",
         ],
         &[
-            531u16, 532u16, 533u16, 534u16, 535u16, 536u16, 537u16, 538u16, 540u16, 541u16, 542u16,
-            543u16, 544u16, 545u16, 546u16, 548u16, 547u16, 549u16, 550u16, 552u16, 551u16, 539u16,
+            397u16, 398u16, 399u16, 400u16, 401u16, 402u16, 403u16, 404u16, 406u16, 407u16, 408u16,
+            409u16, 410u16, 411u16, 412u16, 414u16, 413u16, 415u16, 416u16, 418u16, 417u16, 405u16,
             15u16, 20u16, 24u16,
         ],
     );
@@ -12141,11 +12037,11 @@ pub mod Item {
             "warped_hyphae",
             "stripped_warped_hyphae",
         ],
-        &[176u16, 189u16, 214u16, 201u16],
+        &[143u16, 154u16, 175u16, 164u16],
     );
     pub const MINECRAFT_WART_BLOCKS: Tag = (
         &["nether_wart_block", "warped_wart_block"],
-        &[651u16, 652u16],
+        &[517u16, 518u16],
     );
     pub const MINECRAFT_WOLF_FOOD: Tag = (
         &[
@@ -12162,8 +12058,8 @@ pub mod Item {
             "rotten_flesh",
         ],
         &[
-            1260u16, 1262u16, 1261u16, 1263u16, 1416u16, 1098u16, 1401u16, 1415u16, 1097u16,
-            1400u16, 1264u16,
+            988u16, 990u16, 989u16, 991u16, 1132u16, 882u16, 1119u16, 1131u16, 881u16, 1118u16,
+            992u16,
         ],
     );
     pub const MINECRAFT_WOODEN_BUTTONS: Tag = (
@@ -12181,7 +12077,7 @@ pub mod Item {
             "cherry_button",
         ],
         &[
-            858u16, 859u16, 860u16, 861u16, 862u16, 864u16, 869u16, 870u16, 866u16, 868u16, 863u16,
+            684u16, 685u16, 686u16, 687u16, 688u16, 690u16, 693u16, 694u16, 691u16, 692u16, 689u16,
         ],
     );
     pub const MINECRAFT_WOODEN_DOORS: Tag = (
@@ -12199,7 +12095,7 @@ pub mod Item {
             "cherry_door",
         ],
         &[
-            889u16, 890u16, 891u16, 892u16, 893u16, 895u16, 900u16, 901u16, 897u16, 899u16, 894u16,
+            711u16, 712u16, 713u16, 714u16, 715u16, 717u16, 720u16, 721u16, 718u16, 719u16, 716u16,
         ],
     );
     pub const MINECRAFT_WOODEN_FENCES: Tag = (
@@ -12217,7 +12113,7 @@ pub mod Item {
             "cherry_fence",
         ],
         &[
-            417u16, 421u16, 423u16, 418u16, 419u16, 420u16, 428u16, 429u16, 425u16, 427u16, 422u16,
+            311u16, 315u16, 317u16, 312u16, 313u16, 314u16, 320u16, 321u16, 318u16, 319u16, 316u16,
         ],
     );
     pub const MINECRAFT_WOODEN_PRESSURE_PLATES: Tag = (
@@ -12235,7 +12131,7 @@ pub mod Item {
             "cherry_pressure_plate",
         ],
         &[
-            875u16, 876u16, 877u16, 878u16, 879u16, 881u16, 886u16, 887u16, 883u16, 885u16, 880u16,
+            699u16, 700u16, 701u16, 702u16, 703u16, 705u16, 708u16, 709u16, 706u16, 707u16, 704u16,
         ],
     );
     pub const MINECRAFT_WOODEN_SLABS: Tag = (
@@ -12253,7 +12149,7 @@ pub mod Item {
             "cherry_slab",
         ],
         &[
-            341u16, 342u16, 343u16, 344u16, 345u16, 347u16, 353u16, 354u16, 349u16, 351u16, 346u16,
+            252u16, 253u16, 254u16, 255u16, 256u16, 258u16, 262u16, 263u16, 259u16, 260u16, 257u16,
         ],
     );
     pub const MINECRAFT_WOODEN_STAIRS: Tag = (
@@ -12271,25 +12167,7 @@ pub mod Item {
             "cherry_stairs",
         ],
         &[
-            515u16, 516u16, 517u16, 518u16, 519u16, 521u16, 527u16, 528u16, 523u16, 525u16, 520u16,
-        ],
-    );
-    pub const MINECRAFT_WOODEN_TOOL_MATERIALS: Tag = (
-        &[
-            "oak_planks",
-            "spruce_planks",
-            "birch_planks",
-            "jungle_planks",
-            "acacia_planks",
-            "dark_oak_planks",
-            "crimson_planks",
-            "warped_planks",
-            "mangrove_planks",
-            "bamboo_planks",
-            "cherry_planks",
-        ],
-        &[
-            63u16, 64u16, 65u16, 66u16, 67u16, 69u16, 74u16, 75u16, 71u16, 73u16, 68u16,
+            383u16, 384u16, 385u16, 386u16, 387u16, 389u16, 393u16, 394u16, 390u16, 391u16, 388u16,
         ],
     );
     pub const MINECRAFT_WOODEN_TRAPDOORS: Tag = (
@@ -12307,7 +12185,7 @@ pub mod Item {
             "cherry_trapdoor",
         ],
         &[
-            915u16, 913u16, 917u16, 914u16, 911u16, 912u16, 922u16, 923u16, 919u16, 921u16, 916u16,
+            735u16, 733u16, 737u16, 734u16, 731u16, 732u16, 740u16, 741u16, 738u16, 739u16, 736u16,
         ],
     );
     pub const MINECRAFT_WOOL: Tag = (
@@ -12330,8 +12208,8 @@ pub mod Item {
             "black_wool",
         ],
         &[
-            250u16, 251u16, 252u16, 253u16, 254u16, 255u16, 256u16, 257u16, 258u16, 259u16, 260u16,
-            261u16, 262u16, 263u16, 264u16, 265u16,
+            202u16, 203u16, 204u16, 205u16, 206u16, 207u16, 208u16, 209u16, 210u16, 211u16, 212u16,
+            213u16, 214u16, 215u16, 216u16, 217u16,
         ],
     );
     pub const MINECRAFT_WOOL_CARPETS: Tag = (
@@ -12354,12 +12232,12 @@ pub mod Item {
             "black_carpet",
         ],
         &[
-            580u16, 581u16, 582u16, 583u16, 584u16, 585u16, 586u16, 587u16, 588u16, 589u16, 590u16,
-            591u16, 592u16, 593u16, 594u16, 595u16,
+            446u16, 447u16, 448u16, 449u16, 450u16, 451u16, 452u16, 453u16, 454u16, 455u16, 456u16,
+            457u16, 458u16, 459u16, 460u16, 461u16,
         ],
     );
 }
-static ITEM_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf_map! { "c:animal_foods" => & Item :: C_ANIMAL_FOODS , "c:armors" => & Item :: C_ARMORS , "c:armors/horse" => & Item :: C_ARMORS_HORSE , "c:armors/humanoid" => & Item :: C_ARMORS_HUMANOID , "c:armors/nautilus" => & Item :: C_ARMORS_NAUTILUS , "c:armors/wolf" => & Item :: C_ARMORS_WOLF , "c:barrels" => & Item :: C_BARRELS , "c:barrels/wooden" => & Item :: C_BARRELS_WOODEN , "c:bars" => & Item :: C_BARS , "c:bars/copper" => & Item :: C_BARS_COPPER , "c:bars/iron" => & Item :: C_BARS_IRON , "c:bones" => & Item :: C_BONES , "c:bookshelves" => & Item :: C_BOOKSHELVES , "c:bricks" => & Item :: C_BRICKS , "c:bricks/nether" => & Item :: C_BRICKS_NETHER , "c:bricks/normal" => & Item :: C_BRICKS_NORMAL , "c:bricks/resin" => & Item :: C_BRICKS_RESIN , "c:buckets" => & Item :: C_BUCKETS , "c:buckets/empty" => & Item :: C_BUCKETS_EMPTY , "c:buckets/entity_dry" => & Item :: C_BUCKETS_ENTITY_DRY , "c:buckets/entity_water" => & Item :: C_BUCKETS_ENTITY_WATER , "c:buckets/lava" => & Item :: C_BUCKETS_LAVA , "c:buckets/milk" => & Item :: C_BUCKETS_MILK , "c:buckets/powder_snow" => & Item :: C_BUCKETS_POWDER_SNOW , "c:buckets/water" => & Item :: C_BUCKETS_WATER , "c:budding_blocks" => & Item :: C_BUDDING_BLOCKS , "c:buds" => & Item :: C_BUDS , "c:chains" => & Item :: C_CHAINS , "c:chests" => & Item :: C_CHESTS , "c:chests/ender" => & Item :: C_CHESTS_ENDER , "c:chests/trapped" => & Item :: C_CHESTS_TRAPPED , "c:chests/wooden" => & Item :: C_CHESTS_WOODEN , "c:clumps" => & Item :: C_CLUMPS , "c:clumps/resin" => & Item :: C_CLUMPS_RESIN , "c:clusters" => & Item :: C_CLUSTERS , "c:cobblestones" => & Item :: C_COBBLESTONES , "c:cobblestones/deepslate" => & Item :: C_COBBLESTONES_DEEPSLATE , "c:cobblestones/infested" => & Item :: C_COBBLESTONES_INFESTED , "c:cobblestones/mossy" => & Item :: C_COBBLESTONES_MOSSY , "c:cobblestones/normal" => & Item :: C_COBBLESTONES_NORMAL , "c:concrete_powders" => & Item :: C_CONCRETE_POWDERS , "c:concretes" => & Item :: C_CONCRETES , "c:crops" => & Item :: C_CROPS , "c:crops/beetroot" => & Item :: C_CROPS_BEETROOT , "c:crops/cactus" => & Item :: C_CROPS_CACTUS , "c:crops/carrot" => & Item :: C_CROPS_CARROT , "c:crops/cocoa_bean" => & Item :: C_CROPS_COCOA_BEAN , "c:crops/melon" => & Item :: C_CROPS_MELON , "c:crops/nether_wart" => & Item :: C_CROPS_NETHER_WART , "c:crops/potato" => & Item :: C_CROPS_POTATO , "c:crops/pumpkin" => & Item :: C_CROPS_PUMPKIN , "c:crops/sugar_cane" => & Item :: C_CROPS_SUGAR_CANE , "c:crops/wheat" => & Item :: C_CROPS_WHEAT , "c:drink_containing/bottle" => & Item :: C_DRINK_CONTAINING_BOTTLE , "c:drink_containing/bucket" => & Item :: C_DRINK_CONTAINING_BUCKET , "c:drinks" => & Item :: C_DRINKS , "c:drinks/honey" => & Item :: C_DRINKS_HONEY , "c:drinks/juice" => & Item :: C_DRINKS_JUICE , "c:drinks/magic" => & Item :: C_DRINKS_MAGIC , "c:drinks/milk" => & Item :: C_DRINKS_MILK , "c:drinks/ominous" => & Item :: C_DRINKS_OMINOUS , "c:drinks/water" => & Item :: C_DRINKS_WATER , "c:drinks/watery" => & Item :: C_DRINKS_WATERY , "c:dusts" => & Item :: C_DUSTS , "c:dusts/glowstone" => & Item :: C_DUSTS_GLOWSTONE , "c:dusts/redstone" => & Item :: C_DUSTS_REDSTONE , "c:dyeable" => & Item :: C_DYEABLE , "c:dyeable/dynamic" => & Item :: C_DYEABLE_DYNAMIC , "c:dyeable/simple" => & Item :: C_DYEABLE_SIMPLE , "c:dyeable/simple/redyeable" => & Item :: C_DYEABLE_SIMPLE_REDYEABLE , "c:dyeable/simple/undyed" => & Item :: C_DYEABLE_SIMPLE_UNDYED , "c:dyed" => & Item :: C_DYED , "c:dyed/black" => & Item :: C_DYED_BLACK , "c:dyed/blue" => & Item :: C_DYED_BLUE , "c:dyed/brown" => & Item :: C_DYED_BROWN , "c:dyed/cyan" => & Item :: C_DYED_CYAN , "c:dyed/gray" => & Item :: C_DYED_GRAY , "c:dyed/green" => & Item :: C_DYED_GREEN , "c:dyed/light_blue" => & Item :: C_DYED_LIGHT_BLUE , "c:dyed/light_gray" => & Item :: C_DYED_LIGHT_GRAY , "c:dyed/lime" => & Item :: C_DYED_LIME , "c:dyed/magenta" => & Item :: C_DYED_MAGENTA , "c:dyed/orange" => & Item :: C_DYED_ORANGE , "c:dyed/pink" => & Item :: C_DYED_PINK , "c:dyed/purple" => & Item :: C_DYED_PURPLE , "c:dyed/red" => & Item :: C_DYED_RED , "c:dyed/white" => & Item :: C_DYED_WHITE , "c:dyed/yellow" => & Item :: C_DYED_YELLOW , "c:dyes" => & Item :: C_DYES , "c:dyes/black" => & Item :: C_DYES_BLACK , "c:dyes/blue" => & Item :: C_DYES_BLUE , "c:dyes/brown" => & Item :: C_DYES_BROWN , "c:dyes/cyan" => & Item :: C_DYES_CYAN , "c:dyes/gray" => & Item :: C_DYES_GRAY , "c:dyes/green" => & Item :: C_DYES_GREEN , "c:dyes/light_blue" => & Item :: C_DYES_LIGHT_BLUE , "c:dyes/light_gray" => & Item :: C_DYES_LIGHT_GRAY , "c:dyes/lime" => & Item :: C_DYES_LIME , "c:dyes/magenta" => & Item :: C_DYES_MAGENTA , "c:dyes/orange" => & Item :: C_DYES_ORANGE , "c:dyes/pink" => & Item :: C_DYES_PINK , "c:dyes/purple" => & Item :: C_DYES_PURPLE , "c:dyes/red" => & Item :: C_DYES_RED , "c:dyes/white" => & Item :: C_DYES_WHITE , "c:dyes/yellow" => & Item :: C_DYES_YELLOW , "c:eggs" => & Item :: C_EGGS , "c:enchantables" => & Item :: C_ENCHANTABLES , "c:end_stones" => & Item :: C_END_STONES , "c:ender_pearls" => & Item :: C_ENDER_PEARLS , "c:feathers" => & Item :: C_FEATHERS , "c:fence_gates" => & Item :: C_FENCE_GATES , "c:fence_gates/wooden" => & Item :: C_FENCE_GATES_WOODEN , "c:fences" => & Item :: C_FENCES , "c:fences/nether_brick" => & Item :: C_FENCES_NETHER_BRICK , "c:fences/wooden" => & Item :: C_FENCES_WOODEN , "c:fertilizers" => & Item :: C_FERTILIZERS , "c:flowers" => & Item :: C_FLOWERS , "c:flowers/small" => & Item :: C_FLOWERS_SMALL , "c:flowers/tall" => & Item :: C_FLOWERS_TALL , "c:foods" => & Item :: C_FOODS , "c:foods/berry" => & Item :: C_FOODS_BERRY , "c:foods/bread" => & Item :: C_FOODS_BREAD , "c:foods/candy" => & Item :: C_FOODS_CANDY , "c:foods/cooked_fish" => & Item :: C_FOODS_COOKED_FISH , "c:foods/cooked_meat" => & Item :: C_FOODS_COOKED_MEAT , "c:foods/cookie" => & Item :: C_FOODS_COOKIE , "c:foods/dough" => & Item :: C_FOODS_DOUGH , "c:foods/edible_when_placed" => & Item :: C_FOODS_EDIBLE_WHEN_PLACED , "c:foods/food_poisoning" => & Item :: C_FOODS_FOOD_POISONING , "c:foods/fruit" => & Item :: C_FOODS_FRUIT , "c:foods/golden" => & Item :: C_FOODS_GOLDEN , "c:foods/pie" => & Item :: C_FOODS_PIE , "c:foods/raw_fish" => & Item :: C_FOODS_RAW_FISH , "c:foods/raw_meat" => & Item :: C_FOODS_RAW_MEAT , "c:foods/soup" => & Item :: C_FOODS_SOUP , "c:foods/vegetable" => & Item :: C_FOODS_VEGETABLE , "c:froglights" => & Item :: C_FROGLIGHTS , "c:gems" => & Item :: C_GEMS , "c:gems/amethyst" => & Item :: C_GEMS_AMETHYST , "c:gems/diamond" => & Item :: C_GEMS_DIAMOND , "c:gems/emerald" => & Item :: C_GEMS_EMERALD , "c:gems/lapis" => & Item :: C_GEMS_LAPIS , "c:gems/prismarine" => & Item :: C_GEMS_PRISMARINE , "c:gems/quartz" => & Item :: C_GEMS_QUARTZ , "c:glass_blocks" => & Item :: C_GLASS_BLOCKS , "c:glass_blocks/cheap" => & Item :: C_GLASS_BLOCKS_CHEAP , "c:glass_blocks/colorless" => & Item :: C_GLASS_BLOCKS_COLORLESS , "c:glass_blocks/tinted" => & Item :: C_GLASS_BLOCKS_TINTED , "c:glass_panes" => & Item :: C_GLASS_PANES , "c:glass_panes/colorless" => & Item :: C_GLASS_PANES_COLORLESS , "c:glazed_terracottas" => & Item :: C_GLAZED_TERRACOTTAS , "c:gravels" => & Item :: C_GRAVELS , "c:gunpowders" => & Item :: C_GUNPOWDERS , "c:hidden_from_recipe_viewers" => & Item :: C_HIDDEN_FROM_RECIPE_VIEWERS , "c:ingots" => & Item :: C_INGOTS , "c:ingots/copper" => & Item :: C_INGOTS_COPPER , "c:ingots/gold" => & Item :: C_INGOTS_GOLD , "c:ingots/iron" => & Item :: C_INGOTS_IRON , "c:ingots/netherite" => & Item :: C_INGOTS_NETHERITE , "c:leathers" => & Item :: C_LEATHERS , "c:mushrooms" => & Item :: C_MUSHROOMS , "c:music_discs" => & Item :: C_MUSIC_DISCS , "c:natural_logs" => & Item :: C_NATURAL_LOGS , "c:natural_logs/nether" => & Item :: C_NATURAL_LOGS_NETHER , "c:natural_logs/overworld" => & Item :: C_NATURAL_LOGS_OVERWORLD , "c:natural_woods" => & Item :: C_NATURAL_WOODS , "c:nether_stars" => & Item :: C_NETHER_STARS , "c:netherracks" => & Item :: C_NETHERRACKS , "c:nuggets" => & Item :: C_NUGGETS , "c:nuggets/copper" => & Item :: C_NUGGETS_COPPER , "c:nuggets/gold" => & Item :: C_NUGGETS_GOLD , "c:nuggets/iron" => & Item :: C_NUGGETS_IRON , "c:obsidians" => & Item :: C_OBSIDIANS , "c:obsidians/crying" => & Item :: C_OBSIDIANS_CRYING , "c:obsidians/normal" => & Item :: C_OBSIDIANS_NORMAL , "c:ore_bearing_ground/deepslate" => & Item :: C_ORE_BEARING_GROUND_DEEPSLATE , "c:ore_bearing_ground/netherrack" => & Item :: C_ORE_BEARING_GROUND_NETHERRACK , "c:ore_bearing_ground/stone" => & Item :: C_ORE_BEARING_GROUND_STONE , "c:ore_rates/dense" => & Item :: C_ORE_RATES_DENSE , "c:ore_rates/singular" => & Item :: C_ORE_RATES_SINGULAR , "c:ore_rates/sparse" => & Item :: C_ORE_RATES_SPARSE , "c:ores" => & Item :: C_ORES , "c:ores/coal" => & Item :: C_ORES_COAL , "c:ores/copper" => & Item :: C_ORES_COPPER , "c:ores/diamond" => & Item :: C_ORES_DIAMOND , "c:ores/emerald" => & Item :: C_ORES_EMERALD , "c:ores/gold" => & Item :: C_ORES_GOLD , "c:ores/iron" => & Item :: C_ORES_IRON , "c:ores/lapis" => & Item :: C_ORES_LAPIS , "c:ores/netherite_scrap" => & Item :: C_ORES_NETHERITE_SCRAP , "c:ores/quartz" => & Item :: C_ORES_QUARTZ , "c:ores/redstone" => & Item :: C_ORES_REDSTONE , "c:ores_in_ground/deepslate" => & Item :: C_ORES_IN_GROUND_DEEPSLATE , "c:ores_in_ground/netherrack" => & Item :: C_ORES_IN_GROUND_NETHERRACK , "c:ores_in_ground/stone" => & Item :: C_ORES_IN_GROUND_STONE , "c:player_workstations/crafting_tables" => & Item :: C_PLAYER_WORKSTATIONS_CRAFTING_TABLES , "c:player_workstations/furnaces" => & Item :: C_PLAYER_WORKSTATIONS_FURNACES , "c:potions" => & Item :: C_POTIONS , "c:potions/bottle" => & Item :: C_POTIONS_BOTTLE , "c:pumpkins" => & Item :: C_PUMPKINS , "c:pumpkins/carved" => & Item :: C_PUMPKINS_CARVED , "c:pumpkins/jack_o_lanterns" => & Item :: C_PUMPKINS_JACK_O_LANTERNS , "c:pumpkins/normal" => & Item :: C_PUMPKINS_NORMAL , "c:raw_materials" => & Item :: C_RAW_MATERIALS , "c:raw_materials/copper" => & Item :: C_RAW_MATERIALS_COPPER , "c:raw_materials/gold" => & Item :: C_RAW_MATERIALS_GOLD , "c:raw_materials/iron" => & Item :: C_RAW_MATERIALS_IRON , "c:rods" => & Item :: C_RODS , "c:rods/blaze" => & Item :: C_RODS_BLAZE , "c:rods/breeze" => & Item :: C_RODS_BREEZE , "c:rods/wooden" => & Item :: C_RODS_WOODEN , "c:ropes" => & Item :: C_ROPES , "c:sands" => & Item :: C_SANDS , "c:sands/colorless" => & Item :: C_SANDS_COLORLESS , "c:sands/red" => & Item :: C_SANDS_RED , "c:sandstone/blocks" => & Item :: C_SANDSTONE_BLOCKS , "c:sandstone/red_blocks" => & Item :: C_SANDSTONE_RED_BLOCKS , "c:sandstone/red_slabs" => & Item :: C_SANDSTONE_RED_SLABS , "c:sandstone/red_stairs" => & Item :: C_SANDSTONE_RED_STAIRS , "c:sandstone/slabs" => & Item :: C_SANDSTONE_SLABS , "c:sandstone/stairs" => & Item :: C_SANDSTONE_STAIRS , "c:sandstone/uncolored_blocks" => & Item :: C_SANDSTONE_UNCOLORED_BLOCKS , "c:sandstone/uncolored_slabs" => & Item :: C_SANDSTONE_UNCOLORED_SLABS , "c:sandstone/uncolored_stairs" => & Item :: C_SANDSTONE_UNCOLORED_STAIRS , "c:seeds" => & Item :: C_SEEDS , "c:seeds/beetroot" => & Item :: C_SEEDS_BEETROOT , "c:seeds/melon" => & Item :: C_SEEDS_MELON , "c:seeds/pitcher_plant" => & Item :: C_SEEDS_PITCHER_PLANT , "c:seeds/pumpkin" => & Item :: C_SEEDS_PUMPKIN , "c:seeds/torchflower" => & Item :: C_SEEDS_TORCHFLOWER , "c:seeds/wheat" => & Item :: C_SEEDS_WHEAT , "c:shulker_boxes" => & Item :: C_SHULKER_BOXES , "c:slime_balls" => & Item :: C_SLIME_BALLS , "c:stones" => & Item :: C_STONES , "c:storage_blocks" => & Item :: C_STORAGE_BLOCKS , "c:storage_blocks/bone_meal" => & Item :: C_STORAGE_BLOCKS_BONE_MEAL , "c:storage_blocks/coal" => & Item :: C_STORAGE_BLOCKS_COAL , "c:storage_blocks/copper" => & Item :: C_STORAGE_BLOCKS_COPPER , "c:storage_blocks/diamond" => & Item :: C_STORAGE_BLOCKS_DIAMOND , "c:storage_blocks/dried_kelp" => & Item :: C_STORAGE_BLOCKS_DRIED_KELP , "c:storage_blocks/emerald" => & Item :: C_STORAGE_BLOCKS_EMERALD , "c:storage_blocks/gold" => & Item :: C_STORAGE_BLOCKS_GOLD , "c:storage_blocks/iron" => & Item :: C_STORAGE_BLOCKS_IRON , "c:storage_blocks/lapis" => & Item :: C_STORAGE_BLOCKS_LAPIS , "c:storage_blocks/netherite" => & Item :: C_STORAGE_BLOCKS_NETHERITE , "c:storage_blocks/raw_copper" => & Item :: C_STORAGE_BLOCKS_RAW_COPPER , "c:storage_blocks/raw_gold" => & Item :: C_STORAGE_BLOCKS_RAW_GOLD , "c:storage_blocks/raw_iron" => & Item :: C_STORAGE_BLOCKS_RAW_IRON , "c:storage_blocks/redstone" => & Item :: C_STORAGE_BLOCKS_REDSTONE , "c:storage_blocks/resin" => & Item :: C_STORAGE_BLOCKS_RESIN , "c:storage_blocks/slime" => & Item :: C_STORAGE_BLOCKS_SLIME , "c:storage_blocks/wheat" => & Item :: C_STORAGE_BLOCKS_WHEAT , "c:strings" => & Item :: C_STRINGS , "c:stripped_logs" => & Item :: C_STRIPPED_LOGS , "c:stripped_woods" => & Item :: C_STRIPPED_WOODS , "c:tools" => & Item :: C_TOOLS , "c:tools/bow" => & Item :: C_TOOLS_BOW , "c:tools/brush" => & Item :: C_TOOLS_BRUSH , "c:tools/crossbow" => & Item :: C_TOOLS_CROSSBOW , "c:tools/fishing_rod" => & Item :: C_TOOLS_FISHING_ROD , "c:tools/igniter" => & Item :: C_TOOLS_IGNITER , "c:tools/mace" => & Item :: C_TOOLS_MACE , "c:tools/melee_weapon" => & Item :: C_TOOLS_MELEE_WEAPON , "c:tools/mining_tool" => & Item :: C_TOOLS_MINING_TOOL , "c:tools/ranged_weapon" => & Item :: C_TOOLS_RANGED_WEAPON , "c:tools/shear" => & Item :: C_TOOLS_SHEAR , "c:tools/shield" => & Item :: C_TOOLS_SHIELD , "c:tools/trident" => & Item :: C_TOOLS_TRIDENT , "c:tools/wrench" => & Item :: C_TOOLS_WRENCH , "c:villager_job_sites" => & Item :: C_VILLAGER_JOB_SITES , "minecraft:acacia_logs" => & Item :: MINECRAFT_ACACIA_LOGS , "minecraft:anvil" => & Item :: MINECRAFT_ANVIL , "minecraft:armadillo_food" => & Item :: MINECRAFT_ARMADILLO_FOOD , "minecraft:arrows" => & Item :: MINECRAFT_ARROWS , "minecraft:axes" => & Item :: MINECRAFT_AXES , "minecraft:axolotl_food" => & Item :: MINECRAFT_AXOLOTL_FOOD , "minecraft:bamboo_blocks" => & Item :: MINECRAFT_BAMBOO_BLOCKS , "minecraft:banners" => & Item :: MINECRAFT_BANNERS , "minecraft:beacon_payment_items" => & Item :: MINECRAFT_BEACON_PAYMENT_ITEMS , "minecraft:beds" => & Item :: MINECRAFT_BEDS , "minecraft:bee_food" => & Item :: MINECRAFT_BEE_FOOD , "minecraft:birch_logs" => & Item :: MINECRAFT_BIRCH_LOGS , "minecraft:boats" => & Item :: MINECRAFT_BOATS , "minecraft:bookshelf_books" => & Item :: MINECRAFT_BOOKSHELF_BOOKS , "minecraft:breaks_decorated_pots" => & Item :: MINECRAFT_BREAKS_DECORATED_POTS , "minecraft:buttons" => & Item :: MINECRAFT_BUTTONS , "minecraft:camel_food" => & Item :: MINECRAFT_CAMEL_FOOD , "minecraft:candles" => & Item :: MINECRAFT_CANDLES , "minecraft:cat_food" => & Item :: MINECRAFT_CAT_FOOD , "minecraft:cherry_logs" => & Item :: MINECRAFT_CHERRY_LOGS , "minecraft:chest_armor" => & Item :: MINECRAFT_CHEST_ARMOR , "minecraft:chest_boats" => & Item :: MINECRAFT_CHEST_BOATS , "minecraft:chicken_food" => & Item :: MINECRAFT_CHICKEN_FOOD , "minecraft:cluster_max_harvestables" => & Item :: MINECRAFT_CLUSTER_MAX_HARVESTABLES , "minecraft:coal_ores" => & Item :: MINECRAFT_COAL_ORES , "minecraft:coals" => & Item :: MINECRAFT_COALS , "minecraft:compasses" => & Item :: MINECRAFT_COMPASSES , "minecraft:completes_find_tree_tutorial" => & Item :: MINECRAFT_COMPLETES_FIND_TREE_TUTORIAL , "minecraft:copper_ores" => & Item :: MINECRAFT_COPPER_ORES , "minecraft:copper_tool_materials" => & Item :: MINECRAFT_COPPER_TOOL_MATERIALS , "minecraft:cow_food" => & Item :: MINECRAFT_COW_FOOD , "minecraft:creeper_drop_music_discs" => & Item :: MINECRAFT_CREEPER_DROP_MUSIC_DISCS , "minecraft:creeper_igniters" => & Item :: MINECRAFT_CREEPER_IGNITERS , "minecraft:crimson_stems" => & Item :: MINECRAFT_CRIMSON_STEMS , "minecraft:dampens_vibrations" => & Item :: MINECRAFT_DAMPENS_VIBRATIONS , "minecraft:dark_oak_logs" => & Item :: MINECRAFT_DARK_OAK_LOGS , "minecraft:decorated_pot_ingredients" => & Item :: MINECRAFT_DECORATED_POT_INGREDIENTS , "minecraft:decorated_pot_sherds" => & Item :: MINECRAFT_DECORATED_POT_SHERDS , "minecraft:diamond_ores" => & Item :: MINECRAFT_DIAMOND_ORES , "minecraft:diamond_tool_materials" => & Item :: MINECRAFT_DIAMOND_TOOL_MATERIALS , "minecraft:dirt" => & Item :: MINECRAFT_DIRT , "minecraft:doors" => & Item :: MINECRAFT_DOORS , "minecraft:dyeable" => & Item :: MINECRAFT_DYEABLE , "minecraft:emerald_ores" => & Item :: MINECRAFT_EMERALD_ORES , "minecraft:enchantable/armor" => & Item :: MINECRAFT_ENCHANTABLE_ARMOR , "minecraft:enchantable/bow" => & Item :: MINECRAFT_ENCHANTABLE_BOW , "minecraft:enchantable/chest_armor" => & Item :: MINECRAFT_ENCHANTABLE_CHEST_ARMOR , "minecraft:enchantable/crossbow" => & Item :: MINECRAFT_ENCHANTABLE_CROSSBOW , "minecraft:enchantable/durability" => & Item :: MINECRAFT_ENCHANTABLE_DURABILITY , "minecraft:enchantable/equippable" => & Item :: MINECRAFT_ENCHANTABLE_EQUIPPABLE , "minecraft:enchantable/fire_aspect" => & Item :: MINECRAFT_ENCHANTABLE_FIRE_ASPECT , "minecraft:enchantable/fishing" => & Item :: MINECRAFT_ENCHANTABLE_FISHING , "minecraft:enchantable/foot_armor" => & Item :: MINECRAFT_ENCHANTABLE_FOOT_ARMOR , "minecraft:enchantable/head_armor" => & Item :: MINECRAFT_ENCHANTABLE_HEAD_ARMOR , "minecraft:enchantable/leg_armor" => & Item :: MINECRAFT_ENCHANTABLE_LEG_ARMOR , "minecraft:enchantable/mace" => & Item :: MINECRAFT_ENCHANTABLE_MACE , "minecraft:enchantable/mining" => & Item :: MINECRAFT_ENCHANTABLE_MINING , "minecraft:enchantable/mining_loot" => & Item :: MINECRAFT_ENCHANTABLE_MINING_LOOT , "minecraft:enchantable/sharp_weapon" => & Item :: MINECRAFT_ENCHANTABLE_SHARP_WEAPON , "minecraft:enchantable/sword" => & Item :: MINECRAFT_ENCHANTABLE_SWORD , "minecraft:enchantable/trident" => & Item :: MINECRAFT_ENCHANTABLE_TRIDENT , "minecraft:enchantable/vanishing" => & Item :: MINECRAFT_ENCHANTABLE_VANISHING , "minecraft:enchantable/weapon" => & Item :: MINECRAFT_ENCHANTABLE_WEAPON , "minecraft:fence_gates" => & Item :: MINECRAFT_FENCE_GATES , "minecraft:fences" => & Item :: MINECRAFT_FENCES , "minecraft:fishes" => & Item :: MINECRAFT_FISHES , "minecraft:flowers" => & Item :: MINECRAFT_FLOWERS , "minecraft:foot_armor" => & Item :: MINECRAFT_FOOT_ARMOR , "minecraft:fox_food" => & Item :: MINECRAFT_FOX_FOOD , "minecraft:freeze_immune_wearables" => & Item :: MINECRAFT_FREEZE_IMMUNE_WEARABLES , "minecraft:frog_food" => & Item :: MINECRAFT_FROG_FOOD , "minecraft:goat_food" => & Item :: MINECRAFT_GOAT_FOOD , "minecraft:gold_ores" => & Item :: MINECRAFT_GOLD_ORES , "minecraft:gold_tool_materials" => & Item :: MINECRAFT_GOLD_TOOL_MATERIALS , "minecraft:hanging_signs" => & Item :: MINECRAFT_HANGING_SIGNS , "minecraft:head_armor" => & Item :: MINECRAFT_HEAD_ARMOR , "minecraft:hoes" => & Item :: MINECRAFT_HOES , "minecraft:hoglin_food" => & Item :: MINECRAFT_HOGLIN_FOOD , "minecraft:horse_food" => & Item :: MINECRAFT_HORSE_FOOD , "minecraft:horse_tempt_items" => & Item :: MINECRAFT_HORSE_TEMPT_ITEMS , "minecraft:ignored_by_piglin_babies" => & Item :: MINECRAFT_IGNORED_BY_PIGLIN_BABIES , "minecraft:iron_ores" => & Item :: MINECRAFT_IRON_ORES , "minecraft:iron_tool_materials" => & Item :: MINECRAFT_IRON_TOOL_MATERIALS , "minecraft:jungle_logs" => & Item :: MINECRAFT_JUNGLE_LOGS , "minecraft:lapis_ores" => & Item :: MINECRAFT_LAPIS_ORES , "minecraft:leaves" => & Item :: MINECRAFT_LEAVES , "minecraft:lectern_books" => & Item :: MINECRAFT_LECTERN_BOOKS , "minecraft:leg_armor" => & Item :: MINECRAFT_LEG_ARMOR , "minecraft:llama_food" => & Item :: MINECRAFT_LLAMA_FOOD , "minecraft:llama_tempt_items" => & Item :: MINECRAFT_LLAMA_TEMPT_ITEMS , "minecraft:logs" => & Item :: MINECRAFT_LOGS , "minecraft:logs_that_burn" => & Item :: MINECRAFT_LOGS_THAT_BURN , "minecraft:mangrove_logs" => & Item :: MINECRAFT_MANGROVE_LOGS , "minecraft:meat" => & Item :: MINECRAFT_MEAT , "minecraft:netherite_tool_materials" => & Item :: MINECRAFT_NETHERITE_TOOL_MATERIALS , "minecraft:non_flammable_wood" => & Item :: MINECRAFT_NON_FLAMMABLE_WOOD , "minecraft:noteblock_top_instruments" => & Item :: MINECRAFT_NOTEBLOCK_TOP_INSTRUMENTS , "minecraft:oak_logs" => & Item :: MINECRAFT_OAK_LOGS , "minecraft:ocelot_food" => & Item :: MINECRAFT_OCELOT_FOOD , "minecraft:panda_food" => & Item :: MINECRAFT_PANDA_FOOD , "minecraft:parrot_food" => & Item :: MINECRAFT_PARROT_FOOD , "minecraft:parrot_poisonous_food" => & Item :: MINECRAFT_PARROT_POISONOUS_FOOD , "minecraft:pickaxes" => & Item :: MINECRAFT_PICKAXES , "minecraft:pig_food" => & Item :: MINECRAFT_PIG_FOOD , "minecraft:piglin_food" => & Item :: MINECRAFT_PIGLIN_FOOD , "minecraft:piglin_loved" => & Item :: MINECRAFT_PIGLIN_LOVED , "minecraft:piglin_repellents" => & Item :: MINECRAFT_PIGLIN_REPELLENTS , "minecraft:planks" => & Item :: MINECRAFT_PLANKS , "minecraft:rabbit_food" => & Item :: MINECRAFT_RABBIT_FOOD , "minecraft:rails" => & Item :: MINECRAFT_RAILS , "minecraft:redstone_ores" => & Item :: MINECRAFT_REDSTONE_ORES , "minecraft:sand" => & Item :: MINECRAFT_SAND , "minecraft:saplings" => & Item :: MINECRAFT_SAPLINGS , "minecraft:sheep_food" => & Item :: MINECRAFT_SHEEP_FOOD , "minecraft:shovels" => & Item :: MINECRAFT_SHOVELS , "minecraft:signs" => & Item :: MINECRAFT_SIGNS , "minecraft:skulls" => & Item :: MINECRAFT_SKULLS , "minecraft:slabs" => & Item :: MINECRAFT_SLABS , "minecraft:small_flowers" => & Item :: MINECRAFT_SMALL_FLOWERS , "minecraft:smelts_to_glass" => & Item :: MINECRAFT_SMELTS_TO_GLASS , "minecraft:sniffer_food" => & Item :: MINECRAFT_SNIFFER_FOOD , "minecraft:soul_fire_base_blocks" => & Item :: MINECRAFT_SOUL_FIRE_BASE_BLOCKS , "minecraft:spruce_logs" => & Item :: MINECRAFT_SPRUCE_LOGS , "minecraft:stairs" => & Item :: MINECRAFT_STAIRS , "minecraft:stone_bricks" => & Item :: MINECRAFT_STONE_BRICKS , "minecraft:stone_buttons" => & Item :: MINECRAFT_STONE_BUTTONS , "minecraft:stone_crafting_materials" => & Item :: MINECRAFT_STONE_CRAFTING_MATERIALS , "minecraft:stone_tool_materials" => & Item :: MINECRAFT_STONE_TOOL_MATERIALS , "minecraft:strider_food" => & Item :: MINECRAFT_STRIDER_FOOD , "minecraft:strider_tempt_items" => & Item :: MINECRAFT_STRIDER_TEMPT_ITEMS , "minecraft:swords" => & Item :: MINECRAFT_SWORDS , "minecraft:tall_flowers" => & Item :: MINECRAFT_TALL_FLOWERS , "minecraft:terracotta" => & Item :: MINECRAFT_TERRACOTTA , "minecraft:trapdoors" => & Item :: MINECRAFT_TRAPDOORS , "minecraft:trim_materials" => & Item :: MINECRAFT_TRIM_MATERIALS , "minecraft:trim_templates" => & Item :: MINECRAFT_TRIM_TEMPLATES , "minecraft:trimmable_armor" => & Item :: MINECRAFT_TRIMMABLE_ARMOR , "minecraft:turtle_food" => & Item :: MINECRAFT_TURTLE_FOOD , "minecraft:villager_plantable_seeds" => & Item :: MINECRAFT_VILLAGER_PLANTABLE_SEEDS , "minecraft:walls" => & Item :: MINECRAFT_WALLS , "minecraft:warped_stems" => & Item :: MINECRAFT_WARPED_STEMS , "minecraft:wart_blocks" => & Item :: MINECRAFT_WART_BLOCKS , "minecraft:wolf_food" => & Item :: MINECRAFT_WOLF_FOOD , "minecraft:wooden_buttons" => & Item :: MINECRAFT_WOODEN_BUTTONS , "minecraft:wooden_doors" => & Item :: MINECRAFT_WOODEN_DOORS , "minecraft:wooden_fences" => & Item :: MINECRAFT_WOODEN_FENCES , "minecraft:wooden_pressure_plates" => & Item :: MINECRAFT_WOODEN_PRESSURE_PLATES , "minecraft:wooden_slabs" => & Item :: MINECRAFT_WOODEN_SLABS , "minecraft:wooden_stairs" => & Item :: MINECRAFT_WOODEN_STAIRS , "minecraft:wooden_tool_materials" => & Item :: MINECRAFT_WOODEN_TOOL_MATERIALS , "minecraft:wooden_trapdoors" => & Item :: MINECRAFT_WOODEN_TRAPDOORS , "minecraft:wool" => & Item :: MINECRAFT_WOOL , "minecraft:wool_carpets" => & Item :: MINECRAFT_WOOL_CARPETS };
+static ITEM_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf_map! { "c:animal_foods" => & Item :: C_ANIMAL_FOODS , "c:armors" => & Item :: C_ARMORS , "c:armors/horse" => & Item :: C_ARMORS_HORSE , "c:armors/humanoid" => & Item :: C_ARMORS_HUMANOID , "c:armors/nautilus" => & Item :: C_ARMORS_NAUTILUS , "c:armors/wolf" => & Item :: C_ARMORS_WOLF , "c:barrels" => & Item :: C_BARRELS , "c:barrels/wooden" => & Item :: C_BARRELS_WOODEN , "c:bars" => & Item :: C_BARS , "c:bars/copper" => & Item :: C_BARS_COPPER , "c:bars/iron" => & Item :: C_BARS_IRON , "c:bones" => & Item :: C_BONES , "c:bookshelves" => & Item :: C_BOOKSHELVES , "c:bricks" => & Item :: C_BRICKS , "c:bricks/nether" => & Item :: C_BRICKS_NETHER , "c:bricks/normal" => & Item :: C_BRICKS_NORMAL , "c:bricks/resin" => & Item :: C_BRICKS_RESIN , "c:buckets" => & Item :: C_BUCKETS , "c:buckets/empty" => & Item :: C_BUCKETS_EMPTY , "c:buckets/entity_dry" => & Item :: C_BUCKETS_ENTITY_DRY , "c:buckets/entity_water" => & Item :: C_BUCKETS_ENTITY_WATER , "c:buckets/lava" => & Item :: C_BUCKETS_LAVA , "c:buckets/milk" => & Item :: C_BUCKETS_MILK , "c:buckets/powder_snow" => & Item :: C_BUCKETS_POWDER_SNOW , "c:buckets/water" => & Item :: C_BUCKETS_WATER , "c:budding_blocks" => & Item :: C_BUDDING_BLOCKS , "c:buds" => & Item :: C_BUDS , "c:chains" => & Item :: C_CHAINS , "c:chests" => & Item :: C_CHESTS , "c:chests/ender" => & Item :: C_CHESTS_ENDER , "c:chests/trapped" => & Item :: C_CHESTS_TRAPPED , "c:chests/wooden" => & Item :: C_CHESTS_WOODEN , "c:clumps" => & Item :: C_CLUMPS , "c:clumps/resin" => & Item :: C_CLUMPS_RESIN , "c:clusters" => & Item :: C_CLUSTERS , "c:cobblestones" => & Item :: C_COBBLESTONES , "c:cobblestones/deepslate" => & Item :: C_COBBLESTONES_DEEPSLATE , "c:cobblestones/infested" => & Item :: C_COBBLESTONES_INFESTED , "c:cobblestones/mossy" => & Item :: C_COBBLESTONES_MOSSY , "c:cobblestones/normal" => & Item :: C_COBBLESTONES_NORMAL , "c:concrete_powders" => & Item :: C_CONCRETE_POWDERS , "c:concretes" => & Item :: C_CONCRETES , "c:crops" => & Item :: C_CROPS , "c:crops/beetroot" => & Item :: C_CROPS_BEETROOT , "c:crops/cactus" => & Item :: C_CROPS_CACTUS , "c:crops/carrot" => & Item :: C_CROPS_CARROT , "c:crops/cocoa_bean" => & Item :: C_CROPS_COCOA_BEAN , "c:crops/melon" => & Item :: C_CROPS_MELON , "c:crops/nether_wart" => & Item :: C_CROPS_NETHER_WART , "c:crops/potato" => & Item :: C_CROPS_POTATO , "c:crops/pumpkin" => & Item :: C_CROPS_PUMPKIN , "c:crops/sugar_cane" => & Item :: C_CROPS_SUGAR_CANE , "c:crops/wheat" => & Item :: C_CROPS_WHEAT , "c:drink_containing/bottle" => & Item :: C_DRINK_CONTAINING_BOTTLE , "c:drink_containing/bucket" => & Item :: C_DRINK_CONTAINING_BUCKET , "c:drinks" => & Item :: C_DRINKS , "c:drinks/honey" => & Item :: C_DRINKS_HONEY , "c:drinks/juice" => & Item :: C_DRINKS_JUICE , "c:drinks/magic" => & Item :: C_DRINKS_MAGIC , "c:drinks/milk" => & Item :: C_DRINKS_MILK , "c:drinks/ominous" => & Item :: C_DRINKS_OMINOUS , "c:drinks/water" => & Item :: C_DRINKS_WATER , "c:drinks/watery" => & Item :: C_DRINKS_WATERY , "c:dusts" => & Item :: C_DUSTS , "c:dusts/glowstone" => & Item :: C_DUSTS_GLOWSTONE , "c:dusts/redstone" => & Item :: C_DUSTS_REDSTONE , "c:dyeable" => & Item :: C_DYEABLE , "c:dyeable/dynamic" => & Item :: C_DYEABLE_DYNAMIC , "c:dyeable/simple" => & Item :: C_DYEABLE_SIMPLE , "c:dyeable/simple/redyeable" => & Item :: C_DYEABLE_SIMPLE_REDYEABLE , "c:dyeable/simple/undyed" => & Item :: C_DYEABLE_SIMPLE_UNDYED , "c:dyed" => & Item :: C_DYED , "c:dyed/black" => & Item :: C_DYED_BLACK , "c:dyed/blue" => & Item :: C_DYED_BLUE , "c:dyed/brown" => & Item :: C_DYED_BROWN , "c:dyed/cyan" => & Item :: C_DYED_CYAN , "c:dyed/gray" => & Item :: C_DYED_GRAY , "c:dyed/green" => & Item :: C_DYED_GREEN , "c:dyed/light_blue" => & Item :: C_DYED_LIGHT_BLUE , "c:dyed/light_gray" => & Item :: C_DYED_LIGHT_GRAY , "c:dyed/lime" => & Item :: C_DYED_LIME , "c:dyed/magenta" => & Item :: C_DYED_MAGENTA , "c:dyed/orange" => & Item :: C_DYED_ORANGE , "c:dyed/pink" => & Item :: C_DYED_PINK , "c:dyed/purple" => & Item :: C_DYED_PURPLE , "c:dyed/red" => & Item :: C_DYED_RED , "c:dyed/white" => & Item :: C_DYED_WHITE , "c:dyed/yellow" => & Item :: C_DYED_YELLOW , "c:dyes" => & Item :: C_DYES , "c:dyes/black" => & Item :: C_DYES_BLACK , "c:dyes/blue" => & Item :: C_DYES_BLUE , "c:dyes/brown" => & Item :: C_DYES_BROWN , "c:dyes/cyan" => & Item :: C_DYES_CYAN , "c:dyes/gray" => & Item :: C_DYES_GRAY , "c:dyes/green" => & Item :: C_DYES_GREEN , "c:dyes/light_blue" => & Item :: C_DYES_LIGHT_BLUE , "c:dyes/light_gray" => & Item :: C_DYES_LIGHT_GRAY , "c:dyes/lime" => & Item :: C_DYES_LIME , "c:dyes/magenta" => & Item :: C_DYES_MAGENTA , "c:dyes/orange" => & Item :: C_DYES_ORANGE , "c:dyes/pink" => & Item :: C_DYES_PINK , "c:dyes/purple" => & Item :: C_DYES_PURPLE , "c:dyes/red" => & Item :: C_DYES_RED , "c:dyes/white" => & Item :: C_DYES_WHITE , "c:dyes/yellow" => & Item :: C_DYES_YELLOW , "c:eggs" => & Item :: C_EGGS , "c:enchantables" => & Item :: C_ENCHANTABLES , "c:end_stones" => & Item :: C_END_STONES , "c:ender_pearls" => & Item :: C_ENDER_PEARLS , "c:feathers" => & Item :: C_FEATHERS , "c:fence_gates" => & Item :: C_FENCE_GATES , "c:fence_gates/wooden" => & Item :: C_FENCE_GATES_WOODEN , "c:fences" => & Item :: C_FENCES , "c:fences/nether_brick" => & Item :: C_FENCES_NETHER_BRICK , "c:fences/wooden" => & Item :: C_FENCES_WOODEN , "c:fertilizers" => & Item :: C_FERTILIZERS , "c:flowers" => & Item :: C_FLOWERS , "c:flowers/small" => & Item :: C_FLOWERS_SMALL , "c:flowers/tall" => & Item :: C_FLOWERS_TALL , "c:foods" => & Item :: C_FOODS , "c:foods/berry" => & Item :: C_FOODS_BERRY , "c:foods/bread" => & Item :: C_FOODS_BREAD , "c:foods/candy" => & Item :: C_FOODS_CANDY , "c:foods/cooked_fish" => & Item :: C_FOODS_COOKED_FISH , "c:foods/cooked_meat" => & Item :: C_FOODS_COOKED_MEAT , "c:foods/cookie" => & Item :: C_FOODS_COOKIE , "c:foods/dough" => & Item :: C_FOODS_DOUGH , "c:foods/edible_when_placed" => & Item :: C_FOODS_EDIBLE_WHEN_PLACED , "c:foods/food_poisoning" => & Item :: C_FOODS_FOOD_POISONING , "c:foods/fruit" => & Item :: C_FOODS_FRUIT , "c:foods/golden" => & Item :: C_FOODS_GOLDEN , "c:foods/pie" => & Item :: C_FOODS_PIE , "c:foods/raw_fish" => & Item :: C_FOODS_RAW_FISH , "c:foods/raw_meat" => & Item :: C_FOODS_RAW_MEAT , "c:foods/soup" => & Item :: C_FOODS_SOUP , "c:foods/vegetable" => & Item :: C_FOODS_VEGETABLE , "c:froglights" => & Item :: C_FROGLIGHTS , "c:gems" => & Item :: C_GEMS , "c:gems/amethyst" => & Item :: C_GEMS_AMETHYST , "c:gems/diamond" => & Item :: C_GEMS_DIAMOND , "c:gems/emerald" => & Item :: C_GEMS_EMERALD , "c:gems/lapis" => & Item :: C_GEMS_LAPIS , "c:gems/prismarine" => & Item :: C_GEMS_PRISMARINE , "c:gems/quartz" => & Item :: C_GEMS_QUARTZ , "c:glass_blocks" => & Item :: C_GLASS_BLOCKS , "c:glass_blocks/cheap" => & Item :: C_GLASS_BLOCKS_CHEAP , "c:glass_blocks/colorless" => & Item :: C_GLASS_BLOCKS_COLORLESS , "c:glass_blocks/tinted" => & Item :: C_GLASS_BLOCKS_TINTED , "c:glass_panes" => & Item :: C_GLASS_PANES , "c:glass_panes/colorless" => & Item :: C_GLASS_PANES_COLORLESS , "c:glazed_terracottas" => & Item :: C_GLAZED_TERRACOTTAS , "c:gravels" => & Item :: C_GRAVELS , "c:gunpowders" => & Item :: C_GUNPOWDERS , "c:hidden_from_recipe_viewers" => & Item :: C_HIDDEN_FROM_RECIPE_VIEWERS , "c:ingots" => & Item :: C_INGOTS , "c:ingots/copper" => & Item :: C_INGOTS_COPPER , "c:ingots/gold" => & Item :: C_INGOTS_GOLD , "c:ingots/iron" => & Item :: C_INGOTS_IRON , "c:ingots/netherite" => & Item :: C_INGOTS_NETHERITE , "c:leathers" => & Item :: C_LEATHERS , "c:mushrooms" => & Item :: C_MUSHROOMS , "c:music_discs" => & Item :: C_MUSIC_DISCS , "c:natural_logs" => & Item :: C_NATURAL_LOGS , "c:natural_logs/nether" => & Item :: C_NATURAL_LOGS_NETHER , "c:natural_logs/overworld" => & Item :: C_NATURAL_LOGS_OVERWORLD , "c:natural_woods" => & Item :: C_NATURAL_WOODS , "c:nether_stars" => & Item :: C_NETHER_STARS , "c:netherracks" => & Item :: C_NETHERRACKS , "c:nuggets" => & Item :: C_NUGGETS , "c:nuggets/copper" => & Item :: C_NUGGETS_COPPER , "c:nuggets/gold" => & Item :: C_NUGGETS_GOLD , "c:nuggets/iron" => & Item :: C_NUGGETS_IRON , "c:obsidians" => & Item :: C_OBSIDIANS , "c:obsidians/crying" => & Item :: C_OBSIDIANS_CRYING , "c:obsidians/normal" => & Item :: C_OBSIDIANS_NORMAL , "c:ore_bearing_ground/deepslate" => & Item :: C_ORE_BEARING_GROUND_DEEPSLATE , "c:ore_bearing_ground/netherrack" => & Item :: C_ORE_BEARING_GROUND_NETHERRACK , "c:ore_bearing_ground/stone" => & Item :: C_ORE_BEARING_GROUND_STONE , "c:ore_rates/dense" => & Item :: C_ORE_RATES_DENSE , "c:ore_rates/singular" => & Item :: C_ORE_RATES_SINGULAR , "c:ore_rates/sparse" => & Item :: C_ORE_RATES_SPARSE , "c:ores" => & Item :: C_ORES , "c:ores/coal" => & Item :: C_ORES_COAL , "c:ores/copper" => & Item :: C_ORES_COPPER , "c:ores/diamond" => & Item :: C_ORES_DIAMOND , "c:ores/emerald" => & Item :: C_ORES_EMERALD , "c:ores/gold" => & Item :: C_ORES_GOLD , "c:ores/iron" => & Item :: C_ORES_IRON , "c:ores/lapis" => & Item :: C_ORES_LAPIS , "c:ores/netherite_scrap" => & Item :: C_ORES_NETHERITE_SCRAP , "c:ores/quartz" => & Item :: C_ORES_QUARTZ , "c:ores/redstone" => & Item :: C_ORES_REDSTONE , "c:ores_in_ground/deepslate" => & Item :: C_ORES_IN_GROUND_DEEPSLATE , "c:ores_in_ground/netherrack" => & Item :: C_ORES_IN_GROUND_NETHERRACK , "c:ores_in_ground/stone" => & Item :: C_ORES_IN_GROUND_STONE , "c:player_workstations/crafting_tables" => & Item :: C_PLAYER_WORKSTATIONS_CRAFTING_TABLES , "c:player_workstations/furnaces" => & Item :: C_PLAYER_WORKSTATIONS_FURNACES , "c:potions" => & Item :: C_POTIONS , "c:potions/bottle" => & Item :: C_POTIONS_BOTTLE , "c:pumpkins" => & Item :: C_PUMPKINS , "c:pumpkins/carved" => & Item :: C_PUMPKINS_CARVED , "c:pumpkins/jack_o_lanterns" => & Item :: C_PUMPKINS_JACK_O_LANTERNS , "c:pumpkins/normal" => & Item :: C_PUMPKINS_NORMAL , "c:raw_materials" => & Item :: C_RAW_MATERIALS , "c:raw_materials/copper" => & Item :: C_RAW_MATERIALS_COPPER , "c:raw_materials/gold" => & Item :: C_RAW_MATERIALS_GOLD , "c:raw_materials/iron" => & Item :: C_RAW_MATERIALS_IRON , "c:rods" => & Item :: C_RODS , "c:rods/blaze" => & Item :: C_RODS_BLAZE , "c:rods/breeze" => & Item :: C_RODS_BREEZE , "c:rods/wooden" => & Item :: C_RODS_WOODEN , "c:ropes" => & Item :: C_ROPES , "c:sands" => & Item :: C_SANDS , "c:sands/colorless" => & Item :: C_SANDS_COLORLESS , "c:sands/red" => & Item :: C_SANDS_RED , "c:sandstone/blocks" => & Item :: C_SANDSTONE_BLOCKS , "c:sandstone/red_blocks" => & Item :: C_SANDSTONE_RED_BLOCKS , "c:sandstone/red_slabs" => & Item :: C_SANDSTONE_RED_SLABS , "c:sandstone/red_stairs" => & Item :: C_SANDSTONE_RED_STAIRS , "c:sandstone/slabs" => & Item :: C_SANDSTONE_SLABS , "c:sandstone/stairs" => & Item :: C_SANDSTONE_STAIRS , "c:sandstone/uncolored_blocks" => & Item :: C_SANDSTONE_UNCOLORED_BLOCKS , "c:sandstone/uncolored_slabs" => & Item :: C_SANDSTONE_UNCOLORED_SLABS , "c:sandstone/uncolored_stairs" => & Item :: C_SANDSTONE_UNCOLORED_STAIRS , "c:seeds" => & Item :: C_SEEDS , "c:seeds/beetroot" => & Item :: C_SEEDS_BEETROOT , "c:seeds/melon" => & Item :: C_SEEDS_MELON , "c:seeds/pitcher_plant" => & Item :: C_SEEDS_PITCHER_PLANT , "c:seeds/pumpkin" => & Item :: C_SEEDS_PUMPKIN , "c:seeds/torchflower" => & Item :: C_SEEDS_TORCHFLOWER , "c:seeds/wheat" => & Item :: C_SEEDS_WHEAT , "c:shulker_boxes" => & Item :: C_SHULKER_BOXES , "c:slime_balls" => & Item :: C_SLIME_BALLS , "c:stones" => & Item :: C_STONES , "c:storage_blocks" => & Item :: C_STORAGE_BLOCKS , "c:storage_blocks/bone_meal" => & Item :: C_STORAGE_BLOCKS_BONE_MEAL , "c:storage_blocks/coal" => & Item :: C_STORAGE_BLOCKS_COAL , "c:storage_blocks/copper" => & Item :: C_STORAGE_BLOCKS_COPPER , "c:storage_blocks/diamond" => & Item :: C_STORAGE_BLOCKS_DIAMOND , "c:storage_blocks/dried_kelp" => & Item :: C_STORAGE_BLOCKS_DRIED_KELP , "c:storage_blocks/emerald" => & Item :: C_STORAGE_BLOCKS_EMERALD , "c:storage_blocks/gold" => & Item :: C_STORAGE_BLOCKS_GOLD , "c:storage_blocks/iron" => & Item :: C_STORAGE_BLOCKS_IRON , "c:storage_blocks/lapis" => & Item :: C_STORAGE_BLOCKS_LAPIS , "c:storage_blocks/netherite" => & Item :: C_STORAGE_BLOCKS_NETHERITE , "c:storage_blocks/raw_copper" => & Item :: C_STORAGE_BLOCKS_RAW_COPPER , "c:storage_blocks/raw_gold" => & Item :: C_STORAGE_BLOCKS_RAW_GOLD , "c:storage_blocks/raw_iron" => & Item :: C_STORAGE_BLOCKS_RAW_IRON , "c:storage_blocks/redstone" => & Item :: C_STORAGE_BLOCKS_REDSTONE , "c:storage_blocks/resin" => & Item :: C_STORAGE_BLOCKS_RESIN , "c:storage_blocks/slime" => & Item :: C_STORAGE_BLOCKS_SLIME , "c:storage_blocks/wheat" => & Item :: C_STORAGE_BLOCKS_WHEAT , "c:strings" => & Item :: C_STRINGS , "c:stripped_logs" => & Item :: C_STRIPPED_LOGS , "c:stripped_woods" => & Item :: C_STRIPPED_WOODS , "c:tools" => & Item :: C_TOOLS , "c:tools/bow" => & Item :: C_TOOLS_BOW , "c:tools/brush" => & Item :: C_TOOLS_BRUSH , "c:tools/crossbow" => & Item :: C_TOOLS_CROSSBOW , "c:tools/fishing_rod" => & Item :: C_TOOLS_FISHING_ROD , "c:tools/igniter" => & Item :: C_TOOLS_IGNITER , "c:tools/mace" => & Item :: C_TOOLS_MACE , "c:tools/melee_weapon" => & Item :: C_TOOLS_MELEE_WEAPON , "c:tools/mining_tool" => & Item :: C_TOOLS_MINING_TOOL , "c:tools/ranged_weapon" => & Item :: C_TOOLS_RANGED_WEAPON , "c:tools/shear" => & Item :: C_TOOLS_SHEAR , "c:tools/shield" => & Item :: C_TOOLS_SHIELD , "c:tools/trident" => & Item :: C_TOOLS_TRIDENT , "c:tools/wrench" => & Item :: C_TOOLS_WRENCH , "c:villager_job_sites" => & Item :: C_VILLAGER_JOB_SITES , "minecraft:acacia_logs" => & Item :: MINECRAFT_ACACIA_LOGS , "minecraft:anvil" => & Item :: MINECRAFT_ANVIL , "minecraft:armadillo_food" => & Item :: MINECRAFT_ARMADILLO_FOOD , "minecraft:arrows" => & Item :: MINECRAFT_ARROWS , "minecraft:axes" => & Item :: MINECRAFT_AXES , "minecraft:axolotl_food" => & Item :: MINECRAFT_AXOLOTL_FOOD , "minecraft:bamboo_blocks" => & Item :: MINECRAFT_BAMBOO_BLOCKS , "minecraft:banners" => & Item :: MINECRAFT_BANNERS , "minecraft:beacon_payment_items" => & Item :: MINECRAFT_BEACON_PAYMENT_ITEMS , "minecraft:beds" => & Item :: MINECRAFT_BEDS , "minecraft:bee_food" => & Item :: MINECRAFT_BEE_FOOD , "minecraft:birch_logs" => & Item :: MINECRAFT_BIRCH_LOGS , "minecraft:boats" => & Item :: MINECRAFT_BOATS , "minecraft:bookshelf_books" => & Item :: MINECRAFT_BOOKSHELF_BOOKS , "minecraft:breaks_decorated_pots" => & Item :: MINECRAFT_BREAKS_DECORATED_POTS , "minecraft:buttons" => & Item :: MINECRAFT_BUTTONS , "minecraft:camel_food" => & Item :: MINECRAFT_CAMEL_FOOD , "minecraft:candles" => & Item :: MINECRAFT_CANDLES , "minecraft:cat_food" => & Item :: MINECRAFT_CAT_FOOD , "minecraft:cherry_logs" => & Item :: MINECRAFT_CHERRY_LOGS , "minecraft:chest_armor" => & Item :: MINECRAFT_CHEST_ARMOR , "minecraft:chest_boats" => & Item :: MINECRAFT_CHEST_BOATS , "minecraft:chicken_food" => & Item :: MINECRAFT_CHICKEN_FOOD , "minecraft:cluster_max_harvestables" => & Item :: MINECRAFT_CLUSTER_MAX_HARVESTABLES , "minecraft:coal_ores" => & Item :: MINECRAFT_COAL_ORES , "minecraft:coals" => & Item :: MINECRAFT_COALS , "minecraft:compasses" => & Item :: MINECRAFT_COMPASSES , "minecraft:completes_find_tree_tutorial" => & Item :: MINECRAFT_COMPLETES_FIND_TREE_TUTORIAL , "minecraft:copper_ores" => & Item :: MINECRAFT_COPPER_ORES , "minecraft:cow_food" => & Item :: MINECRAFT_COW_FOOD , "minecraft:creeper_drop_music_discs" => & Item :: MINECRAFT_CREEPER_DROP_MUSIC_DISCS , "minecraft:creeper_igniters" => & Item :: MINECRAFT_CREEPER_IGNITERS , "minecraft:crimson_stems" => & Item :: MINECRAFT_CRIMSON_STEMS , "minecraft:dampens_vibrations" => & Item :: MINECRAFT_DAMPENS_VIBRATIONS , "minecraft:dark_oak_logs" => & Item :: MINECRAFT_DARK_OAK_LOGS , "minecraft:decorated_pot_ingredients" => & Item :: MINECRAFT_DECORATED_POT_INGREDIENTS , "minecraft:decorated_pot_sherds" => & Item :: MINECRAFT_DECORATED_POT_SHERDS , "minecraft:diamond_ores" => & Item :: MINECRAFT_DIAMOND_ORES , "minecraft:dirt" => & Item :: MINECRAFT_DIRT , "minecraft:doors" => & Item :: MINECRAFT_DOORS , "minecraft:dyeable" => & Item :: MINECRAFT_DYEABLE , "minecraft:emerald_ores" => & Item :: MINECRAFT_EMERALD_ORES , "minecraft:enchantable/armor" => & Item :: MINECRAFT_ENCHANTABLE_ARMOR , "minecraft:enchantable/bow" => & Item :: MINECRAFT_ENCHANTABLE_BOW , "minecraft:enchantable/chest_armor" => & Item :: MINECRAFT_ENCHANTABLE_CHEST_ARMOR , "minecraft:enchantable/crossbow" => & Item :: MINECRAFT_ENCHANTABLE_CROSSBOW , "minecraft:enchantable/durability" => & Item :: MINECRAFT_ENCHANTABLE_DURABILITY , "minecraft:enchantable/equippable" => & Item :: MINECRAFT_ENCHANTABLE_EQUIPPABLE , "minecraft:enchantable/fire_aspect" => & Item :: MINECRAFT_ENCHANTABLE_FIRE_ASPECT , "minecraft:enchantable/fishing" => & Item :: MINECRAFT_ENCHANTABLE_FISHING , "minecraft:enchantable/foot_armor" => & Item :: MINECRAFT_ENCHANTABLE_FOOT_ARMOR , "minecraft:enchantable/head_armor" => & Item :: MINECRAFT_ENCHANTABLE_HEAD_ARMOR , "minecraft:enchantable/leg_armor" => & Item :: MINECRAFT_ENCHANTABLE_LEG_ARMOR , "minecraft:enchantable/mace" => & Item :: MINECRAFT_ENCHANTABLE_MACE , "minecraft:enchantable/mining" => & Item :: MINECRAFT_ENCHANTABLE_MINING , "minecraft:enchantable/mining_loot" => & Item :: MINECRAFT_ENCHANTABLE_MINING_LOOT , "minecraft:enchantable/sharp_weapon" => & Item :: MINECRAFT_ENCHANTABLE_SHARP_WEAPON , "minecraft:enchantable/sword" => & Item :: MINECRAFT_ENCHANTABLE_SWORD , "minecraft:enchantable/trident" => & Item :: MINECRAFT_ENCHANTABLE_TRIDENT , "minecraft:enchantable/vanishing" => & Item :: MINECRAFT_ENCHANTABLE_VANISHING , "minecraft:enchantable/weapon" => & Item :: MINECRAFT_ENCHANTABLE_WEAPON , "minecraft:fence_gates" => & Item :: MINECRAFT_FENCE_GATES , "minecraft:fences" => & Item :: MINECRAFT_FENCES , "minecraft:fishes" => & Item :: MINECRAFT_FISHES , "minecraft:flowers" => & Item :: MINECRAFT_FLOWERS , "minecraft:foot_armor" => & Item :: MINECRAFT_FOOT_ARMOR , "minecraft:fox_food" => & Item :: MINECRAFT_FOX_FOOD , "minecraft:freeze_immune_wearables" => & Item :: MINECRAFT_FREEZE_IMMUNE_WEARABLES , "minecraft:frog_food" => & Item :: MINECRAFT_FROG_FOOD , "minecraft:goat_food" => & Item :: MINECRAFT_GOAT_FOOD , "minecraft:gold_ores" => & Item :: MINECRAFT_GOLD_ORES , "minecraft:hanging_signs" => & Item :: MINECRAFT_HANGING_SIGNS , "minecraft:head_armor" => & Item :: MINECRAFT_HEAD_ARMOR , "minecraft:hoes" => & Item :: MINECRAFT_HOES , "minecraft:hoglin_food" => & Item :: MINECRAFT_HOGLIN_FOOD , "minecraft:horse_food" => & Item :: MINECRAFT_HORSE_FOOD , "minecraft:horse_tempt_items" => & Item :: MINECRAFT_HORSE_TEMPT_ITEMS , "minecraft:ignored_by_piglin_babies" => & Item :: MINECRAFT_IGNORED_BY_PIGLIN_BABIES , "minecraft:iron_ores" => & Item :: MINECRAFT_IRON_ORES , "minecraft:jungle_logs" => & Item :: MINECRAFT_JUNGLE_LOGS , "minecraft:lapis_ores" => & Item :: MINECRAFT_LAPIS_ORES , "minecraft:leaves" => & Item :: MINECRAFT_LEAVES , "minecraft:lectern_books" => & Item :: MINECRAFT_LECTERN_BOOKS , "minecraft:leg_armor" => & Item :: MINECRAFT_LEG_ARMOR , "minecraft:llama_food" => & Item :: MINECRAFT_LLAMA_FOOD , "minecraft:llama_tempt_items" => & Item :: MINECRAFT_LLAMA_TEMPT_ITEMS , "minecraft:logs" => & Item :: MINECRAFT_LOGS , "minecraft:logs_that_burn" => & Item :: MINECRAFT_LOGS_THAT_BURN , "minecraft:mangrove_logs" => & Item :: MINECRAFT_MANGROVE_LOGS , "minecraft:meat" => & Item :: MINECRAFT_MEAT , "minecraft:non_flammable_wood" => & Item :: MINECRAFT_NON_FLAMMABLE_WOOD , "minecraft:noteblock_top_instruments" => & Item :: MINECRAFT_NOTEBLOCK_TOP_INSTRUMENTS , "minecraft:oak_logs" => & Item :: MINECRAFT_OAK_LOGS , "minecraft:ocelot_food" => & Item :: MINECRAFT_OCELOT_FOOD , "minecraft:panda_food" => & Item :: MINECRAFT_PANDA_FOOD , "minecraft:parrot_food" => & Item :: MINECRAFT_PARROT_FOOD , "minecraft:parrot_poisonous_food" => & Item :: MINECRAFT_PARROT_POISONOUS_FOOD , "minecraft:pickaxes" => & Item :: MINECRAFT_PICKAXES , "minecraft:pig_food" => & Item :: MINECRAFT_PIG_FOOD , "minecraft:piglin_food" => & Item :: MINECRAFT_PIGLIN_FOOD , "minecraft:piglin_loved" => & Item :: MINECRAFT_PIGLIN_LOVED , "minecraft:piglin_repellents" => & Item :: MINECRAFT_PIGLIN_REPELLENTS , "minecraft:planks" => & Item :: MINECRAFT_PLANKS , "minecraft:rabbit_food" => & Item :: MINECRAFT_RABBIT_FOOD , "minecraft:rails" => & Item :: MINECRAFT_RAILS , "minecraft:redstone_ores" => & Item :: MINECRAFT_REDSTONE_ORES , "minecraft:sand" => & Item :: MINECRAFT_SAND , "minecraft:saplings" => & Item :: MINECRAFT_SAPLINGS , "minecraft:sheep_food" => & Item :: MINECRAFT_SHEEP_FOOD , "minecraft:shovels" => & Item :: MINECRAFT_SHOVELS , "minecraft:signs" => & Item :: MINECRAFT_SIGNS , "minecraft:skulls" => & Item :: MINECRAFT_SKULLS , "minecraft:slabs" => & Item :: MINECRAFT_SLABS , "minecraft:small_flowers" => & Item :: MINECRAFT_SMALL_FLOWERS , "minecraft:smelts_to_glass" => & Item :: MINECRAFT_SMELTS_TO_GLASS , "minecraft:sniffer_food" => & Item :: MINECRAFT_SNIFFER_FOOD , "minecraft:soul_fire_base_blocks" => & Item :: MINECRAFT_SOUL_FIRE_BASE_BLOCKS , "minecraft:spruce_logs" => & Item :: MINECRAFT_SPRUCE_LOGS , "minecraft:stairs" => & Item :: MINECRAFT_STAIRS , "minecraft:stone_bricks" => & Item :: MINECRAFT_STONE_BRICKS , "minecraft:stone_buttons" => & Item :: MINECRAFT_STONE_BUTTONS , "minecraft:stone_crafting_materials" => & Item :: MINECRAFT_STONE_CRAFTING_MATERIALS , "minecraft:stone_tool_materials" => & Item :: MINECRAFT_STONE_TOOL_MATERIALS , "minecraft:strider_food" => & Item :: MINECRAFT_STRIDER_FOOD , "minecraft:strider_tempt_items" => & Item :: MINECRAFT_STRIDER_TEMPT_ITEMS , "minecraft:swords" => & Item :: MINECRAFT_SWORDS , "minecraft:tall_flowers" => & Item :: MINECRAFT_TALL_FLOWERS , "minecraft:terracotta" => & Item :: MINECRAFT_TERRACOTTA , "minecraft:trapdoors" => & Item :: MINECRAFT_TRAPDOORS , "minecraft:trim_materials" => & Item :: MINECRAFT_TRIM_MATERIALS , "minecraft:trim_templates" => & Item :: MINECRAFT_TRIM_TEMPLATES , "minecraft:trimmable_armor" => & Item :: MINECRAFT_TRIMMABLE_ARMOR , "minecraft:turtle_food" => & Item :: MINECRAFT_TURTLE_FOOD , "minecraft:villager_plantable_seeds" => & Item :: MINECRAFT_VILLAGER_PLANTABLE_SEEDS , "minecraft:walls" => & Item :: MINECRAFT_WALLS , "minecraft:warped_stems" => & Item :: MINECRAFT_WARPED_STEMS , "minecraft:wart_blocks" => & Item :: MINECRAFT_WART_BLOCKS , "minecraft:wolf_food" => & Item :: MINECRAFT_WOLF_FOOD , "minecraft:wooden_buttons" => & Item :: MINECRAFT_WOODEN_BUTTONS , "minecraft:wooden_doors" => & Item :: MINECRAFT_WOODEN_DOORS , "minecraft:wooden_fences" => & Item :: MINECRAFT_WOODEN_FENCES , "minecraft:wooden_pressure_plates" => & Item :: MINECRAFT_WOODEN_PRESSURE_PLATES , "minecraft:wooden_slabs" => & Item :: MINECRAFT_WOODEN_SLABS , "minecraft:wooden_stairs" => & Item :: MINECRAFT_WOODEN_STAIRS , "minecraft:wooden_trapdoors" => & Item :: MINECRAFT_WOODEN_TRAPDOORS , "minecraft:wool" => & Item :: MINECRAFT_WOOL , "minecraft:wool_carpets" => & Item :: MINECRAFT_WOOL_CARPETS };
 #[allow(non_snake_case)]
 pub mod PaintingVariant {
     use super::Tag;
@@ -12475,733 +12353,9 @@ static POINTOFINTERESTTYPE_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf
 pub mod Potion {
     use super::Tag;
     pub const C_HIDDEN_FROM_RECIPE_VIEWERS: Tag = (&[], &[]);
-    pub const MINECRAFT_DOUSES_FIRE: Tag = (&["water"], &[0u16]);
-    pub const MINECRAFT_EXTINGUISHES_ENTITIES: Tag = (&["water"], &[0u16]);
-    pub const MINECRAFT_HURTS_WATER_SENSITIVE_ENTITIES: Tag = (&["water"], &[0u16]);
-    pub const MINECRAFT_REHYDRATES_AXOLOTLS: Tag = (&["water"], &[0u16]);
-    pub const MINECRAFT_TRADEABLE: Tag = (
-        &[
-            "wind_charged",
-            "oozing",
-            "infested",
-            "weaving",
-            "night_vision",
-            "long_night_vision",
-            "invisibility",
-            "long_invisibility",
-            "fire_resistance",
-            "long_fire_resistance",
-            "leaping",
-            "long_leaping",
-            "strong_leaping",
-            "slowness",
-            "long_slowness",
-            "strong_slowness",
-            "turtle_master",
-            "long_turtle_master",
-            "strong_turtle_master",
-            "swiftness",
-            "long_swiftness",
-            "strong_swiftness",
-            "water_breathing",
-            "long_water_breathing",
-            "healing",
-            "strong_healing",
-            "harming",
-            "strong_harming",
-            "poison",
-            "long_poison",
-            "strong_poison",
-            "regeneration",
-            "long_regeneration",
-            "strong_regeneration",
-            "strength",
-            "long_strength",
-            "strong_strength",
-            "weakness",
-            "long_weakness",
-            "slow_falling",
-            "long_slow_falling",
-        ],
-        &[
-            42u16, 44u16, 45u16, 43u16, 4u16, 5u16, 6u16, 7u16, 11u16, 12u16, 8u16, 9u16, 10u16,
-            16u16, 17u16, 18u16, 19u16, 20u16, 21u16, 13u16, 14u16, 15u16, 22u16, 23u16, 24u16,
-            25u16, 26u16, 27u16, 28u16, 29u16, 30u16, 31u16, 32u16, 33u16, 34u16, 35u16, 36u16,
-            37u16, 38u16, 40u16, 41u16,
-        ],
-    );
 }
-static POTION_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf_map! { "c:hidden_from_recipe_viewers" => & Potion :: C_HIDDEN_FROM_RECIPE_VIEWERS , "minecraft:douses_fire" => & Potion :: MINECRAFT_DOUSES_FIRE , "minecraft:extinguishes_entities" => & Potion :: MINECRAFT_EXTINGUISHES_ENTITIES , "minecraft:hurts_water_sensitive_entities" => & Potion :: MINECRAFT_HURTS_WATER_SENSITIVE_ENTITIES , "minecraft:rehydrates_axolotls" => & Potion :: MINECRAFT_REHYDRATES_AXOLOTLS , "minecraft:tradeable" => & Potion :: MINECRAFT_TRADEABLE };
-#[allow(non_snake_case)]
-pub mod VillagerTrade {
-    use super::Tag;
-    pub const MINECRAFT_ARMORER_LEVEL_1: Tag = (
-        &[
-            "smith/1/coal_emerald",
-            "armorer/1/emerald_iron_leggings",
-            "armorer/1/emerald_iron_boots",
-            "armorer/1/emerald_iron_helmet",
-            "armorer/1/emerald_iron_chestplate",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_ARMORER_LEVEL_2: Tag = (
-        &[
-            "smith/2/iron_ingot_emerald",
-            "smith/2/emerald_bell",
-            "armorer/2/emerald_chainmail_boots",
-            "armorer/2/emerald_chainmail_leggings",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_ARMORER_LEVEL_3: Tag = (
-        &[
-            "armorer/3/lava_bucket_emerald",
-            "armorer/3/emerald_chainmail_helmet",
-            "armorer/3/emerald_chainmail_chestplate",
-            "armorer/3/emerald_shield",
-            "armorer/3/diamond_emerald",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_ARMORER_LEVEL_4: Tag = (
-        &[
-            "armorer/4/emerald_enchanted_diamond_leggings",
-            "armorer/4/emerald_enchanted_diamond_boots",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_ARMORER_LEVEL_5: Tag = (
-        &[
-            "armorer/5/emerald_enchanted_diamond_helmet",
-            "armorer/5/emerald_enchanted_diamond_chestplate",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_BUTCHER_LEVEL_1: Tag = (
-        &[
-            "butcher/1/chicken_emerald",
-            "butcher/1/porkchop_emerald",
-            "butcher/1/rabbit_emerald",
-            "butcher/1/emerald_rabbit_stew",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_BUTCHER_LEVEL_2: Tag = (
-        &[
-            "butcher/2/coal_emerald",
-            "butcher/2/emerald_cooked_porkchop",
-            "butcher/2/emerald_cooked_chicken",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_BUTCHER_LEVEL_3: Tag =
-        (&["butcher/3/mutton_emerald", "butcher/3/beef_emerald"], &[]);
-    pub const MINECRAFT_BUTCHER_LEVEL_4: Tag = (&["butcher/4/dried_kelp_block_emerald"], &[]);
-    pub const MINECRAFT_BUTCHER_LEVEL_5: Tag = (&["butcher/5/sweet_berries_emerald"], &[]);
-    pub const MINECRAFT_CARTOGRAPHER_LEVEL_1: Tag = (
-        &["cartographer/1/paper_emerald", "cartographer/1/emerald_map"],
-        &[],
-    );
-    pub const MINECRAFT_CARTOGRAPHER_LEVEL_2: Tag = (
-        &[
-            "cartographer/2/glass_pane_emerald",
-            "cartographer/2/emerald_and_compass_village_taiga_map",
-            "cartographer/2/emerald_and_compass_explorer_swamp_map",
-            "cartographer/2/emerald_and_compass_village_snowy_map",
-            "cartographer/2/emerald_and_compass_village_savanna_map",
-            "cartographer/2/emerald_and_compass_village_plains_map",
-            "cartographer/2/emerald_and_compass_explorer_jungle_map",
-            "cartographer/2/emerald_and_compass_village_desert_map",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_CARTOGRAPHER_LEVEL_3: Tag = (
-        &[
-            "cartographer/3/compass_emerald",
-            "cartographer/3/emerald_and_compass_ocean_monument_map",
-            "cartographer/3/emerald_and_compass_buried_trial_chambers_map",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_CARTOGRAPHER_LEVEL_4: Tag = (
-        &[
-            "cartographer/4/emerald_item_frame",
-            "cartographer/4/emerald_white_banner",
-            "cartographer/4/emerald_orange_banner",
-            "cartographer/4/emerald_magenta_banner",
-            "cartographer/4/emerald_blue_banner",
-            "cartographer/4/emerald_light_blue_banner",
-            "cartographer/4/emerald_yellow_banner",
-            "cartographer/4/emerald_lime_banner",
-            "cartographer/4/emerald_pink_banner",
-            "cartographer/4/emerald_gray_banner",
-            "cartographer/4/emerald_cyan_banner",
-            "cartographer/4/emerald_purple_banner",
-            "cartographer/4/emerald_brown_banner",
-            "cartographer/4/emerald_green_banner",
-            "cartographer/4/emerald_red_banner",
-            "cartographer/4/emerald_black_banner",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_CARTOGRAPHER_LEVEL_5: Tag = (
-        &[
-            "cartographer/5/emerald_globe_banner_pattern",
-            "cartographer/5/emerald_and_compass_woodland_mansion_map",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_CLERIC_LEVEL_1: Tag = (
-        &["cleric/1/rotten_flesh_emerald", "cleric/1/emerald_redstone"],
-        &[],
-    );
-    pub const MINECRAFT_CLERIC_LEVEL_2: Tag = (
-        &[
-            "cleric/2/gold_ingot_emerald",
-            "cleric/2/emerald_lapis_lazuli",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_CLERIC_LEVEL_3: Tag = (
-        &["cleric/3/rabbit_foot_emerald", "cleric/3/emerald_glowstone"],
-        &[],
-    );
-    pub const MINECRAFT_CLERIC_LEVEL_4: Tag = (
-        &[
-            "cleric/4/turtle_scute_emerald",
-            "cleric/4/glass_bottle_emerald",
-            "cleric/4/emerald_ender_pearl",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_CLERIC_LEVEL_5: Tag = (
-        &[
-            "cleric/5/nether_wart_emerald",
-            "cleric/5/emerald_experience_bottle",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_COMMON_SMITH_LEVEL_1: Tag = (&["smith/1/coal_emerald"], &[]);
-    pub const MINECRAFT_COMMON_SMITH_LEVEL_2: Tag =
-        (&["smith/2/iron_ingot_emerald", "smith/2/emerald_bell"], &[]);
-    pub const MINECRAFT_COMMON_SMITH_LEVEL_3: Tag = (&[], &[]);
-    pub const MINECRAFT_COMMON_SMITH_LEVEL_4: Tag = (&[], &[]);
-    pub const MINECRAFT_COMMON_SMITH_LEVEL_5: Tag = (&[], &[]);
-    pub const MINECRAFT_FARMER_LEVEL_1: Tag = (
-        &[
-            "farmer/1/wheat_emerald",
-            "farmer/1/potato_emerald",
-            "farmer/1/carrot_emerald",
-            "farmer/1/beetroot_emerald",
-            "farmer/1/emerald_bread",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FARMER_LEVEL_2: Tag = (
-        &[
-            "farmer/2/pumpkin_emerald",
-            "farmer/2/emerald_pumpkin_pie",
-            "farmer/2/emerald_apple",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FARMER_LEVEL_3: Tag =
-        (&["farmer/3/emerald_cookie", "farmer/3/melon_emerald"], &[]);
-    pub const MINECRAFT_FARMER_LEVEL_4: Tag = (
-        &["farmer/4/emerald_cake", "farmer/4/emerald_suspicious_stew"],
-        &[],
-    );
-    pub const MINECRAFT_FARMER_LEVEL_5: Tag = (
-        &[
-            "farmer/5/emerald_golden_carrot",
-            "farmer/5/emerald_glistening_melon_slice",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FISHERMAN_LEVEL_1: Tag = (
-        &[
-            "fisherman/1/string_emerald",
-            "fisherman/1/coal_emerald",
-            "fisherman/1/raw_cod_and_emerald_cooked_cod",
-            "fisherman/1/emerald_cod_bucket",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FISHERMAN_LEVEL_2: Tag = (
-        &[
-            "fisherman/2/cod_emerald",
-            "fisherman/2/salmon_and_emerald_cooked_salmon",
-            "fisherman/2/emerald_campfire",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FISHERMAN_LEVEL_3: Tag = (
-        &[
-            "fisherman/3/salmon_emerald",
-            "fisherman/3/emerald_enchanted_fishing_rod",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FISHERMAN_LEVEL_4: Tag = (&["fisherman/4/tropical_fish_emerald"], &[]);
-    pub const MINECRAFT_FISHERMAN_LEVEL_5: Tag = (
-        &[
-            "fisherman/5/pufferfish_emerald",
-            "fisherman/5/oak_boat_emerald",
-            "fisherman/5/spruce_boat_emerald",
-            "fisherman/5/jungle_boat_emerald",
-            "fisherman/5/acacia_boat_emerald",
-            "fisherman/5/dark_oak_boat_emerald",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FLETCHER_LEVEL_1: Tag = (
-        &[
-            "fletcher/1/stick_emerald",
-            "fletcher/1/emerald_arrow",
-            "fletcher/1/gravel_and_emerald_flint",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FLETCHER_LEVEL_2: Tag =
-        (&["fletcher/2/flint_emerald", "fletcher/2/emerald_bow"], &[]);
-    pub const MINECRAFT_FLETCHER_LEVEL_3: Tag = (
-        &["fletcher/3/string_emerald", "fletcher/3/emerald_crossbow"],
-        &[],
-    );
-    pub const MINECRAFT_FLETCHER_LEVEL_4: Tag = (
-        &[
-            "fletcher/4/feather_emerald",
-            "fletcher/4/emerald_enchanted_bow",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_FLETCHER_LEVEL_5: Tag = (
-        &[
-            "fletcher/5/tripwire_hook_emerald",
-            "fletcher/5/emerald_enchanted_crossbow",
-            "fletcher/5/arrow_and_emerald_tipped_arrow",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LEATHERWORKER_LEVEL_1: Tag = (
-        &[
-            "leatherworker/1/leather_emerald",
-            "leatherworker/1/emerald_dyed_leather_leggings",
-            "leatherworker/1/emerald_dyed_leather_chestplate",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LEATHERWORKER_LEVEL_2: Tag = (
-        &[
-            "leatherworker/2/flint_emerald",
-            "leatherworker/2/emerald_dyed_leather_helmet",
-            "leatherworker/2/emerald_dyed_leather_boots",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LEATHERWORKER_LEVEL_3: Tag = (
-        &[
-            "leatherworker/3/rabbit_hide_emerald",
-            "leatherworker/3/emerald_dyed_leather_chestplate",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LEATHERWORKER_LEVEL_4: Tag = (
-        &[
-            "leatherworker/4/turtle_scute_emerald",
-            "leatherworker/4/emerald_dyed_leather_horse_armor",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LEATHERWORKER_LEVEL_5: Tag = (
-        &[
-            "leatherworker/5/emerald_saddle",
-            "leatherworker/5/emerald_dyed_leather_helmet",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LIBRARIAN_LEVEL_1: Tag = (
-        &[
-            "librarian/1/paper_emerald",
-            "librarian/1/emerald_and_book_enchanted_book",
-            "librarian/1/emerald_bookshelf",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LIBRARIAN_LEVEL_2: Tag = (
-        &[
-            "librarian/2/book_emerald",
-            "librarian/2/emerald_and_book_enchanted_book",
-            "librarian/2/emerald_lantern",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LIBRARIAN_LEVEL_3: Tag = (
-        &[
-            "librarian/3/ink_sac_emerald",
-            "librarian/3/emerald_and_book_enchanted_book",
-            "librarian/3/emerald_glass",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LIBRARIAN_LEVEL_4: Tag = (
-        &[
-            "librarian/4/writable_book_emerald",
-            "librarian/4/emerald_book_and_enchanted_book",
-            "librarian/4/emerald_clock",
-            "librarian/4/emerald_compass",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_LIBRARIAN_LEVEL_5: Tag = (
-        &[
-            "librarian/5/emerald_yellow_candle",
-            "librarian/5/emerald_red_candle",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_MASON_LEVEL_1: Tag =
-        (&["mason/1/clay_ball_emerald", "mason/1/emerald_brick"], &[]);
-    pub const MINECRAFT_MASON_LEVEL_2: Tag = (
-        &[
-            "mason/2/stone_emerald",
-            "mason/2/emerald_chiseled_stone_bricks",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_MASON_LEVEL_3: Tag = (
-        &[
-            "mason/3/granite_emerald",
-            "mason/3/andesite_emerald",
-            "mason/3/diorite_emerald",
-            "mason/3/emerald_dripstone_block",
-            "mason/3/emerald_polished_andesite",
-            "mason/3/emerald_polished_diorite",
-            "mason/3/emerald_polished_granite",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_MASON_LEVEL_4: Tag = (
-        &[
-            "mason/4/quartz_emerald",
-            "mason/4/emerald_white_terracotta",
-            "mason/4/emerald_orange_terracotta",
-            "mason/4/emerald_magenta_terracotta",
-            "mason/4/emerald_light_blue_terracotta",
-            "mason/4/emerald_yellow_terracotta",
-            "mason/4/emerald_lime_terracotta",
-            "mason/4/emerald_pink_terracotta",
-            "mason/4/emerald_gray_terracotta",
-            "mason/4/emerald_light_gray_terracotta",
-            "mason/4/emerald_cyan_terracotta",
-            "mason/4/emerald_purple_terracotta",
-            "mason/4/emerald_blue_terracotta",
-            "mason/4/emerald_brown_terracotta",
-            "mason/4/emerald_green_terracotta",
-            "mason/4/emerald_red_terracotta",
-            "mason/4/emerald_black_terracotta",
-            "mason/4/emerald_white_glazed_terracotta",
-            "mason/4/emerald_orange_glazed_terracotta",
-            "mason/4/emerald_magenta_glazed_terracotta",
-            "mason/4/emerald_light_blue_glazed_terracotta",
-            "mason/4/emerald_yellow_glazed_terracotta",
-            "mason/4/emerald_lime_glazed_terracotta",
-            "mason/4/emerald_pink_glazed_terracotta",
-            "mason/4/emerald_gray_glazed_terracotta",
-            "mason/4/emerald_light_gray_glazed_terracotta",
-            "mason/4/emerald_cyan_glazed_terracotta",
-            "mason/4/emerald_purple_glazed_terracotta",
-            "mason/4/emerald_blue_glazed_terracotta",
-            "mason/4/emerald_brown_glazed_terracotta",
-            "mason/4/emerald_green_glazed_terracotta",
-            "mason/4/emerald_red_glazed_terracotta",
-            "mason/4/emerald_black_glazed_terracotta",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_MASON_LEVEL_5: Tag = (
-        &[
-            "mason/5/emerald_quartz_pillar",
-            "mason/5/emerald_quartz_block",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_SHEPHERD_LEVEL_1: Tag = (
-        &[
-            "shepherd/1/white_wool_emerald",
-            "shepherd/1/brown_wool_emerald",
-            "shepherd/1/gray_wool_emerald",
-            "shepherd/1/black_wool_emerald",
-            "shepherd/1/emerald_shears",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_SHEPHERD_LEVEL_2: Tag = (
-        &[
-            "shepherd/2/white_dye_emerald",
-            "shepherd/2/gray_dye_emerald",
-            "shepherd/2/black_dye_emerald",
-            "shepherd/2/light_blue_dye_emerald",
-            "shepherd/2/lime_dye_emerald",
-            "shepherd/2/emerald_white_wool",
-            "shepherd/2/emerald_orange_wool",
-            "shepherd/2/emerald_magenta_wool",
-            "shepherd/2/emerald_light_blue_wool",
-            "shepherd/2/emerald_yellow_wool",
-            "shepherd/2/emerald_lime_wool",
-            "shepherd/2/emerald_pink_wool",
-            "shepherd/2/emerald_gray_wool",
-            "shepherd/2/emerald_light_gray_wool",
-            "shepherd/2/emerald_cyan_wool",
-            "shepherd/2/emerald_purple_wool",
-            "shepherd/2/emerald_blue_wool",
-            "shepherd/2/emerald_brown_wool",
-            "shepherd/2/emerald_green_wool",
-            "shepherd/2/emerald_red_wool",
-            "shepherd/2/emerald_black_wool",
-            "shepherd/2/emerald_white_carpet",
-            "shepherd/2/emerald_orange_carpet",
-            "shepherd/2/emerald_magenta_carpet",
-            "shepherd/2/emerald_light_blue_carpet",
-            "shepherd/2/emerald_yellow_carpet",
-            "shepherd/2/emerald_lime_carpet",
-            "shepherd/2/emerald_pink_carpet",
-            "shepherd/2/emerald_gray_carpet",
-            "shepherd/2/emerald_light_gray_carpet",
-            "shepherd/2/emerald_cyan_carpet",
-            "shepherd/2/emerald_purple_carpet",
-            "shepherd/2/emerald_blue_carpet",
-            "shepherd/2/emerald_brown_carpet",
-            "shepherd/2/emerald_green_carpet",
-            "shepherd/2/emerald_red_carpet",
-            "shepherd/2/emerald_black_carpet",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_SHEPHERD_LEVEL_3: Tag = (
-        &[
-            "shepherd/3/yellow_dye_emerald",
-            "shepherd/3/light_gray_dye_emerald",
-            "shepherd/3/orange_dye_emerald",
-            "shepherd/3/red_dye_emerald",
-            "shepherd/3/pink_dye_emerald",
-            "shepherd/3/emerald_white_bed",
-            "shepherd/3/emerald_orange_bed",
-            "shepherd/3/emerald_magenta_bed",
-            "shepherd/3/emerald_light_blue_bed",
-            "shepherd/3/emerald_yellow_bed",
-            "shepherd/3/emerald_lime_bed",
-            "shepherd/3/emerald_pink_bed",
-            "shepherd/3/emerald_gray_bed",
-            "shepherd/3/emerald_light_gray_bed",
-            "shepherd/3/emerald_cyan_bed",
-            "shepherd/3/emerald_purple_bed",
-            "shepherd/3/emerald_blue_bed",
-            "shepherd/3/emerald_brown_bed",
-            "shepherd/3/emerald_green_bed",
-            "shepherd/3/emerald_red_bed",
-            "shepherd/3/emerald_black_bed",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_SHEPHERD_LEVEL_4: Tag = (
-        &[
-            "shepherd/4/brown_dye_emerald",
-            "shepherd/4/purple_dye_emerald",
-            "shepherd/4/blue_dye_emerald",
-            "shepherd/4/green_dye_emerald",
-            "shepherd/4/magenta_dye_emerald",
-            "shepherd/4/cyan_dye_emerald",
-            "shepherd/4/emerald_white_banner",
-            "shepherd/4/emerald_orange_banner",
-            "shepherd/4/emerald_magenta_banner",
-            "shepherd/4/emerald_light_blue_banner",
-            "shepherd/4/emerald_yellow_banner",
-            "shepherd/4/emerald_lime_banner",
-            "shepherd/4/emerald_pink_banner",
-            "shepherd/4/emerald_gray_banner",
-            "shepherd/4/emerald_light_gray_banner",
-            "shepherd/4/emerald_cyan_banner",
-            "shepherd/4/emerald_purple_banner",
-            "shepherd/4/emerald_blue_banner",
-            "shepherd/4/emerald_brown_banner",
-            "shepherd/4/emerald_green_banner",
-            "shepherd/4/emerald_red_banner",
-            "shepherd/4/emerald_black_banner",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_SHEPHERD_LEVEL_5: Tag = (&["shepherd/5/emerald_painting"], &[]);
-    pub const MINECRAFT_TOOLSMITH_LEVEL_1: Tag = (
-        &[
-            "smith/1/coal_emerald",
-            "toolsmith/1/emerald_stone_axe",
-            "toolsmith/1/emerald_stone_shovel",
-            "toolsmith/1/emerald_stone_pickaxe",
-            "toolsmith/1/emerald_stone_hoe",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_TOOLSMITH_LEVEL_2: Tag =
-        (&["smith/2/iron_ingot_emerald", "smith/2/emerald_bell"], &[]);
-    pub const MINECRAFT_TOOLSMITH_LEVEL_3: Tag = (
-        &[
-            "toolsmith/3/flint_emerald",
-            "toolsmith/3/emerald_enchanted_iron_axe",
-            "toolsmith/3/emerald_enchanted_iron_shovel",
-            "toolsmith/3/emerald_enchanted_iron_pickaxe",
-            "toolsmith/3/emerald_diamond_hoe",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_TOOLSMITH_LEVEL_4: Tag = (
-        &[
-            "toolsmith/4/emerald_enchanted_diamond_axe",
-            "toolsmith/4/emerald_enchanted_diamond_shovel",
-            "toolsmith/4/diamond_emerald",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_TOOLSMITH_LEVEL_5: Tag =
-        (&["toolsmith/5/emerald_enchanted_diamond_pickaxe"], &[]);
-    pub const MINECRAFT_WANDERING_TRADER_BUYING: Tag = (
-        &[
-            "wandering_trader/water_bottle_emerald",
-            "wandering_trader/water_bucket_emerald",
-            "wandering_trader/milk_bucket_emerald",
-            "wandering_trader/fermented_spider_eye_emerald",
-            "wandering_trader/baked_potato_emerald",
-            "wandering_trader/hay_block_emerald",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_WANDERING_TRADER_COMMON: Tag = (
-        &[
-            "wandering_trader/emerald_white_dye",
-            "wandering_trader/emerald_orange_dye",
-            "wandering_trader/emerald_magenta_dye",
-            "wandering_trader/emerald_light_blue_dye",
-            "wandering_trader/emerald_yellow_dye",
-            "wandering_trader/emerald_lime_dye",
-            "wandering_trader/emerald_pink_dye",
-            "wandering_trader/emerald_gray_dye",
-            "wandering_trader/emerald_light_gray_dye",
-            "wandering_trader/emerald_cyan_dye",
-            "wandering_trader/emerald_purple_dye",
-            "wandering_trader/emerald_blue_dye",
-            "wandering_trader/emerald_brown_dye",
-            "wandering_trader/emerald_green_dye",
-            "wandering_trader/emerald_red_dye",
-            "wandering_trader/emerald_black_dye",
-            "wandering_trader/emerald_fish_bucket",
-            "wandering_trader/emerald_pufferfish_bucket",
-            "wandering_trader/emerald_sea_pickle",
-            "wandering_trader/emerald_slime_ball",
-            "wandering_trader/emerald_glowstone",
-            "wandering_trader/emerald_nautilus_shell",
-            "wandering_trader/emerald_fern",
-            "wandering_trader/emerald_sugar_cane",
-            "wandering_trader/emerald_pumpkin",
-            "wandering_trader/emerald_kelp",
-            "wandering_trader/emerald_cactus",
-            "wandering_trader/emerald_dandelion",
-            "wandering_trader/emerald_poppy",
-            "wandering_trader/emerald_blue_orchid",
-            "wandering_trader/emerald_allium",
-            "wandering_trader/emerald_azure_bluet",
-            "wandering_trader/emerald_red_tulip",
-            "wandering_trader/emerald_orange_tulip",
-            "wandering_trader/emerald_white_tulip",
-            "wandering_trader/emerald_pink_tulip",
-            "wandering_trader/emerald_oxeye_daisy",
-            "wandering_trader/emerald_cornflower",
-            "wandering_trader/emerald_lily_of_the_valley",
-            "wandering_trader/emerald_open_eyeblossom",
-            "wandering_trader/emerald_wheat_seeds",
-            "wandering_trader/emerald_beetroot_seeds",
-            "wandering_trader/emerald_pumpkin_seeds",
-            "wandering_trader/emerald_melon_seeds",
-            "wandering_trader/emerald_acacia_sapling",
-            "wandering_trader/emerald_birch_sapling",
-            "wandering_trader/emerald_dark_oak_sapling",
-            "wandering_trader/emerald_jungle_sapling",
-            "wandering_trader/emerald_oak_sapling",
-            "wandering_trader/emerald_spruce_sapling",
-            "wandering_trader/emerald_cherry_sapling",
-            "wandering_trader/emerald_pale_oak_sapling",
-            "wandering_trader/emerald_mangrove_propagule",
-            "wandering_trader/emerald_poplar_sapling",
-            "wandering_trader/emerald_brain_coral_block",
-            "wandering_trader/emerald_bubble_coral_block",
-            "wandering_trader/emerald_fire_coral_block",
-            "wandering_trader/emerald_horn_coral_block",
-            "wandering_trader/emerald_tube_coral_block",
-            "wandering_trader/emerald_vine",
-            "wandering_trader/emerald_pale_hanging_moss",
-            "wandering_trader/emerald_brown_mushroom",
-            "wandering_trader/emerald_red_mushroom",
-            "wandering_trader/emerald_lily_pad",
-            "wandering_trader/emerald_small_dripleaf",
-            "wandering_trader/emerald_sand",
-            "wandering_trader/emerald_red_sand",
-            "wandering_trader/emerald_pointed_dripstone",
-            "wandering_trader/emerald_sulfur_spike",
-            "wandering_trader/emerald_rooted_dirt",
-            "wandering_trader/emerald_moss_block",
-            "wandering_trader/emerald_pale_moss_block",
-            "wandering_trader/emerald_wildflowers",
-            "wandering_trader/emerald_dry_tall_grass",
-            "wandering_trader/emerald_firefly_bush",
-            "wandering_trader/emerald_golden_dandelion",
-            "wandering_trader/emerald_name_tag",
-            "wandering_trader/emerald_shelf_mushroom",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_WANDERING_TRADER_UNCOMMON: Tag = (
-        &[
-            "wandering_trader/emerald_packed_ice",
-            "wandering_trader/emerald_blue_ice",
-            "wandering_trader/emerald_gunpowder",
-            "wandering_trader/emerald_podzol",
-            "wandering_trader/emerald_acacia_log",
-            "wandering_trader/emerald_birch_log",
-            "wandering_trader/emerald_dark_oak_log",
-            "wandering_trader/emerald_jungle_log",
-            "wandering_trader/emerald_oak_log",
-            "wandering_trader/emerald_spruce_log",
-            "wandering_trader/emerald_cherry_log",
-            "wandering_trader/emerald_mangrove_log",
-            "wandering_trader/emerald_pale_oak_log",
-            "wandering_trader/emerald_poplar_log",
-            "wandering_trader/emerald_enchanted_iron_pickaxe",
-            "wandering_trader/emerald_long_invisibility_potion",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_WEAPONSMITH_LEVEL_1: Tag = (
-        &[
-            "smith/1/coal_emerald",
-            "weaponsmith/1/emerald_iron_axe",
-            "weaponsmith/1/emerald_enchanted_iron_sword",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_WEAPONSMITH_LEVEL_2: Tag =
-        (&["smith/2/iron_ingot_emerald", "smith/2/emerald_bell"], &[]);
-    pub const MINECRAFT_WEAPONSMITH_LEVEL_3: Tag = (&["weaponsmith/3/flint_emerald"], &[]);
-    pub const MINECRAFT_WEAPONSMITH_LEVEL_4: Tag = (
-        &[
-            "weaponsmith/4/emerald_enchanted_diamond_axe",
-            "weaponsmith/4/diamond_emerald",
-        ],
-        &[],
-    );
-    pub const MINECRAFT_WEAPONSMITH_LEVEL_5: Tag =
-        (&["weaponsmith/5/emerald_enchanted_diamond_sword"], &[]);
-}
-static VILLAGERTRADE_TAGS: phf::Map<&'static str, &'static Tag> = phf::phf_map! { "minecraft:armorer/level_1" => & VillagerTrade :: MINECRAFT_ARMORER_LEVEL_1 , "minecraft:armorer/level_2" => & VillagerTrade :: MINECRAFT_ARMORER_LEVEL_2 , "minecraft:armorer/level_3" => & VillagerTrade :: MINECRAFT_ARMORER_LEVEL_3 , "minecraft:armorer/level_4" => & VillagerTrade :: MINECRAFT_ARMORER_LEVEL_4 , "minecraft:armorer/level_5" => & VillagerTrade :: MINECRAFT_ARMORER_LEVEL_5 , "minecraft:butcher/level_1" => & VillagerTrade :: MINECRAFT_BUTCHER_LEVEL_1 , "minecraft:butcher/level_2" => & VillagerTrade :: MINECRAFT_BUTCHER_LEVEL_2 , "minecraft:butcher/level_3" => & VillagerTrade :: MINECRAFT_BUTCHER_LEVEL_3 , "minecraft:butcher/level_4" => & VillagerTrade :: MINECRAFT_BUTCHER_LEVEL_4 , "minecraft:butcher/level_5" => & VillagerTrade :: MINECRAFT_BUTCHER_LEVEL_5 , "minecraft:cartographer/level_1" => & VillagerTrade :: MINECRAFT_CARTOGRAPHER_LEVEL_1 , "minecraft:cartographer/level_2" => & VillagerTrade :: MINECRAFT_CARTOGRAPHER_LEVEL_2 , "minecraft:cartographer/level_3" => & VillagerTrade :: MINECRAFT_CARTOGRAPHER_LEVEL_3 , "minecraft:cartographer/level_4" => & VillagerTrade :: MINECRAFT_CARTOGRAPHER_LEVEL_4 , "minecraft:cartographer/level_5" => & VillagerTrade :: MINECRAFT_CARTOGRAPHER_LEVEL_5 , "minecraft:cleric/level_1" => & VillagerTrade :: MINECRAFT_CLERIC_LEVEL_1 , "minecraft:cleric/level_2" => & VillagerTrade :: MINECRAFT_CLERIC_LEVEL_2 , "minecraft:cleric/level_3" => & VillagerTrade :: MINECRAFT_CLERIC_LEVEL_3 , "minecraft:cleric/level_4" => & VillagerTrade :: MINECRAFT_CLERIC_LEVEL_4 , "minecraft:cleric/level_5" => & VillagerTrade :: MINECRAFT_CLERIC_LEVEL_5 , "minecraft:common_smith/level_1" => & VillagerTrade :: MINECRAFT_COMMON_SMITH_LEVEL_1 , "minecraft:common_smith/level_2" => & VillagerTrade :: MINECRAFT_COMMON_SMITH_LEVEL_2 , "minecraft:common_smith/level_3" => & VillagerTrade :: MINECRAFT_COMMON_SMITH_LEVEL_3 , "minecraft:common_smith/level_4" => & VillagerTrade :: MINECRAFT_COMMON_SMITH_LEVEL_4 , "minecraft:common_smith/level_5" => & VillagerTrade :: MINECRAFT_COMMON_SMITH_LEVEL_5 , "minecraft:farmer/level_1" => & VillagerTrade :: MINECRAFT_FARMER_LEVEL_1 , "minecraft:farmer/level_2" => & VillagerTrade :: MINECRAFT_FARMER_LEVEL_2 , "minecraft:farmer/level_3" => & VillagerTrade :: MINECRAFT_FARMER_LEVEL_3 , "minecraft:farmer/level_4" => & VillagerTrade :: MINECRAFT_FARMER_LEVEL_4 , "minecraft:farmer/level_5" => & VillagerTrade :: MINECRAFT_FARMER_LEVEL_5 , "minecraft:fisherman/level_1" => & VillagerTrade :: MINECRAFT_FISHERMAN_LEVEL_1 , "minecraft:fisherman/level_2" => & VillagerTrade :: MINECRAFT_FISHERMAN_LEVEL_2 , "minecraft:fisherman/level_3" => & VillagerTrade :: MINECRAFT_FISHERMAN_LEVEL_3 , "minecraft:fisherman/level_4" => & VillagerTrade :: MINECRAFT_FISHERMAN_LEVEL_4 , "minecraft:fisherman/level_5" => & VillagerTrade :: MINECRAFT_FISHERMAN_LEVEL_5 , "minecraft:fletcher/level_1" => & VillagerTrade :: MINECRAFT_FLETCHER_LEVEL_1 , "minecraft:fletcher/level_2" => & VillagerTrade :: MINECRAFT_FLETCHER_LEVEL_2 , "minecraft:fletcher/level_3" => & VillagerTrade :: MINECRAFT_FLETCHER_LEVEL_3 , "minecraft:fletcher/level_4" => & VillagerTrade :: MINECRAFT_FLETCHER_LEVEL_4 , "minecraft:fletcher/level_5" => & VillagerTrade :: MINECRAFT_FLETCHER_LEVEL_5 , "minecraft:leatherworker/level_1" => & VillagerTrade :: MINECRAFT_LEATHERWORKER_LEVEL_1 , "minecraft:leatherworker/level_2" => & VillagerTrade :: MINECRAFT_LEATHERWORKER_LEVEL_2 , "minecraft:leatherworker/level_3" => & VillagerTrade :: MINECRAFT_LEATHERWORKER_LEVEL_3 , "minecraft:leatherworker/level_4" => & VillagerTrade :: MINECRAFT_LEATHERWORKER_LEVEL_4 , "minecraft:leatherworker/level_5" => & VillagerTrade :: MINECRAFT_LEATHERWORKER_LEVEL_5 , "minecraft:librarian/level_1" => & VillagerTrade :: MINECRAFT_LIBRARIAN_LEVEL_1 , "minecraft:librarian/level_2" => & VillagerTrade :: MINECRAFT_LIBRARIAN_LEVEL_2 , "minecraft:librarian/level_3" => & VillagerTrade :: MINECRAFT_LIBRARIAN_LEVEL_3 , "minecraft:librarian/level_4" => & VillagerTrade :: MINECRAFT_LIBRARIAN_LEVEL_4 , "minecraft:librarian/level_5" => & VillagerTrade :: MINECRAFT_LIBRARIAN_LEVEL_5 , "minecraft:mason/level_1" => & VillagerTrade :: MINECRAFT_MASON_LEVEL_1 , "minecraft:mason/level_2" => & VillagerTrade :: MINECRAFT_MASON_LEVEL_2 , "minecraft:mason/level_3" => & VillagerTrade :: MINECRAFT_MASON_LEVEL_3 , "minecraft:mason/level_4" => & VillagerTrade :: MINECRAFT_MASON_LEVEL_4 , "minecraft:mason/level_5" => & VillagerTrade :: MINECRAFT_MASON_LEVEL_5 , "minecraft:shepherd/level_1" => & VillagerTrade :: MINECRAFT_SHEPHERD_LEVEL_1 , "minecraft:shepherd/level_2" => & VillagerTrade :: MINECRAFT_SHEPHERD_LEVEL_2 , "minecraft:shepherd/level_3" => & VillagerTrade :: MINECRAFT_SHEPHERD_LEVEL_3 , "minecraft:shepherd/level_4" => & VillagerTrade :: MINECRAFT_SHEPHERD_LEVEL_4 , "minecraft:shepherd/level_5" => & VillagerTrade :: MINECRAFT_SHEPHERD_LEVEL_5 , "minecraft:toolsmith/level_1" => & VillagerTrade :: MINECRAFT_TOOLSMITH_LEVEL_1 , "minecraft:toolsmith/level_2" => & VillagerTrade :: MINECRAFT_TOOLSMITH_LEVEL_2 , "minecraft:toolsmith/level_3" => & VillagerTrade :: MINECRAFT_TOOLSMITH_LEVEL_3 , "minecraft:toolsmith/level_4" => & VillagerTrade :: MINECRAFT_TOOLSMITH_LEVEL_4 , "minecraft:toolsmith/level_5" => & VillagerTrade :: MINECRAFT_TOOLSMITH_LEVEL_5 , "minecraft:wandering_trader/buying" => & VillagerTrade :: MINECRAFT_WANDERING_TRADER_BUYING , "minecraft:wandering_trader/common" => & VillagerTrade :: MINECRAFT_WANDERING_TRADER_COMMON , "minecraft:wandering_trader/uncommon" => & VillagerTrade :: MINECRAFT_WANDERING_TRADER_UNCOMMON , "minecraft:weaponsmith/level_1" => & VillagerTrade :: MINECRAFT_WEAPONSMITH_LEVEL_1 , "minecraft:weaponsmith/level_2" => & VillagerTrade :: MINECRAFT_WEAPONSMITH_LEVEL_2 , "minecraft:weaponsmith/level_3" => & VillagerTrade :: MINECRAFT_WEAPONSMITH_LEVEL_3 , "minecraft:weaponsmith/level_4" => & VillagerTrade :: MINECRAFT_WEAPONSMITH_LEVEL_4 , "minecraft:weaponsmith/level_5" => & VillagerTrade :: MINECRAFT_WEAPONSMITH_LEVEL_5 };
+static POTION_TAGS: phf::Map<&'static str, &'static Tag> =
+    phf::phf_map! { "c:hidden_from_recipe_viewers" => & Potion :: C_HIDDEN_FROM_RECIPE_VIEWERS };
 #[allow(non_snake_case)]
 pub mod WorldgenBiome {
     use super::Tag;
@@ -14825,7 +13979,6 @@ pub const fn get_latest_map(key: RegistryKey) -> &'static phf::Map<&'static str,
         RegistryKey::PaintingVariant => &PAINTINGVARIANT_TAGS,
         RegistryKey::PointOfInterestType => &POINTOFINTERESTTYPE_TAGS,
         RegistryKey::Potion => &POTION_TAGS,
-        RegistryKey::VillagerTrade => &VILLAGERTRADE_TAGS,
         RegistryKey::WorldgenBiome => &WORLDGENBIOME_TAGS,
         RegistryKey::WorldgenFlatLevelGeneratorPreset => &WORLDGENFLATLEVELGENERATORPRESET_TAGS,
         RegistryKey::WorldgenStructure => &WORLDGENSTRUCTURE_TAGS,

@@ -158,7 +158,6 @@ impl BlockBehaviour for NoteBlock {
 
 const fn convert_instrument_to_sound(instrument: NoteblockInstrument) -> Sound {
     match instrument {
-        NoteblockInstrument::Harp => Sound::BlockNoteBlockHarp,
         NoteblockInstrument::Basedrum => Sound::BlockNoteBlockBasedrum,
         NoteblockInstrument::Snare => Sound::BlockNoteBlockSnare,
         NoteblockInstrument::Hat => Sound::BlockNoteBlockHat,
@@ -181,10 +180,9 @@ const fn convert_instrument_to_sound(instrument: NoteblockInstrument) -> Sound {
         NoteblockInstrument::WitherSkeleton => Sound::BlockNoteBlockImitateWitherSkeleton,
         NoteblockInstrument::Piglin => Sound::BlockNoteBlockImitatePiglin,
         NoteblockInstrument::CustomHead => Sound::UiButtonClick,
-        NoteblockInstrument::Trumpet => Sound::BlockNoteBlockTrumpet,
-        NoteblockInstrument::TrumpetExposed => Sound::BlockNoteBlockTrumpetExposed,
-        NoteblockInstrument::TrumpetOxidized => Sound::BlockNoteBlockTrumpetOxidized,
-        NoteblockInstrument::TrumpetWeathered => Sound::BlockNoteBlockTrumpetWeathered,
+        // Also covers Harp and the 26.x-only trumpet instruments, which have
+        // no 1.21.1 sound and cannot occur in a vanilla 1.21.1 world.
+        _ => Sound::BlockNoteBlockHarp,
     }
 }
 

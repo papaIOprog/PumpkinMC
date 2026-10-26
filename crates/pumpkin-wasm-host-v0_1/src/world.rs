@@ -2280,8 +2280,8 @@ mod tests {
                 pumpkin_data::particle::Particle::HappyVillager,
             ),
             (
-                pumpkin::plugin::particles::Particle::SulfurCubeGoo,
-                pumpkin_data::particle::Particle::SulfurCubeGoo,
+                pumpkin::plugin::particles::Particle::Gust,
+                pumpkin_data::particle::Particle::Gust,
             ),
         ];
 

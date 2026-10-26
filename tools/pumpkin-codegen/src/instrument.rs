@@ -1,4 +1,3 @@
-use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
 
@@ -13,6 +12,9 @@ struct InstrumentJson {
     range: f32,
     sound_event: String,
     use_duration: f32,
+    /// Registration order for dirs that mirror a code-registered registry.
+    #[serde(default)]
+    order: Option<u32>,
 }
 
 #[derive(Deserialize)]
@@ -30,7 +32,7 @@ pub fn build() -> TokenStream {
         Path::new("../../assets/vanilla/data/minecraft/instrument")
     };
 
-    let mut instruments: BTreeMap<String, InstrumentJson> = BTreeMap::new();
+    let mut instruments: Vec<(String, InstrumentJson)> = Vec::new();
 
     let mut entries = fs::read_dir(dir)
         .expect("read instrument dir")
@@ -48,8 +50,14 @@ pub fn build() -> TokenStream {
         let content = fs::read_to_string(&path).expect("read instrument file");
         let json: InstrumentJson = serde_json::from_str(&content).expect("parse instrument JSON");
 
-        instruments.insert(stem, json);
+        instruments.push((stem, json));
     }
+
+    // The vanilla fallback dir lists entries in registry registration order;
+    // datapack dirs carry no order and keep the file-name sort.
+    instruments.sort_by(|(a, ja), (b, jb)| {
+        (ja.order.unwrap_or(u32::MAX), a).cmp(&(jb.order.unwrap_or(u32::MAX), b))
+    });
 
     let mut enum_variants = Vec::new();
     let mut from_name_arms = Vec::new();

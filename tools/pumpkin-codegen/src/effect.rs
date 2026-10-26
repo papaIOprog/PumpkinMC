@@ -46,7 +46,7 @@ pub struct Modifiers {
 impl Modifiers {
     /// Converts this modifier entry into a `TokenStream` for use in generated code.
     pub fn get_tokens(self) -> TokenStream {
-        let attribute = format_ident!("{}", self.attribute.to_uppercase());
+        let attribute = format_ident!("{}", self.attribute.replace('.', "_").to_uppercase());
         let id = self.id;
         let base_value = self.base_value;
         let operation = format_ident!("{}", self.operation.to_pascal_case());

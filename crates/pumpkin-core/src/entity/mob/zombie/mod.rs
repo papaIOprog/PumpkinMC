@@ -216,7 +216,6 @@ impl Mob for ZombieEntityBase {
             let r = rand::random_range(0..6);
             let weapon_item = match r {
                 0 => &Item::IRON_SWORD,
-                1 => &Item::IRON_SPEAR,
                 _ => &Item::IRON_SHOVEL,
             };
             let living = &self.mob_entity.living_entity;

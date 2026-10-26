@@ -148,142 +148,144 @@ pub fn attribute_name_to_id(name: &str) -> Option<u8> {
         | "minecraft:generic.max_health"
         | "generic.max_health"
         | "minecraft:max_health"
-        | "max_health" => Some(Attributes::MAX_HEALTH.id),
+        | "max_health" => Some(Attributes::GENERIC_MAX_HEALTH.id),
         "zombie.spawnReinforcements"
         | "Spawn Reinforcements Chance"
         | "minecraft:zombie.spawn_reinforcements"
         | "zombie.spawn_reinforcements"
         | "minecraft:spawn_reinforcements"
-        | "spawn_reinforcements" => Some(Attributes::SPAWN_REINFORCEMENTS.id),
+        | "spawn_reinforcements" => Some(Attributes::ZOMBIE_SPAWN_REINFORCEMENTS.id),
         "horse.jumpStrength"
         | "Jump Strength"
         | "minecraft:horse.jump_strength"
         | "horse.jump_strength"
         | "minecraft:jump_strength"
-        | "jump_strength" => Some(Attributes::JUMP_STRENGTH.id),
+        | "jump_strength" => Some(Attributes::GENERIC_JUMP_STRENGTH.id),
         "generic.followRange"
         | "Follow Range"
         | "minecraft:generic.follow_range"
         | "generic.follow_range"
         | "minecraft:follow_range"
-        | "follow_range" => Some(Attributes::FOLLOW_RANGE.id),
+        | "follow_range" => Some(Attributes::GENERIC_FOLLOW_RANGE.id),
         "generic.knockbackResistance"
         | "Knockback Resistance"
         | "minecraft:generic.knockback_resistance"
         | "generic.knockback_resistance"
         | "minecraft:knockback_resistance"
-        | "knockback_resistance" => Some(Attributes::KNOCKBACK_RESISTANCE.id),
+        | "knockback_resistance" => Some(Attributes::GENERIC_KNOCKBACK_RESISTANCE.id),
         "generic.movementSpeed"
         | "Movement Speed"
         | "minecraft:generic.movement_speed"
         | "generic.movement_speed"
         | "minecraft:movement_speed"
-        | "movement_speed" => Some(Attributes::MOVEMENT_SPEED.id),
+        | "movement_speed" => Some(Attributes::GENERIC_MOVEMENT_SPEED.id),
         "generic.flyingSpeed"
         | "Flying Speed"
         | "minecraft:generic.flying_speed"
         | "generic.flying_speed"
         | "minecraft:flying_speed"
-        | "flying_speed" => Some(Attributes::FLYING_SPEED.id),
+        | "flying_speed" => Some(Attributes::GENERIC_FLYING_SPEED.id),
         "generic.attackDamage"
         | "Attack Damage"
         | "minecraft:generic.attack_damage"
         | "generic.attack_damage"
         | "minecraft:attack_damage"
-        | "attack_damage" => Some(Attributes::ATTACK_DAMAGE.id),
+        | "attack_damage" => Some(Attributes::GENERIC_ATTACK_DAMAGE.id),
         "generic.attackKnockback"
         | "minecraft:generic.attack_knockback"
         | "generic.attack_knockback"
         | "minecraft:attack_knockback"
-        | "attack_knockback" => Some(Attributes::ATTACK_KNOCKBACK.id),
+        | "attack_knockback" => Some(Attributes::GENERIC_ATTACK_KNOCKBACK.id),
         "generic.attackSpeed"
         | "minecraft:generic.attack_speed"
         | "generic.attack_speed"
         | "minecraft:attack_speed"
-        | "attack_speed" => Some(Attributes::ATTACK_SPEED.id),
+        | "attack_speed" => Some(Attributes::GENERIC_ATTACK_SPEED.id),
         "generic.armorToughness"
         | "Armor Toughness"
         | "minecraft:generic.armor_toughness"
         | "generic.armor_toughness"
         | "minecraft:armor_toughness"
-        | "armor_toughness" => Some(Attributes::ARMOR_TOUGHNESS.id),
+        | "armor_toughness" => Some(Attributes::GENERIC_ARMOR_TOUGHNESS.id),
         "generic.armor" | "Armor" | "minecraft:generic.armor" | "minecraft:armor" | "armor" => {
-            Some(Attributes::ARMOR.id)
+            Some(Attributes::GENERIC_ARMOR.id)
         }
         "generic.luck" | "Luck" | "minecraft:generic.luck" | "minecraft:luck" | "luck" => {
-            Some(Attributes::LUCK.id)
+            Some(Attributes::GENERIC_LUCK.id)
         }
         "generic.maxAbsorption"
         | "minecraft:generic.max_absorption"
         | "generic.max_absorption"
         | "minecraft:max_absorption"
-        | "max_absorption" => Some(Attributes::MAX_ABSORPTION.id),
+        | "max_absorption" => Some(Attributes::GENERIC_MAX_ABSORPTION.id),
         "minecraft:generic.scale" | "generic.scale" | "minecraft:scale" | "scale" => {
-            Some(Attributes::SCALE.id)
+            Some(Attributes::GENERIC_SCALE.id)
         }
         "minecraft:generic.step_height"
         | "generic.step_height"
         | "minecraft:step_height"
-        | "step_height" => Some(Attributes::STEP_HEIGHT.id),
+        | "step_height" => Some(Attributes::GENERIC_STEP_HEIGHT.id),
         "minecraft:generic.gravity" | "generic.gravity" | "minecraft:gravity" | "gravity" => {
-            Some(Attributes::GRAVITY.id)
+            Some(Attributes::GENERIC_GRAVITY.id)
         }
         "minecraft:generic.safe_fall_distance"
         | "generic.safe_fall_distance"
         | "minecraft:safe_fall_distance"
-        | "safe_fall_distance" => Some(Attributes::SAFE_FALL_DISTANCE.id),
+        | "safe_fall_distance" => Some(Attributes::GENERIC_SAFE_FALL_DISTANCE.id),
         "minecraft:generic.fall_damage_multiplier"
         | "generic.fall_damage_multiplier"
         | "minecraft:fall_damage_multiplier"
-        | "fall_damage_multiplier" => Some(Attributes::FALL_DAMAGE_MULTIPLIER.id),
+        | "fall_damage_multiplier" => Some(Attributes::GENERIC_FALL_DAMAGE_MULTIPLIER.id),
         "minecraft:generic.burning_time"
         | "generic.burning_time"
         | "minecraft:burning_time"
-        | "burning_time" => Some(Attributes::BURNING_TIME.id),
+        | "burning_time" => Some(Attributes::GENERIC_BURNING_TIME.id),
         "minecraft:generic.explosion_knockback_resistance"
         | "generic.explosion_knockback_resistance"
         | "minecraft:explosion_knockback_resistance"
-        | "explosion_knockback_resistance" => Some(Attributes::EXPLOSION_KNOCKBACK_RESISTANCE.id),
+        | "explosion_knockback_resistance" => {
+            Some(Attributes::GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE.id)
+        }
         "minecraft:generic.movement_efficiency"
         | "generic.movement_efficiency"
         | "minecraft:movement_efficiency"
-        | "movement_efficiency" => Some(Attributes::MOVEMENT_EFFICIENCY.id),
+        | "movement_efficiency" => Some(Attributes::GENERIC_MOVEMENT_EFFICIENCY.id),
         "minecraft:generic.oxygen_bonus"
         | "generic.oxygen_bonus"
         | "minecraft:oxygen_bonus"
-        | "oxygen_bonus" => Some(Attributes::OXYGEN_BONUS.id),
+        | "oxygen_bonus" => Some(Attributes::GENERIC_OXYGEN_BONUS.id),
         "minecraft:generic.water_movement_efficiency"
         | "generic.water_movement_efficiency"
         | "minecraft:water_movement_efficiency"
-        | "water_movement_efficiency" => Some(Attributes::WATER_MOVEMENT_EFFICIENCY.id),
+        | "water_movement_efficiency" => Some(Attributes::GENERIC_WATER_MOVEMENT_EFFICIENCY.id),
         "minecraft:player.block_interaction_range"
         | "player.block_interaction_range"
         | "minecraft:block_interaction_range"
-        | "block_interaction_range" => Some(Attributes::BLOCK_INTERACTION_RANGE.id),
+        | "block_interaction_range" => Some(Attributes::PLAYER_BLOCK_INTERACTION_RANGE.id),
         "minecraft:player.entity_interaction_range"
         | "player.entity_interaction_range"
         | "minecraft:entity_interaction_range"
-        | "entity_interaction_range" => Some(Attributes::ENTITY_INTERACTION_RANGE.id),
+        | "entity_interaction_range" => Some(Attributes::PLAYER_ENTITY_INTERACTION_RANGE.id),
         "minecraft:player.block_break_speed"
         | "player.block_break_speed"
         | "minecraft:block_break_speed"
-        | "block_break_speed" => Some(Attributes::BLOCK_BREAK_SPEED.id),
+        | "block_break_speed" => Some(Attributes::PLAYER_BLOCK_BREAK_SPEED.id),
         "minecraft:player.submerged_mining_speed"
         | "player.submerged_mining_speed"
         | "minecraft:submerged_mining_speed"
-        | "submerged_mining_speed" => Some(Attributes::SUBMERGED_MINING_SPEED.id),
+        | "submerged_mining_speed" => Some(Attributes::PLAYER_SUBMERGED_MINING_SPEED.id),
         "minecraft:player.sneaking_speed"
         | "player.sneaking_speed"
         | "minecraft:sneaking_speed"
-        | "sneaking_speed" => Some(Attributes::SNEAKING_SPEED.id),
+        | "sneaking_speed" => Some(Attributes::PLAYER_SNEAKING_SPEED.id),
         "minecraft:player.mining_efficiency"
         | "player.mining_efficiency"
         | "minecraft:mining_efficiency"
-        | "mining_efficiency" => Some(Attributes::MINING_EFFICIENCY.id),
+        | "mining_efficiency" => Some(Attributes::PLAYER_MINING_EFFICIENCY.id),
         "minecraft:player.sweeping_damage_ratio"
         | "player.sweeping_damage_ratio"
         | "minecraft:sweeping_damage_ratio"
-        | "sweeping_damage_ratio" => Some(Attributes::SWEEPING_DAMAGE_RATIO.id),
+        | "sweeping_damage_ratio" => Some(Attributes::PLAYER_SWEEPING_DAMAGE_RATIO.id),
         _ => {
             let trimmed = name.strip_prefix("minecraft:").unwrap_or(name);
             Attributes::ALL
@@ -417,7 +419,7 @@ mod tests {
         let packet = CUpdateAttributes::new(
             VarInt(1),
             vec![Property::new(
-                VarInt(i32::from(Attributes::ARMOR.id)),
+                VarInt(i32::from(Attributes::GENERIC_ARMOR.id)),
                 0.0,
                 vec![AttributeModifier::new(
                     "minecraft:armor.chestplate".to_string(),
@@ -440,7 +442,7 @@ mod tests {
         assert_eq!(count, VarInt(1));
 
         let attr_id = cursor.get_var_int().unwrap();
-        let expected_id = u32::from(Attributes::ARMOR.id);
+        let expected_id = u32::from(Attributes::GENERIC_ARMOR.id);
         assert_eq!(attr_id.0, expected_id as i32);
 
         let base = cursor.get_f64_be().unwrap();

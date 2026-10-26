@@ -72,9 +72,9 @@ impl TemptGoal {
     /// Non-combat, line of sight ignored, ranged by `tempt_range` and filtered on the held item.
     fn find_tempting_player(&self, mob: &dyn Mob) -> Option<Arc<Player>> {
         let mob_entity = mob.get_mob_entity();
-        let range = mob_entity
-            .living_entity
-            .get_attribute_value(&Attributes::TEMPT_RANGE);
+        // Vanilla 1.21.1 TemptGoal has no tempt_range attribute and works
+        // within a fixed 6 block radius (distanceToSqr < 36.0).
+        let range = 6.0;
         let world = mob_entity.living_entity.entity.world.load();
 
         world.get_nearest_player(

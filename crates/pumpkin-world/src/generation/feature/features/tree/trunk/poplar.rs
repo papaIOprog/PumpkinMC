@@ -1,4 +1,4 @@
-use pumpkin_data::block_properties::{Axis, PaleOakWoodLikeProperties};
+use pumpkin_data::block_properties::{Axis, OakLogLikeProperties};
 use pumpkin_data::{BlockDirection, BlockState, BlockStateId};
 use pumpkin_util::math::int_provider::IntProvider;
 use pumpkin_util::math::position::BlockPos;
@@ -95,7 +95,7 @@ impl PoplarTrunkPlacer {
 
     fn get_sideways_state(id: BlockStateId, axis: Axis) -> BlockStateId {
         let block = id.to_block();
-        let mut props = PaleOakWoodLikeProperties::from_state_id(id);
+        let mut props = OakLogLikeProperties::from_state_id(id);
         props.axis = axis;
         props.to_state_id(block)
     }

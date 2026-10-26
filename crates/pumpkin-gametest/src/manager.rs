@@ -98,39 +98,25 @@ impl GameTestBatchReport {
         let failed_optional = self.failed_optional.load(Ordering::Acquire);
 
         self.reporter.send_message(
-            pumpkin_macros::translate_cross!(
-                java::COMMANDS_TEST_SUMMARY,
-                java::COMMANDS_TEST_SUMMARY,
-                TextComponent::text(total.to_string()),
-            )
-            .color_named(NamedColor::White),
+            TextComponent::text(format!("Game Test complete! {total} test(s) were run"))
+                .color_named(NamedColor::White),
         );
 
         if failed_required != 0 {
             self.reporter.send_message(
-                pumpkin_macros::translate_cross!(
-                    java::COMMANDS_TEST_SUMMARY_FAILED,
-                    java::COMMANDS_TEST_SUMMARY_FAILED,
-                    TextComponent::text(failed_required.to_string()),
-                )
-                .color_named(NamedColor::Red),
+                TextComponent::text(format!("{failed_required} required test(s) failed :("))
+                    .color_named(NamedColor::Red),
             );
         } else {
             self.reporter.send_message(
-                pumpkin_macros::translate_cross!(
-                    java::COMMANDS_TEST_SUMMARY_ALL_REQUIRED_PASSED,
-                    java::COMMANDS_TEST_SUMMARY_ALL_REQUIRED_PASSED,
-                )
-                .color_named(NamedColor::Green),
+                TextComponent::text("All required tests passed :)").color_named(NamedColor::Green),
             );
         }
 
         if failed_optional != 0 {
-            self.reporter.send_message(pumpkin_macros::translate_cross!(
-                java::COMMANDS_TEST_SUMMARY_OPTIONAL_FAILED,
-                java::COMMANDS_TEST_SUMMARY_OPTIONAL_FAILED,
-                TextComponent::text(failed_optional.to_string()),
-            ));
+            self.reporter.send_message(TextComponent::text(format!(
+                "{failed_optional} optional test(s) failed"
+            )));
         }
     }
 }

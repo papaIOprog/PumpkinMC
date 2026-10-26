@@ -14,7 +14,8 @@ pub struct EggItem;
 
 impl ItemMetadata for EggItem {
     fn ids() -> Box<[u16]> {
-        [Item::EGG.id, Item::BLUE_EGG.id, Item::BROWN_EGG.id].into()
+        // 1.21.1 has a single egg item; the blue and brown eggs are 26.x content.
+        [Item::EGG.id].into()
     }
 }
 

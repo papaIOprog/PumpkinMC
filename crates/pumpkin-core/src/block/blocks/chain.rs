@@ -6,21 +6,13 @@ pub struct ChainBlock;
 
 impl BlockMetadata for ChainBlock {
     fn ids() -> Box<[BlockId]> {
-        [
-            BlockId::IRON_CHAIN,
-            BlockId::WAXED_COPPER_CHAIN,
-            BlockId::WAXED_EXPOSED_COPPER_CHAIN,
-            BlockId::WAXED_WEATHERED_COPPER_CHAIN,
-            BlockId::WAXED_OXIDIZED_COPPER_CHAIN,
-        ]
-        .into()
+        [BlockId::CHAIN].into()
     }
 }
 
 impl BlockBehaviour for ChainBlock {
     fn on_place(&self, args: OnPlaceArgs<'_>) -> BlockStateId {
-        let mut props =
-            pumpkin_data::block_properties::IronChainLikeProperties::default(args.block);
+        let mut props = pumpkin_data::block_properties::ChainLikeProperties::default(args.block);
         props.r#waterlogged = args.replacing.water_source();
         props.r#axis = match args.direction {
             BlockDirection::East | BlockDirection::West => Axis::X,

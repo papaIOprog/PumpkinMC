@@ -8,74 +8,63 @@ use crate::snbt::markers::{
 use crate::snbt::operations::SnbtOperations;
 use crate::snbt::{NUMBER_PARSE_FAILURE, SnbtParser};
 use pumpkin_codecs::{DynamicOps, Number};
-use pumpkin_data::translation;
 use pumpkin_nbt::compound::NbtCompound;
 use pumpkin_nbt::nbt_ops::NbtOps;
 use pumpkin_nbt::tag::NbtTag;
 
 pub const INVALID_CODEPOINT: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_INVALID_CODEPOINT,
-    translation::java::SNBT_PARSER_INVALID_CODEPOINT,
+    "Invalid Unicode character value:",
+    "Invalid Unicode character value:",
 );
 
-pub const NO_SUCH_OPERATION: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_NO_SUCH_OPERATION,
-    translation::java::SNBT_PARSER_NO_SUCH_OPERATION,
-);
+pub const NO_SUCH_OPERATION: CommandErrorType<1> =
+    CommandErrorType::new("No such operation:", "No such operation:");
 
 pub const EXPECTED_FLOAT_TYPE: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_FLOAT_TYPE,
-    translation::java::SNBT_PARSER_EXPECTED_FLOAT_TYPE,
+    "Expected a floating point number",
+    "Expected a floating point number",
 );
 
 pub const INVALID_CHARACTER_NAME: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_INVALID_CHARACTER_NAME,
-    translation::java::SNBT_PARSER_INVALID_CHARACTER_NAME,
+    "Invalid Unicode character name",
+    "Invalid Unicode character name",
 );
 
 pub const INVALID_UNQUOTED_START: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_INVALID_UNQUOTED_START,
-    translation::java::SNBT_PARSER_INVALID_UNQUOTED_START,
+    "Unquoted strings can't start with digits 0-9, + or -",
+    "Unquoted strings can't start with digits 0-9, + or -",
 );
 
 pub const EXPECTED_UNQUOTED_STRING: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_UNQUOTED_STRING,
-    translation::java::SNBT_PARSER_EXPECTED_UNQUOTED_STRING,
+    "Expected a valid unquoted string",
+    "Expected a valid unquoted string",
 );
 
-pub const INVALID_STRING_CONTENTS: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_INVALID_STRING_CONTENTS,
-    translation::java::SNBT_PARSER_INVALID_STRING_CONTENTS,
-);
+pub const INVALID_STRING_CONTENTS: CommandErrorType<0> =
+    CommandErrorType::new("Invalid string contents", "Invalid string contents");
 
-pub const EXPECTED_BINARY_NUMERAL: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_BINARY_NUMERAL,
-    translation::java::SNBT_PARSER_EXPECTED_BINARY_NUMERAL,
-);
+pub const EXPECTED_BINARY_NUMERAL: CommandErrorType<0> =
+    CommandErrorType::new("Expected a binary number", "Expected a binary number");
 
-pub const EXPECTED_DECIMAL_NUMERAL: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_DECIMAL_NUMERAL,
-    translation::java::SNBT_PARSER_EXPECTED_DECIMAL_NUMERAL,
-);
+pub const EXPECTED_DECIMAL_NUMERAL: CommandErrorType<0> =
+    CommandErrorType::new("Expected a decimal number", "Expected a decimal number");
 
 pub const EXPECTED_HEX_NUMERAL: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EXPECTED_HEX_NUMERAL,
-    translation::java::SNBT_PARSER_EXPECTED_HEX_NUMERAL,
+    "Expected a hexadecimal number",
+    "Expected a hexadecimal number",
 );
 
-pub const EMPTY_KEY: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_EMPTY_KEY,
-    translation::java::SNBT_PARSER_EMPTY_KEY,
-);
+pub const EMPTY_KEY: CommandErrorType<0> =
+    CommandErrorType::new("Key cannot be empty", "Key cannot be empty");
 
 pub const LEADING_ZERO_NOT_ALLOWED: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_LEADING_ZERO_NOT_ALLOWED,
-    translation::java::SNBT_PARSER_LEADING_ZERO_NOT_ALLOWED,
+    "Decimal numbers can't start with 0",
+    "Decimal numbers can't start with 0",
 );
 
 pub const INFINITY_NOT_ALLOWED: CommandErrorType<0> = CommandErrorType::new(
-    translation::java::SNBT_PARSER_INFINITY_NOT_ALLOWED,
-    translation::java::SNBT_PARSER_INFINITY_NOT_ALLOWED,
+    "Non-finite numbers are not allowed",
+    "Non-finite numbers are not allowed",
 );
 
 /// Parses a string literal.

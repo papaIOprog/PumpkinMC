@@ -573,7 +573,8 @@ mod tests {
     fn particle_metadata_round_trips_id_and_data() {
         let (particle_id, data) = encoded_particle(JavaMinecraftVersion::V_1_21);
 
-        assert_eq!(particle_id, VarInt(29));
+        // The 1.21.1 particle registry id of explosion_emitter.
+        assert_eq!(particle_id, VarInt(21));
         assert_eq!(data, [0x12, 0x34, 0x56, 0x78]);
     }
 

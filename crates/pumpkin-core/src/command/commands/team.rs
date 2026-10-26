@@ -477,12 +477,9 @@ impl CommandExecutor for TeamModifyColorResetExecutor {
         let team_display_name = team.display_name.clone();
         scoreboard.update_team(&world, team);
 
+        // `color reset` is not part of 1.21.1, so there is no vanilla translation key
         context.source.send_feedback(
-            TextComponent::translate_cross(
-                translation::java::COMMANDS_TEAM_OPTION_COLOR_CLEAR_SUCCESS,
-                translation::java::COMMANDS_TEAM_OPTION_COLOR_CLEAR_SUCCESS,
-                [team_display_name],
-            ),
+            TextComponent::text("Reset the color for team ").add_child(team_display_name),
             true,
         );
 

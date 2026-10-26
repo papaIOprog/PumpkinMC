@@ -192,7 +192,6 @@ pub enum ArgumentType {
     ItemStack,
     ItemPredicate,
     Color,
-    HexColor,
     Component,
     Style,
     Message,
@@ -223,14 +222,12 @@ pub enum ArgumentType {
     ResourceOrTagKey { identifier: Identifier },
     Resource { identifier: Identifier },
     ResourceKey { identifier: Identifier },
-    ResourceSelector,
     TemplateMirror,
     TemplateRotation,
     Heightmap,
     LootTable,
     LootPredicate,
     LootModifier,
-    Dialog,
     Uuid,
 }
 

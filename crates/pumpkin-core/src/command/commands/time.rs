@@ -82,7 +82,7 @@ impl CommandExecutor for QueryExecutor {
                 let game_time = level_time.query_gametime();
                 context.source.send_feedback(
                     pumpkin_macros::translate_cross!(
-                        translation::java::COMMANDS_TIME_QUERY_GAMETIME,
+                        translation::java::COMMANDS_TIME_QUERY,
                         translation::bedrock::COMMANDS_TIME_QUERY_GAMETIME,
                         TextComponent::text(game_time.to_string())
                     ),
@@ -93,12 +93,7 @@ impl CommandExecutor for QueryExecutor {
             QueryMode::Time => {
                 let total_ticks = level_time.time_of_day;
                 context.source.send_feedback(
-                    pumpkin_macros::translate_cross!(
-                        translation::java::COMMANDS_TIME_QUERY_ABSOLUTE,
-                        translation::bedrock::COMMANDS_TIME_QUERY_DAYTIME,
-                        TextComponent::text(clock_name),
-                        TextComponent::text(total_ticks.to_string())
-                    ),
+                    TextComponent::text(format!("The time of {clock_name} is {total_ticks}")),
                     false,
                 );
                 Ok(wrap_time(total_ticks))
@@ -165,12 +160,7 @@ impl CommandExecutor for ActionExecutor {
                 };
                 level_time.send_time(world);
                 context.source.send_feedback(
-                    pumpkin_macros::translate_cross!(
-                        translation::java::COMMANDS_TIME_SET_ABSOLUTE,
-                        translation::bedrock::COMMANDS_TIME_SET,
-                        TextComponent::text(clock_name),
-                        TextComponent::text(time_count.to_string())
-                    ),
+                    TextComponent::text(format!("Set the time of {clock_name} to {time_count}")),
                     true,
                 );
                 Ok(time_count)
@@ -188,12 +178,7 @@ impl CommandExecutor for ActionExecutor {
                 };
                 level_time.send_time(world);
                 context.source.send_feedback(
-                    pumpkin_macros::translate_cross!(
-                        translation::java::COMMANDS_TIME_SET_ABSOLUTE,
-                        translation::bedrock::COMMANDS_TIME_ADDED,
-                        TextComponent::text(clock_name),
-                        TextComponent::text(total_ticks.to_string())
-                    ),
+                    TextComponent::text(format!("Set the time of {clock_name} to {total_ticks}")),
                     true,
                 );
                 Ok(wrap_time(total_ticks))
@@ -209,11 +194,7 @@ impl CommandExecutor for ActionExecutor {
                 };
                 level_time.send_time(world);
                 context.source.send_feedback(
-                    pumpkin_macros::translate_cross!(
-                        translation::java::COMMANDS_TIME_PAUSE,
-                        translation::bedrock::COMMANDS_TIME_STOP,
-                        TextComponent::text(clock_name)
-                    ),
+                    TextComponent::text(format!("Paused the time of {clock_name}")),
                     true,
                 );
                 Ok(1)
@@ -229,11 +210,7 @@ impl CommandExecutor for ActionExecutor {
                 };
                 level_time.send_time(world);
                 context.source.send_feedback(
-                    pumpkin_macros::translate_cross!(
-                        translation::java::COMMANDS_TIME_RESUME,
-                        translation::bedrock::COMMANDS_TIME_SET,
-                        TextComponent::text(clock_name)
-                    ),
+                    TextComponent::text(format!("Resumed the time of {clock_name}")),
                     true,
                 );
                 Ok(1)
@@ -250,12 +227,7 @@ impl CommandExecutor for ActionExecutor {
                 };
                 level_time.send_time(world);
                 context.source.send_feedback(
-                    pumpkin_macros::translate_cross!(
-                        translation::java::COMMANDS_TIME_RATE,
-                        translation::bedrock::COMMANDS_TIME_SET,
-                        TextComponent::text(clock_name),
-                        TextComponent::text(rate.to_string())
-                    ),
+                    TextComponent::text(format!("Set the time rate of {clock_name} to {rate}")),
                     true,
                 );
                 Ok(1)

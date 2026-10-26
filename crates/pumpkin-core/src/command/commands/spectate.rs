@@ -32,10 +32,9 @@ const ERROR_SELF: CommandErrorType<0> = CommandErrorType::new(
     translation::java::COMMANDS_SPECTATE_SELF,
 );
 
-const ERROR_CANNOT_SPECTATE: CommandErrorType<1> = CommandErrorType::new(
-    translation::java::COMMANDS_SPECTATE_CANNOT_SPECTATE,
-    translation::java::COMMANDS_SPECTATE_CANNOT_SPECTATE,
-);
+// Same-world guard is a Pumpkin addition; no 1.21.1 vanilla key covers it
+const ERROR_CANNOT_SPECTATE: CommandErrorType<1> =
+    CommandErrorType::new("Unable to spectate %s", "Unable to spectate %s");
 
 struct StopSpectateExecutor;
 

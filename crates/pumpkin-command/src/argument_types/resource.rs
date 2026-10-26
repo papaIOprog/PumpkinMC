@@ -185,7 +185,6 @@ impl<S: crate::source::CommandSource> ArgumentType<S> for ResourceArgument {
                 &pumpkin_data::effect::StatusEffect::ABSORPTION,
                 &pumpkin_data::effect::StatusEffect::BAD_OMEN,
                 &pumpkin_data::effect::StatusEffect::BLINDNESS,
-                &pumpkin_data::effect::StatusEffect::BREATH_OF_THE_NAUTILUS,
                 &pumpkin_data::effect::StatusEffect::CONDUIT_POWER,
                 &pumpkin_data::effect::StatusEffect::DARKNESS,
                 &pumpkin_data::effect::StatusEffect::DOLPHINS_GRACE,

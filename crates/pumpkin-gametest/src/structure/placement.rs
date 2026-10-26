@@ -3,7 +3,7 @@ use pumpkin_nbt::{NbtCompound, tag::NbtTag};
 use pumpkin_util::math::{position::BlockPos, vector3::Vector3};
 use pumpkin_world::world::BlockFlags;
 
-use crate::error::GameTestResult;
+use crate::error::{GameTestError, GameTestResult};
 use crate::model::GameTestRotation;
 use crate::structure::template::GameTestStructureTemplate;
 use crate::world::GameTestWorld;
@@ -164,13 +164,11 @@ pub async fn place_structure_with_controller_rotation(
 
     clear_test_area(world, &origin, size, padding).await?;
 
-    world
-        .set_block_state(
-            &test_instance_pos,
-            Block::TEST_INSTANCE_BLOCK.default_state.id,
-            BlockFlags::NOTIFY_ALL,
-        )
-        .await?;
+    // The test_instance block is 1.21.5+, so this branch of the runner cannot
+    // place a controller on 1.21.1.
+    return Err(GameTestError::World(
+        "test instances require Minecraft 1.21.5 or newer".into(),
+    ));
 
     // TestInstanceBlockEntity.Data stores only the extra controller rotation. The
     // client combines this with the test definition's base rotation from the synced

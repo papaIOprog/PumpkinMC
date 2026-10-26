@@ -134,16 +134,20 @@ pub fn send_attribute_updates_for_living(
         ));
 
         let name = match attribute.id {
-            id if id == Attributes::MOVEMENT_SPEED.id => "minecraft:movement".to_string(),
-            id if id == Attributes::MAX_HEALTH.id => "minecraft:health".to_string(),
-            id if id == Attributes::MAX_ABSORPTION.id => "minecraft:absorption".to_string(),
-            id if id == Attributes::ATTACK_DAMAGE.id => "minecraft:attack_damage".to_string(),
-            id if id == Attributes::KNOCKBACK_RESISTANCE.id => {
+            id if id == Attributes::GENERIC_MOVEMENT_SPEED.id => "minecraft:movement".to_string(),
+            id if id == Attributes::GENERIC_MAX_HEALTH.id => "minecraft:health".to_string(),
+            id if id == Attributes::GENERIC_MAX_ABSORPTION.id => "minecraft:absorption".to_string(),
+            id if id == Attributes::GENERIC_ATTACK_DAMAGE.id => {
+                "minecraft:attack_damage".to_string()
+            }
+            id if id == Attributes::GENERIC_KNOCKBACK_RESISTANCE.id => {
                 "minecraft:knockback_resistance".to_string()
             }
-            id if id == Attributes::LUCK.id => "minecraft:luck".to_string(),
-            id if id == Attributes::FOLLOW_RANGE.id => "minecraft:follow_range".to_string(),
-            id if id == Attributes::JUMP_STRENGTH.id => "minecraft:horse.jump_strength".to_string(),
+            id if id == Attributes::GENERIC_LUCK.id => "minecraft:luck".to_string(),
+            id if id == Attributes::GENERIC_FOLLOW_RANGE.id => "minecraft:follow_range".to_string(),
+            id if id == Attributes::GENERIC_JUMP_STRENGTH.id => {
+                "minecraft:horse.jump_strength".to_string()
+            }
             // Java-only attributes must not be sent under unsupported Bedrock names.
             _ => continue,
         };
@@ -275,7 +279,7 @@ mod tests {
         let speed_attr = EntityType::PLAYER
             .attributes
             .iter()
-            .find(|(attr, _)| attr.id == Attributes::MOVEMENT_SPEED.id);
+            .find(|(attr, _)| attr.id == Attributes::GENERIC_MOVEMENT_SPEED.id);
         assert!(speed_attr.is_some());
         let (_, base_speed) = speed_attr.unwrap();
         assert!((base_speed - 0.1).abs() < 1e-4);

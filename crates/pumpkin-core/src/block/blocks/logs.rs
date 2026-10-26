@@ -4,7 +4,7 @@ use pumpkin_macros::pumpkin_block_from_tag;
 use crate::block::BlockBehaviour;
 use crate::block::OnPlaceArgs;
 
-type LogProperties = pumpkin_data::block_properties::PaleOakWoodLikeProperties;
+type LogProperties = pumpkin_data::block_properties::OakLogLikeProperties;
 
 #[pumpkin_block_from_tag("minecraft:logs")]
 pub struct LogBlock;
