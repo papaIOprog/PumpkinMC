@@ -101,7 +101,9 @@ enum ConditionValue {
 
 #[derive(Deserialize, Clone, Debug)]
 struct ConditionStruct {
-    #[serde(rename = "type", default)]
+    // Loot conditions carry their kind in "condition"; "type" is what
+    // entries, functions and pools use.
+    #[serde(default)]
     condition: String,
     #[allow(dead_code)]
     #[serde(default)]
@@ -291,7 +293,8 @@ where
 
 #[derive(Deserialize, Clone, Debug)]
 struct EntryFunctionStruct {
-    #[serde(rename = "type")]
+    // Functions carry their kind in "function"; entries use "type".
+    #[serde(rename = "function")]
     function: String,
     #[serde(default)]
     formula: Option<String>,
@@ -319,10 +322,10 @@ struct PoolEntryStruct {
     value: Option<LootTableValue>,
     #[serde(default = "default_weight")]
     weight: i32,
-    #[serde(rename = "modifier", default, deserialize_with = "one_or_many")]
+    #[serde(rename = "functions", default, deserialize_with = "one_or_many")]
     functions: Vec<EntryFunctionStruct>,
-    #[serde(default)]
-    condition: Option<ConditionValue>,
+    #[serde(default, rename = "conditions", deserialize_with = "one_or_many")]
+    conditions: Vec<ConditionValue>,
     #[serde(default)]
     children: Vec<PoolEntryStruct>,
 }
@@ -337,8 +340,8 @@ struct PoolStruct {
     entries: Vec<PoolEntryStruct>,
     #[serde(default = "default_rolls")]
     rolls: RollsStruct,
-    #[serde(default)]
-    condition: Option<ConditionValue>,
+    #[serde(default, rename = "conditions", deserialize_with = "one_or_many")]
+    conditions: Vec<ConditionValue>,
 }
 
 fn default_rolls() -> RollsStruct {
@@ -388,7 +391,7 @@ fn extract_entries_with_depth(
         return;
     }
 
-    let entry_cond = match (inherited_condition, condition_of(entry.condition.as_ref())) {
+    let entry_cond = match (inherited_condition, combine_conditions(&entry.conditions)) {
         (LootCondition::None, cond) | (cond, LootCondition::None) => cond,
         (first, second) if first == second => first,
         (first, second) => LootCondition::AllOf(Box::leak(vec![first, second].into_boxed_slice())),
@@ -496,7 +499,7 @@ fn extract_entries_with_depth(
                     if let Ok(nested_table) = serde_json::from_str::<ChestLootTableJson>(&content) {
                         for pool in &nested_table.pools {
                             let mut pool_cond = entry_cond;
-                            let parsed = condition_of(pool.condition.as_ref());
+                            let parsed = combine_conditions(&pool.conditions);
                             if parsed != LootCondition::None {
                                 pool_cond = parsed;
                             }
@@ -516,7 +519,7 @@ fn extract_entries_with_depth(
             Some(LootTableValue::Inline(nested_table)) => {
                 for pool in &nested_table.pools {
                     let mut pool_cond = entry_cond;
-                    let parsed = condition_of(pool.condition.as_ref());
+                    let parsed = combine_conditions(&pool.conditions);
                     if parsed != LootCondition::None {
                         pool_cond = parsed;
                     }
@@ -542,7 +545,7 @@ fn extract_entries_with_depth(
                         {
                             for pool in &nested_table.pools {
                                 let mut pool_cond = entry_cond;
-                                let parsed = condition_of(pool.condition.as_ref());
+                                let parsed = combine_conditions(&pool.conditions);
                                 if parsed != LootCondition::None {
                                     pool_cond = parsed;
                                 }
@@ -566,7 +569,7 @@ fn extract_entries_with_depth(
             let mut saw_shears = false;
 
             for child in &entry.children {
-                let child_cond = condition_of(child.condition.as_ref());
+                let child_cond = combine_conditions(&child.conditions);
 
                 let effective_cond = if child_cond == LootCondition::SilkTouch {
                     saw_silk = true;
@@ -665,7 +668,7 @@ fn emit_table(
         let min_rolls = pool.rolls.min();
         let max_rolls = pool.rolls.max();
 
-        let pool_cond = condition_of(pool.condition.as_ref());
+        let pool_cond = combine_conditions(&pool.conditions);
 
         let mut parsed_entries = Vec::new();
         let mut empty_weight: i32 = 0;
@@ -822,5 +825,59 @@ pub fn build() -> TokenStream {
     quote! {
         pub use pumpkin_util::loot_table::*;
         #all_tokens
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_match_tool_silk_touch_condition() {
+        let json = r#"{
+            "condition": "minecraft:match_tool",
+            "predicate": {
+                "predicates": {
+                    "minecraft:enchantments": [
+                        { "enchantments": "minecraft:silk_touch", "levels": {"min": 1} }
+                    ]
+                }
+            }
+        }"#;
+        let value: ConditionValue = serde_json::from_str(json).unwrap();
+        assert!(matches!(
+            condition_of(Some(&value)),
+            LootCondition::SilkTouch
+        ));
+    }
+
+    /// The generated tables once shipped every alternatives child
+    /// unconditional, which made ore drops a coin flip between the ore block
+    /// and its raw item.
+    #[test]
+    fn iron_ore_alternatives_split_on_silk_touch() {
+        let content = fs::read_to_string(
+            "../../assets/datapack/data/minecraft/loot_table/blocks/iron_ore.json",
+        )
+        .unwrap();
+        let table: ChestLootTableJson = serde_json::from_str(&content).unwrap();
+        let mut out = Vec::new();
+        let mut empty = 0;
+        extract_entries_with_depth(
+            &table.pools[0].entries[0],
+            LootCondition::None,
+            &mut out,
+            &mut empty,
+            0,
+        );
+        assert_eq!(out.len(), 2);
+        assert_eq!(out[0].item, "minecraft:iron_ore");
+        assert!(matches!(out[0].condition, LootCondition::SilkTouch));
+        assert_eq!(out[1].item, "minecraft:raw_iron");
+        assert!(matches!(out[1].condition, LootCondition::NoSilkTouch));
+        assert!(matches!(
+            out[1].bonus_formula,
+            Some(LootBonusFormula::OreDrops)
+        ));
     }
 }

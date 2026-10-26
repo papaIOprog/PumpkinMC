@@ -596,3 +596,33 @@ fn shuffle_and_split_items(
         result.swap(i, j);
     }
 }
+
+#[cfg(test)]
+mod ore_drop_tests {
+    use super::*;
+    use pumpkin_data::item::Item;
+    use pumpkin_data::item_stack::ItemStack;
+
+    #[test]
+    fn iron_ore_drops_raw_iron_without_silk() {
+        let handle =
+            get_loot_table("minecraft:blocks/iron_ore").expect("iron ore loot table exists");
+        let params = LootContextParameters {
+            tool: Some(ItemStack::new(1, &Item::IRON_PICKAXE)),
+            ..LootContextParameters::default()
+        };
+        let mut ore_blocks = 0;
+        let mut raw_iron = 0;
+        for seed in 0..50 {
+            for stack in handle.generate_loot_with_context(seed, &params) {
+                if stack.item == &Item::RAW_IRON {
+                    raw_iron += 1;
+                } else if stack.item == &Item::IRON_ORE {
+                    ore_blocks += 1;
+                }
+            }
+        }
+        assert_eq!(ore_blocks, 0, "plain pickaxe must never drop the ore block");
+        assert_eq!(raw_iron, 50, "each dig drops exactly one raw iron");
+    }
+}
