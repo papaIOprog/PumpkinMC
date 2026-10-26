@@ -1,0 +1,11 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 5
+  },
+  "gives": {
+    "id": "minecraft:nautilus_shell"
+  },
+  "max_uses": 5,
+  "xp": 1
+}

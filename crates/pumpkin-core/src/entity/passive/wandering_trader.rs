@@ -11,10 +11,6 @@ use pumpkin_data::item_stack::ItemStack;
 use pumpkin_data::potion::Effect;
 use pumpkin_data::sound::{Sound, SoundCategory};
 use pumpkin_data::statistic::{CustomStatistic, StatisticCategory};
-use pumpkin_data::villager::{
-    TRADES_WANDERING_TRADER_BUYING, TRADES_WANDERING_TRADER_COMMON,
-    TRADES_WANDERING_TRADER_UNCOMMON, VillagerTrade,
-};
 use pumpkin_inventory::SimpleInventory;
 use pumpkin_inventory::merchant::merchant_screen_handler::MerchantScreenHandler;
 use pumpkin_inventory::screen_handler::{
@@ -28,10 +24,10 @@ use pumpkin_util::math::position::BlockPos;
 use pumpkin_util::math::vector3::Vector3;
 use pumpkin_util::text::TextComponent;
 use rand::RngExt;
-use rand::seq::IndexedRandom;
 
 use super::villager::{
-    apply_potion, apply_random_dye, apply_random_stew_effect, trigger_trade_advancement,
+    apply_potion, apply_random_dye, apply_random_potion, apply_random_stew_effect,
+    apply_stew_effect, trigger_trade_advancement,
 };
 use crate::entity::ageable::{AgeableData, AgeableMob};
 use crate::entity::ai::goal::avoid_entity::AvoidEntityGoal;
@@ -56,7 +52,9 @@ fn create_invisibility_potion() -> ItemStack {
     stack
 }
 
-use crate::data::datapack::trade_loader::{DynamicTradeModifier, DynamicVillagerTrade};
+use crate::data::datapack::trade_loader::{
+    DynamicTradeModifier, DynamicVillagerTrade, DynamicVillagerTradeSet,
+};
 
 fn add_offers_from_dynamic_trades(
     offers: &mut Vec<pumpkin_protocol::java::client::play::MerchantOffer>,
@@ -79,16 +77,11 @@ fn add_offers_from_dynamic_trades(
 
         match &trade.modifier {
             DynamicTradeModifier::RandomDyes => apply_random_dye(rng, &mut output),
-            DynamicTradeModifier::RandomPotion => {
-                if let Some(potion_name) =
-                    pumpkin_data::tag::Potion::MINECRAFT_TRADEABLE.0.choose(rng)
-                {
-                    apply_potion(&mut output, potion_name);
-                }
-            }
-            DynamicTradeModifier::SuspiciousStew => {
-                apply_random_stew_effect(rng, &mut output);
-            }
+            DynamicTradeModifier::RandomPotion => apply_random_potion(rng, &mut output),
+            DynamicTradeModifier::SuspiciousStew { effect, duration } => match effect {
+                Some(effect) => apply_stew_effect(&mut output, effect, *duration),
+                None => apply_random_stew_effect(rng, &mut output),
+            },
             DynamicTradeModifier::Potion(potion) => apply_potion(&mut output, potion),
             _ => {}
         }
@@ -107,17 +100,6 @@ fn add_offers_from_dynamic_trades(
         });
         added += 1;
     }
-}
-
-fn add_offers_from_trade_set(
-    offers: &mut Vec<pumpkin_protocol::java::client::play::MerchantOffer>,
-    trade_pool: &'static [VillagerTrade],
-    amount: usize,
-    rng: &mut impl rand::Rng,
-) {
-    let dynamic_trades: Vec<DynamicVillagerTrade> =
-        trade_pool.iter().map(DynamicVillagerTrade::from).collect();
-    add_offers_from_dynamic_trades(offers, &dynamic_trades, amount, rng);
 }
 
 pub struct WanderingTraderEntity {
@@ -314,47 +296,35 @@ impl WanderingTraderEntity {
             .upgrade()
             .map(|server| server.datapack_manager.clone());
 
-        if let Some(buying) = datapack_manager
-            .as_ref()
-            .and_then(|dm| dm.get_wandering_trader_trade_set("buying"))
-        {
-            add_offers_from_dynamic_trades(
-                &mut offers,
-                &buying.trades,
-                buying.amount as usize,
-                &mut rng,
-            );
-        } else {
-            add_offers_from_trade_set(&mut offers, TRADES_WANDERING_TRADER_BUYING, 2, &mut rng);
-        }
-
-        if let Some(uncommon) = datapack_manager
-            .as_ref()
-            .and_then(|dm| dm.get_wandering_trader_trade_set("uncommon"))
-        {
-            add_offers_from_dynamic_trades(
-                &mut offers,
-                &uncommon.trades,
-                uncommon.amount as usize,
-                &mut rng,
-            );
-        } else {
-            add_offers_from_trade_set(&mut offers, TRADES_WANDERING_TRADER_UNCOMMON, 2, &mut rng);
-        }
-
-        if let Some(common) = datapack_manager
+        // WanderingTrader#updateTrades draws five offers from the common tier
+        // and then one from the uncommon tier; 1.21.1 has no buying tier.
+        let common = datapack_manager
             .as_ref()
             .and_then(|dm| dm.get_wandering_trader_trade_set("common"))
-        {
-            add_offers_from_dynamic_trades(
-                &mut offers,
-                &common.trades,
-                common.amount as usize,
-                &mut rng,
-            );
-        } else {
-            add_offers_from_trade_set(&mut offers, TRADES_WANDERING_TRADER_COMMON, 5, &mut rng);
-        }
+            .unwrap_or_else(|| {
+                DynamicVillagerTradeSet::from(pumpkin_data::villager::WanderingTraderTrades::COMMON)
+            });
+        add_offers_from_dynamic_trades(
+            &mut offers,
+            &common.trades,
+            common.amount as usize,
+            &mut rng,
+        );
+
+        let uncommon = datapack_manager
+            .as_ref()
+            .and_then(|dm| dm.get_wandering_trader_trade_set("uncommon"))
+            .unwrap_or_else(|| {
+                DynamicVillagerTradeSet::from(
+                    pumpkin_data::villager::WanderingTraderTrades::UNCOMMON,
+                )
+            });
+        add_offers_from_dynamic_trades(
+            &mut offers,
+            &uncommon.trades,
+            uncommon.amount as usize,
+            &mut rng,
+        );
     }
 
     pub fn open_trading_screen(&self, player: &Arc<Player>) {
@@ -496,10 +466,9 @@ impl WanderingTraderEntity {
             return false;
         };
         let entity = self.get_entity();
-        let range = player
-            .living_entity
-            .get_attribute_value(&pumpkin_data::attributes::Attributes::ENTITY_INTERACTION_RANGE)
-            + 4.0;
+        let range = player.living_entity.get_attribute_value(
+            &pumpkin_data::attributes::Attributes::PLAYER_ENTITY_INTERACTION_RANGE,
+        ) + 4.0;
         entity.is_alive()
             && self.mob_entity.living_entity.health.load() > 0.0
             && self
@@ -1311,17 +1280,6 @@ mod tests {
     #[test]
     fn default_wandering_trader_despawn_delay_is_zero() {
         assert_eq!(DEFAULT_DESPAWN_DELAY, 0);
-    }
-
-    #[tokio::test]
-    async fn generate_trades_creates_expected_trade_count() {
-        let mut offers = Vec::new();
-        let mut rng = rand::rng();
-        add_offers_from_trade_set(&mut offers, TRADES_WANDERING_TRADER_BUYING, 2, &mut rng);
-        add_offers_from_trade_set(&mut offers, TRADES_WANDERING_TRADER_UNCOMMON, 2, &mut rng);
-        add_offers_from_trade_set(&mut offers, TRADES_WANDERING_TRADER_COMMON, 5, &mut rng);
-
-        assert_eq!(offers.len(), 9);
     }
 
     #[test]

@@ -1,0 +1,11 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 3
+  },
+  "gives": {
+    "id": "minecraft:horn_coral_block"
+  },
+  "max_uses": 8,
+  "xp": 1
+}

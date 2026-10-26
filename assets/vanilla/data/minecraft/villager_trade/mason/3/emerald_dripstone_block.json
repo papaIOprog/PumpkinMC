@@ -1,0 +1,10 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "id": "minecraft:dripstone_block",
+    "count": 4
+  },
+  "xp": 10
+}

@@ -52,6 +52,9 @@ impl MerchantOffer {
             write.write_option(&self.cost_b, |w, cost_b| {
                 cost_b.write_item_cost_with_version(w, version)
             })?;
+            // MerchantOffer#writeToStream sends the stock flag here, not
+            // rewardExp; a true value makes the client grey the trade out.
+            write.write_bool(self.is_out_of_stock())?;
         } else {
             self.base_cost_a.write_with_version(&mut write, version)?;
             self.output.write_with_version(&mut write, version)?;
@@ -60,8 +63,8 @@ impl MerchantOffer {
             } else {
                 write.write_bool(false)?;
             }
+            write.write_bool(self.reward_exp)?;
         }
-        write.write_bool(self.reward_exp)?;
         write.write_i32_be(self.uses)?;
         write.write_i32_be(self.max_uses)?;
         write.write_i32_be(self.xp)?;
@@ -183,7 +186,12 @@ impl<'a> crate::ServerPacket<'a> for CMerchantOffers {
                 (base_cost_a, output, cost_b)
             };
 
-            let reward_exp = bytebuf.get_bool()?;
+            let (reward_exp, _out_of_stock) = if *version >= JavaMinecraftVersion::V_1_20_5 {
+                // The wire bool is the stock flag here; rewardExp is not sent.
+                (true, bytebuf.get_bool()?)
+            } else {
+                (bytebuf.get_bool()?, false)
+            };
             let uses = bytebuf.get_i32_be()?;
             let max_uses = bytebuf.get_i32_be()?;
             let xp = bytebuf.get_i32_be()?;
@@ -281,6 +289,32 @@ mod tests {
         assert!(!offer.is_out_of_stock());
         offer.uses += 1;
         assert!(offer.is_out_of_stock());
+    }
+
+    #[test]
+    fn merchant_offer_writes_the_stock_flag_since_1_20_5() {
+        // MerchantOffer#writeToStream puts isOutOfStock, not rewardExp, in the
+        // bool slot after the costs; 1.20.4 and older send rewardExp there.
+        let version = JavaMinecraftVersion::V_1_21;
+        for (uses, expected) in [(0, false), (12, true)] {
+            let mut offer = offer();
+            offer.uses = uses;
+            let packet =
+                CMerchantOffers::new(VarInt(1), vec![offer], VarInt(1), VarInt(0), true, true);
+            let mut bytes = Vec::new();
+            packet.write_packet_data(&mut bytes, &version).unwrap();
+            let mut cursor = Cursor::new(&bytes);
+
+            // window id, offer count, cost A (item, count, components)
+            for _ in 0..5 {
+                cursor.get_var_int().unwrap();
+            }
+            // result stack (count, item, added, removed), then the cost B flag
+            for _ in 0..5 {
+                cursor.get_var_int().unwrap();
+            }
+            assert_eq!(cursor.get_bool().unwrap(), expected);
+        }
     }
 
     #[test]

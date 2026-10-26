@@ -1,0 +1,11 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 5
+  },
+  "gives": {
+    "id": "minecraft:mangrove_propagule"
+  },
+  "max_uses": 8,
+  "xp": 1
+}

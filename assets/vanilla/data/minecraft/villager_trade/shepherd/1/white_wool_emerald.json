@@ -1,0 +1,9 @@
+{
+  "wants": {
+    "id": "minecraft:white_wool",
+    "count": 18
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  }
+}

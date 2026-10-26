@@ -1,0 +1,21 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 12
+  },
+  "gives": {
+    "id": "minecraft:filled_map"
+  },
+  "wants_b": {
+    "id": "minecraft:compass"
+  },
+  "max_uses": 12,
+  "xp": 10,
+  "reputation_discount": 0.2,
+  "given_item_modifier": [
+    {
+      "type": "minecraft:exploration_map",
+      "destination": "minecraft:on_trial_chambers_maps"
+    }
+  ]
+}

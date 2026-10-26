@@ -89,8 +89,38 @@ pub fn build() -> TokenStream {
         serde_json::from_str(&fs::read_to_string("../../assets/villager_data.json").unwrap())
             .expect("Failed to parse villager_data.json");
 
-    // Load trade sets from datapack
-    let trade_set_dir = std::path::Path::new("../../assets/datapack/data/minecraft/trade_set");
+    // 1.21.1 registers trades in code instead of shipping them as datapack
+    // files; assets/vanilla holds the ported tables for that case.
+    let trade_dirs = [
+        (
+            "../../assets/datapack/data/minecraft/trade_set",
+            "../../assets/vanilla/data/minecraft/trade_set",
+        ),
+        (
+            "../../assets/datapack/data/minecraft/tags/villager_trade",
+            "../../assets/vanilla/data/minecraft/tags/villager_trade",
+        ),
+        (
+            "../../assets/datapack/data/minecraft/villager_trade",
+            "../../assets/vanilla/data/minecraft/villager_trade",
+        ),
+    ];
+    let picked: Vec<std::path::PathBuf> = trade_dirs
+        .iter()
+        .map(|(datapack, vanilla)| {
+            let datapack = std::path::Path::new(datapack);
+            if datapack.is_dir() {
+                datapack.to_path_buf()
+            } else {
+                std::path::Path::new(vanilla).to_path_buf()
+            }
+        })
+        .collect();
+    let trade_set_dir = &picked[0];
+    let trade_tags_dir = &picked[1];
+    let trades_dir = &picked[2];
+
+    // Load trade sets
     let mut trade_sets: IndexMap<String, TradeSetJson> = IndexMap::new();
     walk_json_files(trade_set_dir, trade_set_dir, &mut |key, content| {
         if let Ok(trade_set) = serde_json::from_str::<TradeSetJson>(&content) {
@@ -99,9 +129,7 @@ pub fn build() -> TokenStream {
         }
     });
 
-    // Load trade tags from datapack
-    let trade_tags_dir =
-        std::path::Path::new("../../assets/datapack/data/minecraft/tags/villager_trade");
+    // Load trade tags
     let mut raw_trade_tags: IndexMap<String, Vec<String>> = IndexMap::new();
     walk_json_files(trade_tags_dir, trade_tags_dir, &mut |key, content| {
         #[derive(Deserialize)]
@@ -161,8 +189,7 @@ pub fn build() -> TokenStream {
         result
     }
 
-    // Load individual villager trades from datapack
-    let trades_dir = std::path::Path::new("../../assets/datapack/data/minecraft/villager_trade");
+    // Load individual villager trades
     let mut villager_trades: IndexMap<String, TradeJson> = IndexMap::new();
     walk_json_files(trades_dir, trades_dir, &mut |key, content| {
         if let Ok(trade) = serde_json::from_str::<TradeJson>(&content) {
@@ -246,7 +273,19 @@ pub fn build() -> TokenStream {
                     }
                     "minecraft:set_random_dyes" => quote! { VillagerTradeModifier::RandomDyes },
                     "minecraft:set_random_potion" => quote! { VillagerTradeModifier::RandomPotion },
-                    "minecraft:set_stew_effect" => quote! { VillagerTradeModifier::SuspiciousStew },
+                    "minecraft:set_stew_effect" => {
+                        // An entry without an effect id keeps the random-effect behavior.
+                        let effect = modifier
+                            .get("effect")
+                            .and_then(Value::as_str)
+                            .map(|effect| quote! { Some(#effect) })
+                            .unwrap_or_else(|| quote! { None });
+                        let duration = modifier
+                            .get("duration")
+                            .and_then(Value::as_f64)
+                            .map_or(0, |duration| duration as i32);
+                        quote! { VillagerTradeModifier::SuspiciousStew { effect: #effect, duration: #duration } }
+                    }
                     "minecraft:set_potion" => {
                         let potion = modifier.get("id")?.as_str()?;
                         quote! { VillagerTradeModifier::Potion(#potion) }
@@ -414,6 +453,38 @@ pub fn build() -> TokenStream {
         type_from_i32.push(quote! { #i => Some(Self::#ident) });
     }
 
+    // Wandering trader tier sets; only tiers with data get a constant, so a
+    // missing tier fails to compile at its use site instead of silently
+    // offering nothing.
+    let mut wandering_consts = Vec::new();
+    for tier in ["buying", "common", "uncommon"] {
+        let Some(set) = trade_sets.get(&format!("minecraft:wandering_trader/{tier}")) else {
+            continue;
+        };
+        let Some(trades_ident) = generated_trade_sets.get(&set.trades) else {
+            continue;
+        };
+        let ident = format_ident!("{}", tier.to_shouty_snake_case());
+        let amount = set.amount as i32;
+        wandering_consts.push(quote! {
+            #[must_use]
+            pub const #ident: VillagerTradeSet =
+                VillagerTradeSet { trades: #trades_ident, amount: #amount };
+        });
+    }
+    let wandering_trades = if wandering_consts.is_empty() {
+        quote!()
+    } else {
+        quote! {
+            /// Wandering trader tier sets, one constant per tier with data,
+            /// mirroring `WanderingTrader#updateTrades`.
+            pub struct WanderingTraderTrades;
+            impl WanderingTraderTrades {
+                #(#wandering_consts)*
+            }
+        }
+    };
+
     quote! {
         use serde::Serialize;
 
@@ -443,7 +514,11 @@ pub fn build() -> TokenStream {
             ExplorationMap { destination: &'static str },
             RandomDyes,
             RandomPotion,
-            SuspiciousStew,
+            /// `effect` is `None` when the trade picks a random stew effect.
+            SuspiciousStew {
+                effect: Option<&'static str>,
+                duration: i32,
+            },
             Potion(&'static str),
         }
 
@@ -454,6 +529,8 @@ pub fn build() -> TokenStream {
         }
 
         #(#trade_set_data)*
+
+        #wandering_trades
 
         #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
         #[repr(i32)]

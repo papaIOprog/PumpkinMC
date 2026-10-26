@@ -1,0 +1,10 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 3
+  },
+  "gives": {
+    "id": "minecraft:cod_bucket"
+  },
+  "xp": 1
+}

@@ -1,0 +1,11 @@
+{
+  "wants": {
+    "id": "minecraft:glass_bottle",
+    "count": 9
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 12,
+  "xp": 30
+}

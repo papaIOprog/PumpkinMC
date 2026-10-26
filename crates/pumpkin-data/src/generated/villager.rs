@@ -20,11 +20,20 @@ pub struct VillagerTrade {
 pub enum VillagerTradeModifier {
     None,
     EnchantRandomly,
-    EnchantWithLevels { min: i32, max: i32 },
-    ExplorationMap { destination: &'static str },
+    EnchantWithLevels {
+        min: i32,
+        max: i32,
+    },
+    ExplorationMap {
+        destination: &'static str,
+    },
     RandomDyes,
     RandomPotion,
-    SuspiciousStew,
+    #[doc = r" `effect` is `None` when the trade picks a random stew effect."]
+    SuspiciousStew {
+        effect: Option<&'static str>,
+        duration: i32,
+    },
     Potion(&'static str),
 }
 #[derive(Clone, Copy, PartialEq)]
@@ -60,7 +69,7 @@ pub const TRADES_ARMORER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -76,7 +85,7 @@ pub const TRADES_ARMORER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -92,7 +101,7 @@ pub const TRADES_ARMORER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -108,7 +117,7 @@ pub const TRADES_ARMORER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -199,6 +208,22 @@ pub const TRADES_ARMORER_LEVEL_3: &[VillagerTrade] = &[
     },
     VillagerTrade {
         wants: VillagerTradeItem {
+            item: &crate::item::Item::DIAMOND,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 20i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
             count: 1i32,
         },
@@ -242,22 +267,6 @@ pub const TRADES_ARMORER_LEVEL_3: &[VillagerTrade] = &[
         max_uses: 12i32,
         xp: 10i32,
         price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::DIAMOND,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 20i32,
-        price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
     },
@@ -402,7 +411,7 @@ pub const TRADES_BUTCHER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -535,7 +544,7 @@ pub const TRADES_CARTOGRAPHER_LEVEL_1: &[VillagerTrade] = &[
             item: &crate::item::Item::EMERALD,
             count: 1i32,
         },
-        max_uses: 12i32,
+        max_uses: 16i32,
         xp: 2i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
@@ -552,7 +561,7 @@ pub const TRADES_CARTOGRAPHER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -569,7 +578,7 @@ pub const TRADES_CARTOGRAPHER_LEVEL_2: &[VillagerTrade] = &[
             item: &crate::item::Item::EMERALD,
             count: 1i32,
         },
-        max_uses: 12i32,
+        max_uses: 16i32,
         xp: 10i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
@@ -578,170 +587,23 @@ pub const TRADES_CARTOGRAPHER_LEVEL_2: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 8i32,
+            count: 13i32,
         },
         wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::COMPASS,
             count: 1i32,
         }),
         gives: VillagerTradeItem {
-            item: &crate::item::Item::TAIGA_VILLAGE_MAP,
+            item: &crate::item::Item::FILLED_MAP,
             count: 1i32,
         },
         max_uses: 12i32,
         xp: 5i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_taiga_village_maps",
+            destination: "minecraft:on_ocean_explorer_maps",
         },
-        allowed_types: &[
-            VillagerType::Swamp,
-            VillagerType::Snow,
-            VillagerType::Plains,
-        ],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 8i32,
-        },
-        wants_b: Some(VillagerTradeItem {
-            item: &crate::item::Item::COMPASS,
-            count: 1i32,
-        }),
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::SWAMP_HUT_MAP,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 5i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_swamp_hut_maps",
-        },
-        allowed_types: &[
-            VillagerType::Taiga,
-            VillagerType::Snow,
-            VillagerType::Jungle,
-        ],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 8i32,
-        },
-        wants_b: Some(VillagerTradeItem {
-            item: &crate::item::Item::COMPASS,
-            count: 1i32,
-        }),
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::SNOWY_VILLAGE_MAP,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 5i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_snowy_village_maps",
-        },
-        allowed_types: &[VillagerType::Taiga, VillagerType::Swamp],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 8i32,
-        },
-        wants_b: Some(VillagerTradeItem {
-            item: &crate::item::Item::COMPASS,
-            count: 1i32,
-        }),
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::SAVANNA_VILLAGE_MAP,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 5i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_savanna_village_maps",
-        },
-        allowed_types: &[
-            VillagerType::Plains,
-            VillagerType::Jungle,
-            VillagerType::Desert,
-        ],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 8i32,
-        },
-        wants_b: Some(VillagerTradeItem {
-            item: &crate::item::Item::COMPASS,
-            count: 1i32,
-        }),
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PLAINS_VILLAGE_MAP,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 5i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_plains_village_maps",
-        },
-        allowed_types: &[
-            VillagerType::Taiga,
-            VillagerType::Snow,
-            VillagerType::Savanna,
-            VillagerType::Desert,
-        ],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 8i32,
-        },
-        wants_b: Some(VillagerTradeItem {
-            item: &crate::item::Item::COMPASS,
-            count: 1i32,
-        }),
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::JUNGLE_PYRAMID_MAP,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 5i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_jungle_pyramid_maps",
-        },
-        allowed_types: &[
-            VillagerType::Swamp,
-            VillagerType::Savanna,
-            VillagerType::Desert,
-        ],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 8i32,
-        },
-        wants_b: Some(VillagerTradeItem {
-            item: &crate::item::Item::COMPASS,
-            count: 1i32,
-        }),
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::DESERT_VILLAGE_MAP,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 5i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_desert_village_maps",
-        },
-        allowed_types: &[VillagerType::Savanna, VillagerType::Jungle],
+        allowed_types: &[],
     },
 ];
 pub const TRADES_CARTOGRAPHER_LEVEL_3: &[VillagerTrade] = &[
@@ -764,21 +626,21 @@ pub const TRADES_CARTOGRAPHER_LEVEL_3: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 13i32,
+            count: 14i32,
         },
         wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::COMPASS,
             count: 1i32,
         }),
         gives: VillagerTradeItem {
-            item: &crate::item::Item::OCEAN_MONUMENT_MAP,
+            item: &crate::item::Item::FILLED_MAP,
             count: 1i32,
         },
         max_uses: 12i32,
         xp: 10i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_ocean_monument_maps",
+            destination: "minecraft:on_woodland_explorer_maps",
         },
         allowed_types: &[],
     },
@@ -792,14 +654,14 @@ pub const TRADES_CARTOGRAPHER_LEVEL_3: &[VillagerTrade] = &[
             count: 1i32,
         }),
         gives: VillagerTradeItem {
-            item: &crate::item::Item::BURIED_TRIAL_CHAMBERS_MAP,
+            item: &crate::item::Item::FILLED_MAP,
             count: 1i32,
         },
         max_uses: 12i32,
         xp: 10i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_buried_trial_chambers_maps",
+            destination: "minecraft:on_trial_chambers_maps",
         },
         allowed_types: &[],
     },
@@ -824,7 +686,7 @@ pub const TRADES_CARTOGRAPHER_LEVEL_4: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 2i32,
+            count: 3i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
@@ -835,44 +697,12 @@ pub const TRADES_CARTOGRAPHER_LEVEL_4: &[VillagerTrade] = &[
         xp: 15i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Snow, VillagerType::Plains],
+        allowed_types: &[],
     },
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::ORANGE_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Savanna, VillagerType::Desert],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::MAGENTA_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Savanna],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
+            count: 3i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
@@ -883,12 +713,12 @@ pub const TRADES_CARTOGRAPHER_LEVEL_4: &[VillagerTrade] = &[
         xp: 15i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Snow, VillagerType::Taiga],
+        allowed_types: &[],
     },
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 2i32,
+            count: 3i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
@@ -899,144 +729,12 @@ pub const TRADES_CARTOGRAPHER_LEVEL_4: &[VillagerTrade] = &[
         xp: 15i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Snow, VillagerType::Swamp],
+        allowed_types: &[],
     },
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::YELLOW_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Plains, VillagerType::Jungle],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIME_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Desert, VillagerType::Taiga],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PINK_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Taiga, VillagerType::Plains],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::GRAY_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Desert],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::CYAN_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Desert, VillagerType::Snow],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PURPLE_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Taiga, VillagerType::Swamp],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::BROWN_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Plains, VillagerType::Jungle],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::GREEN_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[
-            VillagerType::Desert,
-            VillagerType::Savanna,
-            VillagerType::Jungle,
-        ],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
+            count: 3i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
@@ -1047,12 +745,76 @@ pub const TRADES_CARTOGRAPHER_LEVEL_4: &[VillagerTrade] = &[
         xp: 15i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Snow, VillagerType::Savanna],
+        allowed_types: &[],
     },
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 2i32,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PINK_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::GREEN_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIME_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::GRAY_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
@@ -1063,22 +825,20 @@ pub const TRADES_CARTOGRAPHER_LEVEL_4: &[VillagerTrade] = &[
         xp: 15i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Swamp],
+        allowed_types: &[],
     },
-];
-pub const TRADES_CARTOGRAPHER_LEVEL_5: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 8i32,
+            count: 3i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::GLOBE_BANNER_PATTERN,
+            item: &crate::item::Item::PURPLE_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 30i32,
+        xp: 15i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -1086,25 +846,116 @@ pub const TRADES_CARTOGRAPHER_LEVEL_5: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 14i32,
+            count: 3i32,
         },
-        wants_b: Some(VillagerTradeItem {
-            item: &crate::item::Item::COMPASS,
-            count: 1i32,
-        }),
+        wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::WOODLAND_MANSION_MAP,
+            item: &crate::item::Item::MAGENTA_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 30i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::ExplorationMap {
-            destination: "#minecraft:on_woodland_mansion_maps",
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
         },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::CYAN_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::BROWN_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::YELLOW_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::ORANGE_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIGHT_GRAY_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
         allowed_types: &[],
     },
 ];
+pub const TRADES_CARTOGRAPHER_LEVEL_5: &[VillagerTrade] = &[VillagerTrade {
+    wants: VillagerTradeItem {
+        item: &crate::item::Item::EMERALD,
+        count: 8i32,
+    },
+    wants_b: None,
+    gives: VillagerTradeItem {
+        item: &crate::item::Item::GLOBE_BANNER_PATTERN,
+        count: 1i32,
+    },
+    max_uses: 12i32,
+    xp: 30i32,
+    price_multiplier: 0.05f32,
+    modifier: VillagerTradeModifier::None,
+    allowed_types: &[],
+}];
 pub const TRADES_CLERIC_LEVEL_1: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
@@ -1133,7 +984,7 @@ pub const TRADES_CLERIC_LEVEL_1: &[VillagerTrade] = &[
             count: 2i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -1367,7 +1218,7 @@ pub const TRADES_FARMER_LEVEL_1: &[VillagerTrade] = &[
             count: 6i32,
         },
         max_uses: 16i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -1461,7 +1312,7 @@ pub const TRADES_FARMER_LEVEL_4: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 3i32,
+            count: 1i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
@@ -1487,7 +1338,105 @@ pub const TRADES_FARMER_LEVEL_4: &[VillagerTrade] = &[
         max_uses: 12i32,
         xp: 15i32,
         price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::SuspiciousStew,
+        modifier: VillagerTradeModifier::SuspiciousStew {
+            effect: Some("minecraft:night_vision"),
+            duration: 100i32,
+        },
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::SUSPICIOUS_STEW,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::SuspiciousStew {
+            effect: Some("minecraft:jump_boost"),
+            duration: 160i32,
+        },
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::SUSPICIOUS_STEW,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::SuspiciousStew {
+            effect: Some("minecraft:weakness"),
+            duration: 140i32,
+        },
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::SUSPICIOUS_STEW,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::SuspiciousStew {
+            effect: Some("minecraft:blindness"),
+            duration: 120i32,
+        },
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::SUSPICIOUS_STEW,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::SuspiciousStew {
+            effect: Some("minecraft:poison"),
+            duration: 280i32,
+        },
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::SUSPICIOUS_STEW,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::SuspiciousStew {
+            effect: Some("minecraft:saturation"),
+            duration: 7i32,
+        },
         allowed_types: &[],
     },
 ];
@@ -1560,19 +1509,19 @@ pub const TRADES_FISHERMAN_LEVEL_1: &[VillagerTrade] = &[
     },
     VillagerTrade {
         wants: VillagerTradeItem {
-            item: &crate::item::Item::COD,
-            count: 6i32,
-        },
-        wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
             count: 1i32,
+        },
+        wants_b: Some(VillagerTradeItem {
+            item: &crate::item::Item::COD,
+            count: 6i32,
         }),
         gives: VillagerTradeItem {
             item: &crate::item::Item::COOKED_COD,
             count: 6i32,
         },
         max_uses: 16i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -1588,7 +1537,7 @@ pub const TRADES_FISHERMAN_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 16i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -1613,12 +1562,12 @@ pub const TRADES_FISHERMAN_LEVEL_2: &[VillagerTrade] = &[
     },
     VillagerTrade {
         wants: VillagerTradeItem {
-            item: &crate::item::Item::SALMON,
-            count: 6i32,
-        },
-        wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
             count: 1i32,
+        },
+        wants_b: Some(VillagerTradeItem {
+            item: &crate::item::Item::SALMON,
+            count: 6i32,
         }),
         gives: VillagerTradeItem {
             item: &crate::item::Item::COOKED_SALMON,
@@ -1747,7 +1696,23 @@ pub const TRADES_FISHERMAN_LEVEL_5: &[VillagerTrade] = &[
         xp: 30i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Taiga, VillagerType::Snow],
+        allowed_types: &[VillagerType::Taiga],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::SPRUCE_BOAT,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 30i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[VillagerType::Snow],
     },
     VillagerTrade {
         wants: VillagerTradeItem {
@@ -1763,7 +1728,23 @@ pub const TRADES_FISHERMAN_LEVEL_5: &[VillagerTrade] = &[
         xp: 30i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[VillagerType::Desert, VillagerType::Jungle],
+        allowed_types: &[VillagerType::Desert],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::JUNGLE_BOAT,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 30i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[VillagerType::Jungle],
     },
     VillagerTrade {
         wants: VillagerTradeItem {
@@ -1826,26 +1807,26 @@ pub const TRADES_FLETCHER_LEVEL_1: &[VillagerTrade] = &[
             count: 16i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
     },
     VillagerTrade {
         wants: VillagerTradeItem {
-            item: &crate::item::Item::GRAVEL,
-            count: 10i32,
-        },
-        wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
             count: 1i32,
+        },
+        wants_b: Some(VillagerTradeItem {
+            item: &crate::item::Item::GRAVEL,
+            count: 10i32,
         }),
         gives: VillagerTradeItem {
             item: &crate::item::Item::FLINT,
             count: 10i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -2040,7 +2021,7 @@ pub const TRADES_LEATHERWORKER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::RandomDyes,
         allowed_types: &[],
@@ -2056,7 +2037,7 @@ pub const TRADES_LEATHERWORKER_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::RandomDyes,
         allowed_types: &[],
@@ -2140,7 +2121,7 @@ pub const TRADES_LEATHERWORKER_LEVEL_3: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::RandomDyes,
         allowed_types: &[],
@@ -2208,7 +2189,7 @@ pub const TRADES_LEATHERWORKER_LEVEL_5: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 5i32,
+        xp: 30i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::RandomDyes,
         allowed_types: &[],
@@ -2234,7 +2215,7 @@ pub const TRADES_LIBRARIAN_LEVEL_1: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 0i32,
+            count: 1i32,
         },
         wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::BOOK,
@@ -2245,7 +2226,7 @@ pub const TRADES_LIBRARIAN_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::EnchantRandomly,
         allowed_types: &[],
@@ -2261,7 +2242,7 @@ pub const TRADES_LIBRARIAN_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -2287,7 +2268,7 @@ pub const TRADES_LIBRARIAN_LEVEL_2: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 0i32,
+            count: 1i32,
         },
         wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::BOOK,
@@ -2340,7 +2321,7 @@ pub const TRADES_LIBRARIAN_LEVEL_3: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 0i32,
+            count: 1i32,
         },
         wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::BOOK,
@@ -2393,7 +2374,7 @@ pub const TRADES_LIBRARIAN_LEVEL_4: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 0i32,
+            count: 1i32,
         },
         wants_b: Some(VillagerTradeItem {
             item: &crate::item::Item::BOOK,
@@ -2442,40 +2423,22 @@ pub const TRADES_LIBRARIAN_LEVEL_4: &[VillagerTrade] = &[
         allowed_types: &[],
     },
 ];
-pub const TRADES_LIBRARIAN_LEVEL_5: &[VillagerTrade] = &[
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::YELLOW_CANDLE,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 30i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
+pub const TRADES_LIBRARIAN_LEVEL_5: &[VillagerTrade] = &[VillagerTrade {
+    wants: VillagerTradeItem {
+        item: &crate::item::Item::EMERALD,
+        count: 20i32,
     },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::RED_CANDLE,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 30i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
+    wants_b: None,
+    gives: VillagerTradeItem {
+        item: &crate::item::Item::NAME_TAG,
+        count: 1i32,
     },
-];
+    max_uses: 12i32,
+    xp: 30i32,
+    price_multiplier: 0.05f32,
+    modifier: VillagerTradeModifier::None,
+    allowed_types: &[],
+}];
 pub const TRADES_MASON_LEVEL_1: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
@@ -2504,7 +2467,7 @@ pub const TRADES_MASON_LEVEL_1: &[VillagerTrade] = &[
             count: 10i32,
         },
         max_uses: 16i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -2682,22 +2645,6 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::WHITE_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
             item: &crate::item::Item::ORANGE_TERRACOTTA,
             count: 1i32,
         },
@@ -2714,7 +2661,23 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::MAGENTA_TERRACOTTA,
+            item: &crate::item::Item::WHITE_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::BLUE_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -2731,54 +2694,6 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::LIGHT_BLUE_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::YELLOW_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIME_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PINK_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -2826,6 +2741,102 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
+            item: &crate::item::Item::BLACK_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::RED_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PINK_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::MAGENTA_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIME_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::GREEN_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
             item: &crate::item::Item::CYAN_TERRACOTTA,
             count: 1i32,
         },
@@ -2858,7 +2869,7 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::BLUE_TERRACOTTA,
+            item: &crate::item::Item::YELLOW_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -2890,39 +2901,7 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::GREEN_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::RED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::BLACK_TERRACOTTA,
+            item: &crate::item::Item::ORANGE_GLAZED_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -2954,23 +2933,7 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::ORANGE_GLAZED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::MAGENTA_GLAZED_TERRACOTTA,
+            item: &crate::item::Item::BLUE_GLAZED_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -2987,54 +2950,6 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::LIGHT_BLUE_GLAZED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::YELLOW_GLAZED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIME_GLAZED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PINK_GLAZED_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -3082,6 +2997,102 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
+            item: &crate::item::Item::BLACK_GLAZED_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::RED_GLAZED_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PINK_GLAZED_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::MAGENTA_GLAZED_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIME_GLAZED_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::GREEN_GLAZED_TERRACOTTA,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
             item: &crate::item::Item::CYAN_GLAZED_TERRACOTTA,
             count: 1i32,
         },
@@ -3114,7 +3125,7 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::BLUE_GLAZED_TERRACOTTA,
+            item: &crate::item::Item::YELLOW_GLAZED_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -3131,54 +3142,6 @@ pub const TRADES_MASON_LEVEL_4: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::BROWN_GLAZED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::GREEN_GLAZED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::RED_GLAZED_TERRACOTTA,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::BLACK_GLAZED_TERRACOTTA,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -3257,7 +3220,7 @@ pub const TRADES_SHEPHERD_LEVEL_1: &[VillagerTrade] = &[
     },
     VillagerTrade {
         wants: VillagerTradeItem {
-            item: &crate::item::Item::GRAY_WOOL,
+            item: &crate::item::Item::BLACK_WOOL,
             count: 18i32,
         },
         wants_b: None,
@@ -3273,7 +3236,7 @@ pub const TRADES_SHEPHERD_LEVEL_1: &[VillagerTrade] = &[
     },
     VillagerTrade {
         wants: VillagerTradeItem {
-            item: &crate::item::Item::BLACK_WOOL,
+            item: &crate::item::Item::GRAY_WOOL,
             count: 18i32,
         },
         wants_b: None,
@@ -3298,7 +3261,7 @@ pub const TRADES_SHEPHERD_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -4002,54 +3965,6 @@ pub const TRADES_SHEPHERD_LEVEL_3: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::ORANGE_BED,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 10i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::MAGENTA_BED,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 10i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIGHT_BLUE_BED,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 10i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
             item: &crate::item::Item::YELLOW_BED,
             count: 1i32,
         },
@@ -4066,7 +3981,7 @@ pub const TRADES_SHEPHERD_LEVEL_3: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::LIME_BED,
+            item: &crate::item::Item::RED_BED,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4082,71 +3997,7 @@ pub const TRADES_SHEPHERD_LEVEL_3: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::PINK_BED,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 10i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::GRAY_BED,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 10i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIGHT_GRAY_BED,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 10i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::CYAN_BED,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 10i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PURPLE_BED,
+            item: &crate::item::Item::BLACK_BED,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4194,6 +4045,38 @@ pub const TRADES_SHEPHERD_LEVEL_3: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
+            item: &crate::item::Item::CYAN_BED,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 10i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::GRAY_BED,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 10i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
             item: &crate::item::Item::GREEN_BED,
             count: 1i32,
         },
@@ -4210,7 +4093,7 @@ pub const TRADES_SHEPHERD_LEVEL_3: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::RED_BED,
+            item: &crate::item::Item::LIGHT_BLUE_BED,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4226,7 +4109,87 @@ pub const TRADES_SHEPHERD_LEVEL_3: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::BLACK_BED,
+            item: &crate::item::Item::LIGHT_GRAY_BED,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 10i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIME_BED,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 10i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::MAGENTA_BED,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 10i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::ORANGE_BED,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 10i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PINK_BED,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 10i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PURPLE_BED,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4356,23 +4319,7 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::ORANGE_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::MAGENTA_BANNER,
+            item: &crate::item::Item::BLUE_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4404,23 +4351,7 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::YELLOW_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIME_BANNER,
+            item: &crate::item::Item::RED_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4452,6 +4383,38 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
+            item: &crate::item::Item::GREEN_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIME_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
             item: &crate::item::Item::GRAY_BANNER,
             count: 1i32,
         },
@@ -4468,23 +4431,7 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::LIGHT_GRAY_BANNER,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 15i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::CYAN_BANNER,
+            item: &crate::item::Item::BLACK_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4516,7 +4463,23 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::BLUE_BANNER,
+            item: &crate::item::Item::MAGENTA_BANNER,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 15i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::CYAN_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4548,7 +4511,7 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::GREEN_BANNER,
+            item: &crate::item::Item::YELLOW_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4564,7 +4527,7 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::RED_BANNER,
+            item: &crate::item::Item::ORANGE_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4580,7 +4543,7 @@ pub const TRADES_SHEPHERD_LEVEL_4: &[VillagerTrade] = &[
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::BLACK_BANNER,
+            item: &crate::item::Item::LIGHT_GRAY_BANNER,
             count: 1i32,
         },
         max_uses: 12i32,
@@ -4634,7 +4597,7 @@ pub const TRADES_TOOLSMITH_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -4650,7 +4613,7 @@ pub const TRADES_TOOLSMITH_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -4666,7 +4629,7 @@ pub const TRADES_TOOLSMITH_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -4682,7 +4645,7 @@ pub const TRADES_TOOLSMITH_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -4816,6 +4779,22 @@ pub const TRADES_TOOLSMITH_LEVEL_3: &[VillagerTrade] = &[
 pub const TRADES_TOOLSMITH_LEVEL_4: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
+            item: &crate::item::Item::DIAMOND,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 30i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
             count: 12i32,
         },
@@ -4852,22 +4831,6 @@ pub const TRADES_TOOLSMITH_LEVEL_4: &[VillagerTrade] = &[
         },
         allowed_types: &[],
     },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::DIAMOND,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 30i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
 ];
 pub const TRADES_TOOLSMITH_LEVEL_5: &[VillagerTrade] = &[VillagerTrade {
     wants: VillagerTradeItem {
@@ -4888,393 +4851,7 @@ pub const TRADES_TOOLSMITH_LEVEL_5: &[VillagerTrade] = &[VillagerTrade {
     },
     allowed_types: &[],
 }];
-pub const TRADES_WANDERING_TRADER_BUYING: &[VillagerTrade] = &[
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::POTION,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        max_uses: 2i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::WATER_BUCKET,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        max_uses: 2i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::MILK_BUCKET,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        max_uses: 2i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::FERMENTED_SPIDER_EYE,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        max_uses: 2i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::BAKED_POTATO,
-            count: 4i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        max_uses: 2i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::HAY_BLOCK,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        max_uses: 2i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-];
 pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::WHITE_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::ORANGE_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::MAGENTA_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIGHT_BLUE_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::YELLOW_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIME_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PINK_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::GRAY_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::LIGHT_GRAY_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::CYAN_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PURPLE_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::BLUE_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::BROWN_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::GREEN_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::RED_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::BLACK_DYE,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::TROPICAL_FISH_BUCKET,
-            count: 1i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PUFFERFISH_BUCKET,
-            count: 1i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
@@ -5286,7 +4863,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5302,7 +4879,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5318,7 +4895,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5334,7 +4911,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5350,7 +4927,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5366,7 +4943,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5381,8 +4958,8 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             item: &crate::item::Item::PUMPKIN,
             count: 1i32,
         },
-        max_uses: 16i32,
-        xp: 2i32,
+        max_uses: 4i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5398,7 +4975,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5414,7 +4991,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5430,7 +5007,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5446,7 +5023,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5462,7 +5039,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5478,7 +5055,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5494,7 +5071,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5510,7 +5087,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5526,7 +5103,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5542,7 +5119,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5558,7 +5135,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5574,7 +5151,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5590,7 +5167,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5606,23 +5183,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 7i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::OPEN_EYEBLOSSOM,
-            count: 1i32,
-        },
-        max_uses: 7i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5638,7 +5199,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5654,7 +5215,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5670,7 +5231,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5686,7 +5247,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5702,7 +5263,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5718,7 +5279,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5734,7 +5295,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5750,7 +5311,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5766,7 +5327,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5782,7 +5343,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5798,23 +5359,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 5i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PALE_OAK_SAPLING,
-            count: 1i32,
-        },
-        max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5830,7 +5375,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5838,15 +5383,255 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
-            count: 5i32,
+            count: 1i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
-            item: &crate::item::Item::POPLAR_SAPLING,
+            item: &crate::item::Item::RED_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
             count: 1i32,
         },
-        max_uses: 8i32,
-        xp: 2i32,
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::WHITE_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::BLUE_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PINK_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::BLACK_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::GREEN_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIGHT_GRAY_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::MAGENTA_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::YELLOW_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::GRAY_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PURPLE_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIGHT_BLUE_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::LIME_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::ORANGE_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::BROWN_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::CYAN_DYE,
+            count: 3i32,
+        },
+        max_uses: 12i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5862,7 +5647,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5878,7 +5663,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5894,7 +5679,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5910,7 +5695,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5926,7 +5711,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5939,26 +5724,10 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::VINE,
-            count: 3i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
             count: 1i32,
         },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PALE_HANGING_MOSS,
-            count: 3i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
+        max_uses: 12i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5971,10 +5740,10 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::BROWN_MUSHROOM,
-            count: 3i32,
+            count: 1i32,
         },
-        max_uses: 16i32,
-        xp: 2i32,
+        max_uses: 12i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -5987,10 +5756,10 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::RED_MUSHROOM,
-            count: 3i32,
+            count: 1i32,
         },
-        max_uses: 16i32,
-        xp: 2i32,
+        max_uses: 12i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6003,10 +5772,10 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::LILY_PAD,
-            count: 5i32,
+            count: 2i32,
         },
-        max_uses: 2i32,
-        xp: 2i32,
+        max_uses: 5i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6022,7 +5791,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 2i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6038,7 +5807,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 8i32,
         },
         max_uses: 8i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6054,7 +5823,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 4i32,
         },
         max_uses: 6i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6070,23 +5839,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 2i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::SULFUR_SPIKE,
-            count: 2i32,
-        },
-        max_uses: 5i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6102,7 +5855,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 2i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6118,119 +5871,7 @@ pub const TRADES_WANDERING_TRADER_COMMON: &[VillagerTrade] = &[
             count: 2i32,
         },
         max_uses: 5i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PALE_MOSS_BLOCK,
-            count: 2i32,
-        },
-        max_uses: 5i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::WILDFLOWERS,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::TALL_DRY_GRASS,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 3i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::FIREFLY_BUSH,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 2i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::GOLDEN_DANDELION,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::NAME_TAG,
-            count: 1i32,
-        },
-        max_uses: 5i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::SHELF_MUSHROOM,
-            count: 3i32,
-        },
-        max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6240,7 +5881,39 @@ pub const TRADES_WANDERING_TRADER_UNCOMMON: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
+            count: 5i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::TROPICAL_FISH_BUCKET,
             count: 1i32,
+        },
+        max_uses: 4i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 5i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::PUFFERFISH_BUCKET,
+            count: 1i32,
+        },
+        max_uses: 4i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 3i32,
         },
         wants_b: None,
         gives: VillagerTradeItem {
@@ -6248,7 +5921,7 @@ pub const TRADES_WANDERING_TRADER_UNCOMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 6i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6264,7 +5937,7 @@ pub const TRADES_WANDERING_TRADER_UNCOMMON: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 6i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6277,10 +5950,10 @@ pub const TRADES_WANDERING_TRADER_UNCOMMON: &[VillagerTrade] = &[
         wants_b: None,
         gives: VillagerTradeItem {
             item: &crate::item::Item::GUNPOWDER,
-            count: 4i32,
+            count: 1i32,
         },
-        max_uses: 2i32,
-        xp: 2i32,
+        max_uses: 8i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6296,204 +5969,9 @@ pub const TRADES_WANDERING_TRADER_UNCOMMON: &[VillagerTrade] = &[
             count: 3i32,
         },
         max_uses: 6i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::ACACIA_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::BIRCH_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::DARK_OAK_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::JUNGLE_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::OAK_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::SPRUCE_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::CHERRY_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::MANGROVE_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::PALE_OAK_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::POPLAR_LOG,
-            count: 8i32,
-        },
-        max_uses: 16i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::IRON_PICKAXE,
-            count: 1i32,
-        },
-        max_uses: 1i32,
-        xp: 2i32,
-        price_multiplier: 0.2f32,
-        modifier: VillagerTradeModifier::EnchantWithLevels {
-            min: 5i32,
-            max: 19i32,
-        },
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 5i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::POTION,
-            count: 1i32,
-        },
-        max_uses: 1i32,
-        xp: 2i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::Potion("minecraft:long_invisibility"),
         allowed_types: &[],
     },
 ];
@@ -6525,7 +6003,7 @@ pub const TRADES_WEAPONSMITH_LEVEL_1: &[VillagerTrade] = &[
             count: 1i32,
         },
         max_uses: 12i32,
-        xp: 2i32,
+        xp: 1i32,
         price_multiplier: 0.2f32,
         modifier: VillagerTradeModifier::None,
         allowed_types: &[],
@@ -6540,9 +6018,9 @@ pub const TRADES_WEAPONSMITH_LEVEL_1: &[VillagerTrade] = &[
             item: &crate::item::Item::IRON_SWORD,
             count: 1i32,
         },
-        max_uses: 12i32,
-        xp: 2i32,
-        price_multiplier: 0.2f32,
+        max_uses: 3i32,
+        xp: 1i32,
+        price_multiplier: 0.05f32,
         modifier: VillagerTradeModifier::EnchantWithLevels {
             min: 5i32,
             max: 19i32,
@@ -6603,6 +6081,22 @@ pub const TRADES_WEAPONSMITH_LEVEL_3: &[VillagerTrade] = &[VillagerTrade {
 pub const TRADES_WEAPONSMITH_LEVEL_4: &[VillagerTrade] = &[
     VillagerTrade {
         wants: VillagerTradeItem {
+            item: &crate::item::Item::DIAMOND,
+            count: 1i32,
+        },
+        wants_b: None,
+        gives: VillagerTradeItem {
+            item: &crate::item::Item::EMERALD,
+            count: 1i32,
+        },
+        max_uses: 12i32,
+        xp: 30i32,
+        price_multiplier: 0.05f32,
+        modifier: VillagerTradeModifier::None,
+        allowed_types: &[],
+    },
+    VillagerTrade {
+        wants: VillagerTradeItem {
             item: &crate::item::Item::EMERALD,
             count: 12i32,
         },
@@ -6618,22 +6112,6 @@ pub const TRADES_WEAPONSMITH_LEVEL_4: &[VillagerTrade] = &[
             min: 5i32,
             max: 19i32,
         },
-        allowed_types: &[],
-    },
-    VillagerTrade {
-        wants: VillagerTradeItem {
-            item: &crate::item::Item::DIAMOND,
-            count: 1i32,
-        },
-        wants_b: None,
-        gives: VillagerTradeItem {
-            item: &crate::item::Item::EMERALD,
-            count: 1i32,
-        },
-        max_uses: 12i32,
-        xp: 30i32,
-        price_multiplier: 0.05f32,
-        modifier: VillagerTradeModifier::None,
         allowed_types: &[],
     },
 ];
@@ -6656,6 +6134,21 @@ pub const TRADES_WEAPONSMITH_LEVEL_5: &[VillagerTrade] = &[VillagerTrade {
     },
     allowed_types: &[],
 }];
+#[doc = r" Wandering trader tier sets, one constant per tier with data,"]
+#[doc = r" mirroring `WanderingTrader#updateTrades`."]
+pub struct WanderingTraderTrades;
+impl WanderingTraderTrades {
+    #[must_use]
+    pub const COMMON: VillagerTradeSet = VillagerTradeSet {
+        trades: TRADES_WANDERING_TRADER_COMMON,
+        amount: 5i32,
+    };
+    #[must_use]
+    pub const UNCOMMON: VillagerTradeSet = VillagerTradeSet {
+        trades: TRADES_WANDERING_TRADER_UNCOMMON,
+        amount: 1i32,
+    };
+}
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 #[repr(i32)]
 pub enum VillagerProfession {
@@ -7017,7 +6510,7 @@ impl VillagerProfession {
                 }),
                 5i32 => Some(VillagerTradeSet {
                     trades: TRADES_LIBRARIAN_LEVEL_5,
-                    amount: 3i32,
+                    amount: 2i32,
                 }),
                 _ => None,
             },

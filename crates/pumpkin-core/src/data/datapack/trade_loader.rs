@@ -14,11 +14,20 @@ use tracing::warn;
 pub enum DynamicTradeModifier {
     None,
     EnchantRandomly,
-    EnchantWithLevels { min: i32, max: i32 },
-    ExplorationMap { destination: String },
+    EnchantWithLevels {
+        min: i32,
+        max: i32,
+    },
+    ExplorationMap {
+        destination: String,
+    },
     RandomDyes,
     RandomPotion,
-    SuspiciousStew,
+    /// `effect` is `None` when the trade picks a random stew effect.
+    SuspiciousStew {
+        effect: Option<String>,
+        duration: i32,
+    },
     Potion(String),
 }
 
@@ -71,7 +80,12 @@ impl From<&VillagerTrade> for DynamicVillagerTrade {
                 }
                 VillagerTradeModifier::RandomDyes => DynamicTradeModifier::RandomDyes,
                 VillagerTradeModifier::RandomPotion => DynamicTradeModifier::RandomPotion,
-                VillagerTradeModifier::SuspiciousStew => DynamicTradeModifier::SuspiciousStew,
+                VillagerTradeModifier::SuspiciousStew { effect, duration } => {
+                    DynamicTradeModifier::SuspiciousStew {
+                        effect: effect.map(std::borrow::ToOwned::to_owned),
+                        duration,
+                    }
+                }
                 VillagerTradeModifier::Potion(potion) => {
                     DynamicTradeModifier::Potion(potion.to_string())
                 }
@@ -188,7 +202,18 @@ pub fn parse_trade_modifier(modifiers: &[Value]) -> DynamicTradeModifier {
             }
             "minecraft:set_random_dyes" => return DynamicTradeModifier::RandomDyes,
             "minecraft:set_random_potion" => return DynamicTradeModifier::RandomPotion,
-            "minecraft:set_stew_effect" => return DynamicTradeModifier::SuspiciousStew,
+            "minecraft:set_stew_effect" => {
+                // An entry without an effect id keeps the random-effect behavior.
+                let effect = modifier
+                    .get("effect")
+                    .and_then(Value::as_str)
+                    .map(std::borrow::ToOwned::to_owned);
+                let duration = modifier
+                    .get("duration")
+                    .and_then(Value::as_f64)
+                    .map_or(0, |duration| duration as i32);
+                return DynamicTradeModifier::SuspiciousStew { effect, duration };
+            }
             "minecraft:set_potion" => {
                 if let Some(potion) = modifier.get("id").and_then(Value::as_str) {
                     return DynamicTradeModifier::Potion(potion.to_string());

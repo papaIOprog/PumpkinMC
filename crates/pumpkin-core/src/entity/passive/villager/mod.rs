@@ -195,23 +195,13 @@ pub(crate) fn apply_random_dye(rng: &mut impl rand::Rng, stack: &mut ItemStack) 
     ));
 }
 
-pub(crate) fn apply_random_stew_effect(rng: &mut impl rand::Rng, stack: &mut ItemStack) {
+pub(crate) fn apply_stew_effect(stack: &mut ItemStack, effect: &str, duration: i32) {
     use pumpkin_data::data_component::DataComponent;
     use pumpkin_data::data_component_impl::{
         DataComponentImpl, SuspiciousStewEffect, SuspiciousStewEffectsImpl,
     };
-    use rand::RngExt;
     use std::borrow::Cow;
 
-    const EFFECTS: [(&str, i32); 6] = [
-        ("minecraft:night_vision", 100),
-        ("minecraft:jump_boost", 160),
-        ("minecraft:weakness", 140),
-        ("minecraft:blindness", 120),
-        ("minecraft:poison", 280),
-        ("minecraft:saturation", 7),
-    ];
-    let (effect, duration) = EFFECTS[rng.random_range(0..EFFECTS.len())];
     stack.patch.push((
         DataComponent::SuspiciousStewEffects,
         Some(
@@ -224,6 +214,42 @@ pub(crate) fn apply_random_stew_effect(rng: &mut impl rand::Rng, stack: &mut Ite
             .to_dyn(),
         ),
     ));
+}
+
+pub(crate) fn apply_random_stew_effect(rng: &mut impl rand::Rng, stack: &mut ItemStack) {
+    use rand::RngExt;
+
+    const EFFECTS: [(&str, i32); 6] = [
+        ("minecraft:night_vision", 100),
+        ("minecraft:jump_boost", 160),
+        ("minecraft:weakness", 140),
+        ("minecraft:blindness", 120),
+        ("minecraft:poison", 280),
+        ("minecraft:saturation", 7),
+    ];
+    let (effect, duration) = EFFECTS[rng.random_range(0..EFFECTS.len())];
+    apply_stew_effect(stack, effect, duration);
+}
+
+/// Mirrors `TippedArrowForItemsAndEmeralds`: a random potion that has effects
+/// and is a brewing output.
+pub(crate) fn apply_random_potion(rng: &mut impl rand::Rng, stack: &mut ItemStack) {
+    use pumpkin_data::potion_brewing::BREWING_RECIPES;
+    use rand::{RngExt, seq::IndexedRandom};
+
+    // Brewable = appears as the output of a brewing mix and has effects,
+    // matching the potion filter in TippedArrowForItemsAndEmeralds.
+    let mut brewable = BREWING_RECIPES
+        .iter()
+        .map(|recipe| recipe.to_potion)
+        .filter(|potion| !potion.effects.is_empty())
+        .collect::<Vec<_>>();
+    brewable.sort_unstable_by_key(|potion| potion.id);
+    brewable.dedup_by_key(|potion| potion.id);
+    let Some(potion) = brewable.choose(rng) else {
+        return;
+    };
+    apply_potion(stack, potion.name);
 }
 
 pub(crate) fn apply_potion(stack: &mut ItemStack, potion_name: &str) {
@@ -656,7 +682,6 @@ impl VillagerEntity {
     pub fn add_trades(&self, profession: VillagerProfession, level: i32) {
         use crate::data::datapack::trade_loader::{DynamicTradeModifier, DynamicVillagerTradeSet};
         use pumpkin_protocol::codec::item_stack_seralizer::ItemStackSerializer;
-        use rand::seq::IndexedRandom;
         use rand::{RngExt, SeedableRng, rngs::StdRng};
         use std::borrow::Cow;
 
@@ -733,17 +758,12 @@ impl VillagerEntity {
                     }
                     DynamicTradeModifier::RandomDyes => apply_random_dye(&mut rng, &mut output),
                     DynamicTradeModifier::RandomPotion => {
-                        let Some(potion_name) = pumpkin_data::tag::Potion::MINECRAFT_TRADEABLE
-                            .0
-                            .choose(&mut rng)
-                        else {
-                            continue;
-                        };
-                        apply_potion(&mut output, potion_name);
+                        apply_random_potion(&mut rng, &mut output);
                     }
-                    DynamicTradeModifier::SuspiciousStew => {
-                        apply_random_stew_effect(&mut rng, &mut output);
-                    }
+                    DynamicTradeModifier::SuspiciousStew { effect, duration } => match effect {
+                        Some(effect) => apply_stew_effect(&mut output, effect, *duration),
+                        None => apply_random_stew_effect(&mut rng, &mut output),
+                    },
                     DynamicTradeModifier::Potion(potion) => apply_potion(&mut output, potion),
                 }
                 new_offers.push(pumpkin_protocol::java::client::play::MerchantOffer {
@@ -832,7 +852,7 @@ impl VillagerEntity {
         let entity = self.get_entity();
         let range = player
             .living_entity
-            .get_attribute_value(&Attributes::ENTITY_INTERACTION_RANGE)
+            .get_attribute_value(&Attributes::PLAYER_ENTITY_INTERACTION_RANGE)
             + 4.0;
         entity.is_alive()
             && self.mob_entity.living_entity.health.load() > 0.0
@@ -914,29 +934,23 @@ impl VillagerEntity {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
 
-        let ok = {
-            let screen = player
-                .current_screen_handler
-                .lock()
-                .unwrap_or_else(std::sync::PoisonError::into_inner)
-                .clone();
-            let mut screen = screen
-                .lock()
-                .unwrap_or_else(std::sync::PoisonError::into_inner);
+        // The slot-click path calls into the villager while already holding
+        // the screen handler lock, so only refresh the handler's copy when it
+        // is free; the handler tracks the trade it completed itself.
+        if let Ok(mut screen) = player
+            .current_screen_handler
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .clone()
+            .try_lock()
+        {
             if screen.sync_id() != sync_id {
-                false
-            } else if let Some(handler) =
-                screen.as_any_mut().downcast_mut::<MerchantScreenHandler>()
-            {
+                return;
+            }
+            if let Some(handler) = screen.as_any_mut().downcast_mut::<MerchantScreenHandler>() {
                 handler.offers.clone_from(&offers);
                 handler.update_result_slot();
-                true
-            } else {
-                false
             }
-        };
-        if !ok {
-            return;
         }
         self.send_trade_offers(player, sync_id, &offers, villager_data);
     }
@@ -963,29 +977,22 @@ impl VillagerEntity {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
 
-        let ok = {
-            let screen = player
-                .current_screen_handler
-                .lock()
-                .unwrap_or_else(std::sync::PoisonError::into_inner)
-                .clone();
-            let mut screen = screen
-                .lock()
-                .unwrap_or_else(std::sync::PoisonError::into_inner);
+        // try_lock keeps this safe against a player mid-click, which holds
+        // the screen handler while calling into the villager.
+        if let Ok(mut screen) = player
+            .current_screen_handler
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .clone()
+            .try_lock()
+        {
             if screen.sync_id() != sync_id {
-                false
-            } else if let Some(handler) =
-                screen.as_any_mut().downcast_mut::<MerchantScreenHandler>()
-            {
+                return;
+            }
+            if let Some(handler) = screen.as_any_mut().downcast_mut::<MerchantScreenHandler>() {
                 handler.offers.clone_from(&offers);
                 handler.update_result_slot();
-                true
-            } else {
-                false
             }
-        };
-        if !ok {
-            return;
         }
         self.send_trade_offers(&player, sync_id, &offers, villager_data);
     }
@@ -2373,7 +2380,7 @@ impl Mob for VillagerEntity {
 #[allow(clippy::expect_used, clippy::unwrap_used)]
 mod tests {
     use pumpkin_data::data_component_impl::{EnchantmentsImpl, StoredEnchantmentsImpl};
-    use pumpkin_data::villager::VillagerTradeModifier;
+    use pumpkin_data::villager::{VillagerTradeModifier, WanderingTraderTrades};
     use pumpkin_util::version::JavaMinecraftVersion;
 
     use super::*;
@@ -2389,6 +2396,44 @@ mod tests {
             .unwrap();
 
         assert_eq!(bytes, [18, 19, 2, 9, 1]);
+    }
+
+    #[test]
+    fn every_profession_has_trades_for_every_level() {
+        // Villager#updateTrades draws 2 offers per level from levels 1-5.
+        for id in 0..15 {
+            let Some(profession) = VillagerProfession::from_i32(id) else {
+                continue;
+            };
+            // Neither the unemployed nor the nitwit profession can gain levels
+            // or trades.
+            if matches!(
+                profession,
+                VillagerProfession::None | VillagerProfession::Nitwit
+            ) {
+                assert!(profession.trade_set(1).is_none());
+                continue;
+            }
+            for level in 1..=5 {
+                let set = profession
+                    .trade_set(level)
+                    .unwrap_or_else(|| panic!("{profession:?} level {level} has no trades"));
+                assert!(!set.trades.is_empty());
+                assert_eq!(set.amount, 2, "{profession:?} level {level}");
+            }
+        }
+    }
+
+    #[test]
+    fn wandering_trader_tiers_match_vanilla_draw_counts() {
+        // WanderingTrader#updateTrades: 5 offers from the common tier, then 1
+        // from the uncommon tier.
+        let common = WanderingTraderTrades::COMMON;
+        assert!(!common.trades.is_empty());
+        assert_eq!(common.amount, 5);
+        let uncommon = WanderingTraderTrades::UNCOMMON;
+        assert!(!uncommon.trades.is_empty());
+        assert_eq!(uncommon.amount, 1);
     }
 
     #[test]
@@ -2493,9 +2538,11 @@ mod tests {
         assert_eq!(enchanted_book.price_multiplier, 0.2);
 
         let cartographer = VillagerProfession::Cartographer.trade_set(2).unwrap();
+        // 1.21.1 treasure maps are not split per villager type, so the trade
+        // carries no allowed_types predicate.
         assert!(cartographer.trades.iter().any(|trade| {
             matches!(trade.modifier, VillagerTradeModifier::ExplorationMap { .. })
-                && !trade.allowed_types.is_empty()
+                && trade.allowed_types.is_empty()
                 && trade
                     .wants_b
                     .is_some_and(|cost| cost.item == &Item::COMPASS)

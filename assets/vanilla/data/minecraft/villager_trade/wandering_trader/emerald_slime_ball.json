@@ -1,0 +1,11 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 4
+  },
+  "gives": {
+    "id": "minecraft:slime_ball"
+  },
+  "max_uses": 5,
+  "xp": 1
+}

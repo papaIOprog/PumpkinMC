@@ -1,0 +1,21 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 8
+  },
+  "gives": {
+    "id": "minecraft:diamond_helmet"
+  },
+  "max_uses": 3,
+  "xp": 30,
+  "reputation_discount": 0.2,
+  "given_item_modifier": [
+    {
+      "type": "minecraft:enchant_with_levels",
+      "levels": {
+        "min": 5,
+        "max": 19
+      }
+    }
+  ]
+}

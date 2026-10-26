@@ -1,0 +1,10 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "id": "minecraft:gunpowder"
+  },
+  "max_uses": 8,
+  "xp": 1
+}

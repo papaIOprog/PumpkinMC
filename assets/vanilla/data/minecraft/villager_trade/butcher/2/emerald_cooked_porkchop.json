@@ -1,0 +1,10 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "id": "minecraft:cooked_porkchop",
+    "count": 5
+  },
+  "xp": 5
+}

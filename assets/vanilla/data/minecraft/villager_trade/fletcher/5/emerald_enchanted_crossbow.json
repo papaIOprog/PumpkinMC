@@ -1,0 +1,20 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 3
+  },
+  "gives": {
+    "id": "minecraft:crossbow"
+  },
+  "max_uses": 3,
+  "xp": 15,
+  "given_item_modifier": [
+    {
+      "type": "minecraft:enchant_with_levels",
+      "levels": {
+        "min": 5,
+        "max": 19
+      }
+    }
+  ]
+}

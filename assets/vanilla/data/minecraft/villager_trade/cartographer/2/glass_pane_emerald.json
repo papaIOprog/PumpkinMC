@@ -1,0 +1,10 @@
+{
+  "wants": {
+    "id": "minecraft:glass_pane",
+    "count": 11
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "xp": 10
+}

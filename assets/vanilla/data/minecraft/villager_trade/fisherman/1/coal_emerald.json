@@ -1,0 +1,9 @@
+{
+  "wants": {
+    "id": "minecraft:coal",
+    "count": 10
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  }
+}
