@@ -269,7 +269,9 @@ impl DataComponentCodec<Self> for EnchantmentsImpl {
             seq.write_var_int(&VarInt::from(enc.id))?;
             seq.write_var_int(&VarInt::from(*level))?;
         }
-        Ok(())
+        // 1.20.5-1.21.4 components end with a show_in_tooltip bool; the
+        // model has no field for it, so always send the default.
+        seq.write_bool(true)
     }
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
         const MAX_ENCHANTMENTS: usize = 256;
@@ -289,6 +291,7 @@ impl DataComponentCodec<Self> for EnchantmentsImpl {
                 level,
             ));
         }
+        let _show_in_tooltip = seq.get_bool()?;
         Ok(Self {
             enchantment: Cow::from(enc),
         })
@@ -296,10 +299,12 @@ impl DataComponentCodec<Self> for EnchantmentsImpl {
 }
 
 impl DataComponentCodec<Self> for UnbreakableImpl {
-    fn serialize(&self, _seq: &mut impl NetworkWriteExt) -> Result<(), WritingError> {
-        Ok(())
+    fn serialize(&self, seq: &mut impl NetworkWriteExt) -> Result<(), WritingError> {
+        // The component is only its show_in_tooltip bool before 1.21.5.
+        seq.write_bool(true)
     }
-    fn deserialize(_seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
+    fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
+        let _show_in_tooltip = seq.get_bool()?;
         Ok(Self)
     }
 }
@@ -394,13 +399,14 @@ impl DataComponentCodec<Self> for ItemNameImpl {
 
 impl DataComponentCodec<Self> for DyedColorImpl {
     fn serialize(&self, seq: &mut impl NetworkWriteExt) -> Result<(), WritingError> {
-        seq.write_i32(self.rgb)
+        seq.write_i32(self.rgb)?;
+        seq.write_bool(true)
     }
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
-        Ok(Self {
-            rgb: seq.get_i32()?,
-        })
+        let rgb = seq.get_i32()?;
+        let _show_in_tooltip = seq.get_bool()?;
+        Ok(Self { rgb })
     }
 }
 
@@ -858,7 +864,9 @@ impl DataComponentCodec<Self> for StoredEnchantmentsImpl {
             seq.write_var_int(&VarInt::from(enc.id))?;
             seq.write_var_int(&VarInt::from(*level))?;
         }
-        Ok(())
+        // 1.20.5-1.21.4 components end with a show_in_tooltip bool; the
+        // model has no field for it, so always send the default.
+        seq.write_bool(true)
     }
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
@@ -881,6 +889,7 @@ impl DataComponentCodec<Self> for StoredEnchantmentsImpl {
                 level,
             ));
         }
+        let _show_in_tooltip = seq.get_bool()?;
         Ok(Self {
             enchantment: Cow::from(stored_enchantments),
         })
@@ -1476,7 +1485,9 @@ impl DataComponentCodec<Self> for DamageTypeImpl {
 
 impl DataComponentCodec<Self> for CanPlaceOnImpl {
     fn serialize(&self, seq: &mut impl NetworkWriteExt) -> Result<(), WritingError> {
-        seq.write_var_int(&VarInt(0))
+        // Empty predicate list plus the pre-1.21.5 show_in_tooltip bool.
+        seq.write_var_int(&VarInt(0))?;
+        seq.write_bool(true)
     }
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
@@ -1614,9 +1625,8 @@ impl DataComponentCodec<Self> for AttributeModifiersImpl {
                 pumpkin_data::enchantment::AttributeModifierSlot::Saddle => 10,
             };
             seq.write_var_int(&VarInt(slot_id))?;
-            seq.write_var_int(&VarInt(0))?;
         }
-        Ok(())
+        seq.write_bool(true)
     }
 
     fn deserialize(seq: &mut impl NetworkReadExt) -> Result<Self, ReadingError> {
@@ -1627,11 +1637,8 @@ impl DataComponentCodec<Self> for AttributeModifiersImpl {
             let _amount = seq.get_f64()?;
             let _operation = seq.get_var_int()?;
             let _slot = seq.get_var_int()?;
-            let display_type = seq.get_var_int()?.0;
-            if display_type == 2 {
-                let _ = seq.get_nbt_with_version(&JavaMinecraftVersion::V_1_21)?;
-            }
         }
+        let _show_in_tooltip = seq.get_bool()?;
         Ok(Self {
             attribute_modifiers: Cow::Borrowed(&[]),
         })
