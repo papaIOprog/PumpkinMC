@@ -1,15 +1,15 @@
 use crate::VarInt;
-use crate::codec::item_stack_seralizer::OptionalItemStackHash;
+use crate::codec::item_stack_seralizer::ItemStackSerializer;
 use crate::{
     ServerPacket,
     ser::{NetworkReadExt, ReadingError},
 };
+use pumpkin_data::item_stack::ItemStack;
 use pumpkin_data::packet::serverbound::play::CONTAINER_CLICK;
 use pumpkin_macros::java_packet;
 use pumpkin_util::version::JavaMinecraftVersion;
 use std::io::Read;
 
-#[derive(Debug)]
 #[java_packet(CONTAINER_CLICK)]
 pub struct SClickSlot {
     pub sync_id: VarInt,
@@ -18,8 +18,8 @@ pub struct SClickSlot {
     pub button: i8,
     pub mode: SlotActionType,
     pub length_of_array: VarInt,
-    pub array_of_changed_slots: Vec<(i16, OptionalItemStackHash)>,
-    pub carried_item: OptionalItemStackHash,
+    pub array_of_changed_slots: Vec<(i16, ItemStack)>,
+    pub carried_item: ItemStack,
 }
 
 impl SClickSlot {
@@ -46,21 +46,22 @@ impl<'a> ServerPacket<'a> for SClickSlot {
         let button = bytebuf.get_i8()?;
         let mode = SlotActionType::read(&mut bytebuf)?;
 
+        // Vanilla caps the changed-slot map at 128 entries.
         let length_of_array = bytebuf.get_var_int()?;
-        if length_of_array.0 < 0 || length_of_array.0 > 256 {
+        if length_of_array.0 < 0 || length_of_array.0 > 128 {
             return Err(ReadingError::Message(
                 "Changed slots length out of bounds".into(),
             ));
         }
         let mut array_of_changed_slots = Vec::with_capacity(length_of_array.0 as usize);
         for _ in 0..length_of_array.0 {
-            array_of_changed_slots.push((
-                bytebuf.get_i16_be()?,
-                OptionalItemStackHash::read(&mut bytebuf)?,
-            ));
+            let slot = bytebuf.get_i16_be()?;
+            let stack = ItemStackSerializer::read_with_version(&mut bytebuf, version)?;
+            array_of_changed_slots.push((slot, stack.0.into_owned()));
         }
 
-        let carried_item = OptionalItemStackHash::read(&mut bytebuf)?;
+        let carried = ItemStackSerializer::read_with_version(&mut bytebuf, version)?;
+        let carried_item = carried.0.into_owned();
 
         Ok(Self {
             sync_id,
@@ -94,9 +95,10 @@ impl crate::ClientPacket for SClickSlot {
         write.write_var_int(&VarInt(self.array_of_changed_slots.len() as i32))?;
         for (slot, item) in &self.array_of_changed_slots {
             write.write_i16_be(*slot)?;
-            item.write(&mut write)?;
+            ItemStackSerializer::from(item.clone()).write_with_version(&mut write, version)?;
         }
-        self.carried_item.write(&mut write)?;
+        ItemStackSerializer::from(self.carried_item.clone())
+            .write_with_version(&mut write, version)?;
         Ok(())
     }
 }

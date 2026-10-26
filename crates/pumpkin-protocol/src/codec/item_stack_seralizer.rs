@@ -685,6 +685,29 @@ pub struct ItemStackHash {
     components: ItemComponentHash,
 }
 
+impl From<&ItemStack> for OptionalItemStackHash {
+    /// Builds the comparison form the screen-handler sync keeps, from a stack
+    /// decoded off the wire (pre-1.21.2 clients send full optional stacks).
+    fn from(stack: &ItemStack) -> Self {
+        if stack.is_empty() {
+            return Self(None);
+        }
+        let mut added = Vec::new();
+        let mut removed = Vec::new();
+        for (id, data) in &stack.patch {
+            match data {
+                Some(data) => added.push((VarInt::from(i32::from(id.to_id())), data.get_hash())),
+                None => removed.push(VarInt::from(i32::from(id.to_id()))),
+            }
+        }
+        Self(Some(ItemStackHash {
+            item_id: VarInt::from(i32::from(stack.item.id)),
+            count: VarInt::from(i32::from(stack.item_count)),
+            components: ItemComponentHash { added, removed },
+        }))
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct OptionalItemStackHash(pub Option<ItemStackHash>);
 

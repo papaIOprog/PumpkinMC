@@ -44,7 +44,7 @@ use pumpkin_protocol::bedrock::server::{
     respawn::{RespawnState, SRespawn as SBedrockRespawn},
     text::SText,
 };
-use pumpkin_protocol::codec::item_stack_seralizer::ItemStackSerializer;
+use pumpkin_protocol::codec::item_stack_seralizer::{ItemStackSerializer, OptionalItemStackHash};
 use pumpkin_util::translation::Locale;
 use pumpkin_util::version::JavaMinecraftVersion;
 use pumpkin_world::chunk::ChunkData;
@@ -1258,7 +1258,7 @@ impl Player {
 
         let base_damage = self
             .living_entity
-            .get_attribute_value(&Attributes::ATTACK_DAMAGE);
+            .get_attribute_value(&Attributes::GENERIC_ATTACK_DAMAGE);
         let base_attack_speed = 4.0;
 
         let mut damage_multiplier = 1.0;
@@ -3351,26 +3351,8 @@ impl Player {
             if let Some(vehicle) = vehicle.as_ref() {
                 let entity_type = vehicle.get_entity().entity_type;
                 if entity_type.has_tag(&pumpkin_data::tag::EntityType::C_BOATS)
-                    || entity_type == &EntityType::OAK_BOAT
-                    || entity_type == &EntityType::SPRUCE_BOAT
-                    || entity_type == &EntityType::BIRCH_BOAT
-                    || entity_type == &EntityType::JUNGLE_BOAT
-                    || entity_type == &EntityType::ACACIA_BOAT
-                    || entity_type == &EntityType::DARK_OAK_BOAT
-                    || entity_type == &EntityType::MANGROVE_BOAT
-                    || entity_type == &EntityType::CHERRY_BOAT
-                    || entity_type == &EntityType::PALE_OAK_BOAT
-                    || entity_type == &EntityType::BAMBOO_RAFT
-                    || entity_type == &EntityType::OAK_CHEST_BOAT
-                    || entity_type == &EntityType::SPRUCE_CHEST_BOAT
-                    || entity_type == &EntityType::BIRCH_CHEST_BOAT
-                    || entity_type == &EntityType::JUNGLE_CHEST_BOAT
-                    || entity_type == &EntityType::ACACIA_CHEST_BOAT
-                    || entity_type == &EntityType::DARK_OAK_CHEST_BOAT
-                    || entity_type == &EntityType::MANGROVE_CHEST_BOAT
-                    || entity_type == &EntityType::CHERRY_CHEST_BOAT
-                    || entity_type == &EntityType::PALE_OAK_CHEST_BOAT
-                    || entity_type == &EntityType::BAMBOO_CHEST_RAFT
+                    || entity_type == &EntityType::BOAT
+                    || entity_type == &EntityType::CHEST_BOAT
                 {
                     return statistics::CustomStatistic::BoatOneCm;
                 }
@@ -3401,14 +3383,6 @@ impl Player {
                 }
                 if entity_type == &EntityType::STRIDER {
                     return statistics::CustomStatistic::StriderOneCm;
-                }
-                if entity_type == &EntityType::HAPPY_GHAST {
-                    return statistics::CustomStatistic::HappyGhastOneCm;
-                }
-                if entity_type == &EntityType::NAUTILUS
-                    || entity_type == &EntityType::ZOMBIE_NAUTILUS
-                {
-                    return statistics::CustomStatistic::NautilusOneCm;
                 }
             }
         }
@@ -4557,7 +4531,10 @@ impl Player {
         // weapon modifiers again.
         crate::entity::attributes::send_attribute_updates_for_living(
             &self.living_entity,
-            vec![Attributes::ATTACK_SPEED, Attributes::ATTACK_DAMAGE],
+            vec![
+                Attributes::GENERIC_ATTACK_SPEED,
+                Attributes::GENERIC_ATTACK_DAMAGE,
+            ],
         );
     }
 
@@ -4891,7 +4868,7 @@ impl Player {
             return;
         }
         self.living_entity
-            .update_attribute(&Attributes::MINING_EFFICIENCY, |inst| {
+            .update_attribute(&Attributes::PLAYER_MINING_EFFICIENCY, |inst| {
                 if level > 0 {
                     inst.add_or_replace_modifier(Modifier {
                         id: Self::EFFICIENCY_ATTRIBUTE_MODIFIER_ID.to_string(),
@@ -4904,7 +4881,7 @@ impl Player {
             });
         crate::entity::attributes::send_attribute_updates_for_living(
             &self.living_entity,
-            vec![Attributes::MINING_EFFICIENCY],
+            vec![Attributes::PLAYER_MINING_EFFICIENCY],
         );
     }
 
@@ -4917,7 +4894,8 @@ impl Player {
         if speed > 1.0 {
             speed += self
                 .living_entity
-                .get_attribute_value(&Attributes::MINING_EFFICIENCY) as f32;
+                .get_attribute_value(&Attributes::PLAYER_MINING_EFFICIENCY)
+                as f32;
         }
         // Haste
         if self.living_entity.has_effect(&StatusEffect::HASTE)
@@ -6209,10 +6187,10 @@ impl Player {
         );
 
         for (key, value) in packet.array_of_changed_slots {
-            screen_handler.set_received_hash(key as usize, value);
+            screen_handler.set_received_hash(key as usize, OptionalItemStackHash::from(&value));
         }
 
-        screen_handler.set_received_cursor_hash(packet.carried_item);
+        screen_handler.set_received_cursor_hash(OptionalItemStackHash::from(&packet.carried_item));
         screen_handler.enable_sync();
 
         if not_in_sync {
