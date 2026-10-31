@@ -120,6 +120,14 @@ impl Goal for TeleportTowardsPlayerGoal {
             }
             let needs_reset = mob_entity.get_target().is_none();
             if needs_reset {
+                // The grudge was dropped (e.g. the player died) while this
+                // goal kept its own reference: stop instead of re-acquiring
+                // a target the anger system no longer backs.
+                let world = mob_entity.living_entity.entity.world.load();
+                if !self.enderman.is_angry_at(target.as_ref(), &world) {
+                    self.committed_target = None;
+                    return false;
+                }
                 mob.set_mob_target(Some(target.clone()));
             }
             true

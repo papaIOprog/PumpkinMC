@@ -482,7 +482,11 @@ pub fn get_loot_table(key: &str) -> Option<LootTableHandle> {
     } else {
         format!("minecraft:{key}")
     };
-    pumpkin_data::loot_table::get_loot_table(key)
+    // Structure NBT stores namespaced keys while the generated tables are
+    // keyed without the namespace, so try both spellings.
+    let bare_key = key.strip_prefix("minecraft:").unwrap_or(key);
+    pumpkin_data::loot_table::get_loot_table(bare_key)
+        .or_else(|| pumpkin_data::loot_table::get_loot_table(key))
         .or_else(|| pumpkin_data::loot_table::get_loot_table(&full_key))
         .map(LootTableHandle::Static)
 }
@@ -624,5 +628,27 @@ mod ore_drop_tests {
         }
         assert_eq!(ore_blocks, 0, "plain pickaxe must never drop the ore block");
         assert_eq!(raw_iron, 50, "each dig drops exactly one raw iron");
+    }
+}
+
+#[cfg(test)]
+mod lookup_tests {
+    use super::*;
+
+    /// Structure NBT stores namespaced loot table keys; the generated tables
+    /// are keyed without the namespace, so trial chamber chests resolved to
+    /// nothing and unpacked empty.
+    #[test]
+    fn namespaced_loot_table_keys_resolve() {
+        for key in [
+            "minecraft:chests/trial_chambers/supply",
+            "chests/trial_chambers/reward",
+            "minecraft:chests/simple_dungeon",
+        ] {
+            assert!(
+                get_loot_table(key).is_some(),
+                "loot table {key} should resolve"
+            );
+        }
     }
 }

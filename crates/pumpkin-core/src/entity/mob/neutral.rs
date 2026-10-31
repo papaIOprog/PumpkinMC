@@ -216,6 +216,18 @@ pub trait NeutralMob: Mob {
         let target = self.get_mob_entity().get_target();
         let anger_target = self.get_persistent_anger_target();
 
+        // A grudge whose player is lying dead is dropped even when the
+        // 32-block death notice missed the mob, so a respawned player does
+        // not inherit the chase (the stare gate has to trigger again).
+        if let Some(angry_at) = anger_target
+            && let Some(grudge) = find_by_uuid(&world, angry_at)
+            && let Some(living) = grudge.get_living_entity()
+            && living.health.load() <= 0.0
+        {
+            self.stop_being_angry();
+            return;
+        }
+
         // Calm and unprovoked: nothing to track, nothing to lock.
         if target.is_none() && anger_target.is_none() {
             return;
