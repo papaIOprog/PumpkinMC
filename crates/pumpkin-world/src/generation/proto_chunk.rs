@@ -553,6 +553,7 @@ impl ProtoChunk {
         if local_y < 0 || local_y >= self.height() as i32 {
             return;
         }
+
         if !block_state.is_air() {
             let index = Self::local_position_to_height_map_index(local_x, local_z);
             let y = y as i16;
@@ -584,6 +585,19 @@ impl ProtoChunk {
             self.flat_block_map.resize(section_end, BlockStateId::AIR);
         }
         self.flat_block_map[index] = block_state.id;
+
+        // Vanilla's setBlock drops the block entity when the position is
+        // overwritten with air; without this, a feature overwriting a
+        // cross-chunk placement (an overlapping dungeon filling with
+        // cave_air) leaves a dangling pending BE that corrupts the chunk
+        // on vanilla import.
+        if block_state.is_air() {
+            self.pending_block_entities.retain(|nbt| {
+                nbt.get_int("x") != Some(x)
+                    || nbt.get_int("y") != Some(y)
+                    || nbt.get_int("z") != Some(z)
+            });
+        }
     }
 
     #[inline]
