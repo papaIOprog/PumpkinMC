@@ -83,6 +83,9 @@ impl BlockBehaviour for DecoratedPotBlock {
     }
 
     fn broken(&self, args: BrokenArgs<'_>) {
+        // Vanilla `DecoratedPotBlock#onRemove`: only the pot's contents drop
+        // here. The pot itself (or its sherds, when cracked by a sword) comes
+        // from the `blocks/decorated_pot` loot table.
         if let Some(block_entity) = args.world.get_block_entity(args.position)
             && let Some(pot_entity) = block_entity
                 .as_any()
@@ -91,14 +94,6 @@ impl BlockBehaviour for DecoratedPotBlock {
         {
             args.world.drop_stack(args.position, contained);
         }
-
-        args.world.play_sound(
-            Sound::BlockDecoratedPotShatter,
-            SoundCategory::Blocks,
-            &args.position.to_f64(),
-        );
-        args.world
-            .drop_stack(args.position, ItemStack::new(4, &Item::BRICK));
     }
 
     fn get_comparator_output(&self, args: GetComparatorOutputArgs<'_>) -> Option<u8> {
