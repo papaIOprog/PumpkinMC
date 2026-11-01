@@ -61,7 +61,7 @@ impl ItemRegistry {
         }
 
         if let Some(cooldown) = cooldown {
-            player.start_cooldown(cooldown_group, (cooldown.seconds * 20.0) as i32);
+            player.start_cooldown(&cooldown_group, (cooldown.seconds * 20.0) as i32);
         }
     }
 
@@ -119,7 +119,7 @@ impl ItemRegistry {
         });
 
         if let Some(cooldown) = cooldown {
-            player.start_cooldown(cooldown_group, (cooldown.seconds * 20.0) as i32);
+            player.start_cooldown(&cooldown_group, (cooldown.seconds * 20.0) as i32);
         }
 
         result
@@ -147,7 +147,7 @@ impl ItemRegistry {
         }
 
         if let Some(cooldown) = cooldown {
-            player.start_cooldown(cooldown_group, (cooldown.seconds * 20.0) as i32);
+            player.start_cooldown(&cooldown_group, (cooldown.seconds * 20.0) as i32);
         }
     }
 

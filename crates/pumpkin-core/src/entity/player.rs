@@ -863,19 +863,26 @@ impl Player {
         self.try_send_client_packet(&CTabList::new(header, footer));
     }
 
-    pub fn start_cooldown(&self, group: String, duration: i32) {
+    pub fn start_cooldown(&self, group: &str, duration: i32) {
         let mut cooldowns = self
             .item_cooldowns
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         cooldowns.insert(
-            group.clone(),
+            group.to_string(),
             ItemCooldown {
                 start_tick: self.tick_counter.load(Ordering::Relaxed),
                 duration,
             },
         );
-        self.try_send_client_packet(&CItemCooldown::new(group, VarInt(duration)));
+        // 1.21.1's cooldown packet is per item, so the wire copy only exists
+        // when the group names one; the server-side cooldown applies either way.
+        if let Some(item) = pumpkin_data::item::Item::from_registry_key(group) {
+            self.try_send_client_packet(&CItemCooldown::new(
+                VarInt(item.id as i32),
+                VarInt(duration),
+            ));
+        }
     }
 
     pub fn get_cooldown(&self, group: &str) -> f32 {
@@ -3957,7 +3964,7 @@ impl Player {
 
     // --- Item Cooldown System ---
     pub fn set_item_cooldown(&self, item_id: &str, ticks: i32) {
-        self.start_cooldown(item_id.to_string(), ticks);
+        self.start_cooldown(item_id, ticks);
     }
 
     pub fn get_item_cooldown(&self, item_id: &str) -> Option<i32> {

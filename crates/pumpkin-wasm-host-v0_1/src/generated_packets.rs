@@ -391,7 +391,7 @@ pub fn serialize_java_packet(
         }
         ClientboundPacket::CItemCooldown(data) => {
             let p = pumpkin_protocol::java::client::play::CItemCooldown {
-                group: data.group.clone(),
+                item_id: VarInt(data.item_id),
                 cooldown: VarInt(data.cooldown),
             };
             let mut buf = Vec::new();
@@ -1913,7 +1913,7 @@ impl ToWitClientboundJava for pumpkin_protocol::java::client::play::CInitializeW
 impl ToWitClientboundJava for pumpkin_protocol::java::client::play::CItemCooldown {
     fn to_wit(&self) -> ClientboundPacket {
         ClientboundPacket::CItemCooldown(crate::pumpkin::plugin::java_packets::CItemCooldown {
-            group: self.group.to_string(),
+            item_id: self.item_id.0.try_into().unwrap(),
             cooldown: self.cooldown.0.try_into().unwrap(),
         })
     }

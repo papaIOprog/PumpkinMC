@@ -860,7 +860,7 @@ interface java-packets {
     warning-time: s32,
   }
   record c-item-cooldown {
-    group: string,
+    item-id: s32,
     cooldown: s32,
   }
   record c-keep-alive {

@@ -3569,7 +3569,7 @@ impl EntityBase for LivingEntity {
                             .cooldown_group
                             .clone()
                             .unwrap_or_else(|| item.item.registry_key.to_string());
-                        player.start_cooldown(group, (cooldown.seconds * 20.0) as i32);
+                        player.start_cooldown(&group, (cooldown.seconds * 20.0) as i32);
                     }
                 }
 
