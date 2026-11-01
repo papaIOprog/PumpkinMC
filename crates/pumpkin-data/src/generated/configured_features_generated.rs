@@ -151,7 +151,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -325,7 +325,7 @@ fn build_configured_features()
             },
             ignore_vines: false,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::ROOTED_DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -445,7 +445,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -499,7 +499,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.002f32,
@@ -555,7 +555,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.02f32,
@@ -611,7 +611,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.05f32,
@@ -978,7 +978,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -1073,7 +1073,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.05f32,
@@ -1455,7 +1455,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -2060,7 +2060,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -2114,7 +2114,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 1f32,
@@ -2170,7 +2170,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.002f32,
@@ -2226,7 +2226,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.02f32,
@@ -2282,7 +2282,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.05f32,
@@ -3130,7 +3130,7 @@ fn build_configured_features()
             },
             ignore_vines: false,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -3184,7 +3184,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![
                 TreeDecorator::Cocoa(CocoaTreeDecorator {
@@ -3246,7 +3246,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -3380,7 +3380,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![
                 TreeDecorator::LeaveVine(LeavesVineTreeDecorator {
@@ -3549,7 +3549,7 @@ fn build_configured_features()
             },
             ignore_vines: false,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![
                 TreeDecorator::TrunkVine(TrunkVineTreeDecorator),
@@ -3615,7 +3615,7 @@ fn build_configured_features()
             },
             ignore_vines: false,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::AlterGround(AlterGroundTreeDecorator {
                 provider: BlockStateProvider::Simple(SimpleStateProvider {
@@ -3688,7 +3688,7 @@ fn build_configured_features()
             },
             ignore_vines: false,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::AlterGround(AlterGroundTreeDecorator {
                 provider: BlockStateProvider::Simple(SimpleStateProvider {
@@ -3922,7 +3922,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -3976,7 +3976,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.002f32,
@@ -4032,7 +4032,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.02f32,
@@ -4088,7 +4088,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.05f32,
@@ -5571,7 +5571,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -6038,7 +6038,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![],
             root_placer: None,
@@ -6092,7 +6092,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 1f32,
@@ -6148,7 +6148,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::Beehive(BeehiveTreeDecorator {
                 probability: 0.002f32,
@@ -6204,7 +6204,7 @@ fn build_configured_features()
             },
             ignore_vines: false,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![TreeDecorator::LeaveVine(LeavesVineTreeDecorator {
                 probability: 0.25f32,
@@ -6279,7 +6279,7 @@ fn build_configured_features()
             },
             ignore_vines: true,
             below_trunk_provider: BlockStateProvider::Simple(SimpleStateProvider {
-                state: pumpkin_data::Block::AIR.default_state,
+                state: pumpkin_data::Block::DIRT.default_state,
             }),
             decorators: vec![
                 TreeDecorator::LeaveVine(LeavesVineTreeDecorator {

@@ -1358,7 +1358,13 @@ fn value_to_tree_feature(config: &Value) -> TokenStream {
     let foliage_placer = value_to_foliage_placer(&config["foliage_placer"]);
     let min_size = value_to_feature_size(&config["minimum_size"]);
     let ignore_vines = config["ignore_vines"].as_bool().unwrap_or(true);
-    let below_trunk_provider = value_to_block_state_provider(&config["below_trunk_provider"]);
+    // Vanilla calls this `dirt_provider` in the tree feature JSON.
+    let below_trunk_provider = value_to_block_state_provider(
+        config
+            .get("dirt_provider")
+            .or_else(|| config.get("below_trunk_provider"))
+            .unwrap_or(&serde_json::Value::Null),
+    );
     let decorators: Vec<TokenStream> = config["decorators"]
         .as_array()
         .map(|arr| arr.iter().filter_map(value_to_tree_decorator).collect())

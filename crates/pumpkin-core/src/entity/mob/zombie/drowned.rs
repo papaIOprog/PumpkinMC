@@ -271,8 +271,14 @@ impl DrownedEntity {
 
         let trident_entity = Entity::new(world.clone(), entity.pos.load(), &EntityType::TRIDENT);
         let stack = ItemStack::new(1, &Item::TRIDENT);
-        let trident =
-            TridentEntity::new_shot(trident_entity, entity, stack.clone(), ArrowPickup::Allowed);
+        // Vanilla's trident stays DISALLOWED unless a player threw it, so a
+        // drowned's trident can never be collected.
+        let trident = TridentEntity::new_shot(
+            trident_entity,
+            entity,
+            stack.clone(),
+            ArrowPickup::Disallowed,
+        );
 
         let source = trident.get_entity().pos.load();
         let target_entity = target.get_entity();
@@ -325,6 +331,17 @@ impl Mob for DrownedEntity {
                 );
         }
         group_data
+    }
+
+    /// Vanilla `Drowned.updateSwimming`: while it has a mind of its own and a
+    /// reason to swim, the swimming flag is on -- the client plays the swim
+    /// animation from that flag alone.
+    fn mob_tick(&self, caller: &dyn EntityBase) {
+        let entity = self.get_entity();
+        let swimming = !self.entity.mob_entity.is_no_ai()
+            && entity.touching_water.load(Ordering::Relaxed)
+            && self.wants_to_swim();
+        entity.set_swimming(swimming);
     }
 
     /// Vanilla `Drowned.populateDefaultEquipmentSlots`: no armor, no sword or

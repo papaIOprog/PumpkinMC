@@ -28,6 +28,9 @@ pub struct TridentEntity {
     pub life: AtomicU32,
     pub shake_time: AtomicU8,
     pub has_hit: AtomicBool,
+    /// Vanilla `ThrownTrident.dealtDamage`: after the first hit the trident
+    /// stops looking for entities to damage.
+    pub dealt_damage: AtomicBool,
     pub last_block_pos: Arc<std::sync::RwLock<Option<BlockPos>>>,
 }
 
@@ -49,6 +52,7 @@ impl TridentEntity {
             life: AtomicU32::new(0),
             shake_time: AtomicU8::new(0),
             has_hit: AtomicBool::new(false),
+            dealt_damage: AtomicBool::new(false),
             last_block_pos: Arc::new(std::sync::RwLock::new(None)),
         }
     }
@@ -64,6 +68,15 @@ impl TridentEntity {
         entity.pos.store(owner_pos);
         entity.set_velocity(Vector3::new(0.0, 0.1, 0.0));
 
+        // Vanilla `AbstractArrow.setOwner`: what a player throws, a player
+        // may pick back up; anything else (a drowned, say) stays untouchable.
+        let pickup = if shooter.entity_type == &pumpkin_data::entity::EntityType::PLAYER
+            && pickup == ArrowPickup::Disallowed
+        {
+            ArrowPickup::Allowed
+        } else {
+            pickup
+        };
         Self {
             entity,
             owner_id: Some(shooter.entity_id),
@@ -74,6 +87,7 @@ impl TridentEntity {
             life: AtomicU32::new(0),
             shake_time: AtomicU8::new(0),
             has_hit: AtomicBool::new(false),
+            dealt_damage: AtomicBool::new(false),
             last_block_pos: Arc::new(std::sync::RwLock::new(None)),
         }
     }
@@ -260,8 +274,13 @@ impl EntityBase for TridentEntity {
             }
         }
 
-        // Entity collisions
-        let candidates = world.get_entities_at_box(&search_box);
+        // Entity collisions. Vanilla `ThrownTrident.findHitEntity`: a trident
+        // that has dealt its damage looks for blocks only.
+        let candidates = if self.dealt_damage.load(Ordering::Relaxed) {
+            Vec::new()
+        } else {
+            world.get_entities_at_box(&search_box)
+        };
         for cand in candidates {
             if self.should_skip_collision(entity, &cand) {
                 continue;
@@ -362,8 +381,22 @@ impl EntityBase for TridentEntity {
                     }
                 }
 
-                let damage_val = damage as f32;
-                target.damage(&*target, damage_val, DamageType::TRIDENT);
+                self.dealt_damage.store(true, Ordering::Relaxed);
+
+                // Vanilla `damageSources().trident(this, owner ?? this)`: the
+                // damage is attributed to whoever threw it.
+                let owner_entity = self.owner_id.and_then(|id| world.get_entity_by_id(id));
+                let damaged = target.damage_with_context(
+                    target.as_ref(),
+                    damage as f32,
+                    DamageType::TRIDENT,
+                    Some(hit_pos),
+                    owner_entity.as_deref(),
+                    None,
+                );
+                if !damaged {
+                    return;
+                }
 
                 // Play hit sound
                 let sound_packet = CSoundEffect::new(
@@ -377,8 +410,11 @@ impl EntityBase for TridentEntity {
                 let chunk_pos = entity.chunk_pos.load();
                 world.broadcast_to_chunk(chunk_pos, &sound_packet);
 
-                // Standard bounce/fall-back behavior
-                entity.velocity.store(Vector3::new(0.0, -0.1, 0.0));
+                // Vanilla drops the trident almost straight down after a hit.
+                let velocity = entity.velocity.load();
+                entity
+                    .velocity
+                    .store(velocity.multiply(-0.01, -0.1, -0.01));
                 self.has_hit.store(false, Ordering::Relaxed); // Let it hit the ground
             }
         }
