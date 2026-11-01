@@ -167,7 +167,7 @@ impl MoveControl {
         // (`setWantedPosition` each tick); steer at the current path node.
         let waypoint = navigator
             .get_path()
-            .and_then(|path| path.get_next_node_pos())
+            .and_then(crate::entity::ai::pathfinder::path::Path::get_next_node_pos)
             .map(|pos| {
                 Vector3::new(
                     f64::from(pos.0.x) + 0.5,
