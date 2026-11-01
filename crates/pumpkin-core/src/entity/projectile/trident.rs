@@ -412,9 +412,7 @@ impl EntityBase for TridentEntity {
 
                 // Vanilla drops the trident almost straight down after a hit.
                 let velocity = entity.velocity.load();
-                entity
-                    .velocity
-                    .store(velocity.multiply(-0.01, -0.1, -0.01));
+                entity.velocity.store(velocity.multiply(-0.01, -0.1, -0.01));
                 self.has_hit.store(false, Ordering::Relaxed); // Let it hit the ground
             }
         }
