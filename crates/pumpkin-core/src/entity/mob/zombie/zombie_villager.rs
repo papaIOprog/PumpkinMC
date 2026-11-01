@@ -311,15 +311,40 @@ impl Mob for ZombieVillagerEntity {
         self.mob_entity.mob_interact(player, item_stack)
     }
 
-    fn mob_tick(&self, _caller: &dyn EntityBase) {
-        if !self.get_entity().is_alive() || !self.is_converting() {
-            return;
+    fn mob_tick(&self, caller: &dyn EntityBase) {
+        if self.get_entity().is_alive() && self.is_converting() {
+            let progress = self.conversion_progress();
+            if self.conversion_time.fetch_sub(progress, Ordering::Relaxed) - progress <= 0 {
+                self.conversion_time.store(0, Ordering::Relaxed);
+                self.finish_conversion();
+            }
         }
-        let progress = self.conversion_progress();
-        if self.conversion_time.fetch_sub(progress, Ordering::Relaxed) - progress <= 0 {
-            self.conversion_time.store(0, Ordering::Relaxed);
-            self.finish_conversion();
-        }
+        // Vanilla zombie villagers also drown-convert like plain zombies.
+        self.mob_entity.tick_water_conversion(caller, true);
+    }
+
+    fn killed_entity(
+        &self,
+        world: &Arc<crate::world::World>,
+        target: &Arc<dyn EntityBase>,
+    ) -> bool {
+        self.mob_entity.killed_entity_villager(world, target)
+    }
+
+    fn after_melee_hit(&self, target: &dyn EntityBase) {
+        self.mob_entity.after_melee_hit_burn(target);
+    }
+
+    fn on_damage(
+        &self,
+        _damage_type: pumpkin_data::damage::DamageType,
+        _source: Option<&dyn EntityBase>,
+    ) {
+        self.mob_entity.on_damage_reinforcements();
+    }
+
+    fn as_zombie(&self) -> Option<&crate::entity::mob::zombie::ZombieEntityBase> {
+        Some(&self.mob_entity)
     }
 
     fn mob_write_nbt(&self, nbt: &mut NbtCompound) {

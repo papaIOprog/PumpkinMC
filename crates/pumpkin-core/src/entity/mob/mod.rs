@@ -821,7 +821,8 @@ pub trait Mob: EntityBase + Send + Sync {
     /// Whether daylight burns this mob.
     ///
     /// The `minecraft:burn_in_daylight` entity tag is 26.x only; in 1.21.1 the
-    /// burning mobs are the skeleton and zombie families plus phantoms.
+    /// burning mobs are the skeleton and zombie families plus phantoms. Husks
+    /// and the undead horses stay in the shade on their own.
     fn burns_in_daylight(&self) -> bool {
         let entity_type = self.get_entity().entity_type;
         [
@@ -830,7 +831,6 @@ pub trait Mob: EntityBase + Send + Sync {
             EntityType::WITHER_SKELETON,
             EntityType::BOGGED,
             EntityType::ZOMBIE,
-            EntityType::ZOMBIE_HORSE,
             EntityType::ZOMBIE_VILLAGER,
             EntityType::DROWNED,
             EntityType::PHANTOM,
@@ -956,6 +956,17 @@ pub trait Mob: EntityBase + Send + Sync {
 
     fn on_attack(&self, _target: &dyn EntityBase) {}
 
+    /// Vanilla `Mob.killedEntity`: called on the killer when it deals a fatal
+    /// hit. Returning `true` means the death was fully handled (a conversion)
+    /// and the usual death effects are skipped.
+    fn killed_entity(&self, _world: &Arc<World>, _target: &Arc<dyn EntityBase>) -> bool {
+        false
+    }
+
+    /// Vanilla `LivingEntity.doHurtTarget` follow-ups: called after a melee
+    /// hit connected (zombies setting their victim alight).
+    fn after_melee_hit(&self, _target: &dyn EntityBase) {}
+
     fn on_eating_grass(&self) {}
 
     fn modify_incoming_damage(&self, amount: f32, _damage_type: DamageType) -> f32 {
@@ -1014,6 +1025,10 @@ pub trait Mob: EntityBase + Send + Sync {
 
     /// Must return `Some(self)` for every `NeutralMob` implementor. Not compiler-enforced.
     fn as_neutral(&self) -> Option<&dyn neutral::NeutralMob> {
+        None
+    }
+
+    fn as_zombie(&self) -> Option<&crate::entity::mob::zombie::ZombieEntityBase> {
         None
     }
 

@@ -34,6 +34,15 @@ impl Mob for ZombieEntity {
         self.entity.spawn_as_baby()
     }
 
+    fn finalize_spawn(
+        &self,
+        world: &Arc<World>,
+        group_data: Option<crate::entity::mob::spawn::SpawnGroupData>,
+    ) -> Option<crate::entity::mob::spawn::SpawnGroupData> {
+        self.entity.finalize_zombie_spawn(world, true);
+        group_data
+    }
+
     fn populate_default_equipment_slots(
         &self,
         world: &Arc<World>,
@@ -55,6 +64,8 @@ impl Mob for ZombieEntity {
     fn mob_read_nbt(&self, nbt: &NbtCompound) {
         self.entity.mob_read_nbt(nbt);
     }
+
+    crate::delegate_zombie_hooks!(true);
 }
 
 impl ZombieEntity {

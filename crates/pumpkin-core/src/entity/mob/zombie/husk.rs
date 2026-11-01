@@ -35,6 +35,15 @@ impl Mob for HuskEntity {
         self.entity.spawn_as_baby()
     }
 
+    fn finalize_spawn(
+        &self,
+        world: &std::sync::Arc<crate::world::World>,
+        group_data: Option<crate::entity::mob::spawn::SpawnGroupData>,
+    ) -> Option<crate::entity::mob::spawn::SpawnGroupData> {
+        self.entity.finalize_zombie_spawn(world, true);
+        group_data
+    }
+
     fn mob_write_nbt(&self, nbt: &mut NbtCompound) {
         self.entity.mob_write_nbt(nbt);
     }
@@ -42,4 +51,6 @@ impl Mob for HuskEntity {
     fn mob_read_nbt(&self, nbt: &NbtCompound) {
         self.entity.mob_read_nbt(nbt);
     }
+
+    crate::delegate_zombie_hooks!(true);
 }

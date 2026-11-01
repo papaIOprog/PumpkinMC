@@ -299,12 +299,82 @@ impl Mob for DrownedEntity {
         self.entity.spawn_as_baby()
     }
 
+    fn finalize_spawn(
+        &self,
+        world: &Arc<World>,
+        group_data: Option<SpawnGroupData>,
+    ) -> Option<SpawnGroupData> {
+        // Vanilla `Drowned.finalizeSpawn`: the zombie rolls with
+        // `supportsBreakDoorGoal() == false`, so drowned never break doors.
+        self.entity.finalize_zombie_spawn(world, false);
+        // Vanilla's `NAUTILUS_SHELL_CHANCE` offhand roll.
+        let equipment = &self.entity.mob_entity.living_entity.entity_equipment;
+        if equipment
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .get(&pumpkin_data::data_component_impl::EquipmentSlot::OFF_HAND)
+            .is_empty()
+            && rand::random::<f32>() < 0.03
+        {
+            equipment
+                .lock()
+                .unwrap_or_else(PoisonError::into_inner)
+                .put(
+                    &pumpkin_data::data_component_impl::EquipmentSlot::OFF_HAND,
+                    ItemStack::new(1, &Item::NAUTILUS_SHELL),
+                );
+        }
+        group_data
+    }
+
+    /// Vanilla `Drowned.populateDefaultEquipmentSlots`: no armor, no sword or
+    /// shovel; a tenth of drowned rise with a trident or fishing rod instead.
+    fn populate_default_equipment_slots(
+        &self,
+        _world: &Arc<World>,
+        _difficulty: &RegionalDifficulty,
+    ) {
+        if rand::random::<f32>() > 0.9 {
+            let item = if rand::random_range(0..16) < 10 {
+                &Item::TRIDENT
+            } else {
+                &Item::FISHING_ROD
+            };
+            self.entity
+                .mob_entity
+                .living_entity
+                .entity_equipment
+                .lock()
+                .unwrap_or_else(PoisonError::into_inner)
+                .put(
+                    &pumpkin_data::data_component_impl::EquipmentSlot::MAIN_HAND,
+                    ItemStack::new(1, item),
+                );
+        }
+    }
+
     fn mob_write_nbt(&self, nbt: &mut NbtCompound) {
         self.entity.mob_write_nbt(nbt);
     }
 
     fn mob_read_nbt(&self, nbt: &NbtCompound) {
         self.entity.mob_read_nbt(nbt);
+    }
+
+    fn killed_entity(
+        &self,
+        world: &Arc<World>,
+        target: &Arc<dyn crate::entity::EntityBase>,
+    ) -> bool {
+        self.entity.killed_entity_villager(world, target)
+    }
+
+    fn after_melee_hit(&self, target: &dyn crate::entity::EntityBase) {
+        self.entity.after_melee_hit_burn(target);
+    }
+
+    fn as_zombie(&self) -> Option<&crate::entity::mob::zombie::ZombieEntityBase> {
+        Some(&self.entity)
     }
 
     /// Vanilla `Drowned.wantsToSwim`: it swims at whatever it is chasing that is in the
@@ -340,25 +410,6 @@ impl Mob for DrownedEntity {
     /// swimming flag for players, so a drowned simply is never pushed.
     fn mob_is_pushed_by_fluids(&self) -> bool {
         false
-    }
-
-    fn finalize_spawn(
-        &self,
-        world: &Arc<World>,
-        group_data: Option<SpawnGroupData>,
-    ) -> Option<SpawnGroupData> {
-        self.get_mob_entity().finalize_spawn_base();
-
-        // Vanilla `Zombie` decides door breaking when the mob spawns, by rolling the
-        // clamped local difficulty; `BreakDoorGoal` itself refuses anything below Hard.
-        let difficulty = RegionalDifficulty::at(world, self.get_entity().pos.load());
-        if difficulty.base_difficulty == Difficulty::Hard
-            && rand::random::<f32>() < difficulty.special_multiplier * 0.1
-        {
-            self.entity.set_can_break_doors(true, self);
-        }
-
-        group_data
     }
 }
 

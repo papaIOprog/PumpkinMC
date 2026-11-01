@@ -211,6 +211,8 @@ impl Goal for MeleeAttackGoal {
             mob.get_mob_entity().living_entity.swing_hand();
             mob.get_mob_entity()
                 .try_attack(mob.get_entity(), target.as_ref());
+            // Vanilla `LivingEntity.doHurtTarget` follow-ups.
+            mob.after_melee_hit(target.as_ref());
         }
     }
 

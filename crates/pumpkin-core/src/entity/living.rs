@@ -2017,6 +2017,15 @@ impl LivingEntity {
             let kill_credit = self.get_kill_credit();
             let killer = cause.or(source).or(kill_credit.as_deref());
 
+            // Vanilla `LivingEntity.die` asks the killer first; a conversion
+            // (zombies infecting villagers) replaces the death entirely.
+            if let Some(killer) = killer
+                && let Some(mob) = killer.get_mob()
+                && mob.killed_entity(&world, &dyn_self)
+            {
+                return;
+            }
+
             self.update_death_stats(&*dyn_self, killer);
 
             // Plays the death sound
