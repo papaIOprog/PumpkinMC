@@ -497,11 +497,18 @@ fn encode_ingredient(
         }
         OwnedRecipeIngredient::Tagged(tag) => {
             let tag = tag.strip_prefix('#').unwrap_or(tag);
-            let tag = tag.strip_prefix("minecraft:").unwrap_or(tag);
-            for key in pumpkin_data::tag::get_tag_values(pumpkin_data::tag::RegistryKey::Item, tag)
-                .into_iter()
-                .flatten()
-            {
+            // The tag map is keyed with the namespace; a bare name resolves
+            // nothing and the recipe would declare an empty ingredient.
+            let values =
+                pumpkin_data::tag::get_tag_values(pumpkin_data::tag::RegistryKey::Item, tag)
+                    .or_else(|| {
+                        let namespaced = format!("minecraft:{tag}");
+                        pumpkin_data::tag::get_tag_values(
+                            pumpkin_data::tag::RegistryKey::Item,
+                            &namespaced,
+                        )
+                    });
+            for key in values.into_iter().flatten() {
                 if let Some(item) = Item::from_registry_key(key) {
                     stacks.push(item);
                 }
@@ -566,6 +573,38 @@ mod update_recipes_tests {
     use crate::ser::NetworkReadExt;
     use pumpkin_data::recipes::RecipeCategoryTypes;
     use pumpkin_util::version::JavaMinecraftVersion;
+
+    #[test]
+    fn tag_ingredients_expand_to_items_not_empty() {
+        // Vanilla 1.21.1 writes ingredients as item stacks; a tag that fails
+        // to resolve would encode an empty ingredient and the client hides
+        // the recipe from the book (oak planks regressed exactly this way).
+        let recipe = DynamicRecipe::Crafting(OwnedCraftingRecipe::Shapeless {
+            recipe_id: Some("minecraft:oak_planks".to_string()),
+            category: RecipeCategoryTypes::Building,
+            group: None,
+            ingredients: vec![OwnedRecipeIngredient::Tagged(
+                "minecraft:oak_logs".to_string(),
+            )],
+            result: OwnedRecipeResult {
+                item_id: "minecraft:oak_planks".to_string(),
+                count: 4,
+            },
+        });
+        let bytes = encode_update_recipes(&[recipe], &JavaMinecraftVersion::V_1_21);
+        let mut cursor = std::io::Cursor::new(&bytes);
+        assert_eq!(cursor.get_var_int().unwrap(), ReadVarInt(1)); // recipe count
+        assert_eq!(cursor.get_str().unwrap().as_ref(), "minecraft:oak_planks");
+        cursor.get_var_int().unwrap(); // serializer id (shapeless)
+        cursor.get_str().unwrap(); // group
+        cursor.get_var_int().unwrap(); // category
+        // One ingredient slot, which the tag expands into the four stacks of
+        // `#minecraft:oak_logs`; an unresolved tag encoded as zero would hide
+        // the recipe from the client's book.
+        assert_eq!(cursor.get_var_int().unwrap().0, 1); // ingredient slots
+        let stacks = cursor.get_var_int().unwrap().0;
+        assert!(stacks >= 4, "got {stacks} stacks for the oak_logs tag");
+    }
 
     #[test]
     fn encodes_a_shapeless_recipe_like_vanilla() {
