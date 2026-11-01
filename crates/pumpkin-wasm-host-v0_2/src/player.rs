@@ -1920,7 +1920,7 @@ impl pumpkin::plugin::player::HostPlayer for PluginHostState {
         duration_ticks: i32,
     ) -> wasmtime::Result<()> {
         let player = self.get(&player)?;
-        player.start_cooldown(group, duration_ticks);
+        player.start_cooldown(&group, duration_ticks);
         Ok(())
     }
 
