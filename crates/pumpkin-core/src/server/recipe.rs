@@ -73,6 +73,28 @@ impl RecipeManager {
             .clone()
     }
 
+    /// Vanilla `RecipeManager#byKey`.
+    #[must_use]
+    pub fn by_key(&self, id: &str) -> Option<DynamicRecipe> {
+        self.dynamic_recipes
+            .read()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .iter()
+            .find(|recipe| recipe.recipe_id() == Some(id))
+            .cloned()
+    }
+
+    /// Every recipe key, including special ones the recipe book skips.
+    #[must_use]
+    pub fn all_ids(&self) -> Vec<String> {
+        self.dynamic_recipes
+            .read()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .iter()
+            .filter_map(|recipe| recipe.recipe_id().map(ToString::to_string))
+            .collect()
+    }
+
     fn invalidate_encoded(&self) {
         *self
             .encoded_client_recipes

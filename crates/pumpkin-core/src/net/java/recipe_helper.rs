@@ -1,28 +1,11 @@
 use pumpkin_data::item::Item;
 use pumpkin_data::item_stack::ItemStack;
-use pumpkin_data::recipes::RecipeIngredientTypes;
 use pumpkin_inventory::player::player_inventory::PlayerInventory;
 use pumpkin_protocol::codec::recipe::OwnedRecipeIngredient;
 
-#[derive(Clone, Copy)]
-pub enum GenericIngredient<'a> {
-    Vanilla(&'a RecipeIngredientTypes),
-    Dynamic(&'a OwnedRecipeIngredient),
-}
-
-impl GenericIngredient<'_> {
-    #[must_use]
-    pub fn match_item(&self, item: &Item) -> bool {
-        match self {
-            Self::Vanilla(v) => v.match_item(item),
-            Self::Dynamic(d) => d.match_item(item),
-        }
-    }
-}
-
 pub fn take_n_ingredient(
     inventory: &PlayerInventory,
-    ingredient: &GenericIngredient<'_>,
+    ingredient: &OwnedRecipeIngredient,
     count: u8,
 ) -> ItemStack {
     let mut taken = 0u8;
@@ -52,7 +35,7 @@ pub fn take_n_ingredient(
 }
 
 pub fn compute_biggest_craftable(
-    ingredients: &[GenericIngredient<'_>],
+    ingredients: &[&OwnedRecipeIngredient],
     inventory: &PlayerInventory,
 ) -> u8 {
     let mut available: Vec<(&'static Item, u32)> = Vec::new();

@@ -29,7 +29,7 @@ use crate::slot::{NormalSlot, Slot};
 
 use crate::inventory::Inventory;
 use pumpkin_data::item_stack::ItemStack;
-use pumpkin_data::recipes::{CraftingRecipeTypes, RECIPES_CRAFTING};
+use pumpkin_data::recipes::{CraftingRecipeTypes, RECIPES_CRAFTING, RECIPES_CRAFTING_IDS};
 use pumpkin_data::screen::WindowType;
 use pumpkin_data::statistic::StatisticCategory;
 use pumpkin_data::tag;
@@ -46,11 +46,16 @@ pub struct ResultSlot {
     pub result: Arc<Mutex<ItemStack>>,
     /// Provider for dynamic recipes.
     pub recipe_provider: Option<Arc<dyn RecipeProvider>>,
+    /// The recipe that produced the current result, vanilla
+    /// `ResultContainer#recipeUsed`; taken (and unlocked) with the result.
+    pub recipe_used: Mutex<Option<String>>,
 }
 
 pub struct RecipeResult {
     pub item_id: String,
     pub count: u8,
+    /// The matched recipe's key, `None` for special recipes the book skips.
+    pub recipe_id: Option<String>,
 }
 
 /// Checks if a recipe pattern is symmetrical horizontally.
@@ -71,6 +76,10 @@ fn is_symmetrical_horizontally(pattern: &[&str]) -> bool {
 
 /// Checks if a crafting recipe matches the current inventory state.
 #[expect(clippy::too_many_lines)]
+#[expect(
+    clippy::too_many_arguments,
+    reason = "grid geometry plus the recipe and its key mirror vanilla's match inputs"
+)]
 fn recipe_matches(
     recipe: GenericRecipe<'_>,
     input_height: usize,
@@ -79,6 +88,7 @@ fn recipe_matches(
     top_y: usize,
     count: usize,
     inventory: &dyn RecipeInputInventory,
+    recipe_id: Option<&str>,
 ) -> Option<RecipeResult> {
     match recipe {
         GenericRecipe::Vanilla(CraftingRecipeTypes::CraftingShaped {
@@ -171,6 +181,7 @@ fn recipe_matches(
             matched.then_some(RecipeResult {
                 item_id: result.id.to_string(),
                 count: result.count,
+                recipe_id: recipe_id.map(ToString::to_string),
             })
         }
         GenericRecipe::Vanilla(CraftingRecipeTypes::CraftingShapeless {
@@ -198,6 +209,7 @@ fn recipe_matches(
             Some(RecipeResult {
                 item_id: result.id.to_string(),
                 count: result.count,
+                recipe_id: recipe_id.map(ToString::to_string),
             })
         }
         GenericRecipe::Vanilla(CraftingRecipeTypes::CraftingTransmute {
@@ -218,9 +230,11 @@ fn recipe_matches(
                     return None;
                 }
             }
+            // Transmute has no 1.21.1 serializer, so no recipe book entry.
             Some(RecipeResult {
                 item_id: result.id.to_string(),
                 count: result.count,
+                recipe_id: None,
             })
         }
         GenericRecipe::Vanilla(CraftingRecipeTypes::CraftingDecoratedPot { .. }) => {
@@ -237,9 +251,11 @@ fn recipe_matches(
                     return None;
                 }
             }
+            // The decorated pot assembly is a special recipe: no book entry.
             Some(RecipeResult {
                 item_id: "minecraft:decorated_pot".to_string(),
                 count: 1,
+                recipe_id: None,
             })
         }
         GenericRecipe::Dynamic(OwnedCraftingRecipe::Shaped {
@@ -291,6 +307,7 @@ fn recipe_matches(
             matched.then_some(RecipeResult {
                 item_id: result.item_id.clone(),
                 count: result.count,
+                recipe_id: recipe_id.map(ToString::to_string),
             })
         }
         GenericRecipe::Dynamic(OwnedCraftingRecipe::Shapeless {
@@ -318,6 +335,7 @@ fn recipe_matches(
             Some(RecipeResult {
                 item_id: result.item_id.clone(),
                 count: result.count,
+                recipe_id: recipe_id.map(ToString::to_string),
             })
         }
         _ => None,
@@ -353,7 +371,7 @@ pub fn match_crafting_recipe(
     let input_width = bottom_x + 1 - top_x;
     let input_height = bottom_y + 1 - top_y;
 
-    for recipe in RECIPES_CRAFTING {
+    for (index, recipe) in RECIPES_CRAFTING.iter().enumerate() {
         if let Some(result) = recipe_matches(
             GenericRecipe::Vanilla(recipe),
             input_height,
@@ -362,6 +380,7 @@ pub fn match_crafting_recipe(
             top_y,
             count,
             inventory,
+            RECIPES_CRAFTING_IDS.get(index).copied(),
         ) {
             return Some(result);
         }
@@ -379,6 +398,7 @@ pub fn match_crafting_recipe(
                     top_y,
                     count,
                     inventory,
+                    recipe.recipe_id(),
                 )
             {
                 return Some(result);
@@ -399,6 +419,7 @@ impl ResultSlot {
             id: AtomicU8::new(0),
             result: Arc::new(Mutex::new(ItemStack::EMPTY.clone())),
             recipe_provider: provider,
+            recipe_used: Mutex::new(None),
         }
     }
 
@@ -407,7 +428,13 @@ impl ResultSlot {
     }
 
     fn refill_output(&self) -> ItemStack {
-        let result = if let Some(matched) = self.match_recipe() {
+        let matched = self.match_recipe();
+        *self
+            .recipe_used
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner) =
+            matched.as_ref().and_then(|m| m.recipe_id.clone());
+        let result = if let Some(matched) = matched {
             let key = matched
                 .item_id
                 .strip_prefix("minecraft:")
@@ -445,6 +472,16 @@ impl Slot for ResultSlot {
             stack.item.id as i32,
             stack.item_count as i32,
         );
+        // Vanilla `ResultContainer#awardUsedRecipes`: taking the result
+        // unlocks the recipe that produced it.
+        let recipe_used = self
+            .recipe_used
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .take();
+        if let Some(recipe_id) = recipe_used {
+            player.award_recipe(&recipe_id);
+        }
         for i in 0..self.inventory.size() {
             self.inventory.remove_stack_specific(i, 1);
         }

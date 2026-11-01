@@ -52,6 +52,7 @@ mod plugins;
 mod pumpkin;
 mod raid;
 mod random;
+mod recipe;
 mod reload;
 mod r#return;
 mod ride;
@@ -129,6 +130,7 @@ pub fn default_dispatcher(
     tag::register(&mut dispatcher, registry);
     tick::register(&mut dispatcher, registry);
     advancement::register(&mut dispatcher, registry);
+    recipe::register(&mut dispatcher, registry);
     data::register(&mut dispatcher, registry);
     trigger::register(&mut dispatcher, registry);
     scoreboard::register(&mut dispatcher, registry);

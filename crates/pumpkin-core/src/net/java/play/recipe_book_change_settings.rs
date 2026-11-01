@@ -15,5 +15,6 @@ impl JavaClient {
             packet.is_filtering,
         );
         server.plugin_manager.fire_blocking(server, &mut event);
+        player.set_recipe_book_setting(packet.book_type.0, packet.is_open, packet.is_filtering);
     }
 }

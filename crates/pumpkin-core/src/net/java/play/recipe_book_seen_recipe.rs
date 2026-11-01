@@ -10,8 +10,9 @@ impl JavaClient {
     ) {
         let mut event = crate::plugin::api::events::player::player_recipe_discover::PlayerRecipeDiscoverEvent::new(
             player.clone(),
-            format!("display_{}", packet.recipe_display_id.0),
+            packet.recipe_id.clone(),
         );
         server.plugin_manager.fire_blocking(server, &mut event);
+        player.remove_recipe_highlight(&packet.recipe_id);
     }
 }

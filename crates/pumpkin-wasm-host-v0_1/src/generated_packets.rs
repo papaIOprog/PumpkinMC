@@ -1254,7 +1254,7 @@ pub fn deserialize_java_serverbound_packet(
             Some(ServerboundPacket::SPlaceRecipe(
                 crate::pumpkin::plugin::java_packets::SPlaceRecipe {
                     container_id: p.container_id.try_into().unwrap(),
-                    recipe_display_id: p.recipe_display_id.0.try_into().unwrap(),
+                    recipe_id: p.recipe_id.into(),
                     use_max_items: p.use_max_items.try_into().unwrap(),
                 },
             ))
@@ -1357,7 +1357,7 @@ pub fn deserialize_java_serverbound_packet(
             let p = <pumpkin_protocol::java::server::play::SRecipeBookSeenRecipe as pumpkin_protocol::ServerPacket>::read(&mut payload, &version).ok()?;
             Some(ServerboundPacket::SRecipeBookSeenRecipe(
                 crate::pumpkin::plugin::java_packets::SRecipeBookSeenRecipe {
-                    recipe_display_id: p.recipe_display_id.0.try_into().unwrap(),
+                    recipe_id: p.recipe_id.into(),
                 },
             ))
         }

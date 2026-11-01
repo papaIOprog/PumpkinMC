@@ -182,6 +182,9 @@ pub trait InventoryPlayer: Send + Sync {
     /// Increments a statistic for the player.
     fn increment_stat(&self, category: StatisticCategory, stat_id: i32, amount: i32);
 
+    /// Unlocks a recipe in the player's recipe book when they craft it.
+    fn award_recipe(&self, _recipe_id: &str) {}
+
     /// Plays a block sound at the open container position.
     fn play_block_sound(&self, sound: Sound, pitch: f32);
 

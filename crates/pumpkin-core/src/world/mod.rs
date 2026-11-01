@@ -3238,7 +3238,7 @@ impl World {
             client_suggestions::send_c_commands_packet(player, server, &command_dispatcher);
         };
 
-        // PlayerList#placeNewPlayer declares every recipe and the (empty)
+        // PlayerList#placeNewPlayer declares every recipe and the player's
         // recipe book right after the commands packet.
         let recipes = server.recipe_manager.encoded_client_recipes();
         client
@@ -3247,10 +3247,7 @@ impl World {
             ))
             .await;
         client
-            .send_packet(&pumpkin_protocol::java::client::play::CUnlockRecipes::init(
-                pumpkin_protocol::java::client::play::RecipeBookSettings::default(),
-                Vec::new(),
-            ))
+            .send_packet(&player.unlock_recipes_init_packet())
             .await;
 
         if client.version.load() < JavaMinecraftVersion::V_1_20_2

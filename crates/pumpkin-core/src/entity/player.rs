@@ -1,4 +1,5 @@
 pub mod advancement;
+pub mod recipe_book;
 pub mod statistics;
 
 use core::f32;
@@ -272,12 +273,14 @@ use pumpkin_protocol::java::client::play::{
     CPlayerPosition, CPlayerSpawnPosition, CRespawn, CSetCamera, CSetContainerContent,
     CSetContainerProperty, CSetContainerSlot, CSetExperience, CSetHealth, CSetSelectedSlot,
     CSoundEffect, CStopSound, CSubtitle, CSystemChatMessage, CTabList, CTeleportEntity,
-    CTitleAnimation, CTitleText, CUnloadChunk, CUpdateMobEffect, CUpdateTime, GameEvent, MapIcon,
-    MapPatch, PlayerAction, PlayerInfoFlags, PlayerSpawnData, PreviousMessage, Statistic,
+    CTitleAnimation, CTitleText, CUnloadChunk, CUnlockRecipes, CUpdateMobEffect, CUpdateTime,
+    GameEvent, MapIcon, MapPatch, PlayerAction, PlayerInfoFlags, PlayerSpawnData, PreviousMessage,
+    RECIPE_BOOK_STATE_ADD, RECIPE_BOOK_STATE_INIT, RECIPE_BOOK_STATE_REMOVE, Statistic,
 };
 use pumpkin_protocol::java::server::play::{
     SClickSlot, SContainerButtonClick, SRenameItem, SlotActionType,
 };
+use pumpkin_util::identifier::Identifier;
 use pumpkin_util::math::{
     boundingbox::BoundingBox, experience, position::BlockPos, vector2::Vector2, vector3::Vector3,
 };
@@ -443,6 +446,8 @@ pub struct Player {
     pub abilities: std::sync::Mutex<Abilities>,
     /// Player statistics
     pub stats: std::sync::Mutex<statistics::Statistics>,
+    /// The player's recipe book: known recipes and book settings.
+    pub recipe_book: std::sync::Mutex<recipe_book::RecipeBook>,
     /// The current stage of block destruction of the block the player is breaking.
     pub current_block_destroy_stage: AtomicI32,
     /// The per-tick block destruction progress last sent to Bedrock clients.
@@ -749,6 +754,7 @@ impl Player {
             mining_pos: Mutex::new(BlockPos::ZERO),
             abilities: std::sync::Mutex::new(abilities),
             stats: std::sync::Mutex::new(statistics::Statistics::default()),
+            recipe_book: std::sync::Mutex::new(recipe_book::RecipeBook::default()),
             gamemode: AtomicCell::new(gamemode),
             previous_gamemode: AtomicCell::new(None),
             camera_target_id: AtomicCell::new(None),
@@ -3318,6 +3324,149 @@ impl Player {
         if let Ok(mut stats) = self.stats.try_lock() {
             stats.set(category, stat, value);
         }
+    }
+
+    /// Vanilla `ServerPlayer#awardRecipes`: learns the recipes and sends an
+    /// ADD packet for the ones that were new. Returns how many were added.
+    pub fn award_recipes(&self, ids: &[String]) -> i32 {
+        let Some(server) = self.world().server.upgrade() else {
+            return 0;
+        };
+        let recipes = server.recipe_manager.get_dynamic_recipes_internal();
+        let added = {
+            let mut book = self
+                .recipe_book
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner);
+            book.add_recipes(ids.iter().filter_map(|id| {
+                recipes.iter().find_map(|recipe| match recipe.recipe_id() {
+                    Some(recipe_id) if recipe_id == id.as_str() => {
+                        Some((recipe_id, recipe.is_special()))
+                    }
+                    _ => None,
+                })
+            }))
+        };
+        if !added.is_empty() {
+            let owned: Vec<String> = added.iter().map(|id| (*id).to_string()).collect();
+            self.send_unlock_recipes(RECIPE_BOOK_STATE_ADD, &owned);
+        }
+        added.len() as i32
+    }
+
+    /// Vanilla `ServerPlayer#resetRecipes`: forgets the recipes and sends a
+    /// REMOVE packet for the ones that were known.
+    pub fn reset_recipes(&self, ids: &[String]) -> i32 {
+        let removed = {
+            let mut book = self
+                .recipe_book
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner);
+            book.remove_recipes(ids.iter().map(String::as_str))
+        };
+        if !removed.is_empty() {
+            let owned: Vec<String> = removed.iter().map(|id| (*id).to_string()).collect();
+            self.send_unlock_recipes(RECIPE_BOOK_STATE_REMOVE, &owned);
+        }
+        removed.len() as i32
+    }
+
+    /// Vanilla `ServerRecipeBook#sendRecipes`.
+    fn send_unlock_recipes(&self, state: i32, ids: &[String]) {
+        let settings = self
+            .recipe_book
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .settings;
+        let packet = CUnlockRecipes {
+            state,
+            settings,
+            recipes: ids.iter().filter_map(|id| parse_recipe_id(id)).collect(),
+            highlight: Vec::new(),
+        };
+        if let ClientPlatform::Java(java) = self.client.as_ref()
+            && let Ok(data) = java.serialize_packet(&packet)
+        {
+            java.try_enqueue_packet(data);
+        }
+    }
+
+    /// The join-time INIT packet, vanilla `sendInitialRecipeBook`.
+    pub fn unlock_recipes_init_packet(&self) -> CUnlockRecipes {
+        let book = self
+            .recipe_book
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        CUnlockRecipes {
+            state: RECIPE_BOOK_STATE_INIT,
+            settings: book.settings,
+            recipes: book
+                .known
+                .iter()
+                .filter_map(|id| parse_recipe_id(id))
+                .collect(),
+            highlight: book
+                .highlight
+                .iter()
+                .filter_map(|id| parse_recipe_id(id))
+                .collect(),
+        }
+    }
+
+    /// Vanilla `RecipeBook#setBookSetting` from the change-settings packet.
+    pub fn set_recipe_book_setting(&self, book_type: i32, open: bool, filtering: bool) {
+        let mut book = self
+            .recipe_book
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        // `RecipeBookType` wire order: crafting, furnace, blast furnace, smoker.
+        let settings = &mut book.settings;
+        let (open_slot, filtering_slot) = match book_type {
+            0 => (
+                &mut settings.crafting_open,
+                &mut settings.crafting_filtering,
+            ),
+            1 => (&mut settings.furnace_open, &mut settings.furnace_filtering),
+            2 => (
+                &mut settings.blast_furnace_open,
+                &mut settings.blast_furnace_filtering,
+            ),
+            3 => (&mut settings.smoker_open, &mut settings.smoker_filtering),
+            _ => return,
+        };
+        *open_slot = open;
+        *filtering_slot = filtering;
+    }
+
+    /// Vanilla `RecipeBook#removeHighlight` from the seen-recipe packet.
+    pub fn remove_recipe_highlight(&self, recipe_id: &str) {
+        self.recipe_book
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .highlight
+            .remove(recipe_id);
+    }
+
+    /// Persists the recipe book, vanilla `Player#addAdditionalSaveData`.
+    pub fn write_recipe_book_nbt(&self, nbt: &mut NbtCompound) {
+        self.recipe_book
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .write_nbt(nbt);
+    }
+
+    /// Loads the recipe book, dropping recipes the manager no longer knows.
+    pub fn read_recipe_book_nbt(&self, nbt: &NbtCompound) {
+        let recipes = self
+            .world()
+            .server
+            .upgrade()
+            .map(|server| server.recipe_manager.get_dynamic_recipes_internal())
+            .unwrap_or_default();
+        self.recipe_book
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .read_nbt(nbt, &recipes);
     }
 
     pub fn get_stat(&self, category: statistics::StatisticCategory, stat: i32) -> i32 {
@@ -6848,6 +6997,7 @@ impl EntityBase for Player {
         nbt.put_int("DataVersion", DATA_VERSION);
         self.inventory.write_nbt(nbt);
         self.ender_chest_inventory.write_nbt(nbt);
+        self.write_recipe_book_nbt(nbt);
 
         self.abilities
             .lock()
@@ -7063,6 +7213,7 @@ impl EntityBase for Player {
         );
 
         self.hunger_manager.read_nbt_non_mut(nbt);
+        self.read_recipe_book_nbt(nbt);
 
         if let Some(air) = nbt
             .get_short("Air")
@@ -7789,6 +7940,10 @@ impl InventoryPlayer for Player {
         self.increment_stat(category, stat_id, amount);
     }
 
+    fn award_recipe(&self, recipe_id: &str) {
+        self.award_recipes(&[recipe_id.to_string()]);
+    }
+
     fn play_block_sound(&self, sound: Sound, pitch: f32) {
         if let Some(pos) = self.open_container_pos.load() {
             self.world().play_sound_fine(
@@ -7919,6 +8074,12 @@ impl InventoryPlayer for Player {
             world.sync_world_event(pumpkin_data::world::WorldEvent::SoundGrindstoneUsed, pos, 0);
         }
     }
+}
+
+/// Recipe keys travel as strings; malformed ones are skipped instead of
+/// failing the whole packet.
+fn parse_recipe_id(id: &str) -> Option<Identifier> {
+    Identifier::parse(id).ok()
 }
 
 #[cfg(test)]

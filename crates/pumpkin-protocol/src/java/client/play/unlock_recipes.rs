@@ -63,20 +63,18 @@ impl ClientPacket for CUnlockRecipes {
     ) -> Result<(), WritingError> {
         write.write_var_int(&VarInt(self.state))?;
         let settings = &self.settings;
-        for open in [
-            settings.crafting_open,
-            settings.furnace_open,
-            settings.blast_furnace_open,
-            settings.smoker_open,
+        // Vanilla `RecipeBookSettings#write`: one open/filtering pair per book
+        // type in `RecipeBookType` declaration order, not all opens first.
+        for (open, filtering) in [
+            (settings.crafting_open, settings.crafting_filtering),
+            (settings.furnace_open, settings.furnace_filtering),
+            (
+                settings.blast_furnace_open,
+                settings.blast_furnace_filtering,
+            ),
+            (settings.smoker_open, settings.smoker_filtering),
         ] {
             write.write_bool(open)?;
-        }
-        for filtering in [
-            settings.crafting_filtering,
-            settings.furnace_filtering,
-            settings.blast_furnace_filtering,
-            settings.smoker_filtering,
-        ] {
             write.write_bool(filtering)?;
         }
 
@@ -97,23 +95,20 @@ impl ClientPacket for CUnlockRecipes {
 impl<'a> ServerPacket<'a> for CUnlockRecipes {
     fn read(bytebuf: &mut &'a [u8], _version: &JavaMinecraftVersion) -> Result<Self, ReadingError> {
         let state = bytebuf.get_var_int()?.0;
-        let mut opens = [false; 4];
-        for open in &mut opens {
-            *open = bytebuf.get_bool()?;
-        }
-        let mut filterings = [false; 4];
-        for filtering in &mut filterings {
-            *filtering = bytebuf.get_bool()?;
+        let mut pairs = [(false, false); 4];
+        for pair in &mut pairs {
+            pair.0 = bytebuf.get_bool()?;
+            pair.1 = bytebuf.get_bool()?;
         }
         let settings = RecipeBookSettings {
-            crafting_open: opens[0],
-            furnace_open: opens[1],
-            blast_furnace_open: opens[2],
-            smoker_open: opens[3],
-            crafting_filtering: filterings[0],
-            furnace_filtering: filterings[1],
-            blast_furnace_filtering: filterings[2],
-            smoker_filtering: filterings[3],
+            crafting_open: pairs[0].0,
+            crafting_filtering: pairs[0].1,
+            furnace_open: pairs[1].0,
+            furnace_filtering: pairs[1].1,
+            blast_furnace_open: pairs[2].0,
+            blast_furnace_filtering: pairs[2].1,
+            smoker_open: pairs[3].0,
+            smoker_filtering: pairs[3].1,
         };
 
         let recipes = read_identifier_list(bytebuf)?;
@@ -206,5 +201,25 @@ mod tests {
 
         // state varint + 8 setting bools + empty recipe list
         assert_eq!(bytes.len(), 1 + 8 + 1);
+    }
+
+    #[test]
+    fn settings_pairs_are_interleaved_per_book_type() {
+        // Vanilla writes open/filtering per RecipeBookType, so with only
+        // crafting open and only furnace filtering the pair order is
+        // 01 00 00 01 00 00 00 00.
+        let packet = CUnlockRecipes::init(
+            RecipeBookSettings {
+                crafting_open: true,
+                furnace_filtering: true,
+                ..RecipeBookSettings::default()
+            },
+            Vec::new(),
+        );
+        let mut bytes = Vec::new();
+        packet
+            .write_packet_data(&mut bytes, &JavaMinecraftVersion::V_1_21)
+            .unwrap();
+        assert_eq!(bytes, [0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0]);
     }
 }

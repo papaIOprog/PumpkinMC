@@ -213,7 +213,7 @@ interface java-packets {
   }
   record s-place-recipe {
     container-id: u8,
-    recipe-display-id: s32,
+    recipe-id: string,
     use-max-items: bool,
   }
   record s-player-abilities {
@@ -286,7 +286,7 @@ interface java-packets {
     is-filtering: bool,
   }
   record s-recipe-book-seen-recipe {
-    recipe-display-id: s32,
+    recipe-id: string,
   }
   record s-rename-item {
     item-name: string,
@@ -1289,6 +1289,22 @@ interface java-packets {
     x: s32,
     z: s32,
   }
+  record recipe-book-settings {
+    crafting-open: bool,
+    crafting-filtering: bool,
+    furnace-open: bool,
+    furnace-filtering: bool,
+    blast-furnace-open: bool,
+    blast-furnace-filtering: bool,
+    smoker-open: bool,
+    smoker-filtering: bool,
+  }
+  record c-unlock-recipes {
+    state: s32,
+    settings: recipe-book-settings,
+    recipes: list<string>,
+    highlight: list<string>,
+  }
   record c-update-advancements {
     reset: bool,
     added: list<string>,
@@ -1579,6 +1595,7 @@ interface java-packets {
     c-ticking-step(c-ticking-step),
     c-transfer(c-transfer),
     c-unload-chunk(c-unload-chunk),
+    c-unlock-recipes(c-unlock-recipes),
     c-update-advancements(c-update-advancements),
     c-update-attributes(c-update-attributes),
     c-update-entity-pos(c-update-entity-pos),

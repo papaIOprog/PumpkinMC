@@ -155,6 +155,37 @@ pub enum DynamicRecipe {
     Special(OwnedSpecialRecipe),
 }
 
+impl DynamicRecipe {
+    /// The recipe's key (`RecipeHolder#id`), `None` for id-less crafting
+    /// recipes.
+    #[must_use]
+    pub fn recipe_id(&self) -> Option<&str> {
+        match self {
+            Self::Crafting(
+                OwnedCraftingRecipe::Shaped { recipe_id, .. }
+                | OwnedCraftingRecipe::Shapeless { recipe_id, .. },
+            ) => recipe_id.as_deref(),
+            Self::Cooking(
+                OwnedCookingRecipeType::Blasting(recipe)
+                | OwnedCookingRecipeType::Smelting(recipe)
+                | OwnedCookingRecipeType::Smoking(recipe)
+                | OwnedCookingRecipeType::CampfireCooking(recipe),
+            ) => Some(&recipe.recipe_id),
+            Self::Brewing(recipe) => Some(&recipe.recipe_id),
+            Self::Stonecutting(recipe) => Some(&recipe.recipe_id),
+            Self::SmithingTransform(recipe) => Some(&recipe.recipe_id),
+            Self::SmithingTrim(recipe) => Some(&recipe.recipe_id),
+            Self::Special(recipe) => Some(&recipe.recipe_id),
+        }
+    }
+
+    /// Vanilla `Recipe#isSpecial`: no recipe book entry and never unlocked.
+    #[must_use]
+    pub const fn is_special(&self) -> bool {
+        matches!(self, Self::Special(_))
+    }
+}
+
 /// Numeric ids of the vanilla `recipe_serializer` registry in registration
 /// order; `Recipe#STREAM_CODEC` dispatches on them via `writeById`.
 const SERIALIZER_CRAFTING_SHAPED: i32 = 0;

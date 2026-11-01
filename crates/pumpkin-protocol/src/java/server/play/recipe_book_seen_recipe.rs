@@ -6,19 +6,16 @@ use pumpkin_data::packet::serverbound::play::RECIPE_BOOK_SEEN_RECIPE;
 use pumpkin_macros::java_packet;
 use pumpkin_util::version::JavaMinecraftVersion;
 
-use crate::VarInt;
-
 #[java_packet(RECIPE_BOOK_SEEN_RECIPE)]
 pub struct SRecipeBookSeenRecipe {
-    pub recipe_display_id: VarInt,
+    /// The recipe's string key the player opened in the book.
+    pub recipe_id: String,
 }
 
 impl<'a> ServerPacket<'a> for SRecipeBookSeenRecipe {
-    fn read(bytebuf: &mut &'a [u8], version: &JavaMinecraftVersion) -> Result<Self, ReadingError> {
-        let _ = version;
-        let _recipe = bytebuf.get_str_borrowed()?;
+    fn read(bytebuf: &mut &'a [u8], _version: &JavaMinecraftVersion) -> Result<Self, ReadingError> {
         Ok(Self {
-            recipe_display_id: VarInt(0),
+            recipe_id: bytebuf.get_str_borrowed()?.to_string(),
         })
     }
 }
@@ -30,7 +27,7 @@ impl crate::ClientPacket for SRecipeBookSeenRecipe {
         _version: &JavaMinecraftVersion,
     ) -> Result<(), crate::ser::WritingError> {
         use crate::ser::NetworkWriteExt;
-        write.write_var_int(&self.recipe_display_id)?;
+        write.write_string(&self.recipe_id)?;
         Ok(())
     }
 }

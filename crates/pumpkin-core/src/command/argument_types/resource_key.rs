@@ -14,10 +14,16 @@ use std::string::ToString;
 
 pub static ADVANCEMENT_REGISTRY: &Identifier = &Identifier::vanilla_static("advancement");
 pub static BIOME_REGISTRY: &Identifier = &Identifier::vanilla_static("worldgen/biome");
+pub static RECIPE_REGISTRY: &Identifier = &Identifier::vanilla_static("recipe");
 
 pub const ERROR_INVALID_ADVANCEMENT: CommandErrorType<1> = CommandErrorType::new(
     translation::java::ADVANCEMENT_ADVANCEMENTNOTFOUND,
     translation::java::ADVANCEMENT_ADVANCEMENTNOTFOUND,
+);
+
+pub const ERROR_UNKNOWN_RECIPE: CommandErrorType<1> = CommandErrorType::new(
+    translation::java::RECIPE_NOTFOUND,
+    translation::java::RECIPE_NOTFOUND,
 );
 
 pub const ERROR_INVALID_BIOME: CommandErrorType<1> =
@@ -32,8 +38,6 @@ pub const ERROR_NOT_SUMMONABLE_ENTITY: CommandErrorType<1> = CommandErrorType::n
 ///
 /// if you want an [`Advancement`] put the [`ADVANCEMENT_REGISTRY`]
 /// and get it with the [`ResourceKeyArgument::get_advancement`] when it has been parsed
-///
-/// TODO Recipe
 ///
 /// if you juste want the [`ResourceKey`] use the [`ResourceKeyArgument::get_registry_key`] function
 pub struct ResourceKeyArgument(pub &'static Identifier);
@@ -61,6 +65,9 @@ impl ArgumentType<CommandSource> for ResourceKeyArgument {
             suggestions_builder
                 .filter_and_suggest_iter(advancements.iter().map(ToString::to_string))
                 .build()
+        } else if self.0 == RECIPE_REGISTRY {
+            let recipes = context.server().recipe_manager.all_ids();
+            suggestions_builder.filter_and_suggest_iter(recipes).build()
         } else if self.0 == BIOME_REGISTRY {
             let biomes = pumpkin_data::biome::Biome::ALL
                 .iter()
@@ -104,6 +111,22 @@ impl ResourceKeyArgument {
                 resource_key.identifier.path().to_string(),
             ))
         })
+    }
+
+    /// Returns a [`CommandContext`]'s parsed resource key argument as a recipe
+    /// key the `RecipeManager` knows, e.g. `minecraft:oak_planks`.
+    pub fn get_recipe_id(
+        context: &CommandContext,
+        name: &str,
+    ) -> Result<String, CommandSyntaxError> {
+        let resource_key: &ResourceKey =
+            Self::get_registry_key(context, name, RECIPE_REGISTRY, &ERROR_UNKNOWN_RECIPE)?;
+        let id = resource_key.identifier.to_string();
+        if context.server().recipe_manager.by_key(&id).is_some() {
+            Ok(id)
+        } else {
+            Err(ERROR_UNKNOWN_RECIPE.create_without_context(TextComponent::text(id)))
+        }
     }
 
     /// Returns a [`CommandContext`]'s parsed resource key argument as a [`Biome`](pumpkin_data::biome::Biome).
