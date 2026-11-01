@@ -699,10 +699,9 @@ where
     let value = Option::<serde_json::Value>::deserialize(deserializer)?;
     Ok(match value {
         Some(serde_json::Value::String(s)) => Some(matcher_from_str(&s)),
-        Some(serde_json::Value::Array(list)) => list
-            .first()
-            .and_then(|v| v.as_str())
-            .map(matcher_from_str),
+        Some(serde_json::Value::Array(list)) => {
+            list.first().and_then(|v| v.as_str()).map(matcher_from_str)
+        }
         _ => None,
     })
 }
@@ -997,41 +996,38 @@ pub(crate) fn build() -> TokenStream {
         // Advancements that grant recipes carry their trigger conditions so
         // the server can award them (item pickups and recipe unlocks).
         if !advancement.rewards.recipes.is_empty() {
-            let criteria = advancement
-                .criteria
-                .iter()
-                .filter_map(|criterion| {
-                    let name = &criterion.name;
-                    match criterion.trigger.as_str() {
-                        "minecraft:inventory_changed" => criterion
-                            .conditions
-                            .items
-                            .first()
-                            .and_then(|item| item.items.as_ref())
-                            .map(|matcher| {
-                                let matcher = matcher_tokens(matcher);
-                                quote! {
-                                    RecipeAdvancementCriterion {
-                                        criterion: #name,
-                                        matcher: Some(#matcher),
-                                        recipe: None,
-                                    }
+            let criteria = advancement.criteria.iter().filter_map(|criterion| {
+                let name = &criterion.name;
+                match criterion.trigger.as_str() {
+                    "minecraft:inventory_changed" => criterion
+                        .conditions
+                        .items
+                        .first()
+                        .and_then(|item| item.items.as_ref())
+                        .map(|matcher| {
+                            let matcher = matcher_tokens(matcher);
+                            quote! {
+                                RecipeAdvancementCriterion {
+                                    criterion: #name,
+                                    matcher: Some(#matcher),
+                                    recipe: None,
                                 }
-                            }),
-                        "minecraft:recipe_unlocked" => criterion.conditions.recipe.as_ref().map(
-                            |recipe| {
-                                quote! {
-                                    RecipeAdvancementCriterion {
-                                        criterion: #name,
-                                        matcher: None,
-                                        recipe: Some(#recipe),
-                                    }
+                            }
+                        }),
+                    "minecraft:recipe_unlocked" => {
+                        criterion.conditions.recipe.as_ref().map(|recipe| {
+                            quote! {
+                                RecipeAdvancementCriterion {
+                                    criterion: #name,
+                                    matcher: None,
+                                    recipe: Some(#recipe),
                                 }
-                            },
-                        ),
-                        _ => None,
+                            }
+                        })
                     }
-                });
+                    _ => None,
+                }
+            });
             recipe_advancements.extend(quote! {
                 RecipeAdvancement {
                     advancement: Advancement::#format_name,
