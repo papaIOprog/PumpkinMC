@@ -45,6 +45,11 @@ impl CommandExecutor for GiveExecutor {
                 }
                 remaining -= take;
             }
+            // Vanilla's inventory menu fires `inventory_changed` for any
+            // inventory change, including command gives.
+            target
+                .inventory_changed
+                .store(true, std::sync::atomic::Ordering::Relaxed);
         }
 
         let item_name = item.registry_key;

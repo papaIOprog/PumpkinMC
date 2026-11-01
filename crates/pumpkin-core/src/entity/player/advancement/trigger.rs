@@ -32,6 +32,24 @@ impl Player {
 
         match trigger {
             AdvancementTrigger::InventoryChanged => {
+                // Vanilla `CriteriaTriggers.INVENTORY_CHANGED`: the recipe
+                // advancements award as soon as their item (or tag) is in the
+                // inventory, which is what makes planks and friends appear in
+                // the recipe book.
+                let items = self.inventory_items();
+                for entry in pumpkin_data::advancement::RECIPE_ADVANCEMENTS {
+                    for criterion in entry.criteria {
+                        if let Some(matcher) = criterion.matcher
+                            && inventory_matches(matcher, &items)
+                        {
+                            self.trigger_advancement_criterion(
+                                entry.advancement,
+                                criterion.criterion,
+                            );
+                        }
+                    }
+                }
+
                 if !self.has_advancement(Advancement::STORY_ROOT) {
                     if self.has_item_in_inventory(&Item::CRAFTING_TABLE) {
                         self.trigger_advancement_criterion(
@@ -625,5 +643,39 @@ impl Player {
                 }
             }
         }
+    }
+
+    /// The item types currently in the main inventory, for the
+    /// `inventory_changed` criteria of the recipe advancements.
+    pub fn inventory_items(&self) -> Vec<&'static pumpkin_data::item::Item> {
+        let main_inv = self
+            .inventory
+            .main_inventory
+            .read()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        main_inv
+            .iter()
+            .filter(|stack| !stack.is_empty())
+            .map(|stack| stack.item)
+            .collect()
+    }
+}
+
+/// Vanilla item predicate of an `inventory_changed` criterion against the
+/// inventory contents.
+fn inventory_matches(
+    matcher: pumpkin_data::advancement_data::ItemMatcher,
+    items: &[&'static pumpkin_data::item::Item],
+) -> bool {
+    use pumpkin_data::tag::Taggable;
+
+    match matcher {
+        pumpkin_data::advancement_data::ItemMatcher::Item(item_id) => {
+            pumpkin_data::item::Item::from_registry_key(item_id)
+                .is_some_and(|item| items.iter().any(|stack_item| stack_item.id == item.id))
+        }
+        pumpkin_data::advancement_data::ItemMatcher::Tag(tag) => items
+            .iter()
+            .any(|stack_item| stack_item.is_tagged_with(tag).unwrap_or(false)),
     }
 }

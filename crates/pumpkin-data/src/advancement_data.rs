@@ -1,5 +1,4 @@
 use crate::item_stack::ItemStack;
-use crate::potion_brewing::ItemRecipe;
 use crate::translation::java::{
     CHAT_TYPE_ADVANCEMENT_CHALLENGE, CHAT_TYPE_ADVANCEMENT_GOAL, CHAT_TYPE_ADVANCEMENT_TASK,
 };
@@ -100,7 +99,31 @@ impl FrameType {
 #[derive(Clone)]
 pub struct AdvancementReward {
     pub experience: i32,
-    pub recipes: &'static [ItemRecipe],
+    /// Recipe keys granted on completion (`rewards.recipes`).
+    pub recipes: &'static [&'static str],
+}
+
+/// One `inventory_changed` item predicate: a single item or an item tag.
+#[derive(Clone, Copy, Debug)]
+pub enum ItemMatcher {
+    Item(&'static str),
+    Tag(&'static str),
+}
+
+/// A criterion of a recipe-granting advancement: the item that satisfies an
+/// `inventory_changed` criterion and/or the recipe that satisfies a
+/// `recipe_unlocked` criterion.
+#[derive(Clone, Copy)]
+pub struct RecipeAdvancementCriterion {
+    pub criterion: &'static str,
+    pub matcher: Option<ItemMatcher>,
+    pub recipe: Option<&'static str>,
+}
+
+/// Advancements whose rewards unlock recipes (`minecraft:recipes/*`).
+pub struct RecipeAdvancement {
+    pub advancement: &'static Advancement,
+    pub criteria: &'static [RecipeAdvancementCriterion],
 }
 
 pub struct AdvancementNode {

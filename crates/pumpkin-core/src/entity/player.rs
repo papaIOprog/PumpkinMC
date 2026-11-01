@@ -3350,6 +3350,17 @@ impl Player {
         if !added.is_empty() {
             let owned: Vec<String> = added.iter().map(|id| (*id).to_string()).collect();
             self.send_unlock_recipes(RECIPE_BOOK_STATE_ADD, &owned);
+            // Vanilla `CriteriaTriggers.RECIPE_UNLOCKED` completes the
+            // `has_the_recipe` criteria of the recipe advancements.
+            for entry in pumpkin_data::advancement::RECIPE_ADVANCEMENTS {
+                for criterion in entry.criteria {
+                    if let Some(recipe) = criterion.recipe
+                        && added.contains(&recipe)
+                    {
+                        self.trigger_advancement_criterion(entry.advancement, criterion.criterion);
+                    }
+                }
+            }
         }
         added.len() as i32
     }

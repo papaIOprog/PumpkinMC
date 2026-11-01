@@ -422,9 +422,14 @@ impl PlayerAdvancement {
         self.is_first_packet = false;
     }
 
-    /// Grants the rewards (like experience) associated with completing an advancement.
+    /// Grants the rewards (experience and recipes) associated with completing
+    /// an advancement.
     pub fn grant_reward(player: &Arc<Player>, reward: &'static AdvancementReward) {
         player.add_experience_points(reward.experience);
+        if !reward.recipes.is_empty() {
+            let recipes: Vec<String> = reward.recipes.iter().map(|r| (*r).to_string()).collect();
+            player.award_recipes(&recipes);
+        }
     }
 
     /// Records a criterion award while the player's advancement state is locked.

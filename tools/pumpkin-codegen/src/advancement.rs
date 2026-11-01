@@ -135,11 +135,8 @@ pub struct AdvancementRewards {
 impl ToTokens for AdvancementRewards {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let experience = self.experience;
-        let recipes = self.recipes.iter().map(|_recipe| {
-            quote! {
-                //TODO implement recipe reward
-                //Recipe::from_id(#recipe)
-            }
+        let recipes = self.recipes.iter().map(|recipe| {
+            quote! { #recipe }
         });
         tokens.extend(quote! {
             AdvancementReward {
@@ -658,16 +655,86 @@ pub struct AdvancementStruct {
     #[serde(default, rename = "sends_telemetry_event")]
     pub sends_telemetry: bool,
     pub requirements: Vec<Vec<String>>,
-    #[serde(deserialize_with = "deserialize_first_key")]
-    pub criteria: Vec<String>,
+    #[serde(deserialize_with = "deserialize_criteria")]
+    pub criteria: Vec<CriterionStruct>,
 }
 
-fn deserialize_first_key<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
+/// A single criterion of an advancement, keeping the trigger conditions the
+/// recipe advancements need (`inventory_changed` items, `recipe_unlocked` id).
+#[derive(Deserialize, Default, Clone)]
+pub struct CriterionStruct {
+    pub name: String,
+    #[serde(default)]
+    pub trigger: String,
+    #[serde(default)]
+    pub conditions: CriterionConditions,
+}
+
+#[derive(Deserialize, Default, Clone)]
+pub struct CriterionConditions {
+    #[serde(default)]
+    pub items: Vec<ItemPredicate>,
+    #[serde(default)]
+    pub recipe: Option<String>,
+}
+
+/// The `items` field of an inventory_changed condition: a single item id or a
+/// `#tag` reference.
+#[derive(Deserialize, Clone)]
+pub struct ItemPredicate {
+    #[serde(default, deserialize_with = "deserialize_item_matcher")]
+    pub items: Option<Matcher>,
+}
+
+#[derive(Clone)]
+pub enum Matcher {
+    Item(String),
+    Tag(String),
+}
+
+fn deserialize_item_matcher<'de, D>(deserializer: D) -> Result<Option<Matcher>, D::Error>
 where
     D: Deserializer<'de>,
 {
-    let map = BTreeMap::<String, serde_json::Value>::deserialize(deserializer)?;
-    Ok(map.into_keys().collect())
+    let value = Option::<serde_json::Value>::deserialize(deserializer)?;
+    Ok(match value {
+        Some(serde_json::Value::String(s)) => Some(matcher_from_str(&s)),
+        Some(serde_json::Value::Array(list)) => list
+            .first()
+            .and_then(|v| v.as_str())
+            .map(matcher_from_str),
+        _ => None,
+    })
+}
+
+fn matcher_from_str(s: &str) -> Matcher {
+    match s.strip_prefix('#') {
+        Some(tag) => Matcher::Tag(tag.to_string()),
+        None => Matcher::Item(s.to_string()),
+    }
+}
+
+fn deserialize_criteria<'de, D>(deserializer: D) -> Result<Vec<CriterionStruct>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let map = BTreeMap::<String, CriterionPayload>::deserialize(deserializer)?;
+    Ok(map
+        .into_iter()
+        .map(|(name, payload)| CriterionStruct {
+            name,
+            trigger: payload.trigger,
+            conditions: payload.conditions,
+        })
+        .collect())
+}
+
+#[derive(Deserialize, Default, Clone)]
+struct CriterionPayload {
+    #[serde(default)]
+    trigger: String,
+    #[serde(default)]
+    conditions: CriterionConditions,
 }
 
 #[derive(Clone)]
@@ -809,6 +876,18 @@ fn identifier_to_tokens(identifier: &Identifier) -> TokenStream {
     }
 }
 
+/// An `inventory_changed` item matcher as an `ItemMatcher` literal.
+fn matcher_tokens(matcher: &Matcher) -> TokenStream {
+    match matcher {
+        Matcher::Item(item) => {
+            quote! { ItemMatcher::Item(#item) }
+        }
+        Matcher::Tag(tag) => {
+            quote! { ItemMatcher::Tag(#tag) }
+        }
+    }
+}
+
 fn collect_advancements(
     base: &std::path::Path,
     dir: &std::path::Path,
@@ -858,6 +937,7 @@ pub(crate) fn build() -> TokenStream {
     let mut minecraft_name_to_type = TokenStream::new();
     let mut minecraft_namespaces = TokenStream::new();
     let mut advancement_list = TokenStream::new();
+    let mut recipe_advancements = TokenStream::new();
     let capacity = advancements.len();
     //construct the tree
     let mut tree = AdvancementTree::default();
@@ -891,11 +971,11 @@ pub(crate) fn build() -> TokenStream {
             Some(display) => quote! { Some(&#display) },
             None => quote! { None },
         };
-        let reward = advancement.rewards;
+        let reward = advancement.rewards.clone();
         let requirements = advancement.requirements.iter().map(|inner_req| {
             quote! { &[#(#inner_req),*]}
         });
-        let criteria = advancement.criteria;
+        let criteria = advancement.criteria.iter().map(|c| c.name.clone());
         variants.extend([quote! {
             pub const #format_name: &Self = &Self {
                 id: Identifier::vanilla_static(#raw_name),
@@ -913,6 +993,52 @@ pub(crate) fn build() -> TokenStream {
         minecraft_name_to_type.extend(quote! { #minecraft_name => Some(Self::#format_name), });
         minecraft_namespaces.extend(quote! { Identifier::vanilla_static(#raw_name),});
         advancement_list.extend(quote! {Self::#format_name, });
+
+        // Advancements that grant recipes carry their trigger conditions so
+        // the server can award them (item pickups and recipe unlocks).
+        if !advancement.rewards.recipes.is_empty() {
+            let criteria = advancement
+                .criteria
+                .iter()
+                .filter_map(|criterion| {
+                    let name = &criterion.name;
+                    match criterion.trigger.as_str() {
+                        "minecraft:inventory_changed" => criterion
+                            .conditions
+                            .items
+                            .first()
+                            .and_then(|item| item.items.as_ref())
+                            .map(|matcher| {
+                                let matcher = matcher_tokens(matcher);
+                                quote! {
+                                    RecipeAdvancementCriterion {
+                                        criterion: #name,
+                                        matcher: Some(#matcher),
+                                        recipe: None,
+                                    }
+                                }
+                            }),
+                        "minecraft:recipe_unlocked" => criterion.conditions.recipe.as_ref().map(
+                            |recipe| {
+                                quote! {
+                                    RecipeAdvancementCriterion {
+                                        criterion: #name,
+                                        matcher: None,
+                                        recipe: Some(#recipe),
+                                    }
+                                }
+                            },
+                        ),
+                        _ => None,
+                    }
+                });
+            recipe_advancements.extend(quote! {
+                RecipeAdvancement {
+                    advancement: Advancement::#format_name,
+                    criteria: &[#(#criteria),*],
+                },
+            });
+        }
     }
 
     quote! {
@@ -1012,6 +1138,12 @@ pub(crate) fn build() -> TokenStream {
             }
 
         }
+
+        /// Advancements that unlock recipes, with the conditions their
+        /// criteria need (`minecraft:recipes/*`).
+        pub static RECIPE_ADVANCEMENTS: &[RecipeAdvancement] = &[
+            #recipe_advancements
+        ];
         #advancement_tree
     }
 }
