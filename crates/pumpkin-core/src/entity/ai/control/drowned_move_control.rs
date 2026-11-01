@@ -37,22 +37,26 @@ impl DrownedMoveControl {
 
     fn swim_target(mob: &dyn Mob) -> Option<Vector3<f64>> {
         let mob_entity = mob.get_mob_entity();
-
-        let nav_target = mob_entity
+        let navigator = mob_entity
             .navigator
             .lock()
-            .unwrap_or_else(PoisonError::into_inner)
-            .get_target_pos()
+            .unwrap_or_else(PoisonError::into_inner);
+
+        // Vanilla's navigation feeds the move control the waypoint it is on
+        // (`setWantedPosition` each tick); steer at the current path node.
+        let waypoint = navigator
+            .get_path()
+            .and_then(|path| path.get_next_node_pos())
             .map(|pos| {
                 Vector3::new(
                     f64::from(pos.0.x) + 0.5,
-                    f64::from(pos.0.y),
+                    f64::from(pos.0.y) + 0.5,
                     f64::from(pos.0.z) + 0.5,
                 )
             });
 
         // A drowned whose path ran out still swims at what it is chasing.
-        nav_target.or_else(|| {
+        waypoint.or_else(|| {
             mob_entity
                 .target
                 .lock()
@@ -126,7 +130,7 @@ impl MoveControlTrait for DrownedMoveControl {
                 (zd.atan2(xd).to_degrees() as f32) - 90.0,
                 90.0,
             );
-            entity.yaw.store(yaw);
+            entity.yaw.store(pumpkin_util::math::wrap_degrees(yaw));
             entity.body_yaw.store(yaw);
         }
 

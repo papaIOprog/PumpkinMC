@@ -408,6 +408,7 @@ pub trait PathNavigationTrait: Send + Sync {
     fn set_max_visited_nodes_multiplier(&mut self, multiplier: f32);
     fn reset_max_visited_nodes_multiplier(&mut self);
     fn get_target_pos(&self) -> Option<BlockPos>;
+
     fn can_path_to_targets_below_surface(&self) -> bool;
     fn set_can_path_to_targets_below_surface(&mut self, can_path: bool);
 
@@ -637,6 +638,14 @@ impl PathNavigation {
             let Some(current) = self.open_set.pop() else {
                 break;
             };
+
+            // Vanilla marks popped nodes `closed` and never expands them
+            // again. Without this gate the search re-expands the same cells
+            // until its budget runs out, and the overwritten `came_from`
+            // links reconstruct as a wiggle in place.
+            if closed_set.contains_key(&current.pos.0) {
+                continue;
+            }
 
             if current.distance_manhattan(&target) <= reach_range as f32 {
                 target.reached = true;
